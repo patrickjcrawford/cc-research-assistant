@@ -132,7 +132,7 @@ The Clo-Author is designed for applied econometrics, but the infrastructure (con
 
 ## Origin
 
-This project is a fork of [Pedro Sant'Anna's claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow), which was built for Econ 730 at Emory University (6 lectures, 800+ slides). The Clo-Author reorients that infrastructure from lecture production to applied econometrics research publication.
+This project is a fork of [Pedro Sant'Anna's claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow), which was built for Econ 730 at Emory University (6 lectures, 800+ slides). The Clo-Author reorients that infrastructure from lecture production to applied economics research publication.
 
 The core infrastructure (contractor mode, quality gates, context survival, session logging) comes from the original template. The adversarial worker-critic architecture, econometrics-specific agents, paper drafting skills, and submission workflow are new.
 
