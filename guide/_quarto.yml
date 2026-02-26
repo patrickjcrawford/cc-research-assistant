@@ -21,11 +21,12 @@ website:
 format:
   html:
     theme:
-      - cosmo
+      - darkly
       - custom.scss
     toc: true
     toc-depth: 3
     code-copy: true
     code-overflow: wrap
     smooth-scroll: true
-    mainfont: "system-ui, -apple-system, sans-serif"
+    mainfont: "Space Grotesk, Inter, system-ui, sans-serif"
+    monofont: "JetBrains Mono, Fira Code, Cascadia Code, monospace"
