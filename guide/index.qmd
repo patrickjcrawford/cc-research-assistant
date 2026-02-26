@@ -3,6 +3,12 @@ title: "The Clo-Author"
 subtitle: "Your Econ AI Research Assistant for Claude Code"
 ---
 
+::: {style="text-align: center; margin: 0.5em 0 1em;"}
+![](images/clo-author-demo.gif){style="max-width: 40%; border-radius: 8px; border: 1px solid #00cc66; box-shadow: 0 0 15px rgba(0,204,102,0.3);" fig-alt="Clo-Author in action"}
+
+*The legendary [Clodovil](https://en.wikipedia.org/wiki/Clodovil_Hernandes)*
+:::
+
 An open-source [Claude Code](https://docs.anthropic.com/en/docs/claude-code) workflow that turns your terminal into a full-service applied econometrics research assistant --- from literature review to journal submission.
 
 **Built on** [Pedro Sant'Anna's claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow), reoriented for applied econometrics research publication.
