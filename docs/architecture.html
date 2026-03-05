@@ -69,6 +69,10 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
+<meta name="mermaid-theme" content="dark">
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 </head>
@@ -99,8 +103,20 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">User Guide</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="./agents.html"> 
+<span class="menu-text">Agents</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link active" href="./architecture.html" aria-current="page"> 
 <span class="menu-text">Architecture</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./customization.html"> 
+<span class="menu-text">Customization</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./reference.html"> 
+<span class="menu-text">Reference</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -126,29 +142,19 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#system-overview" id="toc-system-overview" class="nav-link active" data-scroll-target="#system-overview">System Overview</a></li>
-  <li><a href="#claude.md-the-project-constitution" id="toc-claude.md-the-project-constitution" class="nav-link" data-scroll-target="#claude.md-the-project-constitution">CLAUDE.md — The Project Constitution</a></li>
-  <li><a href="#rules-auto-loading-domain-knowledge" id="toc-rules-auto-loading-domain-knowledge" class="nav-link" data-scroll-target="#rules-auto-loading-domain-knowledge">Rules — Auto-Loading Domain Knowledge</a>
+  <li><a href="#agent-workflow-diagram" id="toc-agent-workflow-diagram" class="nav-link" data-scroll-target="#agent-workflow-diagram">Agent Workflow Diagram</a>
   <ul class="collapse">
-  <li><a href="#always-on-rules" id="toc-always-on-rules" class="nav-link" data-scroll-target="#always-on-rules">Always-On Rules</a></li>
-  <li><a href="#path-scoped-rules" id="toc-path-scoped-rules" class="nav-link" data-scroll-target="#path-scoped-rules">Path-Scoped Rules</a></li>
+  <li><a href="#the-pipeline" id="toc-the-pipeline" class="nav-link" data-scroll-target="#the-pipeline">The Pipeline</a></li>
+  <li><a href="#agents-by-phase" id="toc-agents-by-phase" class="nav-link" data-scroll-target="#agents-by-phase">Agents by Phase</a>
+  <ul class="collapse">
+  <li><a href="#phase-1-discovery" id="toc-phase-1-discovery" class="nav-link" data-scroll-target="#phase-1-discovery">Phase 1: Discovery</a></li>
+  <li><a href="#phase-2-strategy" id="toc-phase-2-strategy" class="nav-link" data-scroll-target="#phase-2-strategy">Phase 2: Strategy</a></li>
+  <li><a href="#phase-3-execution" id="toc-phase-3-execution" class="nav-link" data-scroll-target="#phase-3-execution">Phase 3: Execution</a></li>
+  <li><a href="#phase-4-peer-review" id="toc-phase-4-peer-review" class="nav-link" data-scroll-target="#phase-4-peer-review">Phase 4: Peer Review</a></li>
+  <li><a href="#phase-5-submission" id="toc-phase-5-submission" class="nav-link" data-scroll-target="#phase-5-submission">Phase 5: Submission</a></li>
+  <li><a href="#talks-parallel-with-peer-review" id="toc-talks-parallel-with-peer-review" class="nav-link" data-scroll-target="#talks-parallel-with-peer-review">Talks (parallel with Peer Review)</a></li>
   </ul></li>
-  <li><a href="#agents-worker-critic-pairs" id="toc-agents-worker-critic-pairs" class="nav-link" data-scroll-target="#agents-worker-critic-pairs">Agents — Worker-Critic Pairs</a>
-  <ul class="collapse">
-  <li><a href="#the-6-worker-critic-pairs" id="toc-the-6-worker-critic-pairs" class="nav-link" data-scroll-target="#the-6-worker-critic-pairs">The 6 Worker-Critic Pairs</a></li>
-  <li><a href="#additional-agents" id="toc-additional-agents" class="nav-link" data-scroll-target="#additional-agents">Additional Agents</a></li>
-  <li><a href="#all-15-agents" id="toc-all-15-agents" class="nav-link" data-scroll-target="#all-15-agents">All 15 Agents</a></li>
-  <li><a href="#multi-model-strategy" id="toc-multi-model-strategy" class="nav-link" data-scroll-target="#multi-model-strategy">Multi-Model Strategy</a></li>
-  </ul></li>
-  <li><a href="#skills-reusable-slash-commands" id="toc-skills-reusable-slash-commands" class="nav-link" data-scroll-target="#skills-reusable-slash-commands">Skills — Reusable Slash Commands</a></li>
-  <li><a href="#hooks-automated-enforcement" id="toc-hooks-automated-enforcement" class="nav-link" data-scroll-target="#hooks-automated-enforcement">Hooks — Automated Enforcement</a>
-  <ul class="collapse">
-  <li><a href="#design-principles" id="toc-design-principles" class="nav-link" data-scroll-target="#design-principles">Design Principles</a></li>
-  <li><a href="#all-7-hooks" id="toc-all-7-hooks" class="nav-link" data-scroll-target="#all-7-hooks">All 7 Hooks</a></li>
-  </ul></li>
-  <li><a href="#memory-system" id="toc-memory-system" class="nav-link" data-scroll-target="#memory-system">Memory System</a></li>
-  <li><a href="#context-survival-system" id="toc-context-survival-system" class="nav-link" data-scroll-target="#context-survival-system">Context Survival System</a>
-  <ul class="collapse">
-  <li><a href="#context-monitoring" id="toc-context-monitoring" class="nav-link" data-scroll-target="#context-monitoring">Context Monitoring</a></li>
+  <li><a href="#the-worker-critic-loop" id="toc-the-worker-critic-loop" class="nav-link" data-scroll-target="#the-worker-critic-loop">The Worker-Critic Loop</a></li>
   </ul></li>
   <li><a href="#sec-orchestrator" id="toc-sec-orchestrator" class="nav-link" data-scroll-target="#sec-orchestrator">The Orchestrator (Contractor Mode)</a>
   <ul class="collapse">
@@ -165,14 +171,12 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#the-protocol" id="toc-the-protocol" class="nav-link" data-scroll-target="#the-protocol">The Protocol</a></li>
   <li><a href="#session-logging-3-triggers" id="toc-session-logging-3-triggers" class="nav-link" data-scroll-target="#session-logging-3-triggers">Session Logging (3 Triggers)</a></li>
   </ul></li>
-  <li><a href="#the-adversarial-pattern" id="toc-the-adversarial-pattern" class="nav-link" data-scroll-target="#the-adversarial-pattern">The Adversarial Pattern</a></li>
   <li><a href="#parallel-agents" id="toc-parallel-agents" class="nav-link" data-scroll-target="#parallel-agents">Parallel Agents</a>
   <ul class="collapse">
   <li><a href="#when-to-use" id="toc-when-to-use" class="nav-link" data-scroll-target="#when-to-use">When to Use</a></li>
   <li><a href="#practical-limits" id="toc-practical-limits" class="nav-link" data-scroll-target="#practical-limits">Practical Limits</a></li>
   </ul></li>
   <li><a href="#scoring-protocol" id="toc-scoring-protocol" class="nav-link" data-scroll-target="#scoring-protocol">Scoring Protocol</a></li>
-  <li><a href="#domain-profile" id="toc-domain-profile" class="nav-link" data-scroll-target="#domain-profile">Domain Profile</a></li>
   <li><a href="#additional-workflows-slides-lectures" id="toc-additional-workflows-slides-lectures" class="nav-link" data-scroll-target="#additional-workflows-slides-lectures">Additional Workflows: Slides &amp; Lectures</a>
   <ul class="collapse">
   <li><a href="#creating-talks-from-papers" id="toc-creating-talks-from-papers" class="nav-link" data-scroll-target="#creating-talks-from-papers">Creating Talks from Papers</a></li>
@@ -189,7 +193,7 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Architecture Reference</h1>
-<p class="subtitle lead">How the Clo-Author System Works</p>
+<p class="subtitle lead">How the System Works</p>
 </div>
 
 
@@ -208,7 +212,7 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="system-overview" class="level1">
 <h1>System Overview</h1>
-<p>Claude Code’s power comes from five configuration layers that work together:</p>
+<p>Claude Code’s power comes from five configuration layers that work together. For details on each layer, see the <a href="./customization.html">Customization Guide</a>.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 23%">
@@ -253,544 +257,257 @@ ul.task-list li input[type="checkbox"] {
 <p>Claude reliably follows about <strong>100–150 custom instructions</strong>. Your system prompt uses ~50, leaving ~100 for your project. CLAUDE.md and always-on rules share this budget. Path-scoped rules, skills, and agents load on demand.</p>
 <hr>
 </section>
-<section id="claude.md-the-project-constitution" class="level1">
-<h1>CLAUDE.md — The Project Constitution</h1>
-<p><code>CLAUDE.md</code> is the single most important file. Claude reads it at the start of every session. It should be a <strong>slim constitution</strong> — short directives and pointers, not comprehensive documentation. Aim for ~120 lines:</p>
-<ul>
-<li><strong>Core principles</strong> — 5–6 bullets (plan-first, verify-after, quality gates, worker-critic pairs, LEARN tags)</li>
-<li><strong>Folder structure</strong> — where everything lives</li>
-<li><strong>Commands</strong> — compilation, deployment</li>
-<li><strong>Skill quick reference</strong> — table of available slash commands</li>
-<li><strong>Customization tables</strong> — Beamer environments, notation</li>
-<li><strong>Current state</strong> — what’s done, what’s in progress</li>
-</ul>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<section id="agent-workflow-diagram" class="level1">
+<h1>Agent Workflow Diagram</h1>
+<p>How 16 agents coordinate across the research pipeline. Each phase pairs <strong>workers</strong> (who create) with <strong>critics</strong> (who review). The <strong>Orchestrator</strong> manages dispatch, quality gates, and escalation. For detailed descriptions of each agent, see <a href="./agents.html">Meet the Agents</a>.</p>
+<section id="the-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="the-pipeline">The Pipeline</h2>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#1a1a36', 'primaryTextColor': '#00f0ff', 'primaryBorderColor': '#00f0ff', 'lineColor': '#b44dff', 'secondaryColor': '#14142a', 'tertiaryColor': '#080810', 'edgeLabelBackground': '#080810', 'clusterBkg': '#0c0c18', 'clusterBorder': '#1e1e35'}}}%%
+flowchart LR
+    YOU:::start --&gt; D:::phase1
+    D --&gt; S:::phase2
+    S --&gt; E:::phase3
+    E --&gt; R:::phase4
+    R --&gt;|score &gt;= 95| SUB:::phase5
+    R -.-&gt;|missing lit| D
+    R -.-&gt;|flawed ID| S
+    R -.-&gt;|more checks| E
+    E -.-&gt;|parallel| T:::talks
+
+    YOU((You))
+    D(Discovery)
+    S(Strategy)
+    E(Execution)
+    R(Peer Review)
+    SUB(Submission)
+    T(Talks)
+
+    classDef start fill:#080810,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
+    classDef phase1 fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:2px
+    classDef phase2 fill:#14142a,stroke:#00cc66,color:#00cc66,stroke-width:2px
+    classDef phase3 fill:#14142a,stroke:#b44dff,color:#b44dff,stroke-width:2px
+    classDef phase4 fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
+    classDef phase5 fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:2px
+    classDef talks fill:#0c0c18,stroke:#8888a8,color:#8888a8,stroke-width:1px,stroke-dasharray: 5 5
+</pre>
 </div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Keep It Lean
+<p></p></figure><p></p>
 </div>
 </div>
-<div class="callout-body-container callout-body">
-<p>If CLAUDE.md exceeds ~150 lines, Claude starts ignoring rules silently. Put detailed standards in path-scoped rules instead.</p>
 </div>
-</div>
-<hr>
 </section>
-<section id="rules-auto-loading-domain-knowledge" class="level1">
-<h1>Rules — Auto-Loading Domain Knowledge</h1>
-<p>Rules are markdown files in <code>.claude/rules/</code> that Claude loads automatically. The key design principle is <strong>path-scoping</strong>: rules with a <code>paths:</code> YAML frontmatter only load when Claude works on matching files.</p>
-<section id="always-on-rules" class="level2">
-<h2 class="anchored" data-anchor-id="always-on-rules">Always-On Rules</h2>
-<p>Always-on rules (no <code>paths:</code> frontmatter) load every session:</p>
+<section id="agents-by-phase" class="level2">
+<h2 class="anchored" data-anchor-id="agents-by-phase">Agents by Phase</h2>
+<p>Each phase dispatches <strong>worker → critic</strong> pairs. The worker creates; the critic reviews (read-only, never edits). If they can’t agree after 3 rounds, the Orchestrator escalates.</p>
+<section id="phase-1-discovery" class="level3">
+<h3 class="anchored" data-anchor-id="phase-1-discovery">Phase 1: Discovery</h3>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 40%">
-<col style="width: 60%">
+<col style="width: 16%">
+<col style="width: 33%">
+<col style="width: 16%">
+<col style="width: 33%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Rule</th>
-<th>Purpose</th>
+<th>Worker</th>
+<th>What it creates</th>
+<th>Critic</th>
+<th>What it checks</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>plan-first-workflow.md</code></td>
-<td>Plan before you build</td>
+<td><strong>Librarian</strong></td>
+<td>Bibliography, frontier map</td>
+<td><strong>librarian-critic</strong></td>
+<td>Coverage, gaps, recency</td>
 </tr>
 <tr class="even">
-<td><code>orchestrator-protocol.md</code></td>
-<td>Dependency-driven contractor mode loop</td>
-</tr>
-<tr class="odd">
-<td><code>session-logging.md</code></td>
-<td>Three logging triggers</td>
-</tr>
-<tr class="even">
-<td><code>session-reporting.md</code></td>
-<td>Consolidated session report</td>
-</tr>
-<tr class="odd">
-<td><code>adversarial-pairing.md</code></td>
-<td>Every worker has a critic</td>
-</tr>
-<tr class="even">
-<td><code>separation-of-powers.md</code></td>
-<td>Critics never create, creators never critique</td>
-</tr>
-<tr class="odd">
-<td><code>three-strikes.md</code></td>
-<td>Max 3 rounds, then escalate</td>
-</tr>
-<tr class="even">
-<td><code>severity-gradient.md</code></td>
-<td>Critic severity by phase</td>
-</tr>
-<tr class="odd">
-<td><code>dependency-graph.md</code></td>
-<td>Phases by dependency, not sequence</td>
-</tr>
-<tr class="even">
-<td><code>scoring-protocol.md</code></td>
-<td>Weighted aggregation formula</td>
-</tr>
-<tr class="odd">
-<td><code>standalone-access.md</code></td>
-<td>Any skill works outside the pipeline</td>
-</tr>
-<tr class="even">
-<td><code>revision-protocol.md</code></td>
-<td>R&amp;R cycle routing</td>
-</tr>
-<tr class="odd">
-<td><code>research-journal.md</code></td>
-<td>Auto-append journal after agent reports</td>
-</tr>
-<tr class="even">
-<td><code>meta-governance.md</code></td>
-<td>Template vs working project</td>
-</tr>
-<tr class="odd">
-<td><code>domain-profile.md</code></td>
-<td>Field-specific calibration</td>
+<td><strong>Explorer</strong></td>
+<td>Data sources, feasibility</td>
+<td><strong>explorer-critic</strong></td>
+<td>Measurement, sample, ID fit</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="path-scoped-rules" class="level2">
-<h2 class="anchored" data-anchor-id="path-scoped-rules">Path-Scoped Rules</h2>
-<p>Path-scoped rules load only when relevant:</p>
+<section id="phase-2-strategy" class="level3">
+<h3 class="anchored" data-anchor-id="phase-2-strategy">Phase 2: Strategy</h3>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 33%">
+<col style="width: 16%">
+<col style="width: 33%">
+</colgroup>
 <thead>
 <tr class="header">
-<th>Rule</th>
-<th>Triggers On</th>
+<th>Worker</th>
+<th>What it creates</th>
+<th>Critic</th>
+<th>What it checks</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>quality-gates.md</code></td>
-<td><code>.tex</code>, <code>.R</code>, <code>.do</code>, <code>.py</code>, <code>.jl</code></td>
-</tr>
-<tr class="even">
-<td><code>single-source-of-truth.md</code></td>
-<td><code>Figures/</code>, <code>.tex</code></td>
-</tr>
-<tr class="odd">
-<td><code>pdf-processing.md</code></td>
-<td><code>master_supporting_docs/</code></td>
-</tr>
-<tr class="even">
-<td><code>table-generator.md</code></td>
-<td><code>Tables/</code>, <code>.R</code></td>
-</tr>
-<tr class="odd">
-<td><code>exploration-folder-protocol.md</code></td>
-<td><code>explorations/</code></td>
-</tr>
-<tr class="even">
-<td><code>exploration-fast-track.md</code></td>
-<td><code>explorations/</code></td>
+<td><strong>Strategist</strong></td>
+<td>DiD/IV/RDD/SC design, strategy memo</td>
+<td><strong>strategist-critic</strong></td>
+<td>Assumptions, inference, sanity</td>
 </tr>
 </tbody>
 </table>
-<hr>
 </section>
-</section>
-<section id="agents-worker-critic-pairs" class="level1">
-<h1>Agents — Worker-Critic Pairs</h1>
-<p>The v3 architecture uses <strong>adversarial worker-critic pairs</strong>. Every creator has a paired critic. Critics produce reports but never edit files. Creators implement but never score themselves.</p>
-<section id="the-6-worker-critic-pairs" class="level2">
-<h2 class="anchored" data-anchor-id="the-6-worker-critic-pairs">The 6 Worker-Critic Pairs</h2>
+<section id="phase-3-execution" class="level3">
+<h3 class="anchored" data-anchor-id="phase-3-execution">Phase 3: Execution</h3>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 41%">
-<col style="width: 41%">
-<col style="width: 17%">
+<col style="width: 16%">
+<col style="width: 33%">
+<col style="width: 16%">
+<col style="width: 33%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Worker (Creates)</th>
-<th>Critic (Reviews)</th>
-<th>Phase</th>
+<th>Worker</th>
+<th>What it creates</th>
+<th>Critic</th>
+<th>What it checks</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>Librarian</strong> — literature collector</td>
-<td><strong>Editor</strong> — coverage critic, journal editor</td>
-<td>Discovery</td>
+<td><strong>Data-engineer</strong></td>
+<td>Cleaning scripts, figures</td>
+<td><strong>coder-critic</strong></td>
+<td>Code quality, reproducibility</td>
 </tr>
 <tr class="even">
-<td><strong>Strategist</strong> — identification design</td>
-<td><strong>Econometrician</strong> — 4-phase causal audit</td>
-<td>Strategy</td>
+<td><strong>Coder</strong></td>
+<td>Analysis scripts, tables</td>
+<td><strong>coder-critic</strong></td>
+<td>Strategy alignment, correctness</td>
 </tr>
 <tr class="odd">
-<td><strong>Coder</strong> — implements analysis</td>
-<td><strong>Debugger</strong> — 12-category code review</td>
-<td>Execution</td>
-</tr>
-<tr class="even">
-<td><strong>Writer</strong> — drafts paper + humanizer</td>
-<td><strong>Proofreader</strong> — 6-category manuscript review</td>
-<td>Paper</td>
-</tr>
-<tr class="odd">
-<td><strong>Storyteller</strong> — creates Beamer talks</td>
-<td><strong>Discussant</strong> — 5-category talk review</td>
-<td>Presentation</td>
-</tr>
-<tr class="even">
-<td><strong>Referee</strong> (x2) — blind peer review</td>
-<td><strong>Editor</strong> — editorial decision</td>
-<td>Peer Review</td>
+<td><strong>Writer</strong></td>
+<td>Paper sections, humanizer pass</td>
+<td><strong>writer-critic</strong></td>
+<td>Notation, hedging, claims vs evidence</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="additional-agents" class="level2">
-<h2 class="anchored" data-anchor-id="additional-agents">Additional Agents</h2>
+<section id="phase-4-peer-review" class="level3">
+<h3 class="anchored" data-anchor-id="phase-4-peer-review">Phase 4: Peer Review</h3>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 53%">
-<col style="width: 46%">
+<col style="width: 31%">
+<col style="width: 24%">
+<col style="width: 44%">
 </colgroup>
+<thead>
+<tr class="header">
+<th>Referee</th>
+<th>Focus</th>
+<th>Independence</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>domain-referee</strong></td>
+<td>Contributions, literature, external validity</td>
+<td>Blind — doesn’t see the other report</td>
+</tr>
+<tr class="even">
+<td><strong>methods-referee</strong></td>
+<td>Identification, estimation, robustness</td>
+<td>Blind — doesn’t see the other report</td>
+</tr>
+</tbody>
+</table>
+<p>The Orchestrator synthesizes both reports into an editorial decision: Accept / Minor / Major / Reject.</p>
+</section>
+<section id="phase-5-submission" class="level3">
+<h3 class="anchored" data-anchor-id="phase-5-submission">Phase 5: Submission</h3>
+<table class="caption-top table">
 <thead>
 <tr class="header">
 <th>Agent</th>
-<th>Role</th>
+<th>What it does</th>
+<th>Scoring</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td><strong>Explorer</strong></td>
-<td>Data finder (paired with Surveyor critic)</td>
-</tr>
-<tr class="even">
-<td><strong>Surveyor</strong></td>
-<td>Data quality critic</td>
-</tr>
 <tr class="odd">
 <td><strong>Verifier</strong></td>
-<td>Infrastructure: compilation, execution, AEA compliance</td>
-</tr>
-<tr class="even">
-<td><strong>Orchestrator</strong></td>
-<td>Infrastructure: dispatch, escalation, rule enforcement</td>
+<td>10-check AEA replication audit</td>
+<td>Pass/fail (binary)</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="all-15-agents" class="level2">
-<h2 class="anchored" data-anchor-id="all-15-agents">All 15 Agents</h2>
+<section id="talks-parallel-with-peer-review" class="level3">
+<h3 class="anchored" data-anchor-id="talks-parallel-with-peer-review">Talks (parallel with Peer Review)</h3>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 31%">
-<col style="width: 27%">
-<col style="width: 40%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Agent</th>
-<th>File</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Librarian</td>
-<td><code>librarian.md</code></td>
-<td>Literature collection + proximity scoring</td>
-</tr>
-<tr class="even">
-<td>Editor</td>
-<td><code>editor.md</code></td>
-<td>Evolving critic (lit → paper → journal editor)</td>
-</tr>
-<tr class="odd">
-<td>Explorer</td>
-<td><code>explorer.md</code></td>
-<td>Data source finder + feasibility scoring</td>
-</tr>
-<tr class="even">
-<td>Surveyor</td>
-<td><code>surveyor.md</code></td>
-<td>Data quality critic</td>
-</tr>
-<tr class="odd">
-<td>Strategist</td>
-<td><code>strategist.md</code></td>
-<td>Identification strategy + PAP mode</td>
-</tr>
-<tr class="even">
-<td>Econometrician</td>
-<td><code>econometrician.md</code></td>
-<td>4-phase causal inference audit</td>
-</tr>
-<tr class="odd">
-<td>Coder</td>
-<td><code>coder.md</code></td>
-<td>Analysis implementation (R/Stata/Python/Julia)</td>
-</tr>
-<tr class="even">
-<td>Debugger</td>
-<td><code>debugger.md</code></td>
-<td>12-category code review</td>
-</tr>
-<tr class="odd">
-<td>Writer</td>
-<td><code>writer.md</code></td>
-<td>Paper drafting + humanizer pass</td>
-</tr>
-<tr class="even">
-<td>Proofreader</td>
-<td><code>proofreader.md</code></td>
-<td>6-category manuscript review</td>
-</tr>
-<tr class="odd">
-<td>Referee</td>
-<td><code>referee.md</code></td>
-<td>Blind peer review (x2 instances)</td>
-</tr>
-<tr class="even">
-<td>Storyteller</td>
-<td><code>storyteller.md</code></td>
-<td>Beamer talk creation (4 formats)</td>
-</tr>
-<tr class="odd">
-<td>Discussant</td>
-<td><code>discussant.md</code></td>
-<td>Talk critic (advisory scoring)</td>
-</tr>
-<tr class="even">
-<td>Verifier</td>
-<td><code>verifier.md</code></td>
-<td>Standard (4 checks) + submission (10 checks)</td>
-</tr>
-<tr class="odd">
-<td>Orchestrator</td>
-<td><code>orchestrator.md</code></td>
-<td>Agent dispatch + escalation routing</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="multi-model-strategy" class="level2">
-<h2 class="anchored" data-anchor-id="multi-model-strategy">Multi-Model Strategy</h2>
-<p>Not all agents need the same model. Each agent file has a <code>model:</code> field:</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Task Type</th>
-<th>Recommended Model</th>
-<th>Why</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Complex analysis</td>
-<td><code>model: opus</code></td>
-<td>Needs deep reasoning</td>
-</tr>
-<tr class="even">
-<td>Fast, constrained work</td>
-<td><code>model: sonnet</code></td>
-<td>Speed matters more</td>
-</tr>
-<tr class="odd">
-<td>Default</td>
-<td><code>model: inherit</code></td>
-<td>Uses main session model</td>
-</tr>
-</tbody>
-</table>
-<hr>
-</section>
-</section>
-<section id="skills-reusable-slash-commands" class="level1">
-<h1>Skills — Reusable Slash Commands</h1>
-<p>Skills are multi-step workflows invoked with <code>/command</code>. Each skill lives in <code>.claude/skills/[name]/SKILL.md</code> and dispatches the appropriate v3 agents.</p>
-<p>Skills can be invoked two ways: <strong>explicitly</strong> (you type <code>/proofread Paper/main.tex</code>) or <strong>automatically</strong> (Claude invokes them when relevant). Most of the time, you just describe what you want.</p>
-<p>See the <a href="./user-guide.html#all-skills-reference">User Guide</a> for the complete skills table.</p>
-<hr>
-</section>
-<section id="hooks-automated-enforcement" class="level1">
-<h1>Hooks — Automated Enforcement</h1>
-<p>Hooks live in <code>.claude/settings.json</code> and fire on events, regardless of context state.</p>
-<section id="design-principles" class="level2">
-<h2 class="anchored" data-anchor-id="design-principles">Design Principles</h2>
-<ul>
-<li>Use <strong>command-based hooks</strong> for fast, mechanical checks</li>
-<li>Use <strong>rules</strong> for nuanced judgment</li>
-<li>Avoid prompt-based hooks that trigger LLM calls on every response</li>
-</ul>
-</section>
-<section id="all-7-hooks" class="level2">
-<h2 class="anchored" data-anchor-id="all-7-hooks">All 7 Hooks</h2>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 23%">
-<col style="width: 26%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Hook</th>
-<th>Event</th>
-<th>What It Does</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Session log reminder</td>
-<td><code>Stop</code></td>
-<td>Reminds about session logs</td>
-</tr>
-<tr class="even">
-<td>Desktop notification</td>
-<td><code>Notification</code></td>
-<td>macOS alert when Claude needs attention</td>
-</tr>
-<tr class="odd">
-<td>File protection</td>
-<td><code>PreToolUse</code></td>
-<td>Blocks edits to bibliography and settings</td>
-</tr>
-<tr class="even">
-<td>Context state capture</td>
-<td><code>PreCompact</code></td>
-<td>Saves plan state + context survival checklist</td>
-</tr>
-<tr class="odd">
-<td>Context restoration</td>
-<td><code>SessionStart[compact\|resume]</code></td>
-<td>Restores context after compaction</td>
-</tr>
-<tr class="even">
-<td>Context monitor</td>
-<td><code>PostToolUse[Bash\|Task]</code></td>
-<td>Progressive warnings at 40%/55%/65%/80%/90%</td>
-</tr>
-<tr class="odd">
-<td>Verification reminder</td>
-<td><code>PostToolUse[Write\|Edit]</code></td>
-<td>Reminds to compile/render (<code>.tex</code>, <code>.R</code>, <code>.do</code>, <code>.py</code>, <code>.jl</code>)</td>
-</tr>
-</tbody>
-</table>
-<hr>
-</section>
-</section>
-<section id="memory-system" class="level1">
-<h1>Memory System</h1>
-<p>Four persistent layers plus ephemeral conversation:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 19%">
 <col style="width: 16%">
-<col style="width: 38%">
-<col style="width: 25%">
+<col style="width: 33%">
+<col style="width: 16%">
+<col style="width: 33%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Layer</th>
-<th>File</th>
-<th>Updated When</th>
-<th>Purpose</th>
+<th>Worker</th>
+<th>What it creates</th>
+<th>Critic</th>
+<th>What it checks</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Project context</td>
-<td><code>CLAUDE.md</code></td>
-<td>Rarely</td>
-<td>Project rules, folder structure</td>
-</tr>
-<tr class="even">
-<td>Corrections</td>
-<td><code>MEMORY.md</code></td>
-<td>On <code>[LEARN]</code> tag</td>
-<td>Prevent repeating mistakes</td>
-</tr>
-<tr class="odd">
-<td>Task strategy</td>
-<td><code>quality_reports/plans/</code></td>
-<td>Once per task</td>
-<td>Plan survives handoff</td>
-</tr>
-<tr class="even">
-<td>Decision reasoning</td>
-<td><code>quality_reports/session_logs/</code></td>
-<td>Incrementally</td>
-<td>Record <em>why</em> decisions were made</td>
-</tr>
-<tr class="odd">
-<td>Conversation</td>
-<td>Context window</td>
-<td>Every response</td>
-<td>Current working memory (<strong>not</strong> persistent)</td>
+<td><strong>Storyteller</strong></td>
+<td>Beamer slides (4 formats)</td>
+<td><strong>storyteller-critic</strong></td>
+<td>Narrative, visuals, fidelity</td>
 </tr>
 </tbody>
 </table>
-<hr>
 </section>
-<section id="context-survival-system" class="level1">
-<h1>Context Survival System</h1>
-<p>When context compaction happens, two hooks preserve and restore state:</p>
-<pre><code>Session running → context fills up → PreCompact fires
-                                           ↓
-                                    pre-compact.py saves:
-                                    • Active plan path
-                                    • Current task
-                                    • Recent decisions
-                                    • Context survival checklist
-                                           ↓
-                                    Auto-compaction happens
-                                           ↓
-                                    SessionStart(compact|resume) fires
-                                           ↓
-                                    post-compact-restore.py:
-                                    • Reads saved state
-                                    • Prints context summary
-                                    • Claude knows where it left off</code></pre>
-<section id="context-monitoring" class="level3">
-<h3 class="anchored" data-anchor-id="context-monitoring">Context Monitoring</h3>
-<p>The <code>context-monitor.py</code> hook tracks approximate context usage:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 37%">
-<col style="width: 31%">
-<col style="width: 31%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Threshold</th>
-<th>Message</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>40%, 55%, 65%</td>
-<td>Suggest <code>/learn</code></td>
-<td>Capture discoveries before compaction</td>
-</tr>
-<tr class="even">
-<td>80%</td>
-<td>Info message</td>
-<td>Auto-compact approaching</td>
-</tr>
-<tr class="odd">
-<td>90%</td>
-<td>Caution</td>
-<td>Complete current task with full quality</td>
-</tr>
-</tbody>
-</table>
+</section>
+<section id="the-worker-critic-loop" class="level2">
+<h2 class="anchored" data-anchor-id="the-worker-critic-loop">The Worker-Critic Loop</h2>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#14142a', 'primaryTextColor': '#d0d0e0', 'primaryBorderColor': '#b44dff', 'lineColor': '#b44dff', 'secondaryColor': '#0c0c18', 'tertiaryColor': '#080810', 'edgeLabelBackground': '#080810'}}}%%
+flowchart TD
+    W[WORKER creates artifact]:::worker --&gt; C[CRITIC reviews, scores 0-100]:::critic
+    C --&gt;|score &gt;= 80| A([APPROVED]):::approved
+    C --&gt;|score &lt; 80| F[WORKER fixes issues]:::worker
+    F --&gt; C2[CRITIC re-reviews]:::critic
+    C2 --&gt;|pass| A
+    C2 --&gt;|fail, round 3| ESC([ESCALATE to user]):::escalate
+
+    classDef worker fill:#14142a,stroke:#b44dff,color:#b44dff,stroke-width:2px
+    classDef critic fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:2px
+    classDef approved fill:#14142a,stroke:#00cc66,color:#00cc66,stroke-width:2px
+    classDef escalate fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><strong>Why it works:</strong> The critic can’t fix files (read-only), so it has no incentive to downplay issues. The worker can’t approve itself (the critic re-audits). This prevents Claude from saying “looks good” about its own work.</p>
+<p><strong>Severity gradient:</strong> Critics calibrate harshness by phase — encouraging in Discovery, precise in Execution, adversarial in Peer Review.</p>
 <hr>
 </section>
 </section>
@@ -800,50 +517,110 @@ ul.task-list li input[type="checkbox"] {
 <section id="the-mental-model" class="level2">
 <h2 class="anchored" data-anchor-id="the-mental-model">The Mental Model</h2>
 <p>Think of the orchestrator as a <strong>general contractor</strong>. You are the client. You describe what you want. The plan-first protocol is the blueprint phase. Once you approve the blueprint, the contractor takes over: hires the right specialists (agents), inspects their work (verification), sends them back to fix issues (review-fix loop), and only calls you when the job passes inspection (quality gates).</p>
+<p>The Orchestrator:</p>
+<ul>
+<li><strong>Dispatches</strong> worker-critic pairs based on the dependency graph</li>
+<li><strong>Enforces quality gates</strong>: 80 (commit), 90 (PR), 95 (submission)</li>
+<li><strong>Escalates</strong> when pairs can’t converge after 3 rounds</li>
+<li><strong>Synthesizes</strong> referee reports into editorial decisions</li>
+<li><strong>Selects</strong> target journals at submission time</li>
+<li><strong>Tracks</strong> the research journal with scores and phase transitions</li>
+</ul>
 </section>
 <section id="dependency-driven-dispatch" class="level2">
 <h2 class="anchored" data-anchor-id="dependency-driven-dispatch">Dependency-Driven Dispatch</h2>
-<pre><code>Phase 1: Discovery (no dependencies)
-  ├── Librarian → Editor (lit review)
-  └── Explorer → Surveyor (data assessment)
-          ↓
-Phase 2: Strategy (depends on Discovery)
-  └── Strategist → Econometrician (strategy memo)
-          ↓
-Phase 3: Execution (depends on Strategy)
-  ├── Coder → Debugger (analysis scripts)
-  └── Writer → Proofreader (paper sections)
-          ↓
-Phase 4: Peer Review (depends on Execution)
-  ├── Referee x2 → Editor (editorial decision)
-  └── paper-excellence (weighted aggregate)
-          ↓
-Phase 5: Submission (depends on Peer Review, score &gt;= 95)
-  └── Verifier (10-check AEA audit)</code></pre>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#14142a', 'primaryTextColor': '#d0d0e0', 'primaryBorderColor': '#b44dff', 'lineColor': '#b44dff', 'secondaryColor': '#0c0c18', 'tertiaryColor': '#080810', 'edgeLabelBackground': '#080810'}}}%%
+flowchart TD
+    P1:::phase --&gt; P2:::phase
+    P2 --&gt; P3:::phase
+    P3 --&gt; P4:::phase
+    P4 --&gt;|score &gt;= 95| P5:::phase
+
+    P1(Discovery)
+    P2(Strategy)
+    P3(Execution)
+    P4(Peer Review)
+    P5(Submission)
+
+    subgraph s1 [" "]
+        direction LR
+        L[Librarian]:::worker ---|reviewed by| LC[librarian-critic]:::critic
+        X[Explorer]:::worker ---|reviewed by| XC[explorer-critic]:::critic
+    end
+
+    subgraph s2 [" "]
+        ST[Strategist]:::worker ---|reviewed by| STC[strategist-critic]:::critic
+    end
+
+    subgraph s3 [" "]
+        direction LR
+        DE[Data-engineer]:::worker ---|reviewed by| CC1[coder-critic]:::critic
+        CO[Coder]:::worker ---|reviewed by| CC2[coder-critic]:::critic
+        WR[Writer]:::worker ---|reviewed by| WC[writer-critic]:::critic
+    end
+
+    subgraph s4 [" "]
+        direction LR
+        DR[domain-referee]:::referee
+        MR[methods-referee]:::referee
+    end
+
+    subgraph s5 [" "]
+        VE[Verifier]:::infra
+    end
+
+    P1 --- s1
+    P2 --- s2
+    P3 --- s3
+    P4 --- s4
+    P5 --- s5
+
+    classDef phase fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
+    classDef worker fill:#14142a,stroke:#b44dff,color:#b44dff,stroke-width:1px
+    classDef critic fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:1px
+    classDef referee fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:1px
+    classDef infra fill:#14142a,stroke:#00cc66,color:#00cc66,stroke-width:1px
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
 <p>Phases activate when dependencies are met, not by forced sequence. Parallel dispatch within phases (e.g., Librarian and Explorer run simultaneously in Phase 1).</p>
 </section>
 <section id="the-loop" class="level2">
 <h2 class="anchored" data-anchor-id="the-loop">The Loop</h2>
-<pre><code>Plan approved → orchestrator activates
-  │
-  Step 1: IMPLEMENT — Execute plan steps
-  │
-  Step 2: VERIFY — Compile, render, check outputs
-  │         If verification fails → fix → re-verify
-  │
-  Step 3: REVIEW — Run worker-critic pairs
-  │
-  Step 4: FIX — Apply fixes (critical → major → minor)
-  │         Max 3 rounds per pair (three-strikes rule)
-  │
-  Step 5: RE-VERIFY — Confirm fixes are clean
-  │
-  Step 6: SCORE — Weighted aggregate per scoring-protocol
-  │
-  └── Score &gt;= threshold?
-        YES → Present summary to user
-        NO  → Loop to Step 3 (max 5 total rounds)
-              After max → present with remaining issues</code></pre>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#14142a', 'primaryTextColor': '#d0d0e0', 'primaryBorderColor': '#b44dff', 'lineColor': '#b44dff', 'secondaryColor': '#0c0c18', 'tertiaryColor': '#080810', 'edgeLabelBackground': '#080810'}}}%%
+flowchart TD
+    START([Plan approved]):::start --&gt; IMPL[IMPLEMENT]:::step
+    IMPL --&gt; VERIFY[VERIFY: compile, render, check]:::step
+    VERIFY --&gt; REVIEW[REVIEW: worker-critic pairs]:::step
+    REVIEW --&gt; FIX[FIX: critical then major then minor]:::step
+    FIX --&gt; REVERIFY[RE-VERIFY: confirm fixes]:::step
+    REVERIFY --&gt; SCORE[SCORE: weighted aggregate]:::step
+    SCORE --&gt;|score &gt;= threshold| DONE([Present summary]):::approved
+    SCORE --&gt;|score &lt; threshold| REVIEW
+    SCORE -.-&gt;|max 5 rounds| DONE
+
+    classDef start fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
+    classDef step fill:#14142a,stroke:#b44dff,color:#b44dff,stroke-width:2px
+    classDef approved fill:#14142a,stroke:#00cc66,color:#00cc66,stroke-width:2px
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
 <section id="three-strikes-escalation" class="level3">
 <h3 class="anchored" data-anchor-id="three-strikes-escalation">Three-Strikes Escalation</h3>
 <p>If a worker-critic pair can’t resolve after 3 rounds:</p>
@@ -860,19 +637,19 @@ Phase 5: Submission (depends on Peer Review, score &gt;= 95)
 </thead>
 <tbody>
 <tr class="odd">
-<td>Coder + Debugger</td>
+<td>Coder + coder-critic</td>
 <td>→ Strategist (design may be wrong)</td>
 </tr>
 <tr class="even">
-<td>Writer + Proofreader</td>
-<td>→ Editor (framing may need rethinking)</td>
+<td>Writer + writer-critic</td>
+<td>→ domain-referee (framing may need rethinking)</td>
 </tr>
 <tr class="odd">
-<td>Strategist + Econometrician</td>
+<td>Strategist + strategist-critic</td>
 <td>→ User (fundamental design disagreement)</td>
 </tr>
 <tr class="even">
-<td>Storyteller + Discussant</td>
+<td>Storyteller + storyteller-critic</td>
 <td>→ Writer (paper content may need revision)</td>
 </tr>
 </tbody>
@@ -912,37 +689,6 @@ Phase 5: Submission (depends on Peer Review, score &gt;= 95)
 <hr>
 </section>
 </section>
-<section id="the-adversarial-pattern" class="level1">
-<h1>The Adversarial Pattern</h1>
-<p>The single most powerful pattern in the system: <strong>worker + critic</strong>.</p>
-<pre><code>+------------------+
-|    Worker         |  "I created the analysis."
-|    (READ-WRITE)   |
-+--------+---------+
-         |
-    +----v----+
-    | Critic  |  "I found 8 issues. 2 Critical."
-    | (READ   |
-    | ONLY)   |
-    +----+----+
-     /       \
-APPROVED   NEEDS WORK
-    |          |
-  Done    +----v---------+
-          |    Worker     |  "Fixed 8/8 issues."
-          |    (Round 2)  |
-          +----+---------+
-               |
-          +----v----------+
-          |    Critic      |  "Re-audit: 1 remaining."
-          |    (Round 2)   |
-          +----+----------+
-               |
-          ... (up to 3 rounds, then escalate)</code></pre>
-<p><strong>Why it works:</strong> The critic can’t fix files (read-only), so it has no incentive to downplay issues. The worker can’t approve itself (the critic re-audits). This prevents Claude from saying “looks good” about its own work.</p>
-<p><strong>Severity gradient:</strong> Critics calibrate harshness by phase — encouraging in Discovery, precise in Execution, adversarial in Peer Review.</p>
-<hr>
-</section>
 <section id="parallel-agents" class="level1">
 <h1>Parallel Agents</h1>
 <p>Claude Code can spawn <strong>multiple agents simultaneously</strong> using the Task tool.</p>
@@ -963,9 +709,9 @@ APPROVED   NEEDS WORK
 </thead>
 <tbody>
 <tr class="odd">
-<td>Paper excellence review</td>
+<td>Paper review</td>
 <td>Run each agent sequentially</td>
-<td>Run Econometrician + Debugger + Proofreader + Verifier simultaneously</td>
+<td>Run strategist-critic + coder-critic + writer-critic + Verifier simultaneously</td>
 </tr>
 <tr class="even">
 <td>Literature search</td>
@@ -1006,32 +752,32 @@ APPROVED   NEEDS WORK
 <tr class="odd">
 <td>Literature</td>
 <td>10%</td>
-<td>Librarian + Editor</td>
+<td>Librarian + librarian-critic</td>
 </tr>
 <tr class="even">
 <td>Data</td>
 <td>10%</td>
-<td>Explorer + Surveyor</td>
+<td>Explorer + explorer-critic</td>
 </tr>
 <tr class="odd">
 <td>Identification</td>
 <td>25%</td>
-<td>Econometrician</td>
+<td>strategist-critic</td>
 </tr>
 <tr class="even">
 <td>Code</td>
 <td>15%</td>
-<td>Debugger</td>
+<td>coder-critic</td>
 </tr>
 <tr class="odd">
 <td>Paper</td>
 <td>25%</td>
-<td>Proofreader</td>
+<td>Avg(domain-referee + methods-referee)</td>
 </tr>
 <tr class="even">
 <td>Polish</td>
 <td>10%</td>
-<td>Proofreader (writing subscore)</td>
+<td>writer-critic</td>
 </tr>
 <tr class="odd">
 <td>Replication</td>
@@ -1044,30 +790,12 @@ APPROVED   NEEDS WORK
 <p><strong>Submission gate:</strong> Aggregate &gt;= 95 AND every individual component &gt;= 80.</p>
 <hr>
 </section>
-<section id="domain-profile" class="level1">
-<h1>Domain Profile</h1>
-<p>The domain profile (<code>.claude/rules/domain-profile.md</code>) calibrates all agents to a specific research field. It can be populated two ways:</p>
-<ol type="1">
-<li><strong><code>/interview-me</code></strong> — generates it automatically from the research interview</li>
-<li><strong>Manual editing</strong> — fill in the template directly</li>
-</ol>
-<p>All agents read this file for:</p>
-<ul>
-<li>Target journal tiers (for Editor and Referee)</li>
-<li>Common data sources (for Explorer)</li>
-<li>Identification strategies (for Strategist and Econometrician)</li>
-<li>Field conventions (for Coder and Writer)</li>
-<li>Seminal references (for Librarian)</li>
-<li>Referee concerns (for Econometrician and Referee)</li>
-</ul>
-<hr>
-</section>
 <section id="additional-workflows-slides-lectures" class="level1">
 <h1>Additional Workflows: Slides &amp; Lectures</h1>
 <p>The Clo-Author inherits a lecture production pipeline from <a href="https://github.com/pedrohcgs/claude-code-my-workflow">its origin</a>. These workflows are available for users who also produce course materials.</p>
 <section id="creating-talks-from-papers" class="level2">
 <h2 class="anchored" data-anchor-id="creating-talks-from-papers">Creating Talks from Papers</h2>
-<p>The <code>/create-talk</code> skill dispatches the Storyteller (creator) and Discussant (critic) to generate Beamer presentations in 4 formats (job market, seminar, short, lightning). All content derives from <code>Paper/main.tex</code>.</p>
+<p>The <code>/talk</code> skill dispatches the Storyteller (creator) and storyteller-critic (reviewer) to generate Beamer presentations in 4 formats (job market, seminar, short, lightning). All content derives from <code>Paper/main.tex</code>.</p>
 </section>
 <section id="replication-first-coding" class="level2">
 <h2 class="anchored" data-anchor-id="replication-first-coding">Replication-First Coding</h2>

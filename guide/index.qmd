@@ -7,16 +7,7 @@ An open-source [Claude Code](https://docs.anthropic.com/en/docs/claude-code) wor
 
 **Built on** [Pedro Sant'Anna's claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow), reoriented for applied econometrics research publication.
 
-## What You Get
-
-| Component | Count | Examples |
-|-----------|-------|---------|
-| Specialized agents | 15 | Econometrician, Writer, Coder, Referee, Strategist |
-| Slash commands | 29 | `/econometrics-check`, `/paper-excellence`, `/new-project` |
-| Auto-loading rules | 21 | Quality gates, scoring protocol, adversarial pairing |
-| Hooks | 7 | Session log reminder, context survival, file protection |
-
-You describe a task in plain English. Claude plans the approach, implements it, runs specialized review agents, fixes issues, verifies quality, and presents results. Like a contractor who manages the entire job.
+You describe a task in plain English. Claude plans the approach, dispatches specialized agents, reviews quality, fixes issues, and presents results. Like a contractor who manages the entire job --- 16 agents, 10 commands, all running behind the scenes.
 
 ## Get Started in 5 Minutes
 
@@ -41,7 +32,7 @@ Fill in the **bolded placeholders** with your project details:
 
 > I am starting a new applied econometrics research project on **[YOUR TOPIC]**.
 > Read CLAUDE.md and help me set up the project structure.
-> Start with a literature review on [YOUR TOPIC].
+> Start with `/discover --lit [YOUR TOPIC]`.
 
 Claude reads the configuration, fills in your project details, and enters contractor mode --- planning, implementing, reviewing, and verifying autonomously.
 
@@ -49,16 +40,16 @@ Claude reads the configuration, fills in your project details, and enters contra
 
 Once setup is done, just describe what you need:
 
-- "Review my paper and check the econometrics" --- runs `/paper-excellence` with parallel agents
-- `/econometrics-check Paper/main.tex` --- 4-phase causal inference audit
-- `/data-analysis Data/cleaned/survey.csv` --- end-to-end analysis with publication-ready output
-- `/new-project health insurance` --- full pipeline from idea to paper
+- "Review my paper" --- checks your identification strategy, code, writing, and LaTeX in parallel
+- `/review --methods Paper/main.tex` --- validates your DiD/IV/RDD assumptions, clustering, and inference
+- `/analyze Data/cleaned/survey.csv` --- cleans data, runs your specification, produces tables and figures
+- `/new-project health insurance` --- walks you through the full pipeline from literature review to submission
 
 ## What Happens Behind the Scenes
 
-You talk, Claude orchestrates. The 15 agents work in **worker-critic pairs** --- every creator has a paired critic who can't edit files, only review. The orchestrator dispatches agents based on a dependency graph, enforces quality gates (80/90/95), and routes escalations when critics and creators can't agree after 3 rounds.
+You talk, Claude orchestrates. The 16 agents work in **worker-critic pairs** --- every creator has a paired critic who can't edit files, only review. Two specialized referees (domain + methods) simulate real journal peer review. The orchestrator dispatches agents based on a dependency graph, enforces quality gates (80/90/95), and routes escalations when critics and creators can't agree after 3 rounds.
 
-For the full picture, see the [User Guide](user-guide.qmd) (what you can do) and [Architecture Reference](architecture.qmd) (how the system works).
+For the full picture: [User Guide](user-guide.qmd) (what you can do), [Meet the Agents](agents.qmd) (who does the work), [Architecture](architecture.qmd) (how the system works), [Customization](customization.qmd) (how to make it yours), and [Command Reference](reference.qmd) (every flag and subcommand).
 
 ## Day 1 Checklist
 
@@ -67,7 +58,7 @@ For the full picture, see the [User Guide](user-guide.qmd) (what you can do) and
 - [ ] Paste the starter prompt (fill in your project details)
 - [ ] Wait for Claude to customize `CLAUDE.md` for your project
 - [ ] Approve the configuration plan
-- [ ] Ask Claude to do something: "Review my paper" or "/lit-review [topic]"
+- [ ] Ask Claude to do something: "Review my paper" or `/discover --lit [topic]`
 - [ ] Approve the task plan, watch it work, review the output
 
 That's it. Everything else --- agents, hooks, rules --- runs automatically in the background.
@@ -83,7 +74,7 @@ If you prefer to configure things yourself instead of letting Claude handle it:
 2. **Folder structure** (adjust to your layout)
 3. **Current project state** (your papers and analyses)
 
-**Fill in the domain profile** --- Run `/interview-me` or manually edit `.claude/rules/domain-profile.md`:
+**Fill in the domain profile** --- Run `/discover` (interactive interview) or manually edit `.claude/rules/domain-profile.md`:
 
 1. **Your field** and adjacent subfields
 2. **Target journals** ranked by tier
@@ -95,8 +86,8 @@ If you prefer to configure things yourself instead of letting Claude handle it:
 **Test it:**
 
 ```bash
-/compile-latex main
-/proofread Paper/main.tex
+/tools compile Paper/main.tex
+/review --proofread Paper/main.tex
 ```
 :::
 

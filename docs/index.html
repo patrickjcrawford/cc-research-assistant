@@ -134,8 +134,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">User Guide</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="./agents.html"> 
+<span class="menu-text">Agents</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="./architecture.html"> 
 <span class="menu-text">Architecture</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./customization.html"> 
+<span class="menu-text">Customization</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./reference.html"> 
+<span class="menu-text">Reference</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -160,8 +172,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#what-you-get" id="toc-what-you-get" class="nav-link active" data-scroll-target="#what-you-get">What You Get</a></li>
-  <li><a href="#get-started-in-5-minutes" id="toc-get-started-in-5-minutes" class="nav-link" data-scroll-target="#get-started-in-5-minutes">Get Started in 5 Minutes</a>
+  <li><a href="#get-started-in-5-minutes" id="toc-get-started-in-5-minutes" class="nav-link active" data-scroll-target="#get-started-in-5-minutes">Get Started in 5 Minutes</a>
   <ul class="collapse">
   <li><a href="#step-1-fork-clone" id="toc-step-1-fork-clone" class="nav-link" data-scroll-target="#step-1-fork-clone">Step 1: Fork &amp; Clone</a></li>
   <li><a href="#step-2-start-claude-code" id="toc-step-2-start-claude-code" class="nav-link" data-scroll-target="#step-2-start-claude-code">Step 2: Start Claude Code</a></li>
@@ -200,46 +211,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <p>An open-source <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> workflow that turns your terminal into a full-service applied econometrics research assistant — from literature review to journal submission.</p>
 <p><strong>Built on</strong> <a href="https://github.com/pedrohcgs/claude-code-my-workflow">Pedro Sant’Anna’s claude-code-my-workflow</a>, reoriented for applied econometrics research publication.</p>
-<section id="what-you-get" class="level2">
-<h2 class="anchored" data-anchor-id="what-you-get">What You Get</h2>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 40%">
-<col style="width: 25%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Component</th>
-<th>Count</th>
-<th>Examples</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Specialized agents</td>
-<td>15</td>
-<td>Econometrician, Writer, Coder, Referee, Strategist</td>
-</tr>
-<tr class="even">
-<td>Slash commands</td>
-<td>29</td>
-<td><code>/econometrics-check</code>, <code>/paper-excellence</code>, <code>/new-project</code></td>
-</tr>
-<tr class="odd">
-<td>Auto-loading rules</td>
-<td>21</td>
-<td>Quality gates, scoring protocol, adversarial pairing</td>
-</tr>
-<tr class="even">
-<td>Hooks</td>
-<td>7</td>
-<td>Session log reminder, context survival, file protection</td>
-</tr>
-</tbody>
-</table>
-<p>You describe a task in plain English. Claude plans the approach, implements it, runs specialized review agents, fixes issues, verifies quality, and presents results. Like a contractor who manages the entire job.</p>
-</section>
+<p>You describe a task in plain English. Claude plans the approach, dispatches specialized agents, reviews quality, fixes issues, and presents results. Like a contractor who manages the entire job — 16 agents, 10 commands, all running behind the scenes.</p>
 <section id="get-started-in-5-minutes" class="level2">
 <h2 class="anchored" data-anchor-id="get-started-in-5-minutes">Get Started in 5 Minutes</h2>
 <section id="step-1-fork-clone" class="level3">
@@ -256,7 +228,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="step-3-paste-the-starter-prompt">Step 3: Paste the Starter Prompt</h3>
 <p>Fill in the <strong>bolded placeholders</strong> with your project details:</p>
 <blockquote class="blockquote">
-<p>I am starting a new applied econometrics research project on <strong>[YOUR TOPIC]</strong>. Read CLAUDE.md and help me set up the project structure. Start with a literature review on [YOUR TOPIC].</p>
+<p>I am starting a new applied econometrics research project on <strong>[YOUR TOPIC]</strong>. Read CLAUDE.md and help me set up the project structure. Start with <code>/discover --lit [YOUR TOPIC]</code>.</p>
 </blockquote>
 <p>Claude reads the configuration, fills in your project details, and enters contractor mode — planning, implementing, reviewing, and verifying autonomously.</p>
 </section>
@@ -264,17 +236,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="step-4-start-working">Step 4: Start Working</h3>
 <p>Once setup is done, just describe what you need:</p>
 <ul>
-<li>“Review my paper and check the econometrics” — runs <code>/paper-excellence</code> with parallel agents</li>
-<li><code>/econometrics-check Paper/main.tex</code> — 4-phase causal inference audit</li>
-<li><code>/data-analysis Data/cleaned/survey.csv</code> — end-to-end analysis with publication-ready output</li>
-<li><code>/new-project health insurance</code> — full pipeline from idea to paper</li>
+<li>“Review my paper” — checks your identification strategy, code, writing, and LaTeX in parallel</li>
+<li><code>/review --methods Paper/main.tex</code> — validates your DiD/IV/RDD assumptions, clustering, and inference</li>
+<li><code>/analyze Data/cleaned/survey.csv</code> — cleans data, runs your specification, produces tables and figures</li>
+<li><code>/new-project health insurance</code> — walks you through the full pipeline from literature review to submission</li>
 </ul>
 </section>
 </section>
 <section id="what-happens-behind-the-scenes" class="level2">
 <h2 class="anchored" data-anchor-id="what-happens-behind-the-scenes">What Happens Behind the Scenes</h2>
-<p>You talk, Claude orchestrates. The 15 agents work in <strong>worker-critic pairs</strong> — every creator has a paired critic who can’t edit files, only review. The orchestrator dispatches agents based on a dependency graph, enforces quality gates (80/90/95), and routes escalations when critics and creators can’t agree after 3 rounds.</p>
-<p>For the full picture, see the <a href="./user-guide.html">User Guide</a> (what you can do) and <a href="./architecture.html">Architecture Reference</a> (how the system works).</p>
+<p>You talk, Claude orchestrates. The 16 agents work in <strong>worker-critic pairs</strong> — every creator has a paired critic who can’t edit files, only review. Two specialized referees (domain + methods) simulate real journal peer review. The orchestrator dispatches agents based on a dependency graph, enforces quality gates (80/90/95), and routes escalations when critics and creators can’t agree after 3 rounds.</p>
+<p>For the full picture: <a href="./user-guide.html">User Guide</a> (what you can do), <a href="./agents.html">Meet the Agents</a> (who does the work), <a href="./architecture.html">Architecture</a> (how the system works), <a href="./customization.html">Customization</a> (how to make it yours), and <a href="./reference.html">Command Reference</a> (every flag and subcommand).</p>
 </section>
 <section id="day-1-checklist" class="level2">
 <h2 class="anchored" data-anchor-id="day-1-checklist">Day 1 Checklist</h2>
@@ -284,7 +256,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><label><input type="checkbox">Paste the starter prompt (fill in your project details)</label></li>
 <li><label><input type="checkbox">Wait for Claude to customize <code>CLAUDE.md</code> for your project</label></li>
 <li><label><input type="checkbox">Approve the configuration plan</label></li>
-<li><label><input type="checkbox">Ask Claude to do something: “Review my paper” or “/lit-review [topic]”</label></li>
+<li><label><input type="checkbox">Ask Claude to do something: “Review my paper” or <code>/discover --lit [topic]</code></label></li>
 <li><label><input type="checkbox">Approve the task plan, watch it work, review the output</label></li>
 </ul>
 <p>That’s it. Everything else — agents, hooks, rules — runs automatically in the background.</p>
@@ -307,7 +279,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Folder structure</strong> (adjust to your layout)</li>
 <li><strong>Current project state</strong> (your papers and analyses)</li>
 </ol>
-<p><strong>Fill in the domain profile</strong> — Run <code>/interview-me</code> or manually edit <code>.claude/rules/domain-profile.md</code>:</p>
+<p><strong>Fill in the domain profile</strong> — Run <code>/discover</code> (interactive interview) or manually edit <code>.claude/rules/domain-profile.md</code>:</p>
 <ol type="1">
 <li><strong>Your field</strong> and adjacent subfields</li>
 <li><strong>Target journals</strong> ranked by tier</li>
@@ -316,8 +288,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 <p><strong>Configure permissions</strong> — Review <code>.claude/settings.json</code>. The template includes permissions for git, LaTeX, R, and utility scripts.</p>
 <p><strong>Test it:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">/compile-latex</span> main</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/proofread</span> Paper/main.tex</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">/tools</span> compile Paper/main.tex</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/review</span> <span class="at">--proofread</span> Paper/main.tex</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>

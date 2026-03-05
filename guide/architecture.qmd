@@ -1,11 +1,11 @@
 ---
 title: "Architecture Reference"
-subtitle: "How the Clo-Author System Works"
+subtitle: "How the System Works"
 ---
 
 # System Overview
 
-Claude Code's power comes from five configuration layers that work together:
+Claude Code's power comes from five configuration layers that work together. For details on each layer, see the [Customization Guide](customization.qmd).
 
 | Layer | Location | Loaded When |
 |-------|----------|-------------|
@@ -19,202 +19,109 @@ Claude reliably follows about **100--150 custom instructions**. Your system prom
 
 ---
 
-# CLAUDE.md --- The Project Constitution
+# Agent Workflow Diagram
 
-`CLAUDE.md` is the single most important file. Claude reads it at the start of every session. It should be a **slim constitution** --- short directives and pointers, not comprehensive documentation. Aim for ~120 lines:
+How 16 agents coordinate across the research pipeline. Each phase pairs **workers** (who create) with **critics** (who review). The **Orchestrator** manages dispatch, quality gates, and escalation. For detailed descriptions of each agent, see [Meet the Agents](agents.qmd).
 
-- **Core principles** --- 5--6 bullets (plan-first, verify-after, quality gates, worker-critic pairs, LEARN tags)
-- **Folder structure** --- where everything lives
-- **Commands** --- compilation, deployment
-- **Skill quick reference** --- table of available slash commands
-- **Customization tables** --- Beamer environments, notation
-- **Current state** --- what's done, what's in progress
+## The Pipeline
 
-::: {.callout-important}
-## Keep It Lean
+```{mermaid}
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#1a1a36', 'primaryTextColor': '#00f0ff', 'primaryBorderColor': '#00f0ff', 'lineColor': '#b44dff', 'secondaryColor': '#14142a', 'tertiaryColor': '#080810', 'edgeLabelBackground': '#080810', 'clusterBkg': '#0c0c18', 'clusterBorder': '#1e1e35'}}}%%
+flowchart LR
+    YOU:::start --> D:::phase1
+    D --> S:::phase2
+    S --> E:::phase3
+    E --> R:::phase4
+    R -->|score >= 95| SUB:::phase5
+    R -.->|missing lit| D
+    R -.->|flawed ID| S
+    R -.->|more checks| E
+    E -.->|parallel| T:::talks
 
-If CLAUDE.md exceeds ~150 lines, Claude starts ignoring rules silently. Put detailed standards in path-scoped rules instead.
-:::
+    YOU((You))
+    D(Discovery)
+    S(Strategy)
+    E(Execution)
+    R(Peer Review)
+    SUB(Submission)
+    T(Talks)
 
----
-
-# Rules --- Auto-Loading Domain Knowledge
-
-Rules are markdown files in `.claude/rules/` that Claude loads automatically. The key design principle is **path-scoping**: rules with a `paths:` YAML frontmatter only load when Claude works on matching files.
-
-## Always-On Rules
-
-Always-on rules (no `paths:` frontmatter) load every session:
-
-| Rule | Purpose |
-|------|---------|
-| `plan-first-workflow.md` | Plan before you build |
-| `orchestrator-protocol.md` | Dependency-driven contractor mode loop |
-| `session-logging.md` | Three logging triggers |
-| `session-reporting.md` | Consolidated session report |
-| `adversarial-pairing.md` | Every worker has a critic |
-| `separation-of-powers.md` | Critics never create, creators never critique |
-| `three-strikes.md` | Max 3 rounds, then escalate |
-| `severity-gradient.md` | Critic severity by phase |
-| `dependency-graph.md` | Phases by dependency, not sequence |
-| `scoring-protocol.md` | Weighted aggregation formula |
-| `standalone-access.md` | Any skill works outside the pipeline |
-| `revision-protocol.md` | R&R cycle routing |
-| `research-journal.md` | Auto-append journal after agent reports |
-| `meta-governance.md` | Template vs working project |
-| `domain-profile.md` | Field-specific calibration |
-
-## Path-Scoped Rules
-
-Path-scoped rules load only when relevant:
-
-| Rule | Triggers On |
-|------|------------|
-| `quality-gates.md` | `.tex`, `.R`, `.do`, `.py`, `.jl` |
-| `single-source-of-truth.md` | `Figures/`, `.tex` |
-| `pdf-processing.md` | `master_supporting_docs/` |
-| `table-generator.md` | `Tables/`, `.R` |
-| `exploration-folder-protocol.md` | `explorations/` |
-| `exploration-fast-track.md` | `explorations/` |
-
----
-
-# Agents --- Worker-Critic Pairs
-
-The v3 architecture uses **adversarial worker-critic pairs**. Every creator has a paired critic. Critics produce reports but never edit files. Creators implement but never score themselves.
-
-## The 6 Worker-Critic Pairs
-
-| Worker (Creates) | Critic (Reviews) | Phase |
-|-----------------|-----------------|-------|
-| **Librarian** --- literature collector | **Editor** --- coverage critic, journal editor | Discovery |
-| **Strategist** --- identification design | **Econometrician** --- 4-phase causal audit | Strategy |
-| **Coder** --- implements analysis | **Debugger** --- 12-category code review | Execution |
-| **Writer** --- drafts paper + humanizer | **Proofreader** --- 6-category manuscript review | Paper |
-| **Storyteller** --- creates Beamer talks | **Discussant** --- 5-category talk review | Presentation |
-| **Referee** (x2) --- blind peer review | **Editor** --- editorial decision | Peer Review |
-
-## Additional Agents
-
-| Agent | Role |
-|-------|------|
-| **Explorer** | Data finder (paired with Surveyor critic) |
-| **Surveyor** | Data quality critic |
-| **Verifier** | Infrastructure: compilation, execution, AEA compliance |
-| **Orchestrator** | Infrastructure: dispatch, escalation, rule enforcement |
-
-## All 15 Agents
-
-| Agent | File | Purpose |
-|-------|------|---------|
-| Librarian | `librarian.md` | Literature collection + proximity scoring |
-| Editor | `editor.md` | Evolving critic (lit → paper → journal editor) |
-| Explorer | `explorer.md` | Data source finder + feasibility scoring |
-| Surveyor | `surveyor.md` | Data quality critic |
-| Strategist | `strategist.md` | Identification strategy + PAP mode |
-| Econometrician | `econometrician.md` | 4-phase causal inference audit |
-| Coder | `coder.md` | Analysis implementation (R/Stata/Python/Julia) |
-| Debugger | `debugger.md` | 12-category code review |
-| Writer | `writer.md` | Paper drafting + humanizer pass |
-| Proofreader | `proofreader.md` | 6-category manuscript review |
-| Referee | `referee.md` | Blind peer review (x2 instances) |
-| Storyteller | `storyteller.md` | Beamer talk creation (4 formats) |
-| Discussant | `discussant.md` | Talk critic (advisory scoring) |
-| Verifier | `verifier.md` | Standard (4 checks) + submission (10 checks) |
-| Orchestrator | `orchestrator.md` | Agent dispatch + escalation routing |
-
-## Multi-Model Strategy
-
-Not all agents need the same model. Each agent file has a `model:` field:
-
-| Task Type | Recommended Model | Why |
-|-----------|-------------------|-----|
-| Complex analysis | `model: opus` | Needs deep reasoning |
-| Fast, constrained work | `model: sonnet` | Speed matters more |
-| Default | `model: inherit` | Uses main session model |
-
----
-
-# Skills --- Reusable Slash Commands
-
-Skills are multi-step workflows invoked with `/command`. Each skill lives in `.claude/skills/[name]/SKILL.md` and dispatches the appropriate v3 agents.
-
-Skills can be invoked two ways: **explicitly** (you type `/proofread Paper/main.tex`) or **automatically** (Claude invokes them when relevant). Most of the time, you just describe what you want.
-
-See the [User Guide](user-guide.qmd#all-skills-reference) for the complete skills table.
-
----
-
-# Hooks --- Automated Enforcement
-
-Hooks live in `.claude/settings.json` and fire on events, regardless of context state.
-
-## Design Principles
-
-- Use **command-based hooks** for fast, mechanical checks
-- Use **rules** for nuanced judgment
-- Avoid prompt-based hooks that trigger LLM calls on every response
-
-## All 7 Hooks
-
-| Hook | Event | What It Does |
-|------|-------|-------------|
-| Session log reminder | `Stop` | Reminds about session logs |
-| Desktop notification | `Notification` | macOS alert when Claude needs attention |
-| File protection | `PreToolUse` | Blocks edits to bibliography and settings |
-| Context state capture | `PreCompact` | Saves plan state + context survival checklist |
-| Context restoration | `SessionStart[compact\|resume]` | Restores context after compaction |
-| Context monitor | `PostToolUse[Bash\|Task]` | Progressive warnings at 40%/55%/65%/80%/90% |
-| Verification reminder | `PostToolUse[Write\|Edit]` | Reminds to compile/render (`.tex`, `.R`, `.do`, `.py`, `.jl`) |
-
----
-
-# Memory System
-
-Four persistent layers plus ephemeral conversation:
-
-| Layer | File | Updated When | Purpose |
-|-------|------|--------------|---------|
-| Project context | `CLAUDE.md` | Rarely | Project rules, folder structure |
-| Corrections | `MEMORY.md` | On `[LEARN]` tag | Prevent repeating mistakes |
-| Task strategy | `quality_reports/plans/` | Once per task | Plan survives handoff |
-| Decision reasoning | `quality_reports/session_logs/` | Incrementally | Record *why* decisions were made |
-| Conversation | Context window | Every response | Current working memory (**not** persistent) |
-
----
-
-# Context Survival System
-
-When context compaction happens, two hooks preserve and restore state:
-
-```
-Session running → context fills up → PreCompact fires
-                                           ↓
-                                    pre-compact.py saves:
-                                    • Active plan path
-                                    • Current task
-                                    • Recent decisions
-                                    • Context survival checklist
-                                           ↓
-                                    Auto-compaction happens
-                                           ↓
-                                    SessionStart(compact|resume) fires
-                                           ↓
-                                    post-compact-restore.py:
-                                    • Reads saved state
-                                    • Prints context summary
-                                    • Claude knows where it left off
+    classDef start fill:#080810,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
+    classDef phase1 fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:2px
+    classDef phase2 fill:#14142a,stroke:#00cc66,color:#00cc66,stroke-width:2px
+    classDef phase3 fill:#14142a,stroke:#b44dff,color:#b44dff,stroke-width:2px
+    classDef phase4 fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
+    classDef phase5 fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:2px
+    classDef talks fill:#0c0c18,stroke:#8888a8,color:#8888a8,stroke-width:1px,stroke-dasharray: 5 5
 ```
 
-### Context Monitoring
+## Agents by Phase
 
-The `context-monitor.py` hook tracks approximate context usage:
+Each phase dispatches **worker → critic** pairs. The worker creates; the critic reviews (read-only, never edits). If they can't agree after 3 rounds, the Orchestrator escalates.
 
-| Threshold | Message | Purpose |
-|-----------|---------|---------|
-| 40%, 55%, 65% | Suggest `/learn` | Capture discoveries before compaction |
-| 80% | Info message | Auto-compact approaching |
-| 90% | Caution | Complete current task with full quality |
+### Phase 1: Discovery
+
+| Worker | What it creates | Critic | What it checks |
+|--------|----------------|--------|----------------|
+| **Librarian** | Bibliography, frontier map | **librarian-critic** | Coverage, gaps, recency |
+| **Explorer** | Data sources, feasibility | **explorer-critic** | Measurement, sample, ID fit |
+
+### Phase 2: Strategy
+
+| Worker | What it creates | Critic | What it checks |
+|--------|----------------|--------|----------------|
+| **Strategist** | DiD/IV/RDD/SC design, strategy memo | **strategist-critic** | Assumptions, inference, sanity |
+
+### Phase 3: Execution
+
+| Worker | What it creates | Critic | What it checks |
+|--------|----------------|--------|----------------|
+| **Data-engineer** | Cleaning scripts, figures | **coder-critic** | Code quality, reproducibility |
+| **Coder** | Analysis scripts, tables | **coder-critic** | Strategy alignment, correctness |
+| **Writer** | Paper sections, humanizer pass | **writer-critic** | Notation, hedging, claims vs evidence |
+
+### Phase 4: Peer Review
+
+| Referee | Focus | Independence |
+|---------|-------|-------------|
+| **domain-referee** | Contributions, literature, external validity | Blind --- doesn't see the other report |
+| **methods-referee** | Identification, estimation, robustness | Blind --- doesn't see the other report |
+
+The Orchestrator synthesizes both reports into an editorial decision: Accept / Minor / Major / Reject.
+
+### Phase 5: Submission
+
+| Agent | What it does | Scoring |
+|-------|-------------|---------|
+| **Verifier** | 10-check AEA replication audit | Pass/fail (binary) |
+
+### Talks (parallel with Peer Review)
+
+| Worker | What it creates | Critic | What it checks |
+|--------|----------------|--------|----------------|
+| **Storyteller** | Beamer slides (4 formats) | **storyteller-critic** | Narrative, visuals, fidelity |
+
+## The Worker-Critic Loop
+
+```{mermaid}
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#14142a', 'primaryTextColor': '#d0d0e0', 'primaryBorderColor': '#b44dff', 'lineColor': '#b44dff', 'secondaryColor': '#0c0c18', 'tertiaryColor': '#080810', 'edgeLabelBackground': '#080810'}}}%%
+flowchart TD
+    W[WORKER creates artifact]:::worker --> C[CRITIC reviews, scores 0-100]:::critic
+    C -->|score >= 80| A([APPROVED]):::approved
+    C -->|score < 80| F[WORKER fixes issues]:::worker
+    F --> C2[CRITIC re-reviews]:::critic
+    C2 -->|pass| A
+    C2 -->|fail, round 3| ESC([ESCALATE to user]):::escalate
+
+    classDef worker fill:#14142a,stroke:#b44dff,color:#b44dff,stroke-width:2px
+    classDef critic fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:2px
+    classDef approved fill:#14142a,stroke:#00cc66,color:#00cc66,stroke-width:2px
+    classDef escalate fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
+```
+
+**Why it works:** The critic can't fix files (read-only), so it has no incentive to downplay issues. The worker can't approve itself (the critic re-audits). This prevents Claude from saying "looks good" about its own work.
+
+**Severity gradient:** Critics calibrate harshness by phase --- encouraging in Discovery, precise in Execution, adversarial in Peer Review.
 
 ---
 
@@ -226,53 +133,91 @@ Once a plan is approved, the orchestrator takes over autonomously, dispatching a
 
 Think of the orchestrator as a **general contractor**. You are the client. You describe what you want. The plan-first protocol is the blueprint phase. Once you approve the blueprint, the contractor takes over: hires the right specialists (agents), inspects their work (verification), sends them back to fix issues (review-fix loop), and only calls you when the job passes inspection (quality gates).
 
+The Orchestrator:
+
+- **Dispatches** worker-critic pairs based on the dependency graph
+- **Enforces quality gates**: 80 (commit), 90 (PR), 95 (submission)
+- **Escalates** when pairs can't converge after 3 rounds
+- **Synthesizes** referee reports into editorial decisions
+- **Selects** target journals at submission time
+- **Tracks** the research journal with scores and phase transitions
+
 ## Dependency-Driven Dispatch
 
-```
-Phase 1: Discovery (no dependencies)
-  ├── Librarian → Editor (lit review)
-  └── Explorer → Surveyor (data assessment)
-          ↓
-Phase 2: Strategy (depends on Discovery)
-  └── Strategist → Econometrician (strategy memo)
-          ↓
-Phase 3: Execution (depends on Strategy)
-  ├── Coder → Debugger (analysis scripts)
-  └── Writer → Proofreader (paper sections)
-          ↓
-Phase 4: Peer Review (depends on Execution)
-  ├── Referee x2 → Editor (editorial decision)
-  └── paper-excellence (weighted aggregate)
-          ↓
-Phase 5: Submission (depends on Peer Review, score >= 95)
-  └── Verifier (10-check AEA audit)
+```{mermaid}
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#14142a', 'primaryTextColor': '#d0d0e0', 'primaryBorderColor': '#b44dff', 'lineColor': '#b44dff', 'secondaryColor': '#0c0c18', 'tertiaryColor': '#080810', 'edgeLabelBackground': '#080810'}}}%%
+flowchart TD
+    P1:::phase --> P2:::phase
+    P2 --> P3:::phase
+    P3 --> P4:::phase
+    P4 -->|score >= 95| P5:::phase
+
+    P1(Discovery)
+    P2(Strategy)
+    P3(Execution)
+    P4(Peer Review)
+    P5(Submission)
+
+    subgraph s1 [" "]
+        direction LR
+        L[Librarian]:::worker ---|reviewed by| LC[librarian-critic]:::critic
+        X[Explorer]:::worker ---|reviewed by| XC[explorer-critic]:::critic
+    end
+
+    subgraph s2 [" "]
+        ST[Strategist]:::worker ---|reviewed by| STC[strategist-critic]:::critic
+    end
+
+    subgraph s3 [" "]
+        direction LR
+        DE[Data-engineer]:::worker ---|reviewed by| CC1[coder-critic]:::critic
+        CO[Coder]:::worker ---|reviewed by| CC2[coder-critic]:::critic
+        WR[Writer]:::worker ---|reviewed by| WC[writer-critic]:::critic
+    end
+
+    subgraph s4 [" "]
+        direction LR
+        DR[domain-referee]:::referee
+        MR[methods-referee]:::referee
+    end
+
+    subgraph s5 [" "]
+        VE[Verifier]:::infra
+    end
+
+    P1 --- s1
+    P2 --- s2
+    P3 --- s3
+    P4 --- s4
+    P5 --- s5
+
+    classDef phase fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
+    classDef worker fill:#14142a,stroke:#b44dff,color:#b44dff,stroke-width:1px
+    classDef critic fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:1px
+    classDef referee fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:1px
+    classDef infra fill:#14142a,stroke:#00cc66,color:#00cc66,stroke-width:1px
 ```
 
 Phases activate when dependencies are met, not by forced sequence. Parallel dispatch within phases (e.g., Librarian and Explorer run simultaneously in Phase 1).
 
 ## The Loop
 
-```
-Plan approved → orchestrator activates
-  │
-  Step 1: IMPLEMENT — Execute plan steps
-  │
-  Step 2: VERIFY — Compile, render, check outputs
-  │         If verification fails → fix → re-verify
-  │
-  Step 3: REVIEW — Run worker-critic pairs
-  │
-  Step 4: FIX — Apply fixes (critical → major → minor)
-  │         Max 3 rounds per pair (three-strikes rule)
-  │
-  Step 5: RE-VERIFY — Confirm fixes are clean
-  │
-  Step 6: SCORE — Weighted aggregate per scoring-protocol
-  │
-  └── Score >= threshold?
-        YES → Present summary to user
-        NO  → Loop to Step 3 (max 5 total rounds)
-              After max → present with remaining issues
+```{mermaid}
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#14142a', 'primaryTextColor': '#d0d0e0', 'primaryBorderColor': '#b44dff', 'lineColor': '#b44dff', 'secondaryColor': '#0c0c18', 'tertiaryColor': '#080810', 'edgeLabelBackground': '#080810'}}}%%
+flowchart TD
+    START([Plan approved]):::start --> IMPL[IMPLEMENT]:::step
+    IMPL --> VERIFY[VERIFY: compile, render, check]:::step
+    VERIFY --> REVIEW[REVIEW: worker-critic pairs]:::step
+    REVIEW --> FIX[FIX: critical then major then minor]:::step
+    FIX --> REVERIFY[RE-VERIFY: confirm fixes]:::step
+    REVERIFY --> SCORE[SCORE: weighted aggregate]:::step
+    SCORE -->|score >= threshold| DONE([Present summary]):::approved
+    SCORE -->|score < threshold| REVIEW
+    SCORE -.->|max 5 rounds| DONE
+
+    classDef start fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
+    classDef step fill:#14142a,stroke:#b44dff,color:#b44dff,stroke-width:2px
+    classDef approved fill:#14142a,stroke:#00cc66,color:#00cc66,stroke-width:2px
 ```
 
 ### Three-Strikes Escalation
@@ -281,10 +226,10 @@ If a worker-critic pair can't resolve after 3 rounds:
 
 | Pair | Escalation Target |
 |------|------------------|
-| Coder + Debugger | → Strategist (design may be wrong) |
-| Writer + Proofreader | → Editor (framing may need rethinking) |
-| Strategist + Econometrician | → User (fundamental design disagreement) |
-| Storyteller + Discussant | → Writer (paper content may need revision) |
+| Coder + coder-critic | → Strategist (design may be wrong) |
+| Writer + writer-critic | → domain-referee (framing may need rethinking) |
+| Strategist + strategist-critic | → User (fundamental design disagreement) |
+| Storyteller + storyteller-critic | → Writer (paper content may need revision) |
 
 ### "Just Do It" Mode
 
@@ -321,43 +266,6 @@ Plans are saved to disk so they survive context compression. The rule: **avoid `
 
 ---
 
-# The Adversarial Pattern
-
-The single most powerful pattern in the system: **worker + critic**.
-
-```
-+------------------+
-|    Worker         |  "I created the analysis."
-|    (READ-WRITE)   |
-+--------+---------+
-         |
-    +----v----+
-    | Critic  |  "I found 8 issues. 2 Critical."
-    | (READ   |
-    | ONLY)   |
-    +----+----+
-     /       \
-APPROVED   NEEDS WORK
-    |          |
-  Done    +----v---------+
-          |    Worker     |  "Fixed 8/8 issues."
-          |    (Round 2)  |
-          +----+---------+
-               |
-          +----v----------+
-          |    Critic      |  "Re-audit: 1 remaining."
-          |    (Round 2)   |
-          +----+----------+
-               |
-          ... (up to 3 rounds, then escalate)
-```
-
-**Why it works:** The critic can't fix files (read-only), so it has no incentive to downplay issues. The worker can't approve itself (the critic re-audits). This prevents Claude from saying "looks good" about its own work.
-
-**Severity gradient:** Critics calibrate harshness by phase --- encouraging in Discovery, precise in Execution, adversarial in Peer Review.
-
----
-
 # Parallel Agents
 
 Claude Code can spawn **multiple agents simultaneously** using the Task tool.
@@ -366,7 +274,7 @@ Claude Code can spawn **multiple agents simultaneously** using the Task tool.
 
 | Scenario | Sequential (slow) | Parallel (fast) |
 |----------|-------------------|-----------------|
-| Paper excellence review | Run each agent sequentially | Run Econometrician + Debugger + Proofreader + Verifier simultaneously |
+| Paper review | Run each agent sequentially | Run strategist-critic + coder-critic + writer-critic + Verifier simultaneously |
 | Literature search | Search one database at a time | Spawn agents for journals, NBER, SSRN |
 | Data exploration | Check one source at a time | Spawn agents for each data category |
 
@@ -380,41 +288,23 @@ The orchestrator recognizes independent subtasks and spawns parallel agents auto
 
 ---
 
-# Scoring Protocol
+# Scoring Protocol {#scoring-protocol}
 
 The weighted aggregate score determines quality gate passage:
 
 | Component | Weight | Agent(s) |
 |-----------|--------|----------|
-| Literature | 10% | Librarian + Editor |
-| Data | 10% | Explorer + Surveyor |
-| Identification | 25% | Econometrician |
-| Code | 15% | Debugger |
-| Paper | 25% | Proofreader |
-| Polish | 10% | Proofreader (writing subscore) |
+| Literature | 10% | Librarian + librarian-critic |
+| Data | 10% | Explorer + explorer-critic |
+| Identification | 25% | strategist-critic |
+| Code | 15% | coder-critic |
+| Paper | 25% | Avg(domain-referee + methods-referee) |
+| Polish | 10% | writer-critic |
 | Replication | 5% | Verifier |
 
 **Missing components:** If a component hasn't been scored (e.g., no literature review yet), its weight is redistributed proportionally across available components.
 
 **Submission gate:** Aggregate >= 95 AND every individual component >= 80.
-
----
-
-# Domain Profile
-
-The domain profile (`.claude/rules/domain-profile.md`) calibrates all agents to a specific research field. It can be populated two ways:
-
-1. **`/interview-me`** --- generates it automatically from the research interview
-2. **Manual editing** --- fill in the template directly
-
-All agents read this file for:
-
-- Target journal tiers (for Editor and Referee)
-- Common data sources (for Explorer)
-- Identification strategies (for Strategist and Econometrician)
-- Field conventions (for Coder and Writer)
-- Seminal references (for Librarian)
-- Referee concerns (for Econometrician and Referee)
 
 ---
 
@@ -424,7 +314,7 @@ The Clo-Author inherits a lecture production pipeline from [its origin](https://
 
 ## Creating Talks from Papers
 
-The `/create-talk` skill dispatches the Storyteller (creator) and Discussant (critic) to generate Beamer presentations in 4 formats (job market, seminar, short, lightning). All content derives from `Paper/main.tex`.
+The `/talk` skill dispatches the Storyteller (creator) and storyteller-critic (reviewer) to generate Beamer presentations in 4 formats (job market, seminar, short, lightning). All content derives from `Paper/main.tex`.
 
 ## Replication-First Coding
 

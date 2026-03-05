@@ -24,31 +24,63 @@ A typical research project flows through these phases, driven by dependencies (n
 
 ```
 Phase 1: Discovery
-  /interview-me → Research Spec + Domain Profile
-  /lit-review → Literature Synthesis (Librarian + Editor)
+  /discover             → Interactive interview → Research Spec
+  /discover --lit       → Literature Synthesis (Librarian + librarian-critic)
+  /discover --data      → Data Assessment (Explorer + explorer-critic)
 
 Phase 2: Strategy
-  /find-data → Data Assessment (Explorer + Surveyor)
-  /identify → Strategy Memo (Strategist + Econometrician)
+  /strategize           → Strategy Memo (Strategist + strategist-critic)
 
 Phase 3: Execution
-  /data-analysis → Scripts + Output (Coder + Debugger)
-  /draft-paper → Paper Sections (Writer + Humanizer)
+  /analyze              → Scripts + Output (Data-engineer + Coder + coder-critic)
+  /write                → Paper Sections (Writer + humanizer pass)
 
 Phase 4: Peer Review
-  /paper-excellence → Weighted Score (4 agents parallel)
-  /review-paper → 2 Referees + Editor
+  /review Paper/main.tex → Weighted Score (multi-agent parallel)
+  /review --peer        → domain-referee + methods-referee
 
 Phase 5: Submission
-  /target-journal → Journal Recommendations
-  /submit → Final Gate (score >= 95)
+  /submit --target      → Journal Recommendations
+  /submit --final       → Final Gate (score >= 95)
 ```
 
 You can enter at any stage. Use `/new-project` for the full pipeline. Each skill produces structured output and saves reports to `quality_reports/`.
 
-## Writing Your Paper
+## Discovery Phase
 
-### `/draft-paper [section]`
+### `/discover`
+
+Interactive research interview that builds your research specification and domain profile. Equivalent to sitting down with a mentor and sharpening your question.
+
+### `/discover --lit [topic]`
+
+Dispatches the **Librarian** (collector) and **librarian-critic** (coverage reviewer). Searches top-5 generals, NBER, field journals, SSRN/RePEc. Produces annotated bibliography, BibTeX entries, frontier map, and positioning recommendation.
+
+### `/discover --data [question]`
+
+Dispatches the **Explorer** (data finder) and **explorer-critic** (data quality reviewer). Searches public, administrative, survey, and novel data sources. Scores feasibility (A/B/C/D) and measurement quality.
+
+### `/discover --ideate [topic]`
+
+Generates research questions and identification strategies for a broad topic.
+
+## Strategy Phase
+
+### `/strategize`
+
+Dispatches the **Strategist** (proposer) and **strategist-critic** (reviewer). Produces strategy memo, pseudo-code, robustness plan, and falsification tests. The strategist-critic validates your assumptions, checks inference, and stress-tests the design.
+
+### `/strategize --pap`
+
+Dispatches the **Strategist** in PAP mode. Drafts in AEA/OSF/EGAP format with outcomes, subgroups, multiple testing corrections, and power calculations.
+
+## Execution Phase
+
+### `/analyze [dataset]`
+
+Dispatches the **Data-engineer** (cleaning + visualization), **Coder** (analysis implementation), and **coder-critic** (reviewer). End-to-end analysis: data cleaning, main specification, robustness checks, publication-ready tables and figures. Supports R, Stata, Python, and Julia.
+
+### `/write [section]`
 
 Dispatches the **Writer** agent. Drafts paper sections with proper economics structure:
 
@@ -59,13 +91,41 @@ Dispatches the **Writer** agent. Drafts paper sections with proper economics str
 
 Anti-hedging rules enforced. **Humanizer pass** automatically strips 24 AI writing patterns.
 
-### `/review-paper [file]`
+## Review Phase
 
-Dispatches 2 **Referee** agents (blind, parallel) and the **Editor** agent. Simulates peer review with independent reports and editorial decision (Accept/Minor/Major/Reject).
+### `/review [file]`
 
-### `/respond-to-referee [report]`
+Smart routing based on file type and flags:
 
-Classifies each referee comment per `revision-protocol.md`:
+| Input | What Runs |
+|-------|-----------|
+| `/review Paper/main.tex` | writer-critic + strategist-critic + Verifier (comprehensive) |
+| `/review scripts/R/analysis.R` | coder-critic standalone |
+| `/review --peer` | domain-referee + methods-referee (simulated peer review) |
+| `/review --peer JHR` | Same, calibrated to JHR's review culture |
+| `/review --methods Paper/main.tex` | strategist-critic standalone |
+| `/review --proofread Paper/main.tex` | writer-critic standalone |
+| `/review --code scripts/R/` | coder-critic standalone (code quality only) |
+| `/review --all` | All critics in parallel + weighted aggregate score |
+
+### `/review --peer [journal]`
+
+Dispatches two specialized **blind referees** that mimic real journal review:
+
+- **domain-referee**: Expert in your paper's subject literature. Checks contributions, positioning, missing citations, substantive arguments, external validity.
+- **methods-referee**: Expert in econometric methods. Checks identification strategy, estimation, inference, robustness, replication readiness.
+
+Both referees are independent (neither sees the other's report). The Orchestrator synthesizes the editorial decision (Accept/Minor/Major/Reject).
+
+**Journal calibration:** Add a journal name to calibrate both referees to that journal's review culture. For example, `/review --peer JHR` makes the referees prioritize policy relevance and clean identification (what JHR referees actually care about). 15 journals are pre-populated in `.claude/rules/journal-profiles.md`; you can add your own. Without a journal name, referees review as generic top-field reviewers.
+
+See the full [command reference](reference.qmd) for all flags and subcommands.
+
+## Revision Phase
+
+### `/revise [report]`
+
+Classifies each referee comment and routes to the right agent:
 
 | Class | Routing | Action |
 |-------|---------|--------|
@@ -76,40 +136,34 @@ Classifies each referee comment per `revision-protocol.md`:
 
 Produces point-by-point response letter with diplomatic disagreement protocol.
 
-## Running Analysis
+## Presentations
 
-### `/data-analysis [dataset]`
+### `/talk [format]`
 
-Dispatches the **Coder** (implementer) and **Debugger** (code critic). End-to-end analysis: data cleaning, main specification, robustness checks, publication-ready output. Supports R, Stata, Python, and Julia.
+Dispatches the **Storyteller** (creator) and **storyteller-critic** (talk reviewer). Generates Beamer `.tex` talks derived from your paper in 4 formats:
 
-### `/econometrics-check [file]`
+| Format | Slides | Duration | Content |
+|--------|--------|----------|---------|
+| Job Market | 40--50 | 45--60 min | Full story, all results, mechanism, robustness |
+| Seminar | 25--35 | 30--45 min | Motivation, main result, 2 robustness checks |
+| Short | 10--15 | 15 min | Question, method, key result, implication |
+| Lightning | 3--5 | 5 min | Hook, result, so-what |
 
-The centerpiece agent. Dispatches the **Econometrician** for **4 sequential phases** with early stopping:
+Talk scores are **advisory** (non-blocking).
 
-| Phase | What It Does |
-|-------|-------------|
-| **1. What's the Claim?** | Identify the design (DiD/IV/RDD/SC/Event Study), estimand, treatment, control. Early stops if no causal claims. |
-| **2. Core Design Validity** | Design-specific assumption checks (3--5 critical items) plus mandatory sanity check --- sign, magnitude, dynamics. Early stops on critical issues. |
-| **3. Inference** | SE clustering, few-clusters correction, multiple testing, code-theory alignment with package-specific checks. |
-| **4. Polish** | Robustness (Oster bounds, placebos, alternative specs), assumption stress test, citation fidelity. Only runs if Phases 2--3 pass. |
+Subcommands: `/talk create [format]`, `/talk audit [file]`, `/talk compile [file]`.
 
-**Package-flexible:** Recommends best practices but accepts and validates alternative packages.
+## Submission Phase
 
-### `/find-data [question]`
+### `/submit --target`
 
-Dispatches the **Explorer** (data finder) and **Surveyor** (data critic). Searches public, administrative, survey, and novel data sources. Scores feasibility (A/B/C/D) and measurement quality.
+Journal targeting. Produces ranked journal list using domain-profile tiers, formatting requirements, and submission strategy.
 
-### `/identify [question]`
+### `/submit --package`
 
-Dispatches the **Strategist** (proposer) and **Econometrician** (critic). Produces strategy memo, pseudo-code, robustness plan, and falsification tests.
+Build replication package: AEA-format README, master script, numbered script order, deposit checklist.
 
-## Preparing for Submission
-
-### `/pre-analysis-plan [spec]`
-
-Dispatches the **Strategist** in PAP mode. Drafts in AEA/OSF/EGAP format with outcomes, subgroups, multiple testing corrections, and power calculations.
-
-### `/audit-replication [dir]`
+### `/submit --audit`
 
 Dispatches the **Verifier** in submission mode (all 10 checks):
 
@@ -124,32 +178,22 @@ Dispatches the **Verifier** in submission mode (all 10 checks):
 9. Output cross-reference
 10. README completeness (AEA format)
 
-### `/data-deposit`
-
-Dispatches **Coder** (assembly) and **Verifier** (validation). Generates AEA-format README, master script, numbered script order, and deposit checklist.
-
-### `/target-journal [paper]`
-
-Dispatches the **Editor** in journal-selection mode. Produces ranked journal list using domain-profile tiers, formatting requirements, and submission strategy.
-
-### `/submit [journal]`
+### `/submit --final`
 
 Final submission gate. Requires aggregate score >= 95 with all components >= 80. Generates cover letter draft and submission checklist.
 
-## Giving a Talk
+## Utilities
 
-### `/create-talk [format]`
+### `/tools [subcommand]`
 
-Dispatches the **Storyteller** (creator) and **Discussant** (critic). Generates Beamer `.tex` talks derived from your paper in 4 formats:
-
-| Format | Slides | Duration | Content |
-|--------|--------|----------|---------|
-| Job Market | 40--50 | 45--60 min | Full story, all results, mechanism, robustness |
-| Seminar | 25--35 | 30--45 min | Motivation, main result, 2 robustness checks |
-| Short | 10--15 | 15 min | Question, method, key result, implication |
-| Lightning | 3--5 | 5 min | Hook, result, so-what |
-
-Talk scores are **advisory** (non-blocking).
+| Subcommand | What It Does |
+|------------|-------------|
+| `/tools commit [msg]` | Stage, commit, PR, merge |
+| `/tools compile [file]` | 3-pass XeLaTeX + BibTeX |
+| `/tools validate-bib` | Cross-reference citations |
+| `/tools journal` | Research journal timeline |
+| `/tools learn` | Extract session discoveries into persistent skills |
+| `/tools deploy` | Build and deploy to GitHub Pages |
 
 ---
 
@@ -165,19 +209,7 @@ Every file gets a quality score from 0 to 100, computed as a **weighted aggregat
 | **< 80** | Blocked | Must fix before committing |
 | -- | Advisory | Talks (reported, non-blocking) |
 
-### Weighted Aggregate Formula
-
-| Component | Weight | Agent |
-|-----------|--------|-------|
-| Literature | 10% | Librarian + Editor |
-| Data | 10% | Explorer + Surveyor |
-| Identification | 25% | Econometrician |
-| Code | 15% | Debugger |
-| Paper | 25% | Proofreader |
-| Polish | 10% | Proofreader (writing subscore) |
-| Replication | 5% | Verifier |
-
-Missing components are renormalized. See `scoring-protocol.md` for details.
+See the full [scoring formula](architecture.qmd#scoring-protocol) in the Architecture Reference.
 
 ---
 
@@ -222,15 +254,15 @@ Every correction gets tagged for future reference in MEMORY.md:
 - [LEARN:r-code] Package X: ALWAYS include intercept in design matrix
 ```
 
-## Skill Extraction: /learn
+## Skill Extraction: /tools learn
 
-For discoveries that deserve more than a one-line tag, use `/learn` to create a full skill.
+For discoveries that deserve more than a one-line tag, use `/tools learn` to create a full skill.
 
 | Situation | Use |
 |-----------|-----|
 | One-liner fix | `[LEARN:category]` tag in MEMORY.md |
-| Multi-step workflow | `/learn` to create full skill |
-| Error + root cause + solution | `/learn` if reusable, `[LEARN]` if not |
+| Multi-step workflow | `/tools learn` to create full skill |
+| Error + root cause + solution | `/tools learn` if reusable, `[LEARN]` if not |
 
 ---
 
@@ -238,7 +270,7 @@ For discoveries that deserve more than a one-line tag, use `/learn` to create a 
 
 ## Domain Profile
 
-The domain profile (`.claude/rules/domain-profile.md`) calibrates all agents to your field. Fill it in manually or use `/interview-me` to populate it interactively:
+The domain profile (`.claude/rules/domain-profile.md`) calibrates all agents to your field. Fill it in manually or use `/discover` (interactive interview) to populate it:
 
 - **Field & adjacent subfields** --- inferred from your topic
 - **Target journals** --- ranked by tier
@@ -265,71 +297,7 @@ allowed-tools: ["Read", "Write", "Edit", "Bash", "Task"]
 
 ---
 
-# All Skills Reference
-
-## Research Pipeline
-
-| Skill | Agents | What It Does |
-|-------|--------|-------------|
-| `/new-project [topic]` | All (orchestrated) | Full pipeline: idea → paper |
-| `/interview-me [topic]` | — | Interactive Q&A → research spec + domain profile |
-| `/lit-review [topic]` | Librarian + Editor | Literature search + synthesis |
-| `/find-data [question]` | Explorer + Surveyor | Data discovery + quality assessment |
-| `/identify [question]` | Strategist + Econometrician | Design identification strategy |
-| `/research-ideation [topic]` | — | Research questions + strategies |
-
-## Analysis & Code
-
-| Skill | Agents | What It Does |
-|-------|--------|-------------|
-| `/data-analysis [dataset]` | Coder + Debugger | End-to-end analysis |
-| `/econometrics-check [file]` | Econometrician | 4-phase causal inference audit |
-| `/review-r [file]` | Debugger | Code quality review (standalone) |
-
-## Writing & Polish
-
-| Skill | Agents | What It Does |
-|-------|--------|-------------|
-| `/draft-paper [section]` | Writer | Paper sections + humanizer pass |
-| `/proofread [file]` | Proofreader | 6-category manuscript review |
-| `/humanizer [file]` | — | Strip 24 AI writing patterns |
-| `/compile-latex [file]` | — | 3-pass XeLaTeX + BibTeX |
-
-## Quality & Review
-
-| Skill | Agents | What It Does |
-|-------|--------|-------------|
-| `/paper-excellence [file]` | 4 parallel | Multi-agent review + weighted score |
-| `/review-paper [file]` | 2 Referees + Editor | Simulated peer review |
-| `/validate-bib` | — | Cross-reference citations |
-
-## Submission & Deposit
-
-| Skill | Agents | What It Does |
-|-------|--------|-------------|
-| `/target-journal [paper]` | Editor | Journal targeting + strategy |
-| `/respond-to-referee [report]` | Writer + routing | Point-by-point response |
-| `/data-deposit` | Coder + Verifier | AEA replication package |
-| `/audit-replication [dir]` | Verifier | 10-check submission audit |
-| `/pre-analysis-plan [spec]` | Strategist | Draft PAP (AEA/OSF/EGAP) |
-| `/submit [journal]` | Verifier + scoring | Final gate (score >= 95) |
-
-## Presentations
-
-| Skill | Agents | What It Does |
-|-------|--------|-------------|
-| `/create-talk [format]` | Storyteller + Discussant | Beamer talk (4 formats) |
-| `/visual-audit [file]` | — | Slide layout audit |
-
-## Infrastructure
-
-| Skill | What It Does |
-|-------|-------------|
-| `/commit [msg]` | Stage, commit, PR, merge |
-| `/learn` | Extract session discoveries into persistent skills |
-| `/context-status` | Show session health and context usage |
-| `/deploy` | Build and deploy to GitHub Pages |
-| `/journal` | Research journal timeline |
+See the full [command reference](customization.qmd#skills-10-core-commands) in the Customization Guide.
 
 ---
 
@@ -340,12 +308,12 @@ allowed-tools: ["Read", "Write", "Edit", "Bash", "Task"]
 **Symptom:** `xelatex` errors or missing packages.
 
 1. Check you have XeLaTeX installed: `which xelatex`
-2. Ensure `TEXINPUTS` includes `Preambles/`: the `/compile-latex` skill handles this
+2. Ensure `TEXINPUTS` includes `Preambles/`: the `/tools compile` skill handles this
 3. Missing package? Install via TeX Live: `tlmgr install [package]`
 
 ### Hooks Not Firing
 
-**Symptom:** No context warnings, no verification reminders.
+**Symptom:** No file protection or context survival.
 
 1. Check hooks are configured in `.claude/settings.json`
 2. Ensure Python 3 is available: `which python3`
@@ -371,6 +339,6 @@ allowed-tools: ["Read", "Write", "Edit", "Bash", "Task"]
 
 **Symptom:** Score stuck below 80, can't commit.
 
-1. Run `/paper-excellence` to get detailed issue breakdown
+1. Run `/review --all` to get detailed issue breakdown
 2. Fix critical issues first (they cost the most points)
 3. Check per-component scores --- one weak component can drag down the aggregate

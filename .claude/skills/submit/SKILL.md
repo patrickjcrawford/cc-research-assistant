@@ -1,135 +1,74 @@
 ---
 name: submit
-description: Final submission verification gate. Runs Verifier in submission mode (10 checks), confirms aggregate score >= 95 with all components >= 80, and generates submission checklist. Use when ready to submit to a journal.
+description: Submission pipeline — journal targeting, replication package, audit, and final gate. Replaces /submit, /target-journal, /audit-replication, /data-deposit.
 disable-model-invocation: true
-argument-hint: "[journal name (optional)]"
+argument-hint: "[mode: target | package | audit | final] [journal name (optional)]"
 allowed-tools: ["Read", "Grep", "Glob", "Write", "Bash", "Task"]
 ---
 
 # Submit
 
-Final submission gate combining full verification, score enforcement, and submission checklist.
+Submission pipeline with four modes covering journal selection through final verification.
 
-**Input:** `$ARGUMENTS` — target journal name (optional, uses domain-profile.md default).
+**Input:** `$ARGUMENTS` — mode keyword, optionally followed by journal name.
 
 ---
 
-## Workflow
+## Modes
 
-### Step 1: Pre-Flight Checks
+### `/submit target` — Journal Targeting
+Get ranked journal recommendations.
 
-1. Read `.claude/rules/scoring-protocol.md` for submission requirements
-2. Read `.claude/rules/domain-profile.md` for target journal
-3. Check for existing quality reports in `quality_reports/`
-4. Verify paper exists at `Paper/main.tex`
+**Agent:** Orchestrator (journal selection function)
 
-### Step 2: Run Full Verification
+Considers: contribution fit, methodology fit, audience fit, recent publications, desk rejection risk. Consults domain-profile.md for journal tiers.
 
-If `/paper-excellence` hasn't been run recently (check report dates):
+Output: Ranked list of 3 target journals with rationale.
+Save to `quality_reports/journal_recommendations_[date].md`
 
-Dispatch full review pipeline:
-```
-Run /paper-excellence all
-```
+### `/submit package` — Build Replication Package
+Assemble AEA-compliant replication package.
 
-This triggers: Econometrician + Debugger + Proofreader + Verifier in parallel.
+**Agents:** Coder + Verifier
 
-### Step 3: Run Replication Audit
+Produces:
+- Master script that runs all analyses end-to-end
+- README with data sources, computational requirements, instructions
+- Data documentation and codebook
+- Organized file structure per AEA standards
+Save to `Replication/`
 
-Dispatch Verifier in submission mode:
-```
-Run /audit-replication Replication/
-```
+### `/submit audit` — Audit Replication Package
+Verify replication package completeness.
 
-This runs all 10 checks including end-to-end execution.
+**Agent:** Verifier (submission mode — 10 checks)
 
-### Step 4: Score Gate
+Checks:
+1. Master script exists and runs
+2. All tables reproduce
+3. All figures reproduce
+4. README complete
+5. Data documentation present
+6. Numbered script order
+7. Dependencies listed
+8. Runtime documented
+9. Output paths match paper references
+10. No hardcoded paths
 
-Read the most recent aggregate score and check:
+### `/submit final [journal]` — Final Submission Gate
+Full verification + score enforcement + submission checklist.
 
-| Requirement | Threshold | Status |
-|-------------|-----------|--------|
-| Aggregate score | >= 95 | PASS/FAIL |
-| Identification component | >= 80 | PASS/FAIL |
-| Code component | >= 80 | PASS/FAIL |
-| Paper component | >= 80 | PASS/FAIL |
-| Replication (10/10 checks) | PASS | PASS/FAIL |
-
-**If any requirement FAILS:** List specific blocking issues and stop. Do not generate submission materials.
-
-### Step 5: Generate Submission Package
-
-If all gates pass:
-
-1. **Cover letter draft** (save to `quality_reports/cover_letter_[journal]_[date].tex`)
-   - Addressed to current editor
-   - 1 paragraph: what the paper does and why it matters
-   - 1 paragraph: why this journal
-   - 1 paragraph: originality confirmation
-   - Suggested referees (3-5, from `/target-journal` if available)
-
-2. **Final checklist** (save to `quality_reports/submission_checklist_[date].md`):
-   ```markdown
-   # Submission Checklist: [Journal]
-
-   ## Manuscript
-   - [ ] Title page with affiliations and contact info
-   - [ ] Abstract within word limit
-   - [ ] JEL codes (2-3)
-   - [ ] Keywords (3-5)
-   - [ ] Journal formatting guidelines followed
-
-   ## Data and Code
-   - [ ] Replication package audit: PASS (10/10)
-   - [ ] Data availability statement in manuscript
-   - [ ] Deposit DOI recorded
-
-   ## Quality Gates
-   - [ ] Aggregate score: [XX]/100 (>= 95 required)
-   - [ ] All components >= 80
-   - [ ] No unresolved CRITICAL issues
-
-   ## Submission
-   - [ ] Upload manuscript PDF
-   - [ ] Upload replication package
-   - [ ] Upload cover letter
-   - [ ] Submit via [portal]
-   ```
-
-### Step 6: Present Results
-
-```markdown
-# Submission Report
-**Date:** [YYYY-MM-DD]
-**Target Journal:** [name]
-**Aggregate Score:** [XX/100]
-
-## Gate Status: [PASS / FAIL]
-
-| Component | Score | Threshold | Status |
-|-----------|-------|-----------|--------|
-| Aggregate | XX | >= 95 | ✓/✗ |
-| Identification | XX | >= 80 | ✓/✗ |
-| Code | XX | >= 80 | ✓/✗ |
-| Paper | XX | >= 80 | ✓/✗ |
-| Replication | X/10 | 10/10 | ✓/✗ |
-
-## Generated Materials
-- Cover letter: quality_reports/cover_letter_*.tex
-- Submission checklist: quality_reports/submission_checklist_*.md
-
-## Remaining Steps (manual)
-1. Upload to [submission portal]
-2. Enter suggested referees
-3. Submit
-```
+Workflow:
+1. Run comprehensive review if not done recently
+2. Run replication audit
+3. Check score gate: aggregate >= 95, all components >= 80
+4. If PASS: generate cover letter draft + submission checklist
+5. If FAIL: list blocking issues and stop
 
 ---
 
 ## Principles
-
-- **This is the final gate.** Score >= 95 + all components >= 80. No exceptions.
+- **Score >= 95 + all components >= 80. No exceptions.**
 - **Don't skip verification.** Even if reports exist, check they're recent.
-- **If it fails, stop.** List blocking issues. Don't generate submission materials for a failing paper.
-- **Cover letter is a draft.** The user must review and customize before sending.
-- **Manual submission.** This skill prepares materials but does NOT submit to journals.
+- **If it fails, stop.** Don't generate materials for a failing paper.
+- **Cover letter is a draft.** User must review before sending.

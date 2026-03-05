@@ -16,9 +16,17 @@
 - **Plan first** -- enter plan mode before non-trivial tasks; save plans to `quality_reports/plans/`
 - **Verify after** -- compile and confirm output at the end of every task
 - **Single source of truth** -- Paper `main.tex` is authoritative; talks and supplements derive from it
-- **Quality gates** -- weighted aggregate score; nothing ships below 80/100; see `scoring-protocol.md`
+- **Quality gates** -- weighted aggregate score; nothing ships below 80/100; see `quality.md`
 - **Worker-critic pairs** -- every creator has a paired critic; critics never edit files
 - **[LEARN] tags** -- when corrected, save `[LEARN:category] wrong → right` to MEMORY.md
+
+---
+
+## Getting Started
+
+1. Fill in the `[BRACKETED PLACEHOLDERS]` in this file
+2. Run `/discover interview [topic]` to build your research specification
+3. Or run `/new-project [topic]` for the full orchestrated pipeline
 
 ---
 
@@ -79,7 +87,7 @@ cd Talks && TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode t
 | 95 | Submission | Aggregate + all components >= 80 |
 | -- | Advisory | Talks (reported, non-blocking) |
 
-See `scoring-protocol.md` for weighted aggregation formula.
+See `quality.md` for weighted aggregation formula.
 
 ---
 
@@ -88,34 +96,15 @@ See `scoring-protocol.md` for weighted aggregation formula.
 | Command | What It Does |
 |---------|-------------|
 | `/new-project [topic]` | Full pipeline: idea → paper (orchestrated) |
-| `/interview-me [topic]` | Interactive research interview → spec + domain profile |
-| `/lit-review [topic]` | Librarian + Editor: literature search + synthesis |
-| `/find-data [question]` | Explorer + Surveyor: data discovery + assessment |
-| `/identify [question]` | Strategist + Econometrician: design identification strategy |
-| `/data-analysis [dataset]` | Coder + Debugger: end-to-end analysis |
-| `/draft-paper [section]` | Writer: draft paper sections + humanizer pass |
-| `/econometrics-check [file]` | Econometrician: 4-phase causal inference audit |
-| `/review-r [file]` | Debugger: code quality review (standalone) |
-| `/proofread [file]` | Proofreader: 6-category manuscript review |
-| `/paper-excellence [file]` | Multi-agent parallel review + weighted score |
-| `/review-paper [file]` | 2 Referees + Editor: simulated peer review |
-| `/respond-to-referee [report]` | Revision routing per revision-protocol |
-| `/target-journal [paper]` | Editor: journal targeting + submission strategy |
-| `/submit [journal]` | Final gate: score >= 95, all components >= 80 |
-| `/create-talk [format]` | Storyteller + Discussant: Beamer talk from paper |
-| `/pre-analysis-plan [spec]` | Strategist: draft PAP (AEA/OSF/EGAP) |
-| `/audit-replication [dir]` | Verifier: 10-check submission audit |
-| `/data-deposit` | Coder + Verifier: AEA replication package |
-| `/humanizer [file]` | Strip 24 AI writing patterns |
-| `/journal` | Research journal timeline |
-| `/compile-latex [file]` | 3-pass XeLaTeX + bibtex |
-| `/validate-bib` | Cross-reference citations |
-| `/commit [msg]` | Stage, commit, PR, merge |
-| `/research-ideation [topic]` | Research questions + strategies |
-| `/visual-audit [file]` | Slide layout audit |
-| `/learn` | Extract session discoveries into skills |
-| `/context-status` | Session health + context usage |
-| `/deploy` | Quarto render + GitHub Pages sync |
+| `/discover [mode] [topic]` | Discovery: interview, literature, data, ideation |
+| `/strategize [question]` | Identification strategy or pre-analysis plan |
+| `/analyze [dataset]` | End-to-end data analysis |
+| `/write [section]` | Draft paper sections + humanizer pass |
+| `/review [file/--flag]` | Quality reviews (routes by target: paper, code, peer) |
+| `/revise [report]` | R&R cycle: classify + route referee comments |
+| `/talk [mode] [format]` | Create, audit, or compile Beamer presentations |
+| `/submit [mode]` | Journal targeting → package → audit → final gate |
+| `/tools [subcommand]` | Utilities: commit, compile, validate-bib, journal, etc. |
 
 ---
 

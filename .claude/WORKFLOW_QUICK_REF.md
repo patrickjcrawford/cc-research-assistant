@@ -7,21 +7,19 @@
 ## The Research Pipeline
 
 ```
-/interview-me → Research Spec + Domain Profile
+/discover interview → Research Spec + Domain Profile
     ↓
-/lit-review → Literature Synthesis (Librarian + Editor)
+/discover lit → Literature Synthesis (Librarian + librarian-critic)
     ↓
-/find-data → Data Assessment (Explorer + Surveyor)
+/discover data → Data Assessment (Explorer + explorer-critic)
     ↓
-/identify → Strategy Memo (Strategist + Econometrician)
+/strategize → Strategy Memo (Strategist + strategist-critic)
     ↓
-/data-analysis → Scripts + Output (Coder + Debugger)
+/analyze → Scripts + Output (Coder/Data-engineer + coder-critic)
     ↓
-/draft-paper → Paper Sections (Writer + Humanizer)
+/write → Paper Sections (Writer + writer-critic)
     ↓
-/paper-excellence → Weighted Score (4 agents parallel)
-    ↓
-/review-paper → Peer Review (2 Referees + Editor)
+/review → Weighted Score + Peer Review (domain-referee + methods-referee)
     ↓
 /submit → Final Gate (score >= 95, all components >= 80)
 ```
@@ -30,72 +28,29 @@ Enter at any stage. Use `/new-project` for the full pipeline.
 
 ---
 
-## Key Skills by Research Stage
+## The 10 Commands
 
-### Ideation & Literature
-| Command | Agents | What It Does |
-|---------|--------|-------------|
-| `/interview-me [topic]` | — | Interactive Q&A → research spec + domain profile |
-| `/lit-review [topic]` | Librarian + Editor | Literature search + synthesis |
-| `/research-ideation [topic]` | — | Research questions + strategies |
-
-### Data & Strategy
-| Command | Agents | What It Does |
-|---------|--------|-------------|
-| `/find-data [question]` | Explorer + Surveyor | Data discovery + quality assessment |
-| `/identify [question]` | Strategist + Econometrician | Design identification strategy |
-| `/pre-analysis-plan [spec]` | Strategist | Draft PAP (AEA/OSF/EGAP) |
-
-### Analysis & Writing
-| Command | Agents | What It Does |
-|---------|--------|-------------|
-| `/data-analysis [dataset]` | Coder + Debugger | End-to-end analysis + code review |
-| `/draft-paper [section]` | Writer | Paper sections + humanizer pass |
-| `/compile-latex [file]` | — | 3-pass XeLaTeX + bibtex |
-
-### Quality & Review
-| Command | Agents | What It Does |
-|---------|--------|-------------|
-| `/econometrics-check [file]` | Econometrician | 4-phase causal inference audit |
-| `/review-r [file]` | Debugger | Code quality review (standalone) |
-| `/proofread [file]` | Proofreader | 6-category manuscript review |
-| `/paper-excellence [file]` | 4 parallel | Multi-agent review + weighted score |
-| `/review-paper [file]` | 2 Referees + Editor | Simulated peer review |
-| `/validate-bib` | — | Cross-reference citations |
-
-### Submission & Deposit
-| Command | Agents | What It Does |
-|---------|--------|-------------|
-| `/target-journal [paper]` | Editor | Journal targeting + strategy |
-| `/respond-to-referee [report]` | Writer + routing | Point-by-point response |
-| `/data-deposit` | Coder + Verifier | AEA replication package |
-| `/audit-replication [dir]` | Verifier | 10-check submission audit |
-| `/submit [journal]` | Verifier + scoring | Final gate (score >= 95) |
-
-### Presentations
-| Command | Agents | What It Does |
-|---------|--------|-------------|
-| `/create-talk [format]` | Storyteller + Discussant | Beamer talk (4 formats) |
-| `/visual-audit [file]` | — | Slide layout audit |
-
-### Infrastructure
 | Command | What It Does |
 |---------|-------------|
-| `/commit [msg]` | Stage, commit, PR, merge |
-| `/humanizer [file]` | Strip 24 AI writing patterns |
-| `/journal` | Research journal timeline |
-| `/context-status` | Session health + context usage |
-| `/learn` | Extract discoveries into skills |
-| `/deploy` | Build + deploy to GitHub Pages |
+| `/new-project [topic]` | Full pipeline: idea to paper (orchestrated) |
+| `/discover [interview\|lit\|data]` | Research spec, literature review, or data discovery |
+| `/strategize [question]` | Identification strategy + Econometrician review |
+| `/analyze [dataset]` | End-to-end analysis: scripts, output, code review |
+| `/write [section]` | Draft paper sections + humanizer pass |
+| `/review [file]` | Multi-agent quality review + weighted score |
+| `/revise [report]` | Route referee comments, draft response letter |
+| `/talk [format]` | Beamer presentation from paper (4 formats) |
+| `/submit [journal]` | Final gate: score >= 95, all components >= 80 |
+| `/tools [subcommand]` | commit, compile, validate-bib, journal, learn, deploy, context |
 
 ---
 
-## Quality Gates
+## Quality Gates at a Glance
 
 | Score | Gate | What It Means |
 |-------|------|--------------|
 | >= 95 | Submission | Ready for top-5 (all components >= 80) |
-| >= 90 | PR | Ready to submit (minor polish recommended) |
+| >= 90 | PR | Ready to merge (minor polish recommended) |
 | >= 80 | Commit | Ready to commit (address major issues before submission) |
 | < 80 | **Blocked** | Must fix critical/major issues |
 | -- | Advisory | Talks: reported only, non-blocking |
@@ -109,7 +64,7 @@ Weighted aggregate: Literature 10% + Data 10% + Identification 25% + Code 15% + 
 - **Design forks:** "Option A vs. Option B. Which?"
 - **Identification choice:** "CS DiD vs. Sun-Abraham for this setting?"
 - **Disagreement with referee:** "DISAGREE classification — please review"
-- **After 3 strikes:** "Coder and Debugger can't agree — your call"
+- **After 3 strikes:** "Coder and coder-critic can't agree — your call"
 
 ## I Just Execute When
 
@@ -126,7 +81,7 @@ For experimental work:
 - Work in `explorations/` folder
 - 60/100 quality threshold (vs. 80/100 for production)
 - No plan needed — just a research value check
-- See `.claude/rules/exploration-fast-track.md`
+- See `.claude/rules/content-standards.md`
 
 ---
 

@@ -38,33 +38,30 @@ Claude reads the configuration, fills in your project details, and enters contra
 
 You describe a task. Claude plans the approach, implements it, runs specialized review agents, fixes issues, re-verifies, and scores against quality gates — all autonomously. You approve the plan and see a summary when the work meets quality standards.
 
-### 15 Specialized Agents in Worker-Critic Pairs
+### 16 Specialized Agents in Worker-Critic Pairs
 
 Every creator has a paired critic. Critics can't edit files; creators can't score themselves.
 
 | Phase | Worker (Creates) | Critic (Reviews) |
 |-------|-----------------|-----------------|
-| Discovery | Librarian | Editor |
-| Strategy | Strategist | Econometrician |
-| Execution | Coder | Debugger |
-| Paper | Writer | Proofreader |
-| Peer Review | Referee (x2) | Editor |
-| Presentation | Storyteller | Discussant |
+| Discovery | Librarian | librarian-critic |
+| Discovery | Explorer | explorer-critic |
+| Strategy | Strategist | strategist-critic |
+| Execution | Coder | coder-critic |
+| Execution | Data-engineer | coder-critic |
+| Paper | Writer | writer-critic |
+| Peer Review | domain-referee + methods-referee | — |
+| Presentation | Storyteller | storyteller-critic |
 | Infrastructure | Orchestrator, Verifier | — |
 
-Additional standalone agents: **Explorer** (data finder), **Surveyor** (data critic).
-
-### 29 Slash Commands
+### 10 Slash Commands
 
 | Category | Commands |
 |----------|----------|
-| **Pipeline** | `/new-project`, `/interview-me`, `/lit-review`, `/find-data`, `/identify` |
-| **Analysis** | `/data-analysis`, `/econometrics-check`, `/review-r` |
-| **Writing** | `/draft-paper`, `/proofread`, `/humanizer` |
-| **Review** | `/paper-excellence`, `/review-paper`, `/respond-to-referee` |
-| **Submission** | `/target-journal`, `/submit`, `/data-deposit`, `/audit-replication`, `/pre-analysis-plan` |
-| **Talks** | `/create-talk`, `/visual-audit` |
-| **Infrastructure** | `/compile-latex`, `/validate-bib`, `/commit`, `/learn`, `/context-status`, `/deploy`, `/journal`, `/research-ideation` |
+| **Research** | `/new-project`, `/discover`, `/strategize`, `/analyze`, `/write` |
+| **Review** | `/review`, `/revise` |
+| **Output** | `/talk`, `/submit` |
+| **Tools** | `/tools` (commit, compile, validate-bib, journal, learn, deploy, context) |
 
 ### Quality Gates
 
@@ -88,7 +85,7 @@ Plans, specifications, and session logs survive auto-compression and session bou
 ```
 your-project/
 ├── CLAUDE.md                    # Project configuration (fill in placeholders)
-├── .claude/                     # 15 agents, 29 skills, 21 rules, 7 hooks
+├── .claude/                     # 16 agents, 10 skills, 8 rules, 4 hooks
 ├── Bibliography_base.bib        # Centralized bibliography
 ├── Paper/                       # Main LaTeX manuscript (source of truth)
 │   ├── main.tex
@@ -123,7 +120,7 @@ Optional: Stata, Python, Julia (for multi-language analysis), [Quarto](https://q
 ## Adapting for Your Field
 
 1. **Fill in `CLAUDE.md`** — replace `[BRACKETED PLACEHOLDERS]` with your project details
-2. **Fill in the domain profile** (`.claude/rules/domain-profile.md`) — your field's journals, data sources, identification strategies, conventions, and seminal references. Use `/interview-me` to populate it interactively.
+2. **Fill in the domain profile** (`.claude/rules/domain-profile.md`) — your field's journals, data sources, identification strategies, conventions, and seminal references. Use `/discover interview` to populate it interactively.
 3. **Configure your language** — R is the default; Stata, Python, and Julia are also supported. Set your preference in CLAUDE.md.
 
 The Clo-Author is designed for applied econometrics, but the infrastructure (contractor mode, quality gates, adversarial review) works for any quantitative research field.

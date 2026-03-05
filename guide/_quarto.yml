@@ -10,8 +10,14 @@ website:
         href: index.qmd
       - text: "User Guide"
         href: user-guide.qmd
+      - text: "Agents"
+        href: agents.qmd
       - text: "Architecture"
         href: architecture.qmd
+      - text: "Customization"
+        href: customization.qmd
+      - text: "Reference"
+        href: reference.qmd
     right:
       - icon: github
         href: https://github.com/hsantanna88/clo-author
@@ -30,3 +36,5 @@ format:
     smooth-scroll: true
     mainfont: "Space Grotesk, Inter, system-ui, sans-serif"
     monofont: "JetBrains Mono, Fira Code, Cascadia Code, monospace"
+    mermaid:
+      theme: dark

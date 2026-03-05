@@ -94,7 +94,7 @@ Rscript scripts/R/FILENAME.R 2>&1 | tail -20
 
 **Pass/fail per check.** Binary for aggregation: 0 (any failure) or 100 (all pass).
 
-In the weighted overall score (scoring-protocol.md), Verifier contributes 5% weight.
+In the weighted overall score (quality.md), Verifier contributes 5% weight.
 
 ## Report Format
 

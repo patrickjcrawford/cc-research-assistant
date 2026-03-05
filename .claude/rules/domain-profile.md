@@ -1,7 +1,7 @@
 # Domain Profile
 
 <!--
-HOW TO USE: Fill this in manually OR let /interview-me generate it.
+HOW TO USE: Fill this in manually OR let /discover (interactive interview) generate it.
 All agents read this file to calibrate their field-specific behavior.
 Delete sections that don't apply. Add sections specific to your field.
 -->
@@ -15,7 +15,7 @@ Delete sections that don't apply. Add sections specific to your field.
 
 ## Target Journals (ranked by tier)
 
-<!-- The Editor uses this for journal selection. The Librarian prioritizes these in searches. -->
+<!-- The Orchestrator uses this for journal selection. The Librarian prioritizes these in searches. -->
 
 | Tier | Journals |
 |------|----------|
@@ -28,7 +28,7 @@ Delete sections that don't apply. Add sections specific to your field.
 
 ## Common Data Sources
 
-<!-- The Explorer prioritizes these. The Surveyor knows their quirks. -->
+<!-- The Explorer prioritizes these. The explorer-critic knows their quirks. -->
 
 | Dataset | Type | Access | Notes |
 |---------|------|--------|-------|
@@ -38,7 +38,7 @@ Delete sections that don't apply. Add sections specific to your field.
 
 ## Common Identification Strategies
 
-<!-- The Strategist considers these first. The Econometrician knows field-specific threats. -->
+<!-- The Strategist considers these first. The strategist-critic knows field-specific threats. -->
 
 | Strategy | Typical Application | Key Assumption to Defend |
 |----------|-------------------|------------------------|
@@ -48,7 +48,7 @@ Delete sections that don't apply. Add sections specific to your field.
 
 ## Field Conventions
 
-<!-- The Coder and Writer follow these. The Proofreader checks for them. -->
+<!-- The Coder and Writer follow these. The writer-critic checks for them. -->
 
 - [e.g., Binary outcomes → report LPM alongside logit/probit marginal effects]
 - [e.g., Cost outcomes → log transform or GLM (Gamma, log link)]
@@ -60,7 +60,7 @@ Delete sections that don't apply. Add sections specific to your field.
 
 ## Notation Conventions
 
-<!-- The Writer and Proofreader enforce these. -->
+<!-- The Writer and writer-critic enforce these. -->
 
 | Symbol | Meaning | Anti-pattern |
 |--------|---------|-------------|
@@ -70,7 +70,7 @@ Delete sections that don't apply. Add sections specific to your field.
 
 ## Seminal References
 
-<!-- The Librarian ensures these are cited when relevant. The Econometrician knows their methods. -->
+<!-- The Librarian ensures these are cited when relevant. The strategist-critic knows their methods. -->
 
 | Paper | Why It Matters |
 |-------|---------------|
@@ -80,7 +80,7 @@ Delete sections that don't apply. Add sections specific to your field.
 
 ## Field-Specific Referee Concerns
 
-<!-- The Econometrician and Referee agents watch for these. -->
+<!-- The domain-referee and methods-referee watch for these. -->
 
 - [e.g., "Why not use the Oregon HIE?" — must address if studying insurance effects]
 - [e.g., "Selection into treatment" — always a concern in health care utilization studies]
@@ -91,7 +91,7 @@ Delete sections that don't apply. Add sections specific to your field.
 
 ## Quality Tolerance Thresholds
 
-<!-- Customize for your domain's standards. Used by quality-gates.md. -->
+<!-- Customize for your domain's standards. Used by quality.md. -->
 
 | Quantity | Tolerance | Rationale |
 |----------|-----------|-----------|
