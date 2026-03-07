@@ -4,6 +4,16 @@ All notable changes to the Clo-Author are documented here.
 
 ---
 
+## [2.0.2] — 2026-03-07
+
+### Figures & Tables Rules
+
+- **`figures.md`** — new always-on rule: no embedded ggplot titles, descriptive filenames, LaTeX `\caption{}` as authoritative title, serif fonts, publication-quality axis labels, show all years on x-axis (≤20 ticks)
+- **`tables.md`** — new always-on rule: no embedded titles in generated `.tex` files, `threeparttable` + `booktabs`, notes in paper not R output
+- These complement `content-standards.md` (path-scoped, comprehensive) with concise always-on reminders
+
+---
+
 ## [2.0.1] — 2026-03-05
 
 ### Cross-Language Replication
@@ -123,6 +133,7 @@ All notable changes to the Clo-Author are documented here.
 
 ---
 
+[2.0.2]: https://github.com/hsantanna88/clo-author/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/hsantanna88/clo-author/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/hsantanna88/clo-author/compare/v1.0.1...v2.0.0
 [1.0.1]: https://github.com/hsantanna88/clo-author/compare/v1.0.0...v1.0.1
