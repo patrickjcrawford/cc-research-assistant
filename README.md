@@ -1,12 +1,12 @@
 # The Clo-Author: Your Econ AI Research Assistant for Claude Code
 
-[![Version](https://img.shields.io/github/v/release/hsantanna88/clo-author?style=flat-square&color=b44dff&label=version)](CHANGELOG.md)
+[![Version](https://img.shields.io/github/v/release/hugosantanna/clo-author?style=flat-square&color=b44dff&label=version)](CHANGELOG.md)
 
 > **Work in progress.** This is an experiment born out of my discovery of [Pedro's tool](https://github.com/pedrohcgs/claude-code-my-workflow). This repo is a packaging of my own interpretation of that, tailored to pure research. It is evolving as I learn, and I share it in case others find it useful and would like to build upon it. Expect rough edges.
 
 An open-source [Claude Code](https://docs.anthropic.com/en/docs/claude-code) workflow that turns your terminal into a full-service applied econometrics research assistant — from literature review to journal submission.
 
-**Live guide:** [hsantanna88.github.io/clo-author](https://hsantanna88.github.io/clo-author/)
+**Live guide:** [hugosantanna.github.io/clo-author](https://hugosantanna.github.io/clo-author/)
 <br>**Built on:** [Pedro Sant'Anna's claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow)
 
 ---
@@ -15,7 +15,7 @@ An open-source [Claude Code](https://docs.anthropic.com/en/docs/claude-code) wor
 
 ```bash
 # 1. Fork and clone
-gh repo fork hsantanna88/clo-author --clone
+gh repo fork hugosantanna/clo-author --clone
 cd clo-author
 
 # 2. Open Claude Code

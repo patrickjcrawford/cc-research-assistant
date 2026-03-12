@@ -143,9 +143,9 @@ All notable changes to the Clo-Author are documented here.
 
 ---
 
-[2.0.2]: https://github.com/hsantanna88/clo-author/compare/v2.0.1...v2.0.2
-[2.0.1]: https://github.com/hsantanna88/clo-author/compare/v2.0.0...v2.0.1
-[2.0.0]: https://github.com/hsantanna88/clo-author/compare/v1.0.1...v2.0.0
-[1.0.1]: https://github.com/hsantanna88/clo-author/compare/v1.0.0...v1.0.1
-[1.0.0]: https://github.com/hsantanna88/clo-author/compare/v0.1.0...v1.0.0
-[0.1.0]: https://github.com/hsantanna88/clo-author/commits/v0.1.0
+[2.0.2]: https://github.com/hugosantanna/clo-author/compare/v2.0.1...v2.0.2
+[2.0.1]: https://github.com/hugosantanna/clo-author/compare/v2.0.0...v2.0.1
+[2.0.0]: https://github.com/hugosantanna/clo-author/compare/v1.0.1...v2.0.0
+[1.0.1]: https://github.com/hugosantanna/clo-author/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/hugosantanna/clo-author/compare/v0.1.0...v1.0.0
+[0.1.0]: https://github.com/hugosantanna/clo-author/commits/v0.1.0

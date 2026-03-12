@@ -14,7 +14,7 @@ You describe a task in plain English. Claude plans the approach, dispatches spec
 ### Step 1: Fork & Clone
 
 ```bash
-gh repo fork hsantanna88/clo-author --clone
+gh repo fork hugosantanna/clo-author --clone
 cd clo-author
 ```
 

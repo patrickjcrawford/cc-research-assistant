@@ -44,8 +44,8 @@
 - Project name: "The Clo-Author: Your Econ AI Research Assistant for Claude Code"
 - Based on Pedro Sant'Anna's claude-code-my-workflow template
 - User: Hugo Sant'Anna, UAB (NOT Pedro Sant'Anna)
-- GitHub: hsantanna88
-- Website: hsantanna.org (Jekyll + Minimal Mistakes at hsantanna88.github.io)
+- GitHub: hugosantanna
+- Website: hsantanna.org (Jekyll + Minimal Mistakes at hugosantanna.github.io)
 
 ## Website Content Created
 
@@ -55,7 +55,7 @@
 
 ## Open Items
 
-- Push website changes to hsantanna88.github.io repo
+- Push website changes to hugosantanna.github.io repo
 - Rename GitHub repo from claude-code-my-workflow to the-clo-author
 - Update README.md with Clo-Author branding
 - Add /clo-author/ to site navigation in _config.yml

@@ -5,7 +5,7 @@
 
 ## Context
 
-Continuing from the previous session that reoriented claude-code-my-workflow from lecture-centric to applied econometrics research ("The Clo-Author"). This session focuses on the website (hsantanna.org / hsantanna88.github.io).
+Continuing from the previous session that reoriented claude-code-my-workflow from lecture-centric to applied econometrics research ("The Clo-Author"). This session focuses on the website (hsantanna.org / hugosantanna.github.io).
 
 ## Changes Made
 
@@ -44,7 +44,7 @@ Continuing from the previous session that reoriented claude-code-my-workflow fro
 
 ## Open Items
 
-- Push changes to hsantanna88.github.io repo
+- Push changes to hugosantanna.github.io repo
 - Rename GitHub repo to the-clo-author
 - Update README.md with Clo-Author branding
 - Visual review in browser (user should check rendering)
