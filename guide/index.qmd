@@ -1,6 +1,6 @@
 ---
-title: "The Clo-Author"
-subtitle: "Your AI Research Assistant for Claude Code"
+title: "The Clo-Author 3.0"
+subtitle: "AI Research Architecture for Empirical Social Science"
 ---
 
 An open-source [Claude Code](https://docs.anthropic.com/en/docs/claude-code) workflow that turns your terminal into a full-service empirical research assistant --- from literature review to journal submission. Built for empirical social science: economics, finance, marketing, management, accounting, and public policy.
