@@ -63,42 +63,43 @@ Extract reusable knowledge from the current session. Auto-memory handles correct
 Upgrade an existing project to the latest clo-author architecture.
 
 **What it does:**
-1. Check current version (read CHANGELOG.md or git tags)
-2. Fetch latest clo-author from upstream
-3. Replace `.claude/` directory (agents, skills, rules, references, hooks)
-4. Preserve user content (paper, scripts, data — never touched)
-5. Update CLAUDE.md paths if folder structure changed
-6. Report what changed
+1. Clone the latest clo-author release into a temp directory
+2. Save the user's filled-in domain-profile.md and any custom journal profiles
+3. Delete the old `.claude/` directory
+4. Copy the new `.claude/` in
+5. Restore the user's domain-profile.md and custom journal profiles
+6. Optionally copy new `templates/`
+7. Report what changed
 
 **Workflow:**
 ```
-Step 1: BACKUP
-  - git stash any uncommitted work
+Step 1: DOWNLOAD
+  - Clone latest clo-author into /tmp/clo-author-upgrade
+  - Or: gh release download --repo hugosantanna/clo-author
 
-Step 2: FETCH
-  - If upstream remote exists: git fetch upstream
-  - If not: git remote add upstream https://github.com/hugosantanna/clo-author.git
+Step 2: PRESERVE USER CUSTOMIZATIONS
+  - Save .claude/references/domain-profile.md if filled in (not just placeholders)
+  - Save any custom journal profiles the user added to journal-profiles.md
+  - Save .claude/settings.json (user's permissions and hooks)
+  - Save .claude/settings.local.json if it exists
 
-Step 3: REPLACE INFRASTRUCTURE
-  - Copy new .claude/ from upstream (agents, skills, rules, references, hooks)
-  - Copy new templates/ from upstream
-  - Do NOT touch: paper/, scripts/, data/, explorations/, quality_reports/, Bibliography_base.bib
+Step 3: REPLACE
+  - Delete old .claude/ entirely
+  - Copy new .claude/ from the downloaded release
+  - Restore saved customizations from Step 2
 
-Step 4: RECONCILE
-  - Read user's CLAUDE.md to find their actual folder paths
-  - If their folders don't match the new defaults (e.g., Paper/ vs paper/), update
-    the infrastructure paths to match THEIR structure, not the other way around
-  - Preserve their domain-profile.md if it's been filled in (not just placeholders)
-  - Preserve their journal-profiles.md additions
+Step 4: DO NOT TOUCH
+  - paper/, scripts/, data/, explorations/, quality_reports/
+  - CLAUDE.md, Bibliography_base.bib, README.md, .gitignore
+  - Any other user content
 
 Step 5: REPORT
-  - List what was updated
-  - List what was preserved
-  - Flag any manual action needed (e.g., "your Talks/ is now paper/talks/ in the
-    new structure — rename manually or update CLAUDE.md")
+  - List what was updated (new agents, skills, rules)
+  - List what was preserved (domain profile, settings, custom profiles)
+  - Clean up temp directory
 ```
 
-**Key principle:** The upgrade adapts to the user's project, not the other way around. Never rename folders with content. Never overwrite filled-in profiles.
+**No git merge. No upstream remote. No conflicts.** Just delete and replace `.claude/`.
 
 ---
 

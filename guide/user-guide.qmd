@@ -298,25 +298,26 @@ The domain profile (`.claude/references/domain-profile.md`) calibrates all agent
 
 If you have an existing project using clo-author 2.x, you can upgrade to 3.0 without losing any of your work.
 
-## Automatic Upgrade (3.x → future versions)
-
-Run `/tools upgrade` inside your project. It fetches the latest infrastructure, replaces `.claude/`, preserves your content, and reports what changed.
-
-::: {.callout-warning}
-`/tools upgrade` does **not** work for 2.x → 3.0 because 2.x doesn't have the `/tools` skill. Use the manual upgrade below.
-:::
-
-## Manual Upgrade (2.x → 3.0)
-
 ::: {.callout-note}
-**Your files are safe.** The upgrade only touches the `.claude/` directory (infrastructure). Your paper, scripts, data, bibliography, and all research content are never modified or deleted.
+**Your files are safe.** The upgrade only touches `.claude/` (the infrastructure). Your paper, scripts, data, bibliography, and all research content are never modified or deleted. Don't use `git merge` --- it creates unnecessary conflicts on files you've already customized (CLAUDE.md, README, etc.).
 :::
 
-1. **Back up:** `git stash` any uncommitted work
-2. **Add upstream:** `git remote add upstream https://github.com/hugosantanna/clo-author.git`
-3. **Copy infrastructure:** replace your `.claude/` and `templates/` with the 3.0 versions from upstream
-4. **Keep your content:** don't rename folders that already have files in them --- if your paper is in `Paper/` not `paper/`, that's fine
-5. **Update CLAUDE.md:** adjust the folder structure section and compilation commands to match your actual layout
+## How to Upgrade (2.x → 3.0)
+
+1. **Download** the [latest release](https://github.com/hugosantanna/clo-author/releases) or clone clo-author 3.0 into a temporary folder
+2. **Delete** your old `.claude/` directory
+3. **Copy** the new `.claude/` into your project
+4. **Done** --- your paper, scripts, data, CLAUDE.md, bibliography are all untouched
+
+That's it. No git merge, no upstream remote, no conflicts. The infrastructure is entirely inside `.claude/`; your research content lives in separate directories that clo-author never touches.
+
+**Optional:** also copy the new `templates/` directory if you want updated templates.
+
+**Your CLAUDE.md stays yours.** You already customized it with your project name, institution, field, and folder paths. Don't overwrite it --- the 3.0 infrastructure reads whatever paths you have there.
+
+## Future Upgrades (3.x → 4.0+)
+
+Once you're on 3.0, run `/tools upgrade` for future versions. It automates the same process: replace `.claude/`, preserve your content, report what changed.
 
 ## What Changed in 3.0
 
