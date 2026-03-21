@@ -150,6 +150,22 @@ Maintained by [Hugo Sant'Anna](https://hsantanna.org) at UAB.
 
 ---
 
+## Upgrading from 2.x
+
+If you have an existing project using clo-author 2.x, run `/tools upgrade` inside your project. It replaces the infrastructure (`.claude/` directory) while preserving your content (paper, scripts, data).
+
+Or upgrade manually:
+
+1. **Back up** your work: `git stash`
+2. **Add upstream:** `git remote add upstream https://github.com/hugosantanna/clo-author.git`
+3. **Copy new infrastructure:** replace your `.claude/` and `templates/` with the 3.0 versions
+4. **Keep your content:** don't rename folders that have files in them
+5. **Update CLAUDE.md:** adjust paths to match your actual folder structure
+
+The upgrade adapts to your project — it never renames folders with content or overwrites filled-in profiles.
+
+---
+
 ## Context Efficiency
 
 The 3.0 architecture loads 71% fewer tokens per session compared to 2.x. Reference files (journal profiles, domain profiles) load on demand — only when agents need them. Rules are path-scoped where possible. You get more done with less context consumed.

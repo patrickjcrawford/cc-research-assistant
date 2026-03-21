@@ -292,6 +292,48 @@ The domain profile (`.claude/references/domain-profile.md`) calibrates all agent
 - **Seminal references** --- papers every referee expects you to cite
 - **Referee concerns** --- the "gotcha" questions referees always ask
 
+---
+
+# Upgrading from 2.x {#sec-upgrading}
+
+If you have an existing project using clo-author 2.x, you can upgrade to 3.0 without losing any of your work.
+
+## Automatic Upgrade
+
+Run `/tools upgrade` inside your project. It:
+
+1. Fetches the latest clo-author infrastructure from upstream
+2. Replaces `.claude/` (agents, skills, rules, references, hooks)
+3. Preserves your content (paper, scripts, data, bibliography)
+4. Updates paths in CLAUDE.md to match your folder structure
+5. Reports what changed and what needs manual attention
+
+## Manual Upgrade
+
+1. **Back up:** `git stash` any uncommitted work
+2. **Add upstream:** `git remote add upstream https://github.com/hugosantanna/clo-author.git`
+3. **Copy infrastructure:** replace `.claude/` and `templates/` with the 3.0 versions
+4. **Keep your content:** don't rename folders that already have files
+5. **Update CLAUDE.md:** adjust paths to match your actual layout
+
+## What Changed in 3.0
+
+| Component | 2.x | 3.0 |
+|-----------|-----|-----|
+| Scope | Economics only | All empirical social science |
+| Peer review | Score averaging | Editor + dispositions + desk reject |
+| Journal profiles | 15 (economics) | 35+ across 5 fields |
+| Profile location | `.claude/rules/` | `.claude/references/` (on-demand) |
+| Folder structure | `Paper/`, `Figures/`, `Tables/`, `Talks/` | `paper/` (self-contained) |
+| Presentations | Beamer only | Beamer + Quarto RevealJS |
+| Memory | `[LEARN]` tags | Auto-memory (built-in) |
+| Context overhead | ~3,500 lines/session | ~1,000 lines/session |
+| Agent prompts | Economics-specific | Field-neutral (read from domain profile) |
+
+**Key principle:** The upgrade adapts to your project. It never renames folders with content or overwrites filled-in profiles.
+
+---
+
 ## Creating Custom Skills {#sec-create-skills}
 
 Create a skill when you repeatedly explain the same 3+ step workflow to Claude. Each skill lives in `.claude/skills/[name]/SKILL.md`:
