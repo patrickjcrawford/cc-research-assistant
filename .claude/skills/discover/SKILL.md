@@ -34,7 +34,7 @@ Interview structure:
 
 After interview (5-8 exchanges), produce:
 - Research specification → `quality_reports/research_spec_[topic].md`
-- Domain profile → `.claude/rules/domain-profile.md` (if still template)
+- Domain profile → `.claude/rules/.claude/references/domain-profile.md` (if still template)
 
 ### `/discover lit [topic]` — Literature Review
 Search and synthesize academic literature.
@@ -43,7 +43,7 @@ Search and synthesize academic literature.
 **Output:** Annotated bibliography + BibTeX entries + frontier map
 
 Workflow:
-1. Read domain-profile.md for field journals and seminal references
+1. Read .claude/references/domain-profile.md for field journals and seminal references
 2. Dispatch Librarian to search: top-5 journals, field journals, NBER/SSRN, citation chains
 3. Dispatch librarian-critic to check coverage, gaps, recency, scope
 4. If gaps found, re-dispatch Librarian for targeted search (max 1 round)
@@ -80,5 +80,5 @@ Generate:
 - **Interview style:** Be curious, not prescriptive. Draw out the researcher's thinking.
 - **Literature honesty:** Never fabricate citations. Mark unverified as `% UNVERIFIED`.
 - **Data feasibility matters:** A perfect dataset you can't access is useless.
-- **Domain-profile aware:** Always read domain-profile.md first for field calibration.
+- **Domain-profile aware:** Always read .claude/references/domain-profile.md first for field calibration.
 - **Worker-critic pairing:** Librarian + librarian-critic, Explorer + explorer-critic. Never skip the critic.

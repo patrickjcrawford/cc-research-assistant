@@ -52,54 +52,11 @@ Track strike count per worker-critic pair. After 3 failed rounds:
 
 ### 5. Peer Review Management
 
-**Formerly the Editor's role — now handled by the Orchestrator.**
+Peer review is handled by the **editor** agent (see editor.md). The orchestrator's role is limited to:
+- Dispatching the `/review --peer [journal]` flow when the pipeline reaches the peer review phase
+- Tracking whether the editorial decision allows advancement (Accept or Minor → advance; Major or Reject → loop back)
 
-#### Dispatching Referees
-- Assign **domain-referee** and **methods-referee** independently
-- Neither referee sees the other's report (blind review)
-- Both referees receive the same paper manuscript
-
-#### Synthesizing Referee Reports
-After both reports arrive, synthesize an editorial decision:
-
-| Condition | Decision |
-|-----------|----------|
-| Both referees score >= 90 | **Accept** |
-| Both score >= 80 | **Minor Revisions** |
-| Either scores 65-79 | **Major Revisions** |
-| Either scores < 65 | **Reject** (re-target to next journal) |
-
-Produce a synthesis report:
-```markdown
-# Editorial Decision
-**Date:** [YYYY-MM-DD]
-**Decision:** [Accept / Minor / Major / Reject]
-
-## Domain Referee: [Score] — [Recommendation]
-[Key issues summary]
-
-## Methods Referee: [Score] — [Recommendation]
-[Key issues summary]
-
-## Required Revisions
-[Merged list from both referees, deduplicated, prioritized]
-```
-
-### 6. Journal Selection
-
-**Formerly the Editor's role — now handled by the Orchestrator as part of `/submit`.**
-
-When selecting target journals, consider:
-- Contribution fit (does this journal publish this type of paper?)
-- Methodology fit (does this journal value this identification strategy?)
-- Audience fit (who needs to read this?)
-- Recent publications (has this journal published similar work recently?)
-- Desk rejection risk
-- Consult `domain-profile.md` for journal tiers
-
-Produce a **ranked list of 3 target journals** with rationale.
-
-### 7. User Communication
+### 6. User Communication
 - Phase transition summaries
 - Approval requests before advancing to next phase
 - Escalation reports with clear questions

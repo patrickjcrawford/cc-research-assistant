@@ -192,7 +192,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">The Clo-Author</h1>
-<p class="subtitle lead">Your Econ AI Research Assistant for Claude Code</p>
+<p class="subtitle lead">Your AI Research Assistant for Claude Code</p>
 </div>
 
 
@@ -209,9 +209,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>An open-source <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> workflow that turns your terminal into a full-service applied econometrics research assistant — from literature review to journal submission.</p>
-<p><strong>Built on</strong> <a href="https://github.com/pedrohcgs/claude-code-my-workflow">Pedro Sant’Anna’s claude-code-my-workflow</a>, reoriented for applied econometrics research publication.</p>
-<p>You describe a task in plain English. Claude plans the approach, dispatches specialized agents, reviews quality, fixes issues, and presents results. Like a contractor who manages the entire job — 16 agents, 10 commands, all running behind the scenes.</p>
+<p>An open-source <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> workflow that turns your terminal into a full-service empirical research assistant — from literature review to journal submission. Built for empirical social science: economics, finance, marketing, management, accounting, and public policy.</p>
+<p><strong>Built on</strong> <a href="https://github.com/pedrohcgs/claude-code-my-workflow">Pedro Sant’Anna’s claude-code-my-workflow</a>, reoriented for empirical research publication.</p>
+<p>You describe a task in plain English. Claude plans the approach, dispatches specialized agents, reviews quality, fixes issues, and presents results. Like a contractor who manages the entire job — 17 agents, 10 commands, all running behind the scenes.</p>
 <section id="get-started-in-5-minutes" class="level2">
 <h2 class="anchored" data-anchor-id="get-started-in-5-minutes">Get Started in 5 Minutes</h2>
 <section id="step-1-fork-clone" class="level3">
@@ -228,7 +228,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="step-3-paste-the-starter-prompt">Step 3: Paste the Starter Prompt</h3>
 <p>Fill in the <strong>bolded placeholders</strong> with your project details:</p>
 <blockquote class="blockquote">
-<p>I am starting a new applied econometrics research project on <strong>[YOUR TOPIC]</strong>. Read CLAUDE.md and help me set up the project structure. Start with <code>/discover --lit [YOUR TOPIC]</code>.</p>
+<p>I am starting a new empirical research project in <strong>[YOUR FIELD]</strong> on <strong>[YOUR TOPIC]</strong>. Read CLAUDE.md and help me set up the project structure. Start with <code>/discover --lit [YOUR TOPIC]</code>.</p>
 </blockquote>
 <p>Claude reads the configuration, fills in your project details, and enters contractor mode — planning, implementing, reviewing, and verifying autonomously.</p>
 </section>
@@ -237,7 +237,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Once setup is done, just describe what you need:</p>
 <ul>
 <li>“Review my paper” — checks your identification strategy, code, writing, and LaTeX in parallel</li>
-<li><code>/review --methods Paper/main.tex</code> — validates your DiD/IV/RDD assumptions, clustering, and inference</li>
+<li><code>/review --methods Paper/main.tex</code> — validates your causal design assumptions, clustering, and inference</li>
 <li><code>/analyze Data/cleaned/survey.csv</code> — cleans data, runs your specification, produces tables and figures</li>
 <li><code>/new-project health insurance</code> — walks you through the full pipeline from literature review to submission</li>
 </ul>
@@ -245,7 +245,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="what-happens-behind-the-scenes" class="level2">
 <h2 class="anchored" data-anchor-id="what-happens-behind-the-scenes">What Happens Behind the Scenes</h2>
-<p>You talk, Claude orchestrates. The 16 agents work in <strong>worker-critic pairs</strong> — every creator has a paired critic who can’t edit files, only review. Two specialized referees (domain + methods) simulate real journal peer review. The orchestrator dispatches agents based on a dependency graph, enforces quality gates (80/90/95), and routes escalations when critics and creators can’t agree after 3 rounds.</p>
+<p>You talk, Claude orchestrates. The 17 agents work in <strong>worker-critic pairs</strong> — every creator has a paired critic who can’t edit files, only review. An <strong>Editor</strong> does desk review before dispatching two specialized referees (domain + methods) who simulate real journal peer review with dispositions and pet peeves. The orchestrator dispatches agents based on a dependency graph, enforces quality gates (80/90/95), and routes escalations when critics and creators can’t agree after 3 rounds.</p>
 <p>For the full picture: <a href="./user-guide.html">User Guide</a> (what you can do), <a href="./agents.html">Meet the Agents</a> (who does the work), <a href="./architecture.html">Architecture</a> (how the system works), <a href="./customization.html">Customization</a> (how to make it yours), and <a href="./reference.html">Command Reference</a> (every flag and subcommand).</p>
 </section>
 <section id="day-1-checklist" class="level2">
@@ -279,7 +279,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Folder structure</strong> (adjust to your layout)</li>
 <li><strong>Current project state</strong> (your papers and analyses)</li>
 </ol>
-<p><strong>Fill in the domain profile</strong> — Run <code>/discover</code> (interactive interview) or manually edit <code>.claude/rules/domain-profile.md</code>:</p>
+<p><strong>Fill in the domain profile</strong> — Run <code>/discover</code> (interactive interview) or manually edit <code>.claude/references/domain-profile.md</code>:</p>
 <ol type="1">
 <li><strong>Your field</strong> and adjacent subfields</li>
 <li><strong>Target journals</strong> ranked by tier</li>
@@ -331,8 +331,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="origin" class="level2">
 <h2 class="anchored" data-anchor-id="origin">Origin</h2>
-<p>This project is a fork of <a href="https://github.com/pedrohcgs/claude-code-my-workflow">Pedro Sant’Anna’s claude-code-my-workflow</a>, which was built for Econ 730 at Emory University (6 lectures, 800+ slides). The Clo-Author reorients that infrastructure from lecture production to applied econometrics research publication.</p>
-<p>The <code>/humanizer</code> skill is by <a href="https://github.com/blader/humanizer">Siqi Chen</a>, adapted here for academic writing in economics.</p>
+<p>This project is a fork of <a href="https://github.com/pedrohcgs/claude-code-my-workflow">Pedro Sant’Anna’s claude-code-my-workflow</a>, which was built for Econ 730 at Emory University (6 lectures, 800+ slides). The Clo-Author reorients that infrastructure from lecture production to empirical research publication across the social sciences.</p>
+<p>The <code>/humanizer</code> skill is by <a href="https://github.com/blader/humanizer">Siqi Chen</a>, adapted here for academic writing.</p>
 <p>Maintained by <a href="https://hsantanna.org">Hugo Sant’Anna</a>. MIT License — fork it, customize it, make it yours.</p>
 
 

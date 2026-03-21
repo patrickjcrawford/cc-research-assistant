@@ -5,17 +5,18 @@ subtitle: "Make the Clo-Author Yours"
 
 # Overview
 
-The Clo-Author works out of the box, but it's designed to be customized. Five configuration layers control how Claude behaves in your project --- from the high-level project constitution to low-level event hooks.
+The Clo-Author works out of the box, but it's designed to be customized. Six configuration layers control how Claude behaves in your project --- from the high-level project constitution to low-level event hooks.
 
 | Layer | Location | Loaded When |
 |-------|----------|-------------|
 | **CLAUDE.md** | Project root | Every session |
 | **Rules** | `.claude/rules/` | Always-on or path-scoped |
+| **References** | `.claude/references/` | On demand (agents read when needed) |
 | **Skills** | `.claude/skills/` | On demand (slash commands) |
 | **Agents** | `.claude/agents/` | On demand (via skills or orchestrator) |
 | **Hooks** | `.claude/settings.json` | On events (automatic) |
 
-Claude reliably follows about **100--150 custom instructions**. Your system prompt uses ~50, leaving ~100 for your project. CLAUDE.md and always-on rules share this budget. Path-scoped rules, skills, and agents load on demand --- they don't count against the limit.
+Claude reliably follows about **100--150 custom instructions**. Your system prompt uses ~50, leaving ~100 for your project. CLAUDE.md and always-on rules share this budget. Path-scoped rules, references, skills, and agents load on demand --- they don't count against the limit.
 
 ---
 
@@ -51,23 +52,23 @@ Rules are markdown files in `.claude/rules/` that Claude loads automatically. Co
 | `content-standards.md` | Table generation, PDF processing, exploration workflow |
 | `figures.md` | No embedded titles, serif fonts, publication-quality axis labels, full year axes |
 | `tables.md` | No embedded titles, booktabs, threeparttable, notes in paper not R output |
-| `working-paper-format.md` | Economics working paper layout: 12pt, 1in margins, titling fonts, abstract format |
+| `working-paper-format.md` | Working paper layout: 12pt, 1in margins, titling fonts, abstract format |
 | `revision.md` | R&R cycle comment classification and routing |
 | `meta-governance.md` | Template vs working project distinction |
-| `domain-profile.md` | Field-specific calibration (user-customized) |
+| `domain-profile.md` | Field-specific calibration (moved to `.claude/references/` in v3.0) |
 
 ---
 
 # Domain Profile
 
-The domain profile (`.claude/rules/domain-profile.md`) calibrates all agents to your specific research field. It can be populated two ways:
+The domain profile (`.claude/references/domain-profile.md`) calibrates all agents to your specific research field. Agents read their discipline from this file; the default is economics if not specified. It supports any empirical social science: economics, finance, marketing, management, accounting, and public policy. It can be populated two ways:
 
 1. **`/discover`** (interactive interview) --- generates it automatically
 2. **Manual editing** --- fill in the template directly
 
 All agents read this file for:
 
-- Target journal tiers (for Orchestrator and referees)
+- Target journal tiers (for Orchestrator, Editor, and referees)
 - Common data sources (for Explorer)
 - Identification strategies (for Strategist and strategist-critic)
 - Field conventions (for Coder and Writer)
@@ -76,9 +77,17 @@ All agents read this file for:
 
 ## Journal Profiles
 
-The journal profiles (`.claude/rules/journal-profiles.md`) calibrate the **domain-referee** and **methods-referee** to a specific journal's review culture when you run `/review --peer [journal]`.
+The journal profiles (`.claude/references/journal-profiles.md`) calibrate the **Editor**, **domain-referee**, and **methods-referee** to a specific journal's review culture when you run `/review --peer [journal]`.
 
-15 journals are pre-populated (AER, Econometrica, JPE, QJE, REStud, AEJ:Applied, AEJ:Policy, JHR, JHE, RAND, JPubE, JLE, JDE, RESTAT, AER:Insights). Each profile describes the journal's bar, what its referees prioritize, and typical concerns --- in plain language that the LLM interprets naturally.
+30 journals are pre-populated across multiple fields:
+
+- **Economics:** AER, Econometrica, JPE, QJE, REStud, AEJ:Applied, AEJ:Policy, JHR, JHE, RAND, JPubE, JLE, JDE, RESTAT, AER:Insights
+- **Finance:** JF, JFE, RFS, JFQA
+- **Accounting:** JAR, JAE, TAR, CAR
+- **Marketing:** JMR, Marketing Science, JCR
+- **Management:** Management Science, SMJ, ASQ
+
+Each profile describes the journal's bar, what its referees prioritize, and typical concerns --- in plain language that the LLM interprets naturally.
 
 For journals not in the list, referees still adapt using the journal name + your domain profile. You can add your own profiles using the template at the bottom of the file.
 

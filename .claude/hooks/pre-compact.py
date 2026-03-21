@@ -150,9 +150,8 @@ def format_compaction_message(plan_info: dict | None, decisions: list[str]) -> s
 
     # Context survival checklist (merged from pre-compact.sh)
     lines.append(f"{CYAN}Context Survival Checklist:{NC}")
-    lines.append("  [ ] MEMORY.md updated with [LEARN] entries")
-    lines.append("  [ ] Session log current (last 10 minutes)")
     lines.append("  [ ] Active plan saved to quality_reports/plans/")
+    lines.append("  [ ] SESSION_REPORT.md updated")
     lines.append("  [ ] Open questions documented")
     lines.append("")
 

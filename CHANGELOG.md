@@ -4,6 +4,64 @@ All notable changes to the Clo-Author are documented here.
 
 ---
 
+## [3.0.0] — 2026-03-20
+
+### Scope Expansion: Empirical Social Science
+- clo-author now targets all empirical social science fields: economics, finance, marketing, management, accounting, public policy
+- Updated meta-governance to reflect this scope (no longer claims biology/physics/CS generality)
+- Institution updated from Emory to UAB
+
+### Peer Review Simulation — Complete Redesign
+- **New `editor` agent** — desk reviews papers before sending to referees, verifies novelty claims via WebSearch, selects referee dispositions based on journal culture, makes independent editorial decisions (not score averaging)
+- **Referee dispositions** — 6 intellectual priors (Structuralist, Credibility, Measurement, Policy, Theory, Skeptic) assigned by the editor based on journal culture
+- **Referee pet peeves** — each referee gets 1 critical and 1 constructive pet peeve, creating realistic variation across reviews
+- **Journal-driven referee selection** — new `Referee pool` field in journal profiles weights which dispositions the editor draws from (e.g., Econometrica skews Structuralist/Theory, QJE skews Credibility/Policy)
+- **"What would change my mind"** — every major referee comment must include specific evidence or analysis that would resolve the concern
+- **Desk reject** — editor can reject without sending to referees (wrong fit, no contribution, already published)
+- **FATAL/ADDRESSABLE/TASTE classification** — editorial decisions classify each concern, producing MUST/SHOULD/MAY action items
+- **R&R memory** — `--r2` flag reloads prior referee reports; referees check whether each concern was addressed (Resolved/Partially/Not addressed)
+- **Round escalation** — Round 2 allows Major Revisions if new issues surface; Round 3 is Accept/Minor/Reject only; max 3 rounds
+- **Hostile stress test** — `--stress [journal]` assigns adversarial dispositions, doubles critical pet peeves, pre-submission battle testing
+- **Literature verification** — editor uses WebSearch during desk review to verify novelty claims against published work
+
+### Journal Profiles Expansion
+- Added 15 new A* journal profiles across 4 fields:
+  - **Finance:** JF, JFE, RFS, JFQA
+  - **Accounting:** JAR, JAE, TAR, CAR
+  - **Marketing:** JMR, Marketing Science, JCR
+  - **Management:** Management Science, SMJ, ASQ
+- All profiles include `Referee pool` disposition weights calibrated to each journal's review culture
+- Journal profiles moved from rules to `.claude/references/` — loaded on demand, zero per-session overhead
+
+### Context Reduction: 66% Less Per-Session Overhead
+- **Before:** ~3,518 lines of rules loaded every session
+- **After:** ~1,198 lines loaded per session
+- Deleted `archive/` directory (22 duplicate rule files, ~1,769 lines)
+- Trimmed `meta-governance.md` from 252 to 20 lines
+- Moved `journal-profiles.md` to on-demand reference (299 lines saved per session)
+- Merged `tables.md` and `figures.md` into path-scoped `content-standards.md`
+
+### Content Standards Improvements
+- Added figure standards: PDF vector output, colorblind-friendly palettes, grayscale independence (shape + linetype redundancy), figure width guidance
+- Restored `threeparttable` requirement for tables (lost in prior merge)
+- Consolidated all content rules in one path-scoped file
+- Added 5 table type templates: descriptive statistics, regression results, multi-outcome panels, balance tables, robustness
+
+### Folder Structure Reorganization
+- Figures, tables, talks, and Quarto presentations now live inside `Paper/` (self-contained paper directory)
+- Added `Data/raw/` and `Data/cleaned/` directories
+- Deleted `Slides/` (legacy from lecture workflow)
+- Quarto RevealJS presentation support added (`/talk create [format] --quarto`)
+
+### Other Changes
+- Replaced `[LEARN]` tags with Claude Code's built-in auto-memory system
+- Added `[YOUR FIELD]` placeholder to CLAUDE.md and starter prompt
+- Agent prompts made field-neutral — read field from `.claude/references/domain-profile.md` (defaults to economics)
+- Deleted archived agents (16 files) and archived skills (20+ files)
+- Guide and documentation fully updated for v3.0
+
+---
+
 ## [2.0.3] — 2026-03-07
 
 ### Working Paper Format Rule

@@ -1,11 +1,11 @@
 ---
 title: "Meet the Agents"
-subtitle: "16 Specialists That Do the Work"
+subtitle: "17 Specialists That Do the Work"
 ---
 
 # How Agents Work
 
-When you ask Claude to analyze data or draft a paper, it doesn't do everything itself. It dispatches **specialized agents** --- think of them as 16 different research assistants, each with a specific skill.
+When you ask Claude to analyze data or draft a paper, it doesn't do everything itself. It dispatches **specialized agents** --- think of them as 17 different research assistants, each with a specific skill.
 
 The key pattern: every agent that creates something (a literature review, analysis code, paper text) has a **paired critic** that checks its work. The critic can read but never edit --- so it has no reason to go easy. If the critic finds problems, the worker fixes them. If they can't agree after 3 rounds, you get asked to decide.
 
@@ -19,7 +19,7 @@ These agents help you find the literature and data you need before designing you
 
 ## Librarian
 
-Searches top-5 economics journals, NBER working papers, SSRN, and RePEC for papers related to your topic. Produces an annotated bibliography with BibTeX entries, maps where the research frontier is, and identifies where your paper fits in the conversation.
+Searches top-5 journals, NBER working papers, SSRN, and RePEC for papers related to your topic. Produces an annotated bibliography with BibTeX entries, maps where the research frontier is, and identifies where your paper fits in the conversation. Calibrated to your field via the domain profile.
 
 ## librarian-critic
 
@@ -67,7 +67,7 @@ Reviews all code --- from both the Data-engineer and the Coder. Checks that scri
 
 ## Writer
 
-Drafts paper sections with proper economics structure: an introduction that states the contribution within the first two pages, an empirical strategy section templated to your design (DiD, IV, RDD), and results that distinguish statistical from economic significance. Runs an automatic **humanizer pass** that strips common AI writing patterns (inflated symbolism, rule-of-three lists, hedging language).
+Drafts paper sections with proper empirical paper structure: an introduction that states the contribution within the first two pages, an empirical strategy section templated to your design (DiD, IV, RDD), and results that distinguish statistical from economic significance. Runs an automatic **humanizer pass** that strips common AI writing patterns (inflated symbolism, rule-of-three lists, hedging language).
 
 ## writer-critic
 
@@ -77,17 +77,21 @@ Reads the manuscript looking for problems a referee would catch: inconsistent no
 
 # The Reviewers (Peer Review Phase)
 
-These agents simulate what happens when you submit to a journal. Two independent referees review your paper --- neither sees the other's report.
+These agents simulate what happens when you submit to a journal. An Editor does desk review, then two independent referees review your paper --- neither sees the other's report. Invoked via `/review --peer [journal]`.
+
+## Editor
+
+The **desk reviewer**. Screens the paper before sending it to referees: checks scope fit, minimum quality, and assigns each referee a **disposition** (Structuralist, Credibility, Measurement, Policy, Theory, or Skeptic) plus **pet peeves** (1 critical + 1 constructive per referee) that shape their review personality. After referee reports return, the Editor synthesizes the editorial decision, classifying each issue as FATAL (rejection-worthy), ADDRESSABLE (fixable in revision), or TASTE (referee preference, not binding).
 
 ## domain-referee
 
-The **subject expert**. Evaluates whether your paper makes a real contribution to the literature, whether you've positioned it correctly relative to existing work, whether your substantive arguments hold up, and whether your results generalize beyond the specific setting. Calibrated to your research field via the domain profile. When you specify a target journal (`/review --peer JHR`), it emulates that journal's review culture using [journal profiles](../\.claude/rules/journal-profiles.md).
+The **subject expert**. Evaluates whether your paper makes a real contribution to the literature, whether you've positioned it correctly relative to existing work, whether your substantive arguments hold up, and whether your results generalize beyond the specific setting. Calibrated to your research field via the domain profile. When you specify a target journal (`/review --peer JHR`), it emulates that journal's review culture using [journal profiles](../\.claude/references/journal-profiles.md). Every major comment includes a "what would change my mind" statement.
 
 ## methods-referee
 
-The **econometrics expert**. Evaluates whether your identification strategy is valid, whether the estimation is appropriate, whether inference is correct (clustering, standard errors, multiple testing), whether the robustness checks are sufficient, and whether another researcher could replicate your results. Also calibrates to a target journal when specified.
+The **empirical methods expert**. Evaluates whether your identification strategy is valid, whether the estimation is appropriate, whether inference is correct (clustering, standard errors, multiple testing), whether the robustness checks are sufficient, and whether another researcher could replicate your results. Also calibrates to a target journal when specified. Like the domain-referee, includes "what would change my mind" on every major comment.
 
-The **Orchestrator** synthesizes both referee reports into an editorial decision: Accept, Minor Revisions, Major Revisions, or Reject.
+**R&R memory:** When invoked with `--peer --r2`, referees remember their prior reports and check whether their concerns were addressed. Max 3 rounds.
 
 ---
 
@@ -107,7 +111,7 @@ The general contractor. Manages the entire pipeline: dispatches worker-critic pa
 
 # Quick Reference {#agent-catalog}
 
-All 16 agents at a glance:
+All 17 agents at a glance:
 
 | Agent | File | What It Does |
 |-------|------|-------------|
@@ -122,12 +126,13 @@ All 16 agents at a glance:
 | coder-critic | `coder-critic.md` | Code quality, reproducibility, strategy alignment |
 | Writer | `writer.md` | Paper drafting, humanizer pass |
 | writer-critic | `writer-critic.md` | Notation, hedging, LaTeX, claims vs evidence |
+| Editor | `editor.md` | Desk review, referee dispatch, editorial decision |
 | domain-referee | `domain-referee.md` | Blind peer review (subject expertise) |
-| methods-referee | `methods-referee.md` | Blind peer review (econometric methods) |
-| Storyteller | `storyteller.md` | Beamer talk creation (4 formats) |
+| methods-referee | `methods-referee.md` | Blind peer review (empirical methods) |
+| Storyteller | `storyteller.md` | Beamer + Quarto talk creation (4 formats) |
 | storyteller-critic | `storyteller-critic.md` | Talk narrative, visuals, content fidelity |
 | Verifier | `verifier.md` | Compilation + AEA replication audit |
-| Orchestrator | `orchestrator.md` | Agent dispatch, quality gates, referee synthesis |
+| Orchestrator | `orchestrator.md` | Agent dispatch, quality gates, editorial synthesis |
 
 ---
 
@@ -151,7 +156,7 @@ These agents create and review Beamer presentations derived from your paper.
 
 ## Storyteller
 
-Creates Beamer presentations from `Paper/main.tex` in 4 formats: **job market talk** (45--60 min, full results), **seminar** (30--45 min, standard format), **short talk** (15 min, conference session), and **lightning** (5 min, elevator pitch). All content derives from the paper --- the Storyteller never invents results.
+Creates presentations from `Paper/main.tex` in 4 formats: **job market talk** (45--60 min, full results), **seminar** (30--45 min, standard format), **short talk** (15 min, conference session), and **lightning** (5 min, elevator pitch). Supports both **Beamer** (output to `Paper/talks/`) and **Quarto RevealJS** (output to `Paper/quarto/` via `--quarto` flag). All content derives from the paper --- the Storyteller never invents results.
 
 ## storyteller-critic
 

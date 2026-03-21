@@ -1,13 +1,13 @@
 ---
 name: talk
-description: Create and audit Beamer presentations. Combines talk creation, visual audit, and compilation. Replaces /create-talk, /visual-audit, /compile-latex (for talks).
-argument-hint: "[mode: create | audit | compile] [format: job-market | seminar | short | lightning] [file path]"
+description: Create and audit presentations (Beamer or Quarto RevealJS). Combines talk creation, visual audit, and compilation. Replaces /create-talk, /visual-audit, /compile-latex (for talks).
+argument-hint: "[mode: create | audit | compile] [format: job-market | seminar | short | lightning] [--quarto] [file path]"
 allowed-tools: Read,Grep,Glob,Write,Edit,Task,Bash
 ---
 
 # Talk
 
-Create, audit, or compile Beamer presentations.
+Create, audit, or compile presentations (Beamer or Quarto RevealJS).
 
 **Input:** `$ARGUMENTS` — mode and format/path.
 
@@ -15,8 +15,10 @@ Create, audit, or compile Beamer presentations.
 
 ## Modes
 
-### `/talk create [format]` — Create New Talk
-Generate a Beamer presentation from the paper.
+### `/talk create [format]` — Create Beamer Talk
+### `/talk create [format] --quarto` — Create Quarto RevealJS Talk
+
+Generate a presentation from the paper.
 
 **Agents:** Storyteller (creator) → storyteller-critic (reviewer)
 
@@ -29,12 +31,12 @@ Formats:
 | lightning | 3-5 | 5 min | Hook, one result, so-what |
 
 Workflow:
-1. Read paper (Paper/main.tex)
+1. Read paper (paper/main.tex)
 2. Dispatch Storyteller to design narrative arc and build slides
-3. Compile with XeLaTeX
+3. Compile: XeLaTeX (Beamer) or `quarto render` (Quarto)
 4. Dispatch storyteller-critic to review (5 categories: narrative, visual, fidelity, scope, compilation)
 5. Fix critical issues (max 3 rounds)
-6. Save to Talks/[format]_talk.tex
+6. Save to `paper/talks/[format]_talk.tex` (Beamer) or `paper/quarto/[format]_talk.qmd` (Quarto)
 
 ### `/talk audit [file]` — Visual Audit
 Check existing slides for layout issues.
@@ -50,7 +52,7 @@ Run visual quality checks:
 ### `/talk compile [file]` — Compile Talk
 3-pass XeLaTeX compilation for Beamer:
 ```bash
-cd Talks && TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode [file]
+cd paper/talks && TEXINPUTS=../preambles:$TEXINPUTS xelatex -interaction=nonstopmode [file]
 ```
 
 ---

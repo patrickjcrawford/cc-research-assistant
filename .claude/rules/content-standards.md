@@ -1,8 +1,12 @@
 ---
 paths:
   - "**/*.R"
+  - "**/*.py"
+  - "**/*.jl"
+  - "**/*.do"
   - "**/*.tex"
-  - "tables/**"
+  - "paper/tables/**"
+  - "paper/figures/**"
   - "master_supporting_docs/**"
   - "explorations/**"
 ---
@@ -43,6 +47,7 @@ Every table uses exactly three horizontal rules and **zero vertical lines**:
 - `\midrule` below column headers (and to separate panels)
 - `\bottomrule` at the very end
 - `\cmidrule(lr){2-4}` for partial rules spanning column groups
+- **Use `threeparttable`** — wrap tables with `\begin{threeparttable}` for proper alignment of notes via `\begin{tablenotes}`
 - **Never** use `\hline`, `|`, or any vertical rules
 
 ### Coefficient Display
@@ -145,12 +150,11 @@ kbl(df, format = "latex", booktabs = TRUE, escape = FALSE,
 ```r
 # Write .tex fragment (no \begin{table} wrapper -- added in main.tex)
 writeLines(tex_output, file.path("paper/tables", "reg_main_specification.tex"))
-writeLines(tex_output, file.path("results/tables", "reg_main_specification.tex"))
 ```
 
 - Output **bare `tabular` environment** (no `\begin{table}` float)
 - The paper's `main.tex` wraps it with `\begin{table}`, `\caption{}`, and `\input{}`
-- Always write to both `paper/tables/` and `results/tables/`
+- Write to `paper/tables/`
 
 ### File Naming
 
@@ -188,9 +192,114 @@ Pattern: `{table_type}_{content_description}.tex`
 | `xtable` without booktabs | Produces non-journal-quality output |
 | `\begin{table}` in R output | R exports bare `tabular`; float wrapper lives in `main.tex` |
 
+### Table Type Templates
+
+Use these as defaults. Adapt columns based on the paper's needs (e.g., add Min/Max, percentiles, or subgroup columns when substantively important).
+
+**Descriptive Statistics:**
+```
+\toprule
+                        &  Mean   &  SD     \\
+\midrule
+\multicolumn{3}{l}{\textit{Continuous variables}} \\
+\quad Wages (USD)       &  45,230 &  12,400 \\
+\quad Years of education&  13.2   &  2.8    \\
+\quad Age               &  38.5   &  11.2   \\
+\\[0.5em]
+\multicolumn{3}{l}{\textit{Categorical variables (\%)}} \\
+\quad Female            &  48.2   &         \\
+\quad College degree    &  32.5   &         \\
+\bottomrule
+```
+- Default: Mean and SD in separate columns (never stacked with parentheses — that's for regression SEs)
+- Categorical/binary: percentage in Mean column, SD blank
+- Sample size stated once in table notes, not as a column
+- Add Min/Max only when the range is substantively important (RDD bandwidth, data coverage)
+
+**Regression Results:**
+```
+\toprule
+                        &  (1)    &  (2)    &  (3)    &  (4)    \\
+                        &  OLS    &  OLS    &  IV     &  IV     \\
+\midrule
+Treatment               &  0.045**&  0.038* &  0.052**&  0.041* \\
+                        & (0.021) & (0.020) & (0.025) & (0.022) \\
+\midrule
+Controls                &  No     &  Yes    &  No     &  Yes    \\
+Fixed Effects           &  No     &  Yes    &  No     &  Yes    \\
+Observations            &  10,000 &  10,000 &  10,000 &  10,000 \\
+R$^2$                   &  0.05   &  0.12   &         &         \\
+\bottomrule
+```
+- Coefficients on one row, standard errors in parentheses below
+- Stars: `*` p < 0.10, `**` p < 0.05, `***` p < 0.01
+- Bottom rows: Controls (Yes/No), Fixed Effects (Yes/No), Observations, R²
+
+**Multi-Outcome (Panel Structure):**
+```
+\toprule
+                        &  (1)    &  (2)    &  (3)    &  (4)    \\
+\midrule
+\multicolumn{5}{l}{\textit{Panel A: Wages}} \\
+\midrule
+Treatment               &  0.045**&  0.038* &  0.052**&  0.041* \\
+                        & (0.021) & (0.020) & (0.025) & (0.022) \\
+\\[0.5em]
+\multicolumn{5}{l}{\textit{Panel B: Employment}} \\
+\midrule
+Treatment               &  0.021  &  0.033* &  0.015  &  0.028  \\
+                        & (0.018) & (0.017) & (0.020) & (0.019) \\
+\midrule
+Controls                &  No     &  Yes    &  No     &  Yes    \\
+Fixed Effects           &  No     &  Yes    &  No     &  Yes    \\
+Observations            &  10,000 &  10,000 &  10,000 &  10,000 \\
+\bottomrule
+```
+- Each outcome gets its own panel with same column structure
+- Panel labels in italics, left-aligned, spanning all columns
+- Controls/FE/Observations rows appear once at the bottom (shared across panels)
+
+**Balance Table:**
+```
+\toprule
+Variable                &  Treatment &  Control &  Difference &  SE     &  p-value \\
+\midrule
+Wages (USD)             &  45,800    &  44,650  &  1,150      &  (890)  &  0.197   \\
+Years of education      &  13.4      &  13.1    &  0.3        &  (0.2)  &  0.134   \\
+Female (\%)             &  47.8      &  48.6    &  -0.8       &  (1.2)  &  0.505   \\
+\bottomrule
+```
+
+**Robustness:**
+```
+\toprule
+                        &  (1)        &  (2)           &  (3)          &  (4)            \\
+                        &  Baseline   &  Alt. controls &  Alt. sample  &  Alt. estimator \\
+\midrule
+```
+- Column headers describe what changes across specifications
+- Same outcome variable across all columns
+
 ---
 
-## 2. PDF Processing
+## 2. Figure Standards
+
+- **Never add titles or subtitles inside ggplot** — use `labs(title = NULL, subtitle = NULL)`
+- **Figure information goes in two places:**
+  1. **File name** — descriptive, e.g., `fig1_hispanic_enrollment_ascm.pdf`
+  2. **LaTeX `\caption{}`** — the authoritative title, numbered and editable without re-running R
+- **Panel labels are the exception** — "Panel A: Employment" inside multi-panel figures (via `patchwork`, `cowplot`, etc.) is fine since they identify sub-panels, not the whole figure
+- **Axis labels must be publication-quality** — "Employment Rate" not "emp_rate". Clean labels stay in the figure; titles and context go in the caption
+- **Use serif fonts** — figures should match the paper's body text. In ggplot, set `theme(text = element_text(family = "serif"))` or use `theme_minimal(base_family = "serif")`
+- **Show all years on the x-axis** when the panel spans ~20 years or fewer — use `scale_x_continuous(breaks = min_year:max_year)`. Only thin out labels when they overlap (roughly >20 ticks)
+- **Output PDF for figures** — vector graphics for LaTeX. Use `ggsave("fig.pdf")`. PNG only for raster content (maps, photos).
+- **Colorblind-friendly palettes** — use `scale_color_brewer(palette = "Set2")`, `viridis`, or similar. Never rely on red/green contrast alone.
+- **Color-independent design** — figures must be readable in grayscale. Combine color with shape (`shape` aesthetic) and linetype (`linetype` aesthetic) so series remain distinguishable without color.
+- **Figure width** — single-panel: `width=0.8\textwidth`. Side-by-side panels: `width=0.48\textwidth` each.
+
+---
+
+## 3. PDF Processing
 
 ### The Safe Processing Workflow
 
@@ -247,7 +356,7 @@ done
 
 ---
 
-## 3. Exploration Folder Protocol
+## 4. Exploration Folder Protocol
 
 **All experimental work goes into `explorations/` first.** Never directly into production folders.
 
@@ -287,7 +396,7 @@ explorations/
 
 ---
 
-## 4. Exploration Fast-Track
+## 5. Exploration Fast-Track
 
 **Lightweight workflow for experimental work.** Quality threshold: 60/100 (vs 80 for production). No planning needed.
 

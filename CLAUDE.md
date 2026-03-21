@@ -1,4 +1,4 @@
-# CLAUDE.MD -- Applied Econometrics Research with Claude Code
+# CLAUDE.MD -- Empirical Social Science Research with Claude Code
 
 <!-- HOW TO USE: Replace [BRACKETED PLACEHOLDERS] with your project info.
      Customize Beamer environments for your talk preamble.
@@ -7,6 +7,7 @@
 
 **Project:** [YOUR PROJECT NAME]
 **Institution:** [YOUR INSTITUTION]
+**Field:** [YOUR FIELD — e.g., Economics, Finance, Marketing, Management, Accounting]
 **Branch:** main
 
 ---
@@ -18,7 +19,7 @@
 - **Single source of truth** -- Paper `main.tex` is authoritative; talks and supplements derive from it
 - **Quality gates** -- weighted aggregate score; nothing ships below 80/100; see `quality.md`
 - **Worker-critic pairs** -- every creator has a paired critic; critics never edit files
-- **[LEARN] tags** -- when corrected, save `[LEARN:category] wrong → right` to MEMORY.md
+- **Auto-memory** -- corrections and preferences are saved automatically via Claude Code's built-in memory system
 
 ---
 
@@ -37,23 +38,19 @@
 ├── CLAUDE.MD                    # This file
 ├── .claude/                     # Rules, skills, agents, hooks
 ├── Bibliography_base.bib        # Centralized bibliography
-├── Paper/                       # Main LaTeX manuscript (source of truth)
+├── paper/                       # Main LaTeX manuscript (source of truth)
 │   ├── main.tex                 # Primary paper file
-│   └── sections/                # Section-level .tex files
-├── Talks/                       # Derivative Beamer presentations
-│   ├── job_market_talk.tex      # 45-60 min, full results
-│   ├── seminar_talk.tex         # 30-45 min, standard seminar
-│   ├── short_talk.tex           # 15 min, conference session
-│   └── lightning_talk.tex       # 5 min, spiel/elevator pitch
-├── Data/                        # Project data
+│   ├── sections/                # Section-level .tex files
+│   ├── figures/                 # Generated figures (.pdf, .png)
+│   ├── tables/                  # Generated tables (.tex)
+│   ├── talks/                   # Beamer presentations
+│   ├── quarto/                  # Quarto RevealJS presentations
+│   ├── preambles/               # LaTeX headers / shared preamble
+│   ├── supplementary/           # Online appendix and supplements
+│   └── replication/             # Replication package for deposit
+├── data/                        # Project data
 │   ├── raw/                     # Original untouched data (often gitignored)
 │   └── cleaned/                 # Processed datasets ready for analysis
-├── Output/                      # Intermediate results (logs, temp files)
-├── Figures/                     # Final figures (.pdf, .png) referenced in paper
-├── Tables/                      # Final tables (.tex) referenced in paper
-├── Supplementary/               # Online appendix and supplements
-├── Replication/                 # Replication package for deposit
-├── Preambles/header.tex         # LaTeX headers / shared preamble
 ├── scripts/                     # Analysis code (R, Stata, Python, Julia)
 ├── quality_reports/             # Plans, session logs, reviews, scores
 ├── explorations/                # Research sandbox (see rules)
@@ -67,13 +64,13 @@
 
 ```bash
 # Paper compilation (3-pass, XeLaTeX only)
-cd Paper && TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode main.tex
+cd Paper && TEXINPUTS=preambles:$TEXINPUTS xelatex -interaction=nonstopmode main.tex
 BIBINPUTS=..:$BIBINPUTS bibtex main
-TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode main.tex
-TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode main.tex
+TEXINPUTS=preambles:$TEXINPUTS xelatex -interaction=nonstopmode main.tex
+TEXINPUTS=preambles:$TEXINPUTS xelatex -interaction=nonstopmode main.tex
 
 # Talk compilation
-cd Talks && TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode talk.tex
+cd paper/talks && TEXINPUTS=../preambles:$TEXINPUTS xelatex -interaction=nonstopmode talk.tex
 ```
 
 ---
@@ -123,7 +120,7 @@ See `quality.md` for weighted aggregation formula.
 
 | Component | File | Status | Description |
 |-----------|------|--------|-------------|
-| Paper | `Paper/main.tex` | [draft/submitted/R&R] | [Brief description] |
+| Paper | `paper/main.tex` | [draft/submitted/R&R] | [Brief description] |
 | Data | `scripts/R/` | [complete/in-progress] | [Analysis description] |
 | Replication | `Replication/` | [not started/ready] | [Deposit status] |
 | Job Market Talk | `Talks/job_market_talk.tex` | -- | [Status] |

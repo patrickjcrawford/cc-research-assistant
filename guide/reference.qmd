@@ -12,7 +12,7 @@ subtitle: "Every Command, Flag, and Subcommand"
 | `/strategize` | `--pap` | Identification strategy or pre-analysis plan |
 | `/analyze [dataset]` | `--dual [langs]` | End-to-end data analysis (single or parallel language) |
 | `/write [section]` | `--humanize` | Draft paper sections or strip AI patterns |
-| `/review [file]` | `--peer [journal]`, `--methods`, `--proofread`, `--code`, `--replicate [lang]`, `--all` | Quality reviews (routes by target + flags) |
+| `/review [file]` | `--peer [journal]`, `--peer --r2`, `--stress [journal]`, `--methods`, `--proofread`, `--code`, `--replicate [lang]`, `--all` | Quality reviews (routes by target + flags) |
 | `/revise [report]` | --- | R&R cycle: classify + route referee comments |
 | `/talk` | `create`, `audit`, `compile` | Beamer presentations |
 | `/submit` | `--target`, `--package`, `--audit`, `--final` | Submission pipeline |
@@ -63,7 +63,7 @@ Launches the full orchestrated pipeline. Claude conducts a research interview, b
 | Mode | Agents | Output |
 |------|--------|--------|
 | *(default)* | Strategist → strategist-critic | Strategy memo + robustness plan + falsification tests |
-| `--pap` | Strategist (PAP mode) | Pre-analysis plan with outcomes, power, subgroups |
+| `--pap` | Strategist (PAP mode) | Pre-analysis plan in AEA/OSF/EGAP format *(experimental/RCT only)* |
 
 **Saves to:** `quality_reports/strategy_memo_[topic].md`
 
@@ -85,7 +85,7 @@ End-to-end analysis: data cleaning → main specification → robustness → pub
 | `--dual [langs]` | Data-engineer + 2 Coders in parallel → 2 coder-critics + comparison | Same outputs in both languages + convergence report |
 
 **Languages:** R, Stata, Python, Julia
-**Saves to:** `scripts/`, `Tables/`, `Figures/`, `Output/cross_language_comparison.md`
+**Saves to:** `scripts/`, `Paper/tables/`, `Paper/figures/`, `Output/cross_language_comparison.md`
 
 **Cross-language replication:** When `--dual` is used, both implementations run the same specification independently. Results are compared against tolerances in `domain-profile.md`. Divergences are flagged. Inspired by Scott Cunningham's approach: if two independent implementations agree, neither has a bug.
 
@@ -119,6 +119,8 @@ Every draft gets an automatic humanizer pass before finalizing.
 /review scripts/R/analysis.R    Code review (auto-detect script)
 /review --peer                  Blind peer review (generic)
 /review --peer JHR              Blind peer review (calibrated to JHR)
+/review --peer --r2             R&R round 2 (referees remember prior reports)
+/review --stress JHR            Maximum-severity stress test (max 3 rounds)
 /review --methods [file]        Causal audit only
 /review --proofread [file]      Manuscript polish only
 /review --code [file]           Code quality only
@@ -130,15 +132,21 @@ Every draft gets an automatic humanizer pass before finalizing.
 |------|--------|---------------|
 | *(auto .tex)* | writer-critic + strategist-critic + Verifier | Writing + identification + compilation |
 | *(auto .R/.py)* | coder-critic | Code quality and reproducibility |
-| `--peer` | domain-referee + methods-referee | Simulated journal review (blind, independent) |
-| `--peer [journal]` | domain-referee + methods-referee | Same, calibrated to that journal's review culture |
+| `--peer` | Editor + domain-referee + methods-referee | Editor desk review → referee assignment with dispositions → blind reports → editorial decision |
+| `--peer [journal]` | Editor + domain-referee + methods-referee | Same, calibrated to that journal's review culture |
+| `--peer --r2` | Editor + domain-referee + methods-referee | R&R round 2 --- referees remember prior reports |
+| `--stress [journal]` | Editor + domain-referee + methods-referee | Maximum-severity stress test (max 3 rounds) |
 | `--methods` | strategist-critic | 4-phase causal design review |
 | `--proofread` | writer-critic | Notation, hedging, LaTeX, claims vs evidence |
 | `--code` | coder-critic | Code quality (no strategy comparison) |
 | `--replicate [lang]` | Coder (replication) + coder-critic | Re-implement in target language, compare outputs |
 | `--all` | All critics in parallel | Weighted aggregate score |
 
-**Journal calibration:** When a journal name is provided with `--peer`, both referees read `.claude/rules/journal-profiles.md` and adapt their priorities, bar, and checklist to that journal. 15 journals are pre-populated; unknown journals still get adapted review using the journal name + your domain profile. You can add custom profiles.
+**Referee dispositions:** Each referee is assigned one of 6 dispositions (Structuralist, Credibility, Measurement, Policy, Theory, Skeptic) plus pet peeves (1 critical + 1 constructive). Every major comment includes "what would change my mind."
+
+**Editorial decision:** The Editor classifies each issue as FATAL (rejection-worthy), ADDRESSABLE (fixable in revision), or TASTE (referee preference, not binding).
+
+**Journal calibration:** When a journal name is provided with `--peer`, the Editor and both referees read `.claude/references/journal-profiles.md` and adapt their priorities, bar, and checklist to that journal. 30 journals are pre-populated (economics, finance, accounting, marketing, management); unknown journals still get adapted review using the journal name + your domain profile. You can add custom profiles.
 
 **Saves to:** `quality_reports/`
 
@@ -172,15 +180,17 @@ For **real** R&R responses (not the simulated `/review --peer`). Give it your ac
 /talk create seminar             Standard seminar (30-45 min, 25-35 slides)
 /talk create short               Conference session (15 min, 10-15 slides)
 /talk create lightning           Elevator pitch (5 min, 3-5 slides)
+/talk create [format] --quarto   Quarto RevealJS version (output to Paper/quarto/)
 /talk audit [file]               Visual layout check
-/talk compile [file]             XeLaTeX compilation
+/talk compile [file]             XeLaTeX or Quarto compilation
 ```
 
 | Mode | Agents | Output |
 |------|--------|--------|
-| `create` | Storyteller → storyteller-critic | Beamer `.tex` in `Talks/` |
+| `create` | Storyteller → storyteller-critic | Beamer `.tex` in `Paper/talks/` |
+| `create --quarto` | Storyteller → storyteller-critic | Quarto `.qmd` in `Paper/quarto/` |
 | `audit` | Visual checks | Layout issues report |
-| `compile` | XeLaTeX | Compiled PDF |
+| `compile` | XeLaTeX or Quarto | Compiled PDF or HTML |
 
 Talk scores are **advisory** (non-blocking).
 

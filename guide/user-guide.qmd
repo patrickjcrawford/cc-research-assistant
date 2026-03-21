@@ -37,8 +37,12 @@ Phase 3: Execution
   /write                → Paper Sections (Writer + humanizer pass)
 
 Phase 4: Peer Review
-  /review Paper/main.tex → Weighted Score (multi-agent parallel)
-  /review --peer        → domain-referee + methods-referee
+  /review Paper/main.tex    → Weighted Score (multi-agent parallel)
+  /review --peer [journal]  → Editor desk review → Referee dispatch
+                            → domain-referee + methods-referee (blind)
+                            → Editorial decision (FATAL/ADDRESSABLE/TASTE)
+  /review --stress [journal] → Adversarial stress test
+  /review --peer --r2       → R&R second round (referee memory)
 
 Phase 5: Submission
   /submit --target      → Journal Recommendations
@@ -55,7 +59,7 @@ Interactive research interview that builds your research specification and domai
 
 ### `/discover --lit [topic]`
 
-Dispatches the **Librarian** (collector) and **librarian-critic** (coverage reviewer). Searches top-5 generals, NBER, field journals, SSRN/RePEc. Produces annotated bibliography, BibTeX entries, frontier map, and positioning recommendation.
+Dispatches the **Librarian** (collector) and **librarian-critic** (coverage reviewer). Searches top-5 generals, NBER/SSRN/RePEc, and field journals. Produces annotated bibliography, BibTeX entries, frontier map, and positioning recommendation.
 
 ### `/discover --data [question]`
 
@@ -73,7 +77,7 @@ Dispatches the **Strategist** (proposer) and **strategist-critic** (reviewer). P
 
 ### `/strategize --pap`
 
-Dispatches the **Strategist** in PAP mode. Drafts in AEA/OSF/EGAP format with outcomes, subgroups, multiple testing corrections, and power calculations.
+*For experimental/RCT research only.* Dispatches the **Strategist** in Pre-Analysis Plan mode. Drafts in AEA/OSF/EGAP registry format with pre-specified outcomes, subgroups, multiple testing corrections, and power calculations. Not needed for observational quasi-experimental designs.
 
 ## Execution Phase
 
@@ -85,12 +89,12 @@ Use `--dual r,python` to run the same analysis in two languages simultaneously. 
 
 ### `/write [section]`
 
-Dispatches the **Writer** agent. Drafts paper sections with proper economics structure:
+Dispatches the **Writer** agent. Drafts paper sections with proper empirical paper structure:
 
 - **Introduction**: contribution paragraph within first 2 pages, effect sizes stated, clear identification preview
 - **Empirical Strategy**: per-design template (DiD, IV, RDD, etc.) with assumption discussion
 - **Results**: proper table/figure references, statistical vs economic significance
-- **Notation protocol**: $Y_{it}$, $D_{it}$, $ATT(g,t)$ --- consistent throughout
+- **Notation protocol**: consistent notation throughout, calibrated to your field via domain profile
 
 Anti-hedging rules enforced. **Humanizer pass** automatically strips 24 AI writing patterns.
 
@@ -114,14 +118,19 @@ Smart routing based on file type and flags:
 
 ### `/review --peer [journal]`
 
-Dispatches two specialized **blind referees** that mimic real journal review:
+Dispatches the full peer review pipeline: **Editor** desk review, then two specialized **blind referees**.
 
-- **domain-referee**: Expert in your paper's subject literature. Checks contributions, positioning, missing citations, substantive arguments, external validity.
-- **methods-referee**: Expert in econometric methods. Checks identification strategy, estimation, inference, robustness, replication readiness.
+1. **Editor** does a desk review first --- checks scope, minimum quality, and assigns referee dispositions
+2. **domain-referee**: Expert in your paper's subject literature. Checks contributions, positioning, missing citations, substantive arguments, external validity.
+3. **methods-referee**: Expert in empirical methods. Checks identification strategy, estimation, inference, robustness, replication readiness.
 
-Both referees are independent (neither sees the other's report). The Orchestrator synthesizes the editorial decision (Accept/Minor/Major/Reject).
+Both referees are independent (neither sees the other's report). Each referee gets a **disposition** (Structuralist, Credibility, Measurement, Policy, Theory, or Skeptic) and **pet peeves** (1 critical + 1 constructive) that shape their review personality. Every major comment includes a "what would change my mind" statement. The Editor synthesizes the editorial decision, classifying each issue as FATAL, ADDRESSABLE, or TASTE.
 
-**Journal calibration:** Add a journal name to calibrate both referees to that journal's review culture. For example, `/review --peer JHR` makes the referees prioritize policy relevance and clean identification (what JHR referees actually care about). 15 journals are pre-populated in `.claude/rules/journal-profiles.md`; you can add your own. Without a journal name, referees review as generic top-field reviewers.
+**R&R memory:** Use `--peer --r2` for round 2 reviews --- referees remember their prior reports and check whether their concerns were addressed.
+
+**Stress test:** Use `--stress [journal]` for maximum-severity review (max 3 rounds).
+
+**Journal calibration:** Add a journal name to calibrate both referees to that journal's review culture. For example, `/review --peer JHR` makes the referees prioritize policy relevance and clean identification (what JHR referees actually care about). 30 journals are pre-populated in `.claude/references/journal-profiles.md` (economics, finance, accounting, marketing, management); you can add your own. Without a journal name, referees review as generic top-field reviewers.
 
 See the full [command reference](reference.qmd) for all flags and subcommands.
 
@@ -144,7 +153,7 @@ Produces point-by-point response letter with diplomatic disagreement protocol.
 
 ### `/talk [format]`
 
-Dispatches the **Storyteller** (creator) and **storyteller-critic** (talk reviewer). Generates Beamer `.tex` talks derived from your paper in 4 formats:
+Dispatches the **Storyteller** (creator) and **storyteller-critic** (talk reviewer). Generates talks derived from your paper in 4 formats:
 
 | Format | Slides | Duration | Content |
 |--------|--------|----------|---------|
@@ -156,6 +165,10 @@ Dispatches the **Storyteller** (creator) and **storyteller-critic** (talk review
 Talk scores are **advisory** (non-blocking).
 
 Subcommands: `/talk create [format]`, `/talk audit [file]`, `/talk compile [file]`.
+
+**Beamer** (default): Outputs to `Paper/talks/`. Use `/talk create [format]`.
+
+**Quarto RevealJS**: Outputs to `Paper/quarto/`. Use `/talk create [format] --quarto` for web-native slides with interactive features.
 
 ## Submission Phase
 
@@ -248,25 +261,20 @@ explorations/
 
 # Self-Improvement
 
-## Quick Corrections: [LEARN] Tags
+## Auto-Memory
 
-Every correction gets tagged for future reference in MEMORY.md:
+Claude Code has a built-in memory system that automatically saves corrections and preferences across sessions. No manual tagging needed — when you correct Claude ("that's UAB, not Emory"), it saves the correction and applies it in future conversations.
 
-```markdown
-- [LEARN:notation] T_t = 1{t=2} is deterministic -> use T_i in {1,2}
-- [LEARN:citation] Post-LASSO is Belloni (2013), NOT Belloni (2014)
-- [LEARN:r-code] Package X: ALWAYS include intercept in design matrix
-```
+Memory is stored in `.claude/projects/.../memory/` and persists across sessions. You can also explicitly ask Claude to remember or forget something.
 
 ## Skill Extraction: /tools learn
 
-For discoveries that deserve more than a one-line tag, use `/tools learn` to create a full skill.
+For discoveries that deserve a reusable workflow (not just a one-liner correction), use `/tools learn` to create a full skill.
 
 | Situation | Use |
 |-----------|-----|
-| One-liner fix | `[LEARN:category]` tag in MEMORY.md |
+| Correction or preference | Auto-memory (automatic) |
 | Multi-step workflow | `/tools learn` to create full skill |
-| Error + root cause + solution | `/tools learn` if reusable, `[LEARN]` if not |
 
 ---
 
@@ -274,7 +282,7 @@ For discoveries that deserve more than a one-line tag, use `/tools learn` to cre
 
 ## Domain Profile
 
-The domain profile (`.claude/rules/domain-profile.md`) calibrates all agents to your field. Fill it in manually or use `/discover` (interactive interview) to populate it:
+The domain profile (`.claude/references/domain-profile.md`) calibrates all agents to your field. Agents read their discipline from this file; the default is economics if not specified. Fill it in manually or use `/discover` (interactive interview) to populate it:
 
 - **Field & adjacent subfields** --- inferred from your topic
 - **Target journals** --- ranked by tier

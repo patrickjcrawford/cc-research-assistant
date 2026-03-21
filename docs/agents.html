@@ -189,6 +189,7 @@ window.Quarto = {
   </ul></li>
   <li><a href="#the-reviewers-peer-review-phase" id="toc-the-reviewers-peer-review-phase" class="nav-link" data-scroll-target="#the-reviewers-peer-review-phase">The Reviewers (Peer Review Phase)</a>
   <ul class="collapse">
+  <li><a href="#editor" id="toc-editor" class="nav-link" data-scroll-target="#editor">Editor</a></li>
   <li><a href="#domain-referee" id="toc-domain-referee" class="nav-link" data-scroll-target="#domain-referee">domain-referee</a></li>
   <li><a href="#methods-referee" id="toc-methods-referee" class="nav-link" data-scroll-target="#methods-referee">methods-referee</a></li>
   </ul></li>
@@ -213,7 +214,7 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Meet the Agents</h1>
-<p class="subtitle lead">16 Specialists That Do the Work</p>
+<p class="subtitle lead">17 Specialists That Do the Work</p>
 </div>
 
 
@@ -232,7 +233,7 @@ window.Quarto = {
 
 <section id="how-agents-work" class="level1">
 <h1>How Agents Work</h1>
-<p>When you ask Claude to analyze data or draft a paper, it doesn’t do everything itself. It dispatches <strong>specialized agents</strong> — think of them as 16 different research assistants, each with a specific skill.</p>
+<p>When you ask Claude to analyze data or draft a paper, it doesn’t do everything itself. It dispatches <strong>specialized agents</strong> — think of them as 17 different research assistants, each with a specific skill.</p>
 <p>The key pattern: every agent that creates something (a literature review, analysis code, paper text) has a <strong>paired critic</strong> that checks its work. The critic can read but never edit — so it has no reason to go easy. If the critic finds problems, the worker fixes them. If they can’t agree after 3 rounds, you get asked to decide.</p>
 <p>This is what prevents Claude from saying “looks good” about its own work.</p>
 <hr>
@@ -242,7 +243,7 @@ window.Quarto = {
 <p>These agents help you find the literature and data you need before designing your empirical strategy.</p>
 <section id="librarian" class="level2">
 <h2 class="anchored" data-anchor-id="librarian">Librarian</h2>
-<p>Searches top-5 economics journals, NBER working papers, SSRN, and RePEC for papers related to your topic. Produces an annotated bibliography with BibTeX entries, maps where the research frontier is, and identifies where your paper fits in the conversation.</p>
+<p>Searches top-5 journals, NBER working papers, SSRN, and RePEC for papers related to your topic. Produces an annotated bibliography with BibTeX entries, maps where the research frontier is, and identifies where your paper fits in the conversation. Calibrated to your field via the domain profile.</p>
 </section>
 <section id="librarian-critic" class="level2">
 <h2 class="anchored" data-anchor-id="librarian-critic">librarian-critic</h2>
@@ -288,7 +289,7 @@ window.Quarto = {
 </section>
 <section id="writer" class="level2">
 <h2 class="anchored" data-anchor-id="writer">Writer</h2>
-<p>Drafts paper sections with proper economics structure: an introduction that states the contribution within the first two pages, an empirical strategy section templated to your design (DiD, IV, RDD), and results that distinguish statistical from economic significance. Runs an automatic <strong>humanizer pass</strong> that strips common AI writing patterns (inflated symbolism, rule-of-three lists, hedging language).</p>
+<p>Drafts paper sections with proper empirical paper structure: an introduction that states the contribution within the first two pages, an empirical strategy section templated to your design (DiD, IV, RDD), and results that distinguish statistical from economic significance. Runs an automatic <strong>humanizer pass</strong> that strips common AI writing patterns (inflated symbolism, rule-of-three lists, hedging language).</p>
 </section>
 <section id="writer-critic" class="level2">
 <h2 class="anchored" data-anchor-id="writer-critic">writer-critic</h2>
@@ -298,15 +299,19 @@ window.Quarto = {
 </section>
 <section id="the-reviewers-peer-review-phase" class="level1">
 <h1>The Reviewers (Peer Review Phase)</h1>
-<p>These agents simulate what happens when you submit to a journal. Two independent referees review your paper — neither sees the other’s report.</p>
+<p>These agents simulate what happens when you submit to a journal. An Editor does desk review, then two independent referees review your paper — neither sees the other’s report. Invoked via <code>/review --peer [journal]</code>.</p>
+<section id="editor" class="level2">
+<h2 class="anchored" data-anchor-id="editor">Editor</h2>
+<p>The <strong>desk reviewer</strong>. Screens the paper before sending it to referees: checks scope fit, minimum quality, and assigns each referee a <strong>disposition</strong> (Structuralist, Credibility, Measurement, Policy, Theory, or Skeptic) plus <strong>pet peeves</strong> (1 critical + 1 constructive per referee) that shape their review personality. After referee reports return, the Editor synthesizes the editorial decision, classifying each issue as FATAL (rejection-worthy), ADDRESSABLE (fixable in revision), or TASTE (referee preference, not binding).</p>
+</section>
 <section id="domain-referee" class="level2">
 <h2 class="anchored" data-anchor-id="domain-referee">domain-referee</h2>
-<p>The <strong>subject expert</strong>. Evaluates whether your paper makes a real contribution to the literature, whether you’ve positioned it correctly relative to existing work, whether your substantive arguments hold up, and whether your results generalize beyond the specific setting. Calibrated to your research field via the domain profile. When you specify a target journal (<code>/review --peer JHR</code>), it emulates that journal’s review culture using <a href="../.claude/rules/journal-profiles.md">journal profiles</a>.</p>
+<p>The <strong>subject expert</strong>. Evaluates whether your paper makes a real contribution to the literature, whether you’ve positioned it correctly relative to existing work, whether your substantive arguments hold up, and whether your results generalize beyond the specific setting. Calibrated to your research field via the domain profile. When you specify a target journal (<code>/review --peer JHR</code>), it emulates that journal’s review culture using <a href="../.claude/references/journal-profiles.md">journal profiles</a>. Every major comment includes a “what would change my mind” statement.</p>
 </section>
 <section id="methods-referee" class="level2">
 <h2 class="anchored" data-anchor-id="methods-referee">methods-referee</h2>
-<p>The <strong>econometrics expert</strong>. Evaluates whether your identification strategy is valid, whether the estimation is appropriate, whether inference is correct (clustering, standard errors, multiple testing), whether the robustness checks are sufficient, and whether another researcher could replicate your results. Also calibrates to a target journal when specified.</p>
-<p>The <strong>Orchestrator</strong> synthesizes both referee reports into an editorial decision: Accept, Minor Revisions, Major Revisions, or Reject.</p>
+<p>The <strong>empirical methods expert</strong>. Evaluates whether your identification strategy is valid, whether the estimation is appropriate, whether inference is correct (clustering, standard errors, multiple testing), whether the robustness checks are sufficient, and whether another researcher could replicate your results. Also calibrates to a target journal when specified. Like the domain-referee, includes “what would change my mind” on every major comment.</p>
+<p><strong>R&amp;R memory:</strong> When invoked with <code>--peer --r2</code>, referees remember their prior reports and check whether their concerns were addressed. Max 3 rounds.</p>
 <hr>
 </section>
 </section>
@@ -325,7 +330,7 @@ window.Quarto = {
 </section>
 <section id="agent-catalog" class="level1">
 <h1>Quick Reference</h1>
-<p>All 16 agents at a glance:</p>
+<p>All 17 agents at a glance:</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 26%">
@@ -396,34 +401,39 @@ window.Quarto = {
 <td>Notation, hedging, LaTeX, claims vs evidence</td>
 </tr>
 <tr class="even">
+<td>Editor</td>
+<td><code>editor.md</code></td>
+<td>Desk review, referee dispatch, editorial decision</td>
+</tr>
+<tr class="odd">
 <td>domain-referee</td>
 <td><code>domain-referee.md</code></td>
 <td>Blind peer review (subject expertise)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>methods-referee</td>
 <td><code>methods-referee.md</code></td>
-<td>Blind peer review (econometric methods)</td>
-</tr>
-<tr class="even">
-<td>Storyteller</td>
-<td><code>storyteller.md</code></td>
-<td>Beamer talk creation (4 formats)</td>
+<td>Blind peer review (empirical methods)</td>
 </tr>
 <tr class="odd">
+<td>Storyteller</td>
+<td><code>storyteller.md</code></td>
+<td>Beamer + Quarto talk creation (4 formats)</td>
+</tr>
+<tr class="even">
 <td>storyteller-critic</td>
 <td><code>storyteller-critic.md</code></td>
 <td>Talk narrative, visuals, content fidelity</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Verifier</td>
 <td><code>verifier.md</code></td>
 <td>Compilation + AEA replication audit</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Orchestrator</td>
 <td><code>orchestrator.md</code></td>
-<td>Agent dispatch, quality gates, referee synthesis</td>
+<td>Agent dispatch, quality gates, editorial synthesis</td>
 </tr>
 </tbody>
 </table>
@@ -471,7 +481,7 @@ window.Quarto = {
 <p>These agents create and review Beamer presentations derived from your paper.</p>
 <section id="storyteller" class="level2">
 <h2 class="anchored" data-anchor-id="storyteller">Storyteller</h2>
-<p>Creates Beamer presentations from <code>Paper/main.tex</code> in 4 formats: <strong>job market talk</strong> (45–60 min, full results), <strong>seminar</strong> (30–45 min, standard format), <strong>short talk</strong> (15 min, conference session), and <strong>lightning</strong> (5 min, elevator pitch). All content derives from the paper — the Storyteller never invents results.</p>
+<p>Creates presentations from <code>Paper/main.tex</code> in 4 formats: <strong>job market talk</strong> (45–60 min, full results), <strong>seminar</strong> (30–45 min, standard format), <strong>short talk</strong> (15 min, conference session), and <strong>lightning</strong> (5 min, elevator pitch). Supports both <strong>Beamer</strong> (output to <code>Paper/talks/</code>) and <strong>Quarto RevealJS</strong> (output to <code>Paper/quarto/</code> via <code>--quarto</code> flag). All content derives from the paper — the Storyteller never invents results.</p>
 </section>
 <section id="storyteller-critic" class="level2">
 <h2 class="anchored" data-anchor-id="storyteller-critic">storyteller-critic</h2>

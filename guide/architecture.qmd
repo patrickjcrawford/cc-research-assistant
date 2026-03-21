@@ -5,23 +5,24 @@ subtitle: "How the System Works"
 
 # System Overview
 
-Claude Code's power comes from five configuration layers that work together. For details on each layer, see the [Customization Guide](customization.qmd).
+Claude Code's power comes from six configuration layers that work together. For details on each layer, see the [Customization Guide](customization.qmd).
 
 | Layer | Location | Loaded When |
 |-------|----------|-------------|
 | **CLAUDE.md** | Project root | Every session |
 | **Rules** | `.claude/rules/` | Always-on or path-scoped |
+| **References** | `.claude/references/` | On demand (agents read when needed) |
 | **Skills** | `.claude/skills/` | On demand (slash commands) |
 | **Agents** | `.claude/agents/` | On demand (via skills or orchestrator) |
 | **Hooks** | `.claude/settings.json` | On events (automatic) |
 
-Claude reliably follows about **100--150 custom instructions**. Your system prompt uses ~50, leaving ~100 for your project. CLAUDE.md and always-on rules share this budget. Path-scoped rules, skills, and agents load on demand.
+Claude reliably follows about **100--150 custom instructions**. Your system prompt uses ~50, leaving ~100 for your project. CLAUDE.md and always-on rules share this budget. Path-scoped rules, references, skills, and agents load on demand --- they don't count against the limit.
 
 ---
 
 # Agent Workflow Diagram
 
-How 16 agents coordinate across the research pipeline. Each phase pairs **workers** (who create) with **critics** (who review). The **Orchestrator** manages dispatch, quality gates, and escalation. For detailed descriptions of each agent, see [Meet the Agents](agents.qmd).
+How 17 agents coordinate across the research pipeline. Each phase pairs **workers** (who create) with **critics** (who review). The **Orchestrator** manages dispatch, quality gates, and escalation. For detailed descriptions of each agent, see [Meet the Agents](agents.qmd).
 
 ## The Pipeline
 
@@ -82,12 +83,13 @@ Each phase dispatches **worker → critic** pairs. The worker creates; the criti
 
 ### Phase 4: Peer Review
 
-| Referee | Focus | Independence |
-|---------|-------|-------------|
+| Agent | Focus | Role |
+|-------|-------|------|
+| **Editor** | Desk review, scope, referee assignment | Assigns dispositions + pet peeves to referees |
 | **domain-referee** | Contributions, literature, external validity | Blind --- doesn't see the other report |
 | **methods-referee** | Identification, estimation, robustness | Blind --- doesn't see the other report |
 
-The Orchestrator synthesizes both reports into an editorial decision: Accept / Minor / Major / Reject.
+The Editor does desk review first, then dispatches referees with dispositions (Structuralist, Credibility, Measurement, Policy, Theory, Skeptic). After reports return, the Editor synthesizes the editorial decision, classifying issues as FATAL / ADDRESSABLE / TASTE.
 
 ### Phase 5: Submission
 
@@ -99,7 +101,7 @@ The Orchestrator synthesizes both reports into an editorial decision: Accept / M
 
 | Worker | What it creates | Critic | What it checks |
 |--------|----------------|--------|----------------|
-| **Storyteller** | Beamer slides (4 formats) | **storyteller-critic** | Narrative, visuals, fidelity |
+| **Storyteller** | Beamer + Quarto slides (4 formats) | **storyteller-critic** | Narrative, visuals, fidelity |
 
 ## The Worker-Critic Loop
 
@@ -177,6 +179,7 @@ flowchart TD
 
     subgraph s4 [" "]
         direction LR
+        ED[Editor]:::infra
         DR[domain-referee]:::referee
         MR[methods-referee]:::referee
     end
@@ -314,7 +317,7 @@ The Clo-Author inherits a lecture production pipeline from [its origin](https://
 
 ## Creating Talks from Papers
 
-The `/talk` skill dispatches the Storyteller (creator) and storyteller-critic (reviewer) to generate Beamer presentations in 4 formats (job market, seminar, short, lightning). All content derives from `Paper/main.tex`.
+The `/talk` skill dispatches the Storyteller (creator) and storyteller-critic (reviewer) to generate presentations in 4 formats (job market, seminar, short, lightning). Supports both Beamer (output to `Paper/talks/`) and Quarto RevealJS (output to `Paper/quarto/` via `--quarto` flag). All content derives from `Paper/main.tex`.
 
 ## Replication-First Coding
 
@@ -333,7 +336,7 @@ Run the same analysis in two languages simultaneously to catch implementation bu
 
 - `/analyze --dual r,python` dispatches two Coder agents in parallel with the same strategy memo
 - `/review --replicate python` re-implements existing R code in Python and compares outputs
-- Tolerances come from `domain-profile.md` --- divergence beyond tolerance is flagged as a bug
+- Tolerances come from `.claude/references/domain-profile.md` --- divergence beyond tolerance is flagged as a bug
 
 Inspired by Scott Cunningham's approach: if two independent implementations produce the same estimates, neither has a bug. If they diverge, you've caught something before it reaches the paper.
 
