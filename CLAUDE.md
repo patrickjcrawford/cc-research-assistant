@@ -116,6 +116,16 @@ See `quality.md` for weighted aggregation formula.
 
 ---
 
+## Output Organization
+
+<!-- Options: by-script (default) or by-purpose -->
+Output organization: by-script
+
+<!-- by-script:  paper/figures/main_regression/figure1.pdf, paper/tables/main_regression/table1.tex -->
+<!-- by-purpose: paper/figures/estimation/coefplot_main.pdf, paper/tables/robustness/alt_controls.tex -->
+
+---
+
 ## Current Project State
 
 | Component | File | Status | Description |

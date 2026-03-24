@@ -82,10 +82,16 @@ If results diverge: investigate whether the difference is numerical precision (a
 
 ## Output Location
 
-- Scripts: `scripts/R/` (or `scripts/stata/`, `scripts/python/`)
-- Tables: `paper/tables/`
-- Figures: `paper/figures/`
-- Logs: `Output/`
+Read CLAUDE.md for the project's **Output Organization** setting:
+
+- **by-script (default):** Outputs go to subfolders named after the script that generates them:
+  - `paper/figures/main_regression/figure1.pdf`
+  - `paper/tables/main_regression/table1.tex`
+- **by-purpose:** Outputs go to subfolders named by purpose:
+  - `paper/figures/estimation/coefplot_main.pdf`
+  - `paper/tables/robustness/alt_controls.tex`
+
+Scripts: `scripts/R/` (or `scripts/stata/`, `scripts/python/`)
 
 ## What You Do NOT Do
 
