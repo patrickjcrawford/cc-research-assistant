@@ -4,6 +4,22 @@ All notable changes to the Clo-Author are documented here.
 
 ---
 
+## [3.1.1] — 2026-03-24
+
+### Output Organization
+- Added `Output Organization` setting to CLAUDE.md (by-script or by-purpose)
+- Default is **by-script**: outputs go to subfolders named after the generating script (e.g., `paper/figures/main_regression/figure1.pdf`)
+- Coder agent reads this setting and follows accordingly
+
+### Bug Fixes
+- Fixed Paper/ → paper/ rename on case-insensitive macOS filesystem (git index mismatch)
+- Fixed all stale uppercase paths across 10 files (agents, skills, rules, CLAUDE.md)
+- Fixed broken domain-profile path in /new-project
+- Added plan mode (Step 0) to /new-project
+- Removed stale upstream remote to Pedro's repo
+
+---
+
 ## [3.1.0] — 2026-03-23
 
 ### Skill Detail Restoration — v1.0 Depth Returns to v3.0
