@@ -16,8 +16,6 @@ The following preamble is the project standard. New papers should use this struc
 
 ```latex
 \documentclass[12pt]{article}
-\DeclareUnicodeCharacter{22C6}{\ensuremath{\star}}
-
 % ====== Page Layout and Basic Formatting ======
 \usepackage[left=1.0in,right=1.0in,top=1.0in,bottom=1.0in]{geometry}
 \usepackage{setspace}
