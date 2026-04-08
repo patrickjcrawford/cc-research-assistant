@@ -1,10 +1,10 @@
-# The Clo-Author: AI Research Architecture for Empirical Social Science
+# The Clo-Author: AI Research Architecture for Economics
 
 [![Version](https://img.shields.io/github/v/release/hugosantanna/clo-author?style=flat-square&color=b44dff&label=version)](CHANGELOG.md)
 
 > **Work in progress.** This repo is evolving as I learn, and I share it in case others find it useful and would like to build upon it. Expect rough edges.
 
-An open-source [Claude Code](https://docs.anthropic.com/en/docs/claude-code) architecture that turns your terminal into a research assistant for empirical social science — economics, finance, marketing, management, accounting, and public policy. From literature review to journal submission.
+An open-source [Claude Code](https://docs.anthropic.com/en/docs/claude-code) scaffold for empirical economics research. Provides structured workflows from literature review to journal submission. Can be adapted to other fields (finance, accounting, marketing, management) by customizing the domain profile and journal profiles.
 
 **Live guide:** [hugosantanna.github.io/clo-author](https://hugosantanna.github.io/clo-author/)
 <br>**Built on:** [Pedro Sant'Anna's claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow)
@@ -28,7 +28,7 @@ Then paste this prompt:
 > Read CLAUDE.md and help me set up the project structure.
 > Start with a literature review on [YOUR TOPIC].
 
-Claude reads the configuration, fills in your project details, and works autonomously — planning, implementing, reviewing, and verifying.
+Claude reads the configuration, fills in your project details, and plans the approach — you approve the plan, it implements and runs review agents, and you review the results.
 
 **Using VS Code?** Open the Claude Code panel instead. Everything works the same.
 
@@ -36,9 +36,9 @@ Claude reads the configuration, fills in your project details, and works autonom
 
 ## What It Does
 
-### Contractor Mode
+### How It Works
 
-You describe a task. Claude plans the approach, implements it, runs specialized review agents, fixes issues, re-verifies, and scores against quality gates — all autonomously. You approve the plan and see a summary when the work meets quality standards.
+You describe a task. Claude plans the approach (you approve), implements it, runs specialized review agents, fixes issues, re-verifies, and scores against quality gates. You review the output at each stage.
 
 ### Specialized Agents in Worker-Critic Pairs
 
@@ -56,7 +56,7 @@ Every creator has a paired critic. Critics can't edit files; creators can't scor
 | Presentation | Storyteller | storyteller-critic |
 | Infrastructure | Orchestrator, Verifier | — |
 
-### Realistic Peer Review Simulation
+### Simulated Peer Review
 
 `/review --peer [journal]` simulates a full journal submission:
 
@@ -70,7 +70,7 @@ Additional modes:
 - `--peer --r2 [journal]` — R&R second round with referee memory (checks whether prior concerns were addressed)
 - Max 3 rounds, then the editor's patience runs out — just like real life
 
-**30 journal profiles** across economics, finance, accounting, marketing, and management (all top-tier, A* in the Australian Business Deans Council ranking), each with calibrated referee pools.
+**30 journal profiles** across economics and adjacent fields (all top-tier, A* in the Australian Business Deans Council ranking), each with configured referee pools based on published style guides and common review culture.
 
 ### 10 Slash Commands
 
@@ -133,18 +133,20 @@ Optional: Stata, Python, Julia (for multi-language analysis), [Quarto](https://q
 
 ---
 
-## Adapting for Your Field
+## Setup
 
 1. **Fill in `CLAUDE.md`** — replace `[BRACKETED PLACEHOLDERS]` with your project details
-2. **Fill in the domain profile** (`.claude/references/domain-profile.md`) — your field's journals, data sources, identification strategies, conventions, and seminal references. Use `/discover interview` to populate it interactively.
-3. **Add journal profiles** — 30 profiles are included. Add your own to `.claude/references/journal-profiles.md` using the template at the bottom of the file.
+2. **Fill in the domain profile** (`.claude/references/domain-profile.md`) — your journals, data sources, identification strategies, conventions, and seminal references. Use `/discover interview` to populate it interactively.
+3. **Add journal profiles** — 30 profiles are included (economics and adjacent fields). Add your own to `.claude/references/journal-profiles.md` using the template at the bottom of the file.
 4. **Configure your language** — R is the default; Stata, Python, and Julia are also supported. Set your preference in CLAUDE.md.
+
+**Adapting to other fields:** The pipeline assumes economics by default (causal inference methods, working paper format, AEA-style conventions). To adapt for finance, accounting, marketing, or management, customize the domain profile and journal profiles. The agents, rules, and section templates will follow the domain profile's field specification.
 
 ---
 
 ## Origin
 
-This project builds on [Pedro Sant'Anna's claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow), which was built for Econ 730 at Emory University. The Clo-Author reorients that infrastructure from lecture production to empirical research publication, and expands the scope from economics to all empirical social science.
+This project builds on [Pedro Sant'Anna's claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow), which was built for Econ 730 at Emory University. The Clo-Author reorients that infrastructure from lecture production to empirical economics research.
 
 Maintained by [Hugo Sant'Anna](https://hsantanna.org) at UAB.
 
@@ -165,7 +167,17 @@ No git merge, no upstream remote, no conflicts. Once on 3.0, future upgrades can
 
 ## Context Efficiency
 
-The 3.0 architecture loads 71% fewer tokens per session compared to 2.x. Reference files (journal profiles, domain profiles) load on demand — only when agents need them. Rules are path-scoped where possible. You get more done with less context consumed.
+The 3.0 architecture loads fewer tokens per session than 2.x by demand-loading reference files (journal profiles, domain profiles) only when agents need them. Rules are path-scoped where possible.
+
+---
+
+## Limitations
+
+- **Scaffold, not autopilot.** Every output — drafts, analysis, reviews — needs human review. Claude plans and executes; you decide what ships.
+- **Simulated peer review** catches structural issues (missing robustness, identification gaps, notation errors) but does not replicate actual referee expertise or field-specific judgment.
+- **Journal profiles** are based on published style guides and common review culture, not empirical calibration against actual editorial decisions.
+- **Quality scores** are heuristic deduction rubrics. They flag problems reliably but do not measure publishability.
+- **The writer produces drafts.** It does not replace your writing process — it gives you structured first drafts to revise.
 
 ---
 

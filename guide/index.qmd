@@ -1,13 +1,13 @@
 ---
 title: "The Clo-Author 3.0"
-subtitle: "AI Research Architecture for Empirical Social Science"
+subtitle: "AI Research Architecture for Economics"
 ---
 
-An open-source [Claude Code](https://docs.anthropic.com/en/docs/claude-code) workflow that turns your terminal into a full-service empirical research assistant --- from literature review to journal submission. Built for empirical social science: economics, finance, marketing, management, accounting, and public policy.
+An open-source [Claude Code](https://docs.anthropic.com/en/docs/claude-code) scaffold for empirical economics research --- from literature review to journal submission. Can be adapted to adjacent fields (finance, accounting, marketing, management) by customizing the domain profile and journal profiles.
 
 **Built on** [Pedro Sant'Anna's claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow), reoriented for empirical research publication.
 
-You describe a task in plain English. Claude plans the approach, dispatches specialized agents, reviews quality, fixes issues, and presents results. Like a contractor who manages the entire job --- 17 agents, 10 commands, all running behind the scenes.
+You describe a task in plain English. Claude plans the approach (you approve), dispatches specialized agents, reviews quality, fixes issues, and presents results --- 17 agents, 10 commands, all running behind the scenes. You review the output at each stage.
 
 ## Get Started in 5 Minutes
 
@@ -104,7 +104,7 @@ Optional: Stata, Python, Julia (multi-language analysis), [Quarto](https://quart
 
 ## Origin
 
-This project is a fork of [Pedro Sant'Anna's claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow), which was built for Econ 730 at Emory University (6 lectures, 800+ slides). The Clo-Author reorients that infrastructure from lecture production to empirical research publication across the social sciences.
+This project is a fork of [Pedro Sant'Anna's claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow), which was built for Econ 730 at Emory University (6 lectures, 800+ slides). The Clo-Author reorients that infrastructure from lecture production to empirical economics research.
 
 The `/humanizer` skill is by [Siqi Chen](https://github.com/blader/humanizer), adapted here for academic writing.
 

@@ -131,17 +131,20 @@ The following preamble is the project standard. New papers should use this struc
 
 ## Key Design Decisions
 
+**Required** items are blocking — the writer-critic deducts points for violations. **Recommended** items improve output quality but are not publication blockers.
+
 | Choice | Standard | Rationale |
 |--------|----------|-----------|
 | `biblatex` + `biber` | Required | Replaces `natbib` + `bibtex`. More flexible, better Unicode, `natbib=true` preserves `\citet`/`\citep` |
-| `lmodern` | Required | Clean Latin Modern font; compatible with all LaTeX engines |
-| `microtype` | Required | Improved character spacing and margin kerning |
 | `fancyhdr` | Required | Clean centered page numbers, no header rule |
-| Citation color `(0,127,255)` | Default | Azure — visible but professional. Consistent across citations, links, URLs |
 | `\doublespacing` | Required | Standard for working paper submissions |
-| `captionsetup` | Required | Small font, bold labels — matches journal style |
-| `hidelinks` in `hyperref` | Required | No colored boxes around links; colors applied via `colorlinks` |
+| `booktabs` + `threeparttable` | Required | Professional tables with proper notes — see content-standards.md |
 | `hyperref` loaded last | Required | Avoids conflicts with other packages |
+| `lmodern` | Recommended | Clean Latin Modern font; Computer Modern also acceptable |
+| `microtype` | Recommended | Improved character spacing and margin kerning — cosmetic |
+| Citation color `(0,127,255)` | Recommended | Azure — visible but professional. Can be customized |
+| `captionsetup` | Recommended | Small font, bold labels — improves appearance |
+| `hidelinks` in `hyperref` | Recommended | No colored boxes around links; aesthetic preference |
 
 ## Title Page Format
 
@@ -232,11 +235,10 @@ Note: `biber` replaces `bibtex` when using `biblatex`.
 
 ## What the Writer-Critic Checks
 
-The writer-critic deducts points for:
+**Required (blocking deductions):**
 - Wrong document class or font size (-5)
 - Missing `\doublespacing` in body (-5)
 - Using `natbib` instead of `biblatex` (-3)
-- Missing `microtype` (-2)
 - Missing `fancyhdr` page number setup (-2)
 - `\textbf{}` wrapping `\title{}` (-3)
 - `\and` between authors instead of `\quad` (-3)
@@ -246,5 +248,11 @@ The writer-critic deducts points for:
 - Missing table notes on any table (-5)
 - Missing figure notes on any figure (-5)
 - `hyperref` not loaded last (-2)
-- Missing caption styling (`captionsetup`) (-2)
 - Using `bibtex` instead of `biber` (-3)
+
+**Recommended (advisory — reported but not deducted):**
+- Missing `microtype`
+- Missing `lmodern`
+- Non-default citation color
+- Missing `captionsetup`
+- Missing `hidelinks`

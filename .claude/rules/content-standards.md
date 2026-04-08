@@ -17,7 +17,7 @@ paths:
 
 ## 1. Table Standards
 
-**Target:** Publication-quality tables matching AER, QJE, and Econometrica formatting.
+**Target:** Publication-quality tables using standard economics formatting (booktabs, threeparttable, no vertical rules). Journal-specific conventions (significance stars, note format) adapt to the target journal — see journal-profiles.md.
 
 ### No In-Table Titles or Notes
 
@@ -53,12 +53,25 @@ Every table uses exactly three horizontal rules and **zero vertical lines**:
 ### Coefficient Display
 
 - Point estimates on one row, standard errors in parentheses on the row below
-- Stars for significance: `*` p < 0.10, `**` p < 0.05, `***` p < 0.01
-- Align significance note at the bottom: `\textit{Notes:} * p < 0.10, ** p < 0.05, *** p < 0.01`
-- Standard errors labeled in the note (e.g., "Robust standard errors in parentheses" or "Clustered at municipality level")
+- Standard errors labeled in the table note (e.g., "Robust standard errors in parentheses" or "Clustered at municipality level")
 
+**Significance reporting depends on the target journal:**
+
+| Context | Convention |
+|---------|-----------|
+| **Working papers (default)** | Stars: `*` p < 0.10, `**` p < 0.05, `***` p < 0.01. Note at bottom: `\textit{Notes:} * p < 0.10, ** p < 0.05, *** p < 0.01` |
+| **AEA journals** (AER, AEJ:Applied, AEJ:Policy, AER:Insights) | No significance stars. Report standard errors in parentheses. Use exact p-values or confidence intervals for key results. See the [AEA Style Guide](https://www.aeaweb.org/journals/aeri/style-guide). |
+| **All other journals** | Stars acceptable. Follow journal-specific conventions in journal-profiles.md. |
+
+Working paper default example:
 ```
 Treatment        & 0.045**  & 0.038*   & 0.052*** \\
+                 & (0.021)  & (0.020)  & (0.019)  \\
+```
+
+AEA journal example:
+```
+Treatment        & 0.045    & 0.038    & 0.052    \\
                  & (0.021)  & (0.020)  & (0.019)  \\
 ```
 
@@ -101,7 +114,7 @@ library(modelsummary)
 modelsummary(
   models,
   output   = "latex_tabular",  # bare tabular, no wrapper
-  stars    = c("*" = 0.10, "**" = 0.05, "***" = 0.01),
+  stars    = c("*" = 0.10, "**" = 0.05, "***" = 0.01),  # set FALSE for AEA journals
   coef_rename = c(
     "treatment"  = "Treatment",
     "log_income" = "Log income"
@@ -124,7 +137,7 @@ fixest::etable(
     yesNo    = c("Yes", "No")
   ),
   se.below = TRUE,
-  signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.10)
+  signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.10)  # omit for AEA journals
 )
 ```
 

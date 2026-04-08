@@ -130,7 +130,7 @@ Both referees are independent (neither sees the other's report). Each referee ge
 
 **Stress test:** Use `--stress [journal]` for maximum-severity review (max 3 rounds).
 
-**Journal calibration:** Add a journal name to calibrate both referees to that journal's review culture. For example, `/review --peer JHR` makes the referees prioritize policy relevance and clean identification (what JHR referees actually care about). 30 journals are pre-populated in `.claude/references/journal-profiles.md` (economics, finance, accounting, marketing, management); you can add your own. Without a journal name, referees review as generic top-field reviewers.
+**Journal calibration:** Add a journal name to calibrate both referees to that journal's review culture. For example, `/review --peer JHR` makes the referees prioritize policy relevance and clean identification (what JHR referees actually care about). 30 journals are pre-populated in `.claude/references/journal-profiles.md` (economics and adjacent fields); you can add your own. Without a journal name, referees review as generic top-field reviewers.
 
 See the full [command reference](reference.qmd) for all flags and subcommands.
 
@@ -323,7 +323,7 @@ Once you're on 3.0, run `/tools upgrade` for future versions. It automates the s
 
 | Component | 2.x | 3.0 |
 |-----------|-----|-----|
-| Scope | Economics only | All empirical social science |
+| Scope | Economics only | Economics (adaptable to adjacent fields) |
 | Peer review | Score averaging | Editor + dispositions + desk reject |
 | Journal profiles | 15 (economics) | 35+ across 5 fields |
 | Profile location | `.claude/rules/` | `.claude/references/` (on-demand) |

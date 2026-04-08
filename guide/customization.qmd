@@ -61,7 +61,7 @@ Rules are markdown files in `.claude/rules/` that Claude loads automatically. Co
 
 # Domain Profile
 
-The domain profile (`.claude/references/domain-profile.md`) calibrates all agents to your specific research field. Agents read their discipline from this file; the default is economics if not specified. It supports any empirical social science: economics, finance, marketing, management, accounting, and public policy. It can be populated two ways:
+The domain profile (`.claude/references/domain-profile.md`) calibrates all agents to your specific research field. The default is economics. It can be adapted to adjacent fields (finance, accounting, marketing, management) by editing the profile. It can be populated two ways:
 
 1. **`/discover`** (interactive interview) --- generates it automatically
 2. **Manual editing** --- fill in the template directly

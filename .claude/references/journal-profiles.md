@@ -22,6 +22,12 @@ When `/review --peer [journal]` is invoked:
 
 Each journal profile includes a **Referee pool** that weights which dispositions the editor draws from. The two referees always get DIFFERENT dispositions. Dispositions: STRUCTURAL, CREDIBILITY, MEASUREMENT, POLICY, THEORY, SKEPTIC (see editor.md for definitions).
 
+### Table Format Convention
+
+**Default:** All journals use standard economics table conventions — significance stars (`*` p<0.10, `**` p<0.05, `***` p<0.01), standard errors in parentheses, booktabs formatting. This default applies unless a journal profile below includes a **Table format** override.
+
+**Exception — AEA journals** (AER, AEJ:Applied, AEJ:Policy, AER:Insights): No significance stars. Report standard errors in parentheses; use exact p-values or confidence intervals for key results. See the [AEA Style Guide](https://www.aeaweb.org/journals/aeri/style-guide) and content-standards.md for implementation details.
+
 ---
 
 ## Economics
@@ -35,6 +41,7 @@ Each journal profile includes a **Referee pool** that weights which dispositions
 **Methods referee adjusts:** Identification must be convincing to non-specialists. Clean, transparent design preferred over technically complex one. Standard errors and robustness should be thorough but not excessive.
 **Typical concerns:** "Why should economists outside this field care?" "Is the contribution big enough for AER?" "Is this too narrow/specialized?"
 **Referee pool:** CREDIBILITY (high), POLICY (medium), STRUCTURAL (medium), MEASUREMENT (low), THEORY (low), SKEPTIC (low)
+**Table format:** No significance stars. Standard errors in parentheses. Exact p-values or confidence intervals for key results (AEA style).
 
 ### Econometrica (ECMA)
 **Focus:** Theoretical and empirical economics with formal rigor
@@ -79,6 +86,7 @@ Each journal profile includes a **Referee pool** that weights which dispositions
 **Methods referee adjusts:** Same identification standards as top-5. Modern estimators expected (no naive TWFE for staggered). Replication package expected.
 **Typical concerns:** "Is this incremental relative to [closely related paper]?" "Would this be better in a field journal?"
 **Referee pool:** CREDIBILITY (high), POLICY (medium), MEASUREMENT (medium), SKEPTIC (low), STRUCTURAL (low), THEORY (low)
+**Table format:** No significance stars. Standard errors in parentheses. Exact p-values or confidence intervals for key results (AEA style).
 
 ### American Economic Journal: Economic Policy (AEJ:Policy)
 **Focus:** Policy evaluation and design — how policies affect outcomes
@@ -87,6 +95,7 @@ Each journal profile includes a **Referee pool** that weights which dispositions
 **Methods referee adjusts:** Identification from actual policy variation (not cross-sectional). Pre-trends must be clean. Heterogeneity by policy-relevant subgroups expected. Back-of-envelope welfare calculations.
 **Typical concerns:** "What should policymakers do with this?" "Does this generalize to other states/countries?" "What's the cost-benefit?"
 **Referee pool:** POLICY (high), CREDIBILITY (high), MEASUREMENT (medium), STRUCTURAL (low), THEORY (low), SKEPTIC (low)
+**Table format:** No significance stars. Standard errors in parentheses. Exact p-values or confidence intervals for key results (AEA style).
 
 ### Journal of Human Resources (JHR)
 **Focus:** Labor economics, education, health, demography
@@ -147,6 +156,7 @@ Each journal profile includes a **Referee pool** that weights which dispositions
 **Methods referee adjusts:** Core identification must be clean. Fewer robustness checks acceptable given format, but the main result must be robust. Transparency and visual evidence valued.
 **Typical concerns:** "Can this be communicated in 10 pages?" "Is the single result compelling enough?" "Does this need a longer format to be convincing?"
 **Referee pool:** CREDIBILITY (high), POLICY (medium), SKEPTIC (medium), STRUCTURAL (low), THEORY (low), MEASUREMENT (low)
+**Table format:** No significance stars. Standard errors in parentheses. Exact p-values or confidence intervals for key results (AEA style).
 
 ### Economics Letters
 **Focus:** Short papers across all fields of economics — theoretical and empirical
@@ -350,4 +360,5 @@ Copy this template and add it above this section:
 **Methods referee adjusts:** [rigor expectations, preferred methods, required checks]
 **Typical concerns:** [common referee questions at this journal]
 **Referee pool:** [disposition] (high/medium/low) for each: STRUCTURAL, CREDIBILITY, MEASUREMENT, POLICY, THEORY, SKEPTIC
+**Table format:** [optional — only include if journal deviates from default (stars OK). E.g., "No significance stars (AEA style)."]
 ```

@@ -146,7 +146,7 @@ Every draft gets an automatic humanizer pass before finalizing.
 
 **Editorial decision:** The Editor classifies each issue as FATAL (rejection-worthy), ADDRESSABLE (fixable in revision), or TASTE (referee preference, not binding).
 
-**Journal calibration:** When a journal name is provided with `--peer`, the Editor and both referees read `.claude/references/journal-profiles.md` and adapt their priorities, bar, and checklist to that journal. 30 journals are pre-populated (economics, finance, accounting, marketing, management); unknown journals still get adapted review using the journal name + your domain profile. You can add custom profiles.
+**Journal calibration:** When a journal name is provided with `--peer`, the Editor and both referees read `.claude/references/journal-profiles.md` and adapt their priorities, bar, and checklist to that journal. 30 journals are pre-populated (economics and adjacent fields); unknown journals still get adapted review using the journal name + your domain profile. You can add custom profiles.
 
 **Saves to:** `quality_reports/`
 
