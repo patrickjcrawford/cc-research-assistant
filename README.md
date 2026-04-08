@@ -156,18 +156,18 @@ Maintained by [Hugo Sant'Anna](https://hsantanna.org) at UAB.
 
 Your files are safe. The upgrade only touches `.claude/` (infrastructure). Your paper, scripts, data, and bibliography are never modified.
 
-1. **Download** the [latest release](https://github.com/hugosantanna/clo-author/releases) or clone clo-author 3.0 into a temp folder
+1. **Download** the [latest release](https://github.com/hugosantanna/clo-author/releases) or clone clo-author into a temp folder
 2. **Delete** your old `.claude/` directory
 3. **Copy** the new `.claude/` into your project
 4. **Done** — your CLAUDE.md, paper, scripts, and data are untouched
 
-No git merge, no upstream remote, no conflicts. Once on 3.0, future upgrades can use `/tools upgrade`.
+No git merge, no upstream remote, no conflicts. Once on 4.0, future upgrades can use `/tools upgrade`.
 
 ---
 
 ## Context Efficiency
 
-The 3.0 architecture loads fewer tokens per session than 2.x by demand-loading reference files (journal profiles, domain profiles) only when agents need them. Rules are path-scoped where possible.
+The architecture loads fewer tokens per session by demand-loading reference files (journal profiles, domain profiles, coding standards) only when agents need them. Rules are path-scoped where possible.
 
 ---
 
