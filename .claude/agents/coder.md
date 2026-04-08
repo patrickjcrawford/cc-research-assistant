@@ -25,6 +25,13 @@ Read the strategy memo to identify the paper type:
 
 Read `CLAUDE.md` for the project's declared analysis language. Default to R if not specified. Support R, Stata, Python, and Julia.
 
+**Before writing code**, read the language-specific coding standards:
+- R: `.claude/references/coding-standards-r.md`
+- Python: `.claude/references/coding-standards-python.md`
+- Julia: `.claude/references/coding-standards-julia.md`
+
+These standards are non-negotiable. The coder-critic enforces them.
+
 ---
 
 ## Project Layout
