@@ -4,6 +4,63 @@ All notable changes to the Clo-Author are documented here.
 
 ---
 
+## [4.0.0] — 2026-04-08 — Paper-Type Architecture
+
+Every agent now knows whether it's working on a reduced-form, structural, theory+empirics, or descriptive paper — and adapts accordingly.
+
+### Paper-Type Awareness (7 agents rewritten)
+- **Writer** rebuilt around paragraph-level argument moves (motivation, result, mechanism, qualification). Section templates for all 4 paper types with design-specific guidance (DiD/IV/RDD/event study for reduced-form; model+estimation+counterfactuals for structural; predictions+tests for theory+empirics; construction+validation for descriptive)
+- **Writer-critic** upgraded to 8 check categories including paper-type coherence, results narration quality, and design-specific completeness tables
+- **Strategist** expanded from reduced-form-only to full coverage: structural estimation strategy (model specification, parameter identification, estimation method, counterfactual design), theory+empirics (testable predictions, mapping to data), descriptive/measurement (construct validity, validation plan)
+- **Strategist-critic** expanded with structural checklists (model specification, parameter identification, model fit, counterfactual credibility), theory+empirics checks (prediction sharpness, test power, honesty assessment), descriptive checks (construct validity, causal language)
+- **Coder** rebuilt with engineering discipline: paper-to-code naming maps, numbered script structure, function-per-file, structural estimation implementation patterns (MLE/GMM/SMM/BLP), Monte Carlo simulation structure
+- **Coder-critic** expanded to 16 check categories, adding numerical discipline (float guards, CDF clamping, inverse link protection, pre-allocation), structural code checks (convergence, multiple starts), and prohibited patterns table
+- **Methods-referee** expanded with paper-type-specific evaluation dimensions and scoring rubrics for each type
+
+### Numerical Discipline (new in Coder + Coder-critic)
+- Float comparison guards (no `==` on floats)
+- CDF clamping to [0, 1], inverse link protection
+- Integer literals (`1L`, `seq_len(n)`)
+- Pre-allocation (no growing lists in loops)
+- Bootstrap/parallel patterns with proper seed handling
+
+### Scope: Back to Economics
+- Reverted scope from "empirical social science" to economics — the pipeline's agents, rules, and section templates are built for economics and that's what they should claim
+- Other fields (finance, accounting, marketing, management) can adapt by customizing the domain profile and journal profiles
+- Non-economics journal profiles retained — they're useful reference data for adjacent fields that use similar methods
+
+### Profile-Aware Table Standards
+- Significance stars are now journal-dependent, not hardcoded
+- AEA journals (AER, AEJ:Applied, AEJ:Policy, AER:Insights): no significance stars per current AEA style guide
+- All other journals: stars acceptable (default for working papers)
+- Journal profiles now include `Table format` field for overrides
+
+### Working Paper Format: Required vs. Recommended
+- Split "Key Design Decisions" table into Required (blocking) and Recommended (advisory)
+- Required: document class, margins, double-spacing, biblatex+biber, booktabs, hyperref last
+- Recommended: lmodern, microtype, citation color, captionsetup, hidelinks
+- Writer-critic deductions adjusted: recommended items are advisory, not blocking
+
+### Compilation Alignment
+- Fixed bibtex→biber mismatch: CLAUDE.md and tools/SKILL.md now match working-paper-format.md
+- Fixed remaining uppercase paths in tools/SKILL.md (Paper→paper, Talks→paper/talks, Preambles→preambles)
+
+### Dead Code Removal
+- Deleted `scripts/quality_score.py` (761 lines targeting nonexistent Quarto/Slides/ directories)
+- Deleted `scripts/sync_to_docs.sh` (92 lines targeting nonexistent deployment structure)
+- Removed stale `sync_to_docs.sh` permissions from settings.json
+- Added `biber` permission to settings.json
+
+### README Honesty
+- "turns your terminal into a research assistant" → "scaffold for empirical economics research"
+- "works autonomously" → removed; describes the plan-approve-review loop
+- "Realistic Peer Review Simulation" → "Simulated Peer Review"
+- "calibrated referee pools" → "configured referee pools"
+- Dropped unverifiable "71% fewer tokens" claim
+- Added Limitations section
+
+---
+
 ## [3.1.1] — 2026-03-24
 
 ### Output Organization
@@ -75,9 +132,9 @@ The v2.0→v3.0 consolidation accidentally stripped practical detail from 6 skil
 
 ## [3.0.0] — 2026-03-20
 
-### Scope Expansion: Empirical Social Science
-- clo-author now targets all empirical social science fields: economics, finance, marketing, management, accounting, public policy
-- Updated meta-governance to reflect this scope (no longer claims biology/physics/CS generality)
+### Scope Clarification
+- clo-author is built for empirical economics; adaptable to adjacent fields (finance, accounting, marketing, management) via domain profile
+- Updated meta-governance to reflect this scope
 - Institution updated from Emory to UAB
 
 ### Peer Review Simulation — Complete Redesign

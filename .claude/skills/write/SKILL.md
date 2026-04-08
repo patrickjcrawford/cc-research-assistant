@@ -1,13 +1,13 @@
 ---
 name: write
-description: Draft academic paper sections with notation protocol, anti-hedging, and humanizer pass. Replaces /draft-paper and /humanizer.
+description: Draft academic paper sections using paragraph-level argument moves. Cleanup pass strips AI patterns after drafting. Replaces /draft-paper and /humanizer.
 argument-hint: "[section or mode: intro | strategy | results | conclusion | abstract | full | humanize] [file path (optional)]"
 allowed-tools: Read,Grep,Glob,Write,Edit,Task
 ---
 
 # Write
 
-Draft paper sections or apply humanizer pass by dispatching the **Writer** agent.
+Draft paper sections or apply cleanup pass by dispatching the **Writer** agent.
 
 **Input:** `$ARGUMENTS` — section name or mode, optionally followed by file path.
 
@@ -34,24 +34,40 @@ Before drafting, read all available context:
 6. Scan `paper/tables/` and `paper/figures/` for generated output
 7. Read `quality_reports/results_summary.md` if it exists (from Coder)
 
-#### 2. Section Routing
+#### 2. Paper Type Detection
+
+Before routing, identify the paper type from the strategy memo or existing draft:
+- **Reduced-form** — DiD, IV, RDD, event study
+- **Structural** — Model estimation, counterfactual simulations
+- **Theory + empirics** — Propositions tested with data
+- **Descriptive / measurement** — New data, new measure, stylized facts
+
+This determines which section templates the Writer uses.
+
+#### 3. Section Routing
 
 Based on `$ARGUMENTS`:
 - **`full`**: Draft all sections in sequence, pausing between major sections for user feedback
 - **`intro`**: Draft introduction (most common request)
-- **`strategy`**: Draft identification and estimation section
-- **`results`**: Draft results from available output
-- **`conclusion`**: Draft conclusion
+- **`strategy`**: Draft empirical strategy (reduced-form), model + estimation (structural), or model + tests (theory+empirics)
+- **`results`**: Draft results — narration style depends on paper type and output type (regression tables, event study figures, counterfactual simulations, etc.)
+- **`conclusion`**: Draft conclusion with type-appropriate ending (policy implications, counterfactual implications, or research agenda)
 - **`abstract`**: Draft abstract (must have other sections first)
+- **`data`**: Draft data section — expanded for descriptive/measurement papers
+- **`model`**: Draft model section (structural or theory+empirics papers only)
 - **No argument**: Ask user which section to draft
 
-#### 3. Dispatch Writer
+#### 4. Dispatch Writer
 
-Dispatch Writer with section standards, notation protocol, and anti-hedging rules. Humanizer pass runs automatically before finalizing. Save to `paper/sections/[section].tex`.
+Dispatch Writer with paper type and argument-move templates for the target section. The writer drafts using paragraph types (motivation, result statement, mechanism, etc.), applies design-specific moves, then runs the cleanup pass. Save to `paper/sections/[section].tex`.
 
-#### 4. Quality Self-Check
+#### 5. Quality Self-Check
 
 Before presenting the draft:
+- [ ] Paper type identified and correct template used
+- [ ] Every paragraph has an identifiable purpose (argument move type)
+- [ ] Findings lead sentences — not buried after setup
+- [ ] Design-specific elements present (see writer.md for checklists per design)
 - [ ] Every displayed equation is numbered (`\label{eq:...}`)
 - [ ] All `\cite{}` keys exist in `Bibliography_base.bib`
 - [ ] Introduction contribution paragraph names specific papers
@@ -59,23 +75,24 @@ Before presenting the draft:
 - [ ] No banned hedging phrases
 - [ ] Notation consistent throughout
 - [ ] All tables/figures referenced actually exist in `paper/tables/` or `paper/figures/`
+- [ ] Results narrated correctly for output type (tables, event study figures, counterfactuals)
 
-#### 5. Present to User
+#### 6. Present to User
 
 Present each section for feedback. Flag items that need attention:
 - **TBD items:** Where empirical results are needed but not yet available
 - **VERIFY items:** Citations that need user confirmation
 - **PLACEHOLDER items:** Effect sizes awaiting final estimates
 
-### `/write humanize [file]` — Humanizer Pass Only
+### `/write humanize [file]` — Cleanup Pass Only
 Strip AI writing patterns from existing text without rewriting content.
 
-**Agent:** Writer (humanizer mode)
+**Agent:** Writer (cleanup mode)
 **Output:** Edited file with AI patterns removed
 
 Strips 24 patterns across 4 categories:
 - Structural: forced narrative arcs, artificial progression
-- Lexical: "delve,leverage,nuanced,robust"
+- Lexical: "delve, leverage, nuanced, robust"
 - Rhetorical: rule-of-three, negative parallelisms, em dash overuse
 - Formatting: excessive bullet points, promotional language
 
@@ -83,13 +100,16 @@ Strips 24 patterns across 4 categories:
 
 ## Section Standards
 
-| Section | Length | Key Requirements |
-|---------|--------|-----------------|
-| Introduction | 1000-1500 words | Hook → question → method → finding → contribution → roadmap |
-| Strategy | 800-1200 words | Formal assumption, numbered equation, threats addressed |
-| Results | 800-1500 words | Main spec, effect sizes in economic terms, heterogeneity |
-| Conclusion | 500-700 words | Restate with effect size, policy, limitations, future |
-| Abstract | 100-150 words | Question, method, finding with magnitude, implication |
+**All paper types share the same backbone. Moves diverge by type — see writer.md for full templates.**
+
+| Section | Length | Reduced-Form | Structural | Theory+Empirics | Descriptive |
+|---------|--------|-------------|-----------|----------------|-------------|
+| Introduction | 1000-1500 | ...preview → result → contribution | ...model preview → counterfactual → contribution | ...theory preview → test result → contribution | ...data innovation → key fact → contribution |
+| Data | 800-1200 | Treatment, outcome, controls | Moments that identify parameters | Standard | 1200-1800 (core contribution) |
+| Strategy/Model | 800-1500 | Design-specific (DiD/IV/RDD/ES) | Environment → decisions → equilibrium → estimation | Model → propositions → tests | N/A (merged into Data) |
+| Results | 800-1500 | Main spec → robustness → heterogeneity | Estimates → model fit → counterfactuals → welfare | Prediction-by-prediction evidence | Key facts → decompositions → implications |
+| Conclusion | 500-700 | Policy implications | Counterfactual implications + model limitations | What model gets right/wrong | Research agenda enabled by new data |
+| Abstract | 100-150 | Question, design, finding with magnitude | Question, model, counterfactual finding | Question, prediction, test result | Question, measurement, key fact |
 
 ---
 
@@ -106,4 +126,4 @@ Strips 24 patterns across 4 categories:
 - **This is the user's paper, not Claude's.** Match their voice and style.
 - **Never fabricate results.** Use TBD placeholders.
 - **Citations must be verifiable.** Only cite confirmed papers.
-- **Humanizer is automatic.** Every draft gets de-AI-ified.
+- **Argument moves first, cleanup second.** Draft with structure, then strip AI patterns.
