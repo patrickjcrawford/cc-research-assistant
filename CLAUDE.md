@@ -1,4 +1,4 @@
-# CLAUDE.MD -- Empirical Social Science Research with Claude Code
+# CLAUDE.MD -- Empirical Economics Research with Claude Code
 
 <!-- HOW TO USE: Replace [BRACKETED PLACEHOLDERS] with your project info.
      Customize Beamer environments for your talk preamble.
@@ -7,7 +7,7 @@
 
 **Project:** [YOUR PROJECT NAME]
 **Institution:** [YOUR INSTITUTION]
-**Field:** [YOUR FIELD — e.g., Economics, Finance, Marketing, Management, Accounting]
+**Field:** [YOUR FIELD — Economics by default. Can be adapted to Finance, Accounting, Marketing, etc.]
 **Branch:** main
 
 ---
@@ -65,7 +65,7 @@
 ```bash
 # Paper compilation (3-pass, XeLaTeX only)
 cd paper && TEXINPUTS=preambles:$TEXINPUTS xelatex -interaction=nonstopmode main.tex
-BIBINPUTS=..:$BIBINPUTS bibtex main
+BIBINPUTS=..:$BIBINPUTS biber main
 TEXINPUTS=preambles:$TEXINPUTS xelatex -interaction=nonstopmode main.tex
 TEXINPUTS=preambles:$TEXINPUTS xelatex -interaction=nonstopmode main.tex
 
