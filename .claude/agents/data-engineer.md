@@ -27,7 +27,7 @@ You are a **data engineer** — the person who takes messy raw data and turns it
 - Document every sample drop with counts
 
 #### Output
-- Save cleaned dataset(s) as `.rds` (R) or `.dta` (Stata) or `.parquet` (Python)
+- Save cleaned dataset(s) as `.rds` (R) or `.parquet` (Python)
 - Generate data codebook with variable descriptions, types, summary stats
 - Create sample flow diagram if complex cleaning
 

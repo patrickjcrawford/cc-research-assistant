@@ -64,7 +64,7 @@ A creator cannot evaluate the quality of its own work. The score always comes fr
 | explorer | Data assessment | explorer-critic |
 | data-engineer | Data pipeline and cleaned datasets | coder-critic |
 | strategist | Strategy memo | strategist-critic |
-| coder | R/Stata/Python scripts | coder-critic |
+| coder | R/Python/Julia scripts | coder-critic |
 | writer | Paper manuscript | writer-critic |
 | storyteller | Beamer talk | storyteller-critic |
 

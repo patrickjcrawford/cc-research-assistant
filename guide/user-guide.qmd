@@ -83,7 +83,7 @@ Dispatches the **Strategist** (proposer) and **strategist-critic** (reviewer). P
 
 ### `/analyze [dataset]`
 
-Dispatches the **Data-engineer** (cleaning + visualization), **Coder** (analysis implementation), and **coder-critic** (reviewer). End-to-end analysis: data cleaning, main specification, robustness checks, publication-ready tables and figures. Supports R, Stata, Python, and Julia.
+Dispatches the **Data-engineer** (cleaning + visualization), **Coder** (analysis implementation), and **coder-critic** (reviewer). End-to-end analysis: data cleaning, main specification, robustness checks, publication-ready tables and figures. Supports R, Python, and Julia.
 
 Use `--dual r,python` to run the same analysis in two languages simultaneously. Both implementations follow the same strategy memo; results are compared within tolerance. Divergences are flagged. See the [Command Reference](reference.qmd) for details.
 

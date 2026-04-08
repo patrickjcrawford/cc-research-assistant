@@ -39,7 +39,7 @@ Rscript scripts/R/FILENAME.R 2>&1 | tail -20
 - Check exit code
 - Verify output files created
 - Check file sizes > 0
-- Support R, Stata (`stata -b do`), Python, Julia
+- Support R, Python, Julia
 
 ### 3. File Integrity
 - Every `\input{}`, `\include{}` reference resolves to an existing file
@@ -61,7 +61,6 @@ Rscript scripts/R/FILENAME.R 2>&1 | tail -20
 
 ### 6. Dependency Verification
 - R: `renv.lock` or `sessionInfo()` output exists
-- Stata: version number and `ssc install` list documented
 - Python: `requirements.txt` or `pyproject.toml` exists
 - Non-standard packages documented with install instructions
 

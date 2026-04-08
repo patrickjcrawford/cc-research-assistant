@@ -51,7 +51,7 @@
 ├── data/                        # Project data
 │   ├── raw/                     # Original untouched data (often gitignored)
 │   └── cleaned/                 # Processed datasets ready for analysis
-├── scripts/                     # Analysis code (R, Stata, Python, Julia)
+├── scripts/                     # Analysis code (R, Python, Julia)
 ├── quality_reports/             # Plans, session logs, reviews, scores
 ├── explorations/                # Research sandbox (see rules)
 ├── templates/                   # Session log, quality report templates

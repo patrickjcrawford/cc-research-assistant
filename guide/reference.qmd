@@ -74,7 +74,6 @@ Launches the full orchestrated pipeline. Claude conducts a research interview, b
 ```
 /analyze [dataset path or goal]
 /analyze --dual r,python        Parallel analysis in two languages
-/analyze --dual r,stata         Same, with Stata as second language
 ```
 
 End-to-end analysis: data cleaning → main specification → robustness → publication tables and figures. Reads the strategy memo (if it exists) and implements it faithfully.
@@ -84,7 +83,7 @@ End-to-end analysis: data cleaning → main specification → robustness → pub
 | *(default)* | Data-engineer + Coder → coder-critic | Scripts, tables, figures in one language |
 | `--dual [langs]` | Data-engineer + 2 Coders in parallel → 2 coder-critics + comparison | Same outputs in both languages + convergence report |
 
-**Languages:** R, Stata, Python, Julia
+**Languages:** R, Python, Julia
 **Saves to:** `scripts/`, `paper/tables/`, `paper/figures/`, `Output/cross_language_comparison.md`
 
 **Cross-language replication:** When `--dual` is used, both implementations run the same specification independently. Results are compared against tolerances in `domain-profile.md`. Divergences are flagged. Inspired by Scott Cunningham's approach: if two independent implementations agree, neither has a bug.

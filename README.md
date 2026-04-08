@@ -112,7 +112,7 @@ your-project/
 │   ├── supplementary/           # Online appendix
 │   └── replication/             # Replication package for deposit
 ├── data/                        # Raw and cleaned datasets
-├── scripts/                     # Analysis code (R, Stata, Python, Julia)
+├── scripts/                     # Analysis code (R, Python, Julia)
 ├── quality_reports/             # Plans, session logs, reviews, scores
 ├── explorations/                # Research sandbox
 └── master_supporting_docs/      # Reference papers and data docs
@@ -129,7 +129,7 @@ your-project/
 | R | Analysis & figures | [r-project.org](https://www.r-project.org/) |
 | [gh CLI](https://cli.github.com/) | GitHub integration | `brew install gh` (macOS) |
 
-Optional: Stata, Python, Julia (for multi-language analysis), [Quarto](https://quarto.org) (web slides).
+Optional: Python, Julia (for multi-language analysis), [Quarto](https://quarto.org) (web slides).
 
 ---
 
@@ -138,7 +138,7 @@ Optional: Stata, Python, Julia (for multi-language analysis), [Quarto](https://q
 1. **Fill in `CLAUDE.md`** — replace `[BRACKETED PLACEHOLDERS]` with your project details
 2. **Fill in the domain profile** (`.claude/references/domain-profile.md`) — your journals, data sources, identification strategies, conventions, and seminal references. Use `/discover interview` to populate it interactively.
 3. **Add journal profiles** — 30 profiles are included (economics and adjacent fields). Add your own to `.claude/references/journal-profiles.md` using the template at the bottom of the file.
-4. **Configure your language** — R is the default; Stata, Python, and Julia are also supported. Set your preference in CLAUDE.md.
+4. **Configure your language** — R is the default; Python and Julia are also supported. Set your preference in CLAUDE.md.
 
 **Adapting to other fields:** The pipeline assumes economics by default (causal inference methods, working paper format, AEA-style conventions). To adapt for finance, accounting, marketing, or management, customize the domain profile and journal profiles. The agents, rules, and section templates will follow the domain profile's field specification.
 

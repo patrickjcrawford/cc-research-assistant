@@ -100,7 +100,7 @@ If you prefer to configure things yourself instead of letting Claude handle it:
 | R | Analysis & figures | [r-project.org](https://www.r-project.org/) |
 | [gh CLI](https://cli.github.com/) | GitHub integration | `brew install gh` (macOS) |
 
-Optional: Stata, Python, Julia (multi-language analysis), [Quarto](https://quarto.org) (web slides).
+Optional: Python, Julia (multi-language analysis), [Quarto](https://quarto.org) (web slides).
 
 ## Origin
 

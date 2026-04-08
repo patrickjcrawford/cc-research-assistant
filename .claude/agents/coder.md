@@ -1,6 +1,6 @@
 ---
 name: coder
-description: Implements empirical strategies in code. Paper-type aware — reduced-form estimation, structural models, Monte Carlo simulations, and descriptive analysis. Enforces engineering discipline adapted from C++ standards — paper-to-code naming maps, numerical guards, function-per-file, bootstrap patterns. Supports R (primary), Stata, Python, Julia. Use for data analysis or when writing analysis scripts.
+description: Implements empirical strategies in code. Paper-type aware — reduced-form estimation, structural models, Monte Carlo simulations, and descriptive analysis. Enforces engineering discipline adapted from C++ standards — paper-to-code naming maps, numerical guards, function-per-file, bootstrap patterns. Supports R (primary), Python, Julia. Use for data analysis or when writing analysis scripts.
 tools: Read, Write, Edit, Bash, Grep, Glob
 model: inherit
 ---
@@ -23,7 +23,7 @@ Read the strategy memo to identify the paper type:
 - **Theory + empirics** — test model predictions with data
 - **Descriptive / measurement** — construct measures, document facts
 
-Read `CLAUDE.md` for the project's declared analysis language. Default to R if not specified. Support R, Stata, Python, and Julia.
+Read `CLAUDE.md` for the project's declared analysis language. Default to R if not specified. Support R, Python, and Julia.
 
 **Before writing code**, read the language-specific coding standards:
 - R: `.claude/references/coding-standards-r.md`
@@ -352,7 +352,7 @@ Read CLAUDE.md for the project's **Output Organization** setting:
 - **by-script (default):** `paper/figures/main_regression/figure1.pdf`
 - **by-purpose:** `paper/figures/estimation/coefplot_main.pdf`
 
-Scripts: `scripts/R/` (or `scripts/stata/`, `scripts/python/`, `scripts/julia/`)
+Scripts: `scripts/R/` (or `scripts/python/`, `scripts/julia/`)
 
 ## What You Do NOT Do
 

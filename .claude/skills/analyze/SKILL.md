@@ -1,6 +1,6 @@
 ---
 name: analyze
-description: End-to-end data analysis dispatching Coder and Data-engineer for implementation, coder-critic for review. Supports R, Stata, Python, Julia. Replaces /data-analysis.
+description: End-to-end data analysis dispatching Coder and Data-engineer for implementation, coder-critic for review. Supports R, Python, Julia. Replaces /data-analysis.
 argument-hint: "[dataset path or goal] Options: --dual [lang1,lang2]"
 allowed-tools: Read,Grep,Glob,Write,Edit,Bash,Task
 ---
@@ -18,7 +18,7 @@ Run end-to-end data analysis by dispatching the **Coder** (analysis), **Data-eng
 ### Step 1: Context Gathering
 1. Read .claude/references/domain-profile.md for field conventions
 2. Read strategy memo in `quality_reports/` if it exists
-3. Check CLAUDE.md for language preference (R/Stata/Python/Julia)
+3. Check CLAUDE.md for language preference (R/Python/Julia)
 4. Scan existing scripts in `scripts/` for project patterns
 
 ### Step 2: Data Preparation (if needed)
@@ -133,7 +133,7 @@ This file is the primary handoff artifact to the writer agent. Without it, the w
 
 ## Dual-Language Mode (`--dual r,python`)
 
-When `--dual [lang1,lang2]` is provided (e.g., `--dual r,python`, `--dual r,stata`):
+When `--dual [lang1,lang2]` is provided (e.g., `--dual r,python`, `--dual r,julia`):
 
 1. **Data-engineer** runs once — language-agnostic cleaning, saves to `data/cleaned/`
 2. **Two Coder agents** dispatched in parallel — same strategy memo, different languages
@@ -149,7 +149,7 @@ When `--dual [lang1,lang2]` is provided (e.g., `--dual r,python`, `--dual r,stat
 Inspired by Scott Cunningham's replication methodology: **if two independent implementations agree, neither has a bug.** This is the core rationale for dual-language mode.
 
 **Tolerance thresholds:**
-- **Floating-point differences are normal.** Minor numerical differences (e.g., 1e-10) between R and Python/Stata arise from different linear algebra backends, optimizer defaults, and floating-point arithmetic. These are expected, not bugs.
+- **Floating-point differences are normal.** Minor numerical differences (e.g., 1e-10) between R and Python arise from different linear algebra backends, optimizer defaults, and floating-point arithmetic. These are expected, not bugs.
 - **Point estimates:** Must agree within 1e-6 (relative) or as declared in `domain-profile.md`
 - **Standard errors:** Must agree within 1e-4 (relative) — SE computation varies more across implementations due to degrees-of-freedom corrections and clustering algorithms
 - **P-values:** Must agree on significance at conventional levels (0.01, 0.05, 0.10). If one language says p=0.049 and the other says p=0.051, flag for manual review but do not treat as a bug.

@@ -75,7 +75,7 @@ Handles the unglamorous but critical work: data cleaning, variable construction,
 
 ## Coder
 
-Translates the strategy memo into working analysis scripts. **Paper-type aware** --- implements reduced-form estimation (DiD/IV/RDD with design-specific packages), structural models (MLE/GMM/SMM/BLP with convergence diagnostics and counterfactual simulation), theory+empirics (prediction-by-prediction tests), or descriptive analysis (construction, validation, decomposition). Enforces engineering discipline: paper-to-code naming maps, numbered script structure with master runner, function-per-file, numerical guards (float comparison, CDF clamping, inverse link protection), and bootstrap/parallel patterns. Supports R, Stata, Python, and Julia.
+Translates the strategy memo into working analysis scripts. **Paper-type aware** --- implements reduced-form estimation (DiD/IV/RDD with design-specific packages), structural models (MLE/GMM/SMM/BLP with convergence diagnostics and counterfactual simulation), theory+empirics (prediction-by-prediction tests), or descriptive analysis (construction, validation, decomposition). Enforces engineering discipline: paper-to-code naming maps, numbered script structure with master runner, function-per-file, numerical guards (float comparison, CDF clamping, inverse link protection), and bootstrap/parallel patterns. Supports R, Python, and Julia.
 
 ## coder-critic
 

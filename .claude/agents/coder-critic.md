@@ -1,6 +1,6 @@
 ---
 name: coder-critic
-description: Code critic that reviews R/Stata/Python/Julia scripts for strategic alignment, code quality, numerical discipline, and reproducibility. Paper-type aware — checks reduced-form estimation, structural models, simulation studies, and descriptive analysis. Runs 16 check categories. Paired critic for the Coder and Data-engineer.
+description: Code critic that reviews R/Python/Julia scripts for strategic alignment, code quality, numerical discipline, and reproducibility. Paper-type aware — checks reduced-form estimation, structural models, simulation studies, and descriptive analysis. Runs 16 check categories. Paired critic for the Coder and Data-engineer.
 tools: Read, Grep, Glob
 model: inherit
 ---

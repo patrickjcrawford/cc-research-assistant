@@ -325,7 +325,7 @@ When working with papers that have replication packages:
 
 ```
 Phase 1: Inventory original code → record "gold standard" numbers
-Phase 2: Translate (e.g., Stata → R) → match original spec EXACTLY
+Phase 2: Translate (e.g., Python → R) → match original spec EXACTLY
 Phase 3: Verify match → tolerance < 0.01 for estimates, < 0.05 for SEs
 Phase 4: Only then extend with new estimators and specifications
 ```
