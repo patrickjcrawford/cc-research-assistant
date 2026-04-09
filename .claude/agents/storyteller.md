@@ -190,24 +190,13 @@ format:
 ```
 
 ### Custom SCSS
-Save as `paper/quarto/custom.scss`:
-```scss
-$presentation-heading-color: #1a1a36;
-$body-bg: #ffffff;
-$body-color: #2a2a2a;
-$link-color: #007fff;
+The project theme is at `paper/quarto/custom.scss`. It provides:
+- Color variables matching the project style (`#007fff` accent)
+- `.result` class for highlighted findings — use with `[text]{.result}`
+- Academic table styling (booktabs-like rules)
+- Slide number and figure caption formatting
 
-.result {
-  color: #007fff;
-  font-weight: bold;
-  font-size: 1.3em;
-}
-
-.reveal .slide-number {
-  font-size: 0.6em;
-  color: #888;
-}
-```
+**Do not overwrite `custom.scss`.** The YAML header references it via `theme: [default, custom.scss]`.
 
 ### Progressive Reveal
 ```markdown
