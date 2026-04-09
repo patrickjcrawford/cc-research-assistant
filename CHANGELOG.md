@@ -4,6 +4,48 @@ All notable changes to the Clo-Author are documented here.
 
 ---
 
+## [4.1.0] — 2026-04-09 — Enforcement Layer
+
+Adds hard mechanical enforcement underneath the existing creative orchestration. Agents still do judgment work; the new layer catches grep-able violations before judgment is even needed. Inspired by contract-driven, grep-verified patterns from defensive engineering.
+
+### Content Invariants
+- **21 numbered non-negotiable rules** in `.claude/rules/content-invariants.md`
+- Consolidates scattered rules from `content-standards.md`, `working-paper-format.md`, and coding standards into one canonical reference
+- Paper (INV-1–13): threeparttable with notes, booktabs only, no ggplot titles, biblatex+biber, abstract ≤150 words, numbers match tables exactly, notation consistency, causal claims require identification
+- Code (INV-14–19): set.seed at top, packages at top, no absolute paths, no growing vectors, no prohibited functions
+- Talk (INV-20–21): notation matches paper, every slide claim traceable to manuscript
+- writer-critic, coder-critic, storyteller-critic, verifier all updated to cite invariant numbers (e.g., "violates INV-3")
+
+### Pre-Flight Reports
+- **Strategist** must output a Pre-Strategy Report proving it read literature review, data assessment, research spec, and domain profile before designing any strategy
+- **Coder** must output a Pre-Code Report proving it read strategy memo and established paper-to-code naming map before writing any code
+- Both agents and both skills (`/strategize`, `/analyze`) updated with mandatory structured first output
+- If an input is missing, the agent says so explicitly instead of silently assuming
+
+### Grep-Based Linter (`/tools lint`)
+- New `/tools lint [file|dir]` subcommand — mechanical pre-check for R/Python/Julia scripts
+- 20 checks across R (12), Python (6), Julia (3) + shared absolute-path detection
+- Patterns: `setwd()`, `rm(list=ls())`, `T`/`F`, `sapply()`, `<<-`, `attach()`, missing `set.seed()`, late `library()`, `os.chdir()`, wildcard imports, bare `except:`, prohibited packages, and more
+- Portable macOS/Linux (BSD grep -E, no Perl regex required)
+- `/review --code` now runs lint as Step 1 before dispatching coder-critic
+- New files: `.claude/hooks/lint-scripts.sh` (linter), `.claude/hooks/post-edit-lint.sh` (hook wrapper)
+
+### Decision Records
+- ADR-style records at the two stages where real choices happen:
+  - **Discovery** (`/discover interview`): why this research question over alternatives
+  - **Strategy** (`/strategize`): why this identification method over alternatives
+- Each record captures: what was chosen, what was rejected and why, key assumptions, what would invalidate the decision
+- Shared template: `templates/decision-record.md`
+- Saves to `quality_reports/decisions/`
+
+### PostToolUse Lint Hook
+- Auto-lints R/Python/Julia files on every Edit/Write operation
+- Advisory (exit 0) — shows warnings immediately without blocking
+- Skips `.claude/` internals
+- Wired into `.claude/settings.json` as PostToolUse hook
+
+---
+
 ## [4.0.0] — 2026-04-08 — Paper-Type Architecture
 
 Every agent now knows whether it's working on a reduced-form, structural, theory+empirics, or descriptive paper — and adapts accordingly.
@@ -327,6 +369,7 @@ The v2.0→v3.0 consolidation accidentally stripped practical detail from 6 skil
 
 ---
 
+[4.1.0]: https://github.com/hugosantanna/clo-author/compare/v4.0.0...v4.1.0
 [2.0.2]: https://github.com/hugosantanna/clo-author/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/hugosantanna/clo-author/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/hugosantanna/clo-author/compare/v1.0.1...v2.0.0
