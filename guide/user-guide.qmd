@@ -18,199 +18,122 @@ For complex or ambiguous tasks, Claude may ask 3--5 clarifying questions to crea
 
 ---
 
-# Research Workflow
+# A Typical Workflow
 
-A typical research project flows through these phases, driven by dependencies (not forced sequence):
+```{mermaid}
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#14142a', 'primaryTextColor': '#d0d0e0', 'primaryBorderColor': '#b44dff', 'lineColor': '#b44dff', 'secondaryColor': '#0c0c18', 'tertiaryColor': '#080810', 'edgeLabelBackground': '#080810'}}}%%
+flowchart LR
+    D(Discovery<br/>Literature + Data):::phase1 --> S(Strategy<br/>Identification Design):::phase2
+    S --> E(Execution<br/>Code + Paper):::phase3
+    E --> R(Review<br/>Simulated Peer Review):::phase4
+    R -->|score >= 95| SUB(Submission<br/>Package + Gate):::phase5
 
-```
-Phase 1: Discovery
-  /discover             → Interactive interview → Research Spec
-  /discover --lit       → Literature Synthesis (Librarian + librarian-critic)
-  /discover --data      → Data Assessment (Explorer + explorer-critic)
-
-Phase 2: Strategy
-  /strategize           → Strategy Memo (Strategist + strategist-critic)
-
-Phase 3: Execution
-  /analyze              → Scripts + Output (Data-engineer + Coder + coder-critic)
-  /analyze --dual r,py  → Same in two languages + convergence check
-  /write                → Paper Sections (Writer + humanizer pass)
-
-Phase 4: Peer Review
-  /review paper/main.tex    → Weighted Score (multi-agent parallel)
-  /review --peer [journal]  → Editor desk review → Referee dispatch
-                            → domain-referee + methods-referee (blind)
-                            → Editorial decision (FATAL/ADDRESSABLE/TASTE)
-  /review --stress [journal] → Adversarial stress test
-  /review --peer --r2       → R&R second round (referee memory)
-
-Phase 5: Submission
-  /submit --target      → Journal Recommendations
-  /submit --final       → Final Gate (score >= 95)
+    classDef phase1 fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:2px
+    classDef phase2 fill:#14142a,stroke:#00cc66,color:#00cc66,stroke-width:2px
+    classDef phase3 fill:#14142a,stroke:#b44dff,color:#b44dff,stroke-width:2px
+    classDef phase4 fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
+    classDef phase5 fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:2px
 ```
 
-You can enter at any stage. Use `/new-project` for the full pipeline. Each skill produces structured output and saves reports to `quality_reports/`.
+You can enter at any stage. Each phase produces structured output saved to `quality_reports/`.
 
-## Discovery Phase
+---
 
-### `/discover`
+# Your First Review
 
-Interactive research interview that builds your research specification and domain profile. Equivalent to sitting down with a mentor and sharpening your question.
+Here is what happens when you run a simulated peer review.
 
-### `/discover --lit [topic]`
+**Step 1.** You type `/review --peer JHR paper/main.tex`
 
-Dispatches the **Librarian** (collector) and **librarian-critic** (coverage reviewer). Searches top-5 generals, NBER/SSRN/RePEc, and field journals. Produces annotated bibliography, BibTeX entries, frontier map, and positioning recommendation.
+**Step 2.** The **Editor** does a desk review --- checks scope, assigns each referee a disposition (Credibility, Policy, Structuralist, etc.) and pet peeves that shape their personality.
 
-### `/discover --data [question]`
+**Step 3.** Two blind referees review independently --- a **domain-referee** (subject expertise) and a **methods-referee** (empirical methods). Neither sees the other's report.
 
-Dispatches the **Explorer** (data finder) and **explorer-critic** (data quality reviewer). Searches public, administrative, survey, and novel data sources. Scores feasibility (A/B/C/D) and measurement quality.
+**Step 4.** The editorial decision arrives, classifying every concern as FATAL, ADDRESSABLE, or TASTE:
 
-### `/discover --ideate [topic]`
+```markdown
+# Editorial Decision --- Journal of Human Resources
+**Decision:** Major Revisions
 
-Generates research questions and identification strategies for a broad topic.
+## Referee 1 (domain-referee) --- Disposition: Policy
+- ADDRESSABLE: Missing discussion of policy implementation costs (Section 6)
+- ADDRESSABLE: Literature review omits Garcia & Santos (2024) on same population
+- TASTE: Prefer confidence intervals over p-values
 
-## Strategy Phase
+## Referee 2 (methods-referee) --- Disposition: Credibility
+- FATAL: Pre-trends test shows significant coefficient at t-2 (Figure 3)
+- ADDRESSABLE: Clustering at state level with 12 states --- use wild bootstrap
+- ADDRESSABLE: No sensitivity analysis (Rambachan & Roth 2023)
 
-### `/strategize`
+## Action Items
+- MUST: Address pre-trends concern (fatal if unresolved)
+- MUST: Add wild bootstrap standard errors
+- SHOULD: Add sensitivity bounds
+- SHOULD: Cite Garcia & Santos (2024)
+```
 
-Dispatches the **Strategist** (proposer) and **strategist-critic** (reviewer). Produces strategy memo, pseudo-code, robustness plan, and falsification tests. The strategist-critic validates your assumptions, checks inference, and stress-tests the design.
+This is what you work with. Each concern has a classification and a specific fix. Use `/revise` to route each comment to the right agent --- new analysis goes to the Coder, clarifications go to the Writer, disagreements get flagged for your review.
 
-### `/strategize --pap`
+For the full peer review architecture (dispositions, pet peeves, journal calibration), see [Meet the Agents](agents.qmd).
 
-*For experimental/RCT research only.* Dispatches the **Strategist** in Pre-Analysis Plan mode. Drafts in AEA/OSF/EGAP registry format with pre-specified outcomes, subgroups, multiple testing corrections, and power calculations. Not needed for observational quasi-experimental designs.
+---
 
-## Execution Phase
+# Your First Draft
 
-### `/analyze [dataset]`
+Here is what happens when you draft a paper section.
 
-Dispatches the **Data-engineer** (cleaning + visualization), **Coder** (analysis implementation), and **coder-critic** (reviewer). End-to-end analysis: data cleaning, main specification, robustness checks, publication-ready tables and figures. Supports R, Python, and Julia.
+**Step 1.** You type `/write intro`
 
-Use `--dual r,python` to run the same analysis in two languages simultaneously. Both implementations follow the same strategy memo; results are compared within tolerance. Divergences are flagged. See the [Command Reference](reference.qmd) for details.
+**Step 2.** Claude reads your paper type (reduced-form, structural, descriptive, or theory+empirics), your strategy memo, and any existing sections.
 
-### `/write [section]`
+**Step 3.** The Writer drafts using **paragraph-level argument moves** --- each paragraph has one job:
 
-Dispatches the **Writer** agent. First identifies the paper type (reduced-form, structural, theory+empirics, descriptive), then drafts using **paragraph-level argument moves** --- each paragraph has one job (motivation, result, mechanism, qualification):
+```
+Paragraph 1 [MOTIVATION]: Big question --- why this matters for policy
+Paragraph 2 [GAP]: What the literature hasn't answered
+Paragraph 3 [THIS PAPER]: "We estimate..." --- result preview with magnitude
+Paragraph 4 [IDENTIFICATION]: Source of variation, one-sentence design
+Paragraph 5 [PREVIEW]: Key finding with effect size
+Paragraph 6 [ROADMAP]: Section-by-section guide
+```
 
-- **Introduction**: paper-type-specific sequence --- reduced-form leads with identification preview + result; structural leads with model preview + counterfactual; descriptive leads with data innovation + key fact
-- **Strategy/Model**: design-specific templates (DiD parallel trends, IV exclusion restriction, RDD manipulation) or structural (environment, identification of parameters, estimation, counterfactuals)
-- **Results**: narration adapts to output type --- regression tables, event study figures, IV first stage + 2SLS, counterfactual simulations, descriptive facts
-- **Notation protocol**: consistent notation throughout, calibrated to your field via domain profile
+**Step 4.** A cleanup pass strips 24 known AI writing patterns (hedging, filler phrases, over-signposting).
 
-Anti-hedging rules enforced. **Cleanup pass** automatically strips 24 AI writing patterns after drafting.
+Each paragraph has one job. The Writer adapts this structure to your paper type --- reduced-form leads with identification preview and result, structural leads with the model and counterfactual, descriptive leads with the data innovation and key fact.
 
-## Review Phase
+For all available sections and flags, see the [Command Reference](reference.qmd).
 
-### `/review [file]`
+---
 
-Smart routing based on file type and flags:
+# The Research Pipeline
 
-| Input | What Runs |
-|-------|-----------|
-| `/review paper/main.tex` | writer-critic + strategist-critic + Verifier (comprehensive) |
-| `/review scripts/R/analysis.R` | coder-critic standalone |
-| `/review --peer` | domain-referee + methods-referee (simulated peer review) |
-| `/review --peer JHR` | Same, calibrated to JHR's review culture |
-| `/review --methods paper/main.tex` | strategist-critic standalone |
-| `/review --proofread paper/main.tex` | writer-critic standalone |
-| `/review --code scripts/R/` | coder-critic standalone (code quality only) |
-| `/review --replicate python` | Re-implement existing R code in Python, compare outputs |
-| `/review --all` | All critics in parallel + weighted aggregate score |
+## Discovery
 
-### `/review --peer [journal]`
+`/discover` runs an interactive interview that builds your research specification and produces a **decision record** documenting alternatives considered. Use `/discover --lit` for literature synthesis (Librarian + librarian-critic) or `/discover --data` for data assessment (Explorer + explorer-critic). See the [Command Reference](reference.qmd) for all flags.
 
-Dispatches the full peer review pipeline: **Editor** desk review, then two specialized **blind referees**.
+## Strategy
 
-1. **Editor** does a desk review first --- checks scope, minimum quality, and assigns referee dispositions
-2. **domain-referee**: Expert in your paper's subject literature. Checks contributions, positioning, missing citations, substantive arguments, external validity.
-3. **methods-referee**: Expert in empirical methods. Checks identification strategy, estimation, inference, robustness, replication readiness.
+`/strategize` proposes your identification design via the Strategist + strategist-critic pair. It first produces a **pre-strategy report** (paper type classification, candidate designs), then the full strategy memo with robustness plan and falsification tests. Use `/strategize --pap` for Pre-Analysis Plans (RCT/experimental only). For how strategy adapts to paper types, see [Meet the Agents](agents.qmd).
 
-Both referees are independent (neither sees the other's report). Each referee gets a **disposition** (Structuralist, Credibility, Measurement, Policy, Theory, or Skeptic) and **pet peeves** (1 critical + 1 constructive) that shape their review personality. Every major comment includes a "what would change my mind" statement. The Editor synthesizes the editorial decision, classifying each issue as FATAL, ADDRESSABLE, or TASTE.
+## Execution
 
-**R&R memory:** Use `--peer --r2` for round 2 reviews --- referees remember their prior reports and check whether their concerns were addressed.
+`/analyze` handles end-to-end data analysis: cleaning, main specification, robustness, publication-ready tables and figures. The Coder produces a **pre-code report** (naming map, script structure, numerical guards) before writing any code. Use `/review --code` to run a mechanical lint pass before the full code review. `/write` drafts paper sections using argument moves (see "Your First Draft" above). Supports R, Python, and Julia.
 
-**Stress test:** Use `--stress [journal]` for maximum-severity review (max 3 rounds).
+## Review and Revision
 
-**Journal calibration:** Add a journal name to calibrate both referees to that journal's review culture. For example, `/review --peer JHR` makes the referees prioritize policy relevance and clean identification (what JHR referees actually care about). 30 journals are pre-populated in `.claude/references/journal-profiles.md` (economics and adjacent fields); you can add your own. Without a journal name, referees review as generic top-field reviewers.
-
-See the full [command reference](reference.qmd) for all flags and subcommands.
-
-## Revision Phase
-
-### `/revise [report]`
-
-Classifies each referee comment and routes to the right agent:
-
-| Class | Routing | Action |
-|-------|---------|--------|
-| **NEW ANALYSIS** | → Coder | Flag for user, create analysis task |
-| **CLARIFICATION** | → Writer | Draft revised text |
-| **DISAGREE** | → User | Draft diplomatic pushback (flagged for review) |
-| **MINOR** | → Writer | Draft fix directly |
-
-Produces point-by-point response letter with diplomatic disagreement protocol.
+`/review` routes automatically based on file type --- paper files get writer-critic + strategist-critic + Verifier; scripts get coder-critic; `--peer` dispatches the full editorial pipeline (see "Your First Review" above). `/revise` classifies each referee comment as NEW ANALYSIS, CLARIFICATION, DISAGREE, or MINOR, and routes to the right agent. See [Meet the Agents](agents.qmd) for the peer review architecture and [Command Reference](reference.qmd) for all flags.
 
 ## Presentations
 
-### `/talk [format]`
+`/talk create [format]` generates talks derived from your paper in 4 formats: job market (45--60 min), seminar (30--45 min), short (15 min), and lightning (5 min). Supports both **Beamer** (output to `paper/talks/`) and **Quarto RevealJS** (`--quarto`, output to `paper/quarto/`). Talk scores are advisory (non-blocking). See the [Command Reference](reference.qmd) for subcommands.
 
-Dispatches the **Storyteller** (creator) and **storyteller-critic** (talk reviewer). Generates talks derived from your paper in 4 formats:
+## Submission
 
-| Format | Slides | Duration | Content |
-|--------|--------|----------|---------|
-| Job Market | 40--50 | 45--60 min | Full story, all results, mechanism, robustness |
-| Seminar | 25--35 | 30--45 min | Motivation, main result, 2 robustness checks |
-| Short | 10--15 | 15 min | Question, method, key result, implication |
-| Lightning | 3--5 | 5 min | Hook, result, so-what |
-
-Talk scores are **advisory** (non-blocking).
-
-Subcommands: `/talk create [format]`, `/talk audit [file]`, `/talk compile [file]`.
-
-**Beamer** (default): Outputs to `paper/talks/`. Use `/talk create [format]`.
-
-**Quarto RevealJS**: Outputs to `paper/quarto/`. Use `/talk create [format] --quarto` for web-native slides with interactive features.
-
-## Submission Phase
-
-### `/submit --target`
-
-Journal targeting. Produces ranked journal list using domain-profile tiers, formatting requirements, and submission strategy.
-
-### `/submit --package`
-
-Build replication package: AEA-format README, master script, numbered script order, deposit checklist.
-
-### `/submit --audit`
-
-Dispatches the **Verifier** in submission mode (all 10 checks):
-
-1. LaTeX compilation
-2. Script execution
-3. File integrity
-4. Output freshness
-5. Package inventory
-6. Dependency verification
-7. Data provenance
-8. End-to-end execution
-9. Output cross-reference
-10. README completeness (AEA format)
-
-### `/submit --final`
-
-Final submission gate. Requires aggregate score >= 95 with all components >= 80. Generates cover letter draft and submission checklist.
+`/submit --target` recommends journals. `/submit --package` builds an AEA-format replication package. `/submit --audit` runs the Verifier's 10-check audit. `/submit --final` enforces the submission gate (aggregate >= 95, all components >= 80). See the [Command Reference](reference.qmd) for details.
 
 ## Utilities
 
-### `/tools [subcommand]`
-
-| Subcommand | What It Does |
-|------------|-------------|
-| `/tools commit [msg]` | Stage, commit, PR, merge |
-| `/tools compile [file]` | 3-pass XeLaTeX + BibTeX |
-| `/tools validate-bib` | Cross-reference citations |
-| `/tools journal` | Research journal timeline |
-| `/tools learn` | Extract session discoveries into persistent skills |
-| `/tools deploy` | Build and deploy to GitHub Pages |
+`/tools` provides commit, compile, validate-bib, lint, journal, deploy, learn, and upgrade subcommands. Use `/tools lint` for mechanical code linting (R, Python, Julia) --- runs prohibited-pattern checks before the full coder-critic review.
 
 ---
 
@@ -226,135 +149,9 @@ Every file gets a quality score from 0 to 100, computed as a **weighted aggregat
 | **< 80** | Blocked | Must fix before committing |
 | -- | Advisory | Talks (reported, non-blocking) |
 
+These run in the background. You will rarely think about them --- they just prevent broken work from being committed.
+
 See the full [scoring formula](architecture.qmd#scoring-protocol) in the Architecture Reference.
-
----
-
-# Exploration Workflow {#sec-exploration}
-
-The `explorations/` folder provides a structured sandbox for experimental work.
-
-**The problem:** Without structure, experimental code scatters across the repository.
-
-**The solution:** All experimental work goes into `explorations/` first:
-
-```
-explorations/
-├── [active-project]/
-│   ├── README.md           # Goal, hypotheses, status
-│   ├── R/                  # Code iterations (_v1, _v2)
-│   └── output/             # Results
-└── ARCHIVE/
-    ├── completed_[name]/   # Graduated to production
-    └── abandoned_[name]/   # Documented why stopped
-```
-
-### Fast-Track vs Plan-First
-
-| Question | Answer | Workflow |
-|----------|--------|----------|
-| "Will this ship?" | YES | Plan-First (80/100 quality) |
-| "Am I testing an idea?" | YES | Fast-Track (60/100 quality) |
-| "Does this improve the project?" | NO | Don't build it |
-
----
-
-# Self-Improvement
-
-## Auto-Memory
-
-Claude Code has a built-in memory system that automatically saves corrections and preferences across sessions. No manual tagging needed — when you correct Claude ("that's UAB, not Emory"), it saves the correction and applies it in future conversations.
-
-Memory is stored in `.claude/projects/.../memory/` and persists across sessions. You can also explicitly ask Claude to remember or forget something.
-
-## Skill Extraction: /tools learn
-
-For discoveries that deserve a reusable workflow (not just a one-liner correction), use `/tools learn` to create a full skill.
-
-| Situation | Use |
-|-----------|-----|
-| Correction or preference | Auto-memory (automatic) |
-| Multi-step workflow | `/tools learn` to create full skill |
-
----
-
-# Customizing for Your Domain
-
-## Domain Profile
-
-The domain profile (`.claude/references/domain-profile.md`) calibrates all agents to your field. Agents read their discipline from this file; the default is economics if not specified. Fill it in manually or use `/discover` (interactive interview) to populate it:
-
-- **Field & adjacent subfields** --- inferred from your topic
-- **Target journals** --- ranked by tier
-- **Common data sources** --- datasets typical for your area
-- **Common identification strategies** --- designs used in your literature
-- **Field conventions** --- estimation quirks, clustering norms
-- **Seminal references** --- papers every referee expects you to cite
-- **Referee concerns** --- the "gotcha" questions referees always ask
-
----
-
-# Upgrading from 2.x {#sec-upgrading}
-
-If you have an existing project using clo-author 2.x, you can upgrade to 3.0 without losing any of your work.
-
-::: {.callout-note}
-**Your files are safe.** The upgrade only touches `.claude/` (the infrastructure). Your paper, scripts, data, bibliography, and all research content are never modified or deleted. Don't use `git merge` --- it creates unnecessary conflicts on files you've already customized (CLAUDE.md, README, etc.).
-:::
-
-## How to Upgrade (2.x → 3.0)
-
-1. **Download** the [latest release](https://github.com/hugosantanna/clo-author/releases) or clone clo-author 3.0 into a temporary folder
-2. **Delete** your old `.claude/` directory
-3. **Copy** the new `.claude/` into your project
-4. **Done** --- your paper, scripts, data, CLAUDE.md, bibliography are all untouched
-
-That's it. No git merge, no upstream remote, no conflicts. The infrastructure is entirely inside `.claude/`; your research content lives in separate directories that clo-author never touches.
-
-**Optional:** also copy the new `templates/` directory if you want updated templates.
-
-**Your CLAUDE.md stays yours.** You already customized it with your project name, institution, field, and folder paths. Don't overwrite it --- the 3.0 infrastructure reads whatever paths you have there.
-
-## Future Upgrades (3.x → 4.0+)
-
-Once you're on 3.0, run `/tools upgrade` for future versions. It automates the same process: replace `.claude/`, preserve your content, report what changed.
-
-## What Changed in 3.0
-
-| Component | 2.x | 3.0 |
-|-----------|-----|-----|
-| Scope | Economics only | Economics (adaptable to adjacent fields) |
-| Peer review | Score averaging | Editor + dispositions + desk reject |
-| Journal profiles | 15 (economics) | 35+ across 5 fields |
-| Profile location | `.claude/rules/` | `.claude/references/` (on-demand) |
-| Folder structure | `Paper/`, `Figures/`, `Tables/`, `Talks/` | `paper/` (self-contained), `scripts/` |
-| Presentations | Beamer only | Beamer + Quarto RevealJS |
-| Memory | `[LEARN]` tags | Auto-memory (built-in) |
-| Context overhead | ~3,500 lines/session | ~1,000 lines/session |
-| Agent prompts | Economics-specific | Field-neutral (read from domain profile) |
-
-**Key principle:** The upgrade adapts to your project. It never renames folders with content or overwrites filled-in profiles.
-
----
-
-## Creating Custom Skills {#sec-create-skills}
-
-Create a skill when you repeatedly explain the same 3+ step workflow to Claude. Each skill lives in `.claude/skills/[name]/SKILL.md`:
-
-```yaml
----
-name: your-skill-name
-description: [What it does] + [When to use] + [Key capabilities]
-argument-hint: "[brief hint for user]"
-allowed-tools: ["Read", "Write", "Edit", "Bash", "Task"]
----
-```
-
-**Quick start:** Copy `templates/skill-template.md` to `.claude/skills/your-skill-name/SKILL.md` and customize.
-
----
-
-See the full [command reference](customization.qmd#skills-10-core-commands) in the Customization Guide.
 
 ---
 
@@ -365,7 +162,7 @@ See the full [command reference](customization.qmd#skills-10-core-commands) in t
 **Symptom:** `xelatex` errors or missing packages.
 
 1. Check you have XeLaTeX installed: `which xelatex`
-2. Ensure `TEXINPUTS` includes `Preambles/`: the `/tools compile` skill handles this
+2. Ensure `TEXINPUTS` includes `preambles/`: the `/tools compile` skill handles this
 3. Missing package? Install via TeX Live: `tlmgr install [package]`
 
 ### Hooks Not Firing
@@ -399,3 +196,15 @@ See the full [command reference](customization.qmd#skills-10-core-commands) in t
 1. Run `/review --all` to get detailed issue breakdown
 2. Fix critical issues first (they cost the most points)
 3. Check per-component scores --- one weak component can drag down the aggregate
+
+---
+
+# Upgrading {#sec-upgrading}
+
+Run `/tools upgrade` to upgrade your project to the latest clo-author version. It replaces `.claude/` and `templates/`, preserving your paper, scripts, data, bibliography, and CLAUDE.md.
+
+::: {.callout-note}
+**Your files are safe.** The upgrade only touches `.claude/` (the infrastructure) and `templates/`. Your paper, scripts, data, bibliography, and all research content are never modified or deleted.
+:::
+
+**Manual alternative:** Download the [latest release](https://github.com/hugosantanna/clo-author/releases), delete your `.claude/` directory, and copy the new one in. Your CLAUDE.md stays yours --- the infrastructure reads whatever paths you have there.

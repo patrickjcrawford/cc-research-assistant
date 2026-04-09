@@ -5,18 +5,7 @@ subtitle: "How the System Works"
 
 # System Overview
 
-Claude Code's power comes from six configuration layers that work together. For details on each layer, see the [Customization Guide](customization.qmd).
-
-| Layer | Location | Loaded When |
-|-------|----------|-------------|
-| **CLAUDE.md** | Project root | Every session |
-| **Rules** | `.claude/rules/` | Always-on or path-scoped |
-| **References** | `.claude/references/` | On demand (agents read when needed) |
-| **Skills** | `.claude/skills/` | On demand (slash commands) |
-| **Agents** | `.claude/agents/` | On demand (via skills or orchestrator) |
-| **Hooks** | `.claude/settings.json` | On events (automatic) |
-
-Claude reliably follows about **100--150 custom instructions**. Your system prompt uses ~50, leaving ~100 for your project. CLAUDE.md and always-on rules share this budget. Path-scoped rules, references, skills, and agents load on demand --- they don't count against the limit.
+Six configuration layers control behavior --- from CLAUDE.md (loaded every session) to hooks (event-driven). See the [Customization Guide](customization.qmd) for the full breakdown.
 
 ---
 
@@ -309,56 +298,4 @@ The weighted aggregate score determines quality gate passage:
 
 **Submission gate:** Aggregate >= 95 AND every individual component >= 80.
 
----
-
-# Additional Workflows: Slides & Lectures {#additional-workflows-slides-lectures}
-
-The Clo-Author inherits a lecture production pipeline from [its origin](https://github.com/pedrohcgs/claude-code-my-workflow). These workflows are available for users who also produce course materials.
-
-## Creating Talks from Papers
-
-The `/talk` skill dispatches the Storyteller (creator) and storyteller-critic (reviewer) to generate presentations in 4 formats (job market, seminar, short, lightning). Supports both Beamer (output to `paper/talks/`) and Quarto RevealJS (output to `paper/quarto/` via `--quarto` flag). All content derives from `paper/main.tex`.
-
-## Replication-First Coding
-
-When working with papers that have replication packages:
-
-```
-Phase 1: Inventory original code → record "gold standard" numbers
-Phase 2: Translate (e.g., Python → R) → match original spec EXACTLY
-Phase 3: Verify match → tolerance < 0.01 for estimates, < 0.05 for SEs
-Phase 4: Only then extend with new estimators and specifications
-```
-
-## Cross-Language Replication
-
-Run the same analysis in two languages simultaneously to catch implementation bugs:
-
-- `/analyze --dual r,python` dispatches two Coder agents in parallel with the same strategy memo
-- `/review --replicate python` re-implements existing R code in Python and compares outputs
-- Tolerances come from `.claude/references/domain-profile.md` --- divergence beyond tolerance is flagged as a bug
-
-Inspired by Scott Cunningham's approach: if two independent implementations produce the same estimates, neither has a bug. If they diverge, you've caught something before it reaches the paper.
-
-## Branch Isolation with Git Worktrees
-
-Git worktrees create a separate working directory linked to the same repository. Useful for major translations, risky refactors, or multi-day projects.
-
-| Situation | Use Worktree? |
-|-----------|---------------|
-| Quick fix to one file | No |
-| Major refactor | Yes |
-| Experimenting with new approach | Yes |
-
-For most users, working directly on main with frequent commits is simpler and sufficient.
-
----
-
-# Constitutional Governance (Optional) {#sec-constitutional}
-
-As your project grows, some decisions become non-negotiable. The `templates/constitutional-governance.md` template helps you distinguish between:
-
-- **Immutable principles** (Articles I--V): Non-negotiable rules
-- **User preferences**: Flexible patterns that can vary
-
-Use it **after** you've established 3--7 recurring patterns.
+These numbers run in the background. They prevent broken work from shipping --- you rarely need to think about them directly.

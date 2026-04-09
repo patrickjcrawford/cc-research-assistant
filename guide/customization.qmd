@@ -24,7 +24,7 @@ Claude reliably follows about **100--150 custom instructions**. Your system prom
 
 `CLAUDE.md` is the single most important file. Claude reads it at the start of every session. It should be a **slim constitution** --- short directives and pointers, not comprehensive documentation. Aim for ~120 lines:
 
-- **Core principles** --- 5--6 bullets (plan-first, verify-after, quality gates, worker-critic pairs, LEARN tags)
+- **Core principles** --- 5--6 bullets (plan-first, verify-after, quality gates, worker-critic pairs, auto-memory)
 - **Folder structure** --- where everything lives
 - **Commands** --- compilation, deployment
 - **Skill quick reference** --- table of 10 available commands
@@ -41,7 +41,7 @@ If CLAUDE.md exceeds ~150 lines, Claude starts ignoring rules silently. Put deta
 
 # Rules --- Auto-Loading Domain Knowledge
 
-Rules are markdown files in `.claude/rules/` that Claude loads automatically. Consolidated into **11 focused files** for clarity.
+Rules are markdown files in `.claude/rules/` that Claude loads automatically. Consolidated into **9 focused files** for clarity.
 
 | Rule | Purpose |
 |------|---------|
@@ -49,13 +49,11 @@ Rules are markdown files in `.claude/rules/` that Claude loads automatically. Co
 | `quality.md` | Weighted scoring formula, severity gradient by phase, quality gates |
 | `agents.md` | Worker-critic pairs, separation of powers, three-strikes escalation |
 | `logging.md` | Session logging, session reporting, research journal |
-| `content-standards.md` | Table generation, PDF processing, exploration workflow |
-| `figures.md` | No embedded titles, serif fonts, publication-quality axis labels, full year axes |
-| `tables.md` | No embedded titles, booktabs, threeparttable, notes in paper not R output |
+| `content-standards.md` | Table generation, figure standards, PDF processing, exploration workflow |
+| `content-invariants.md` | 21 numbered non-negotiable rules (INV-1 through INV-21) for paper, code, and talks |
 | `working-paper-format.md` | Working paper layout: 12pt, 1in margins, titling fonts, abstract format |
 | `revision.md` | R&R cycle comment classification and routing |
 | `meta-governance.md` | Template vs working project distinction |
-| `domain-profile.md` | Field-specific calibration (moved to `.claude/references/` in v3.0) |
 
 ---
 
@@ -107,7 +105,7 @@ See the [Command Reference](reference.qmd) for every command, flag, and subcomma
 
 # Hooks --- Smart Defaults
 
-Hooks live in `.claude/settings.json` and fire on events, regardless of context state. Reduced to **4 essential hooks** that stay out of the way.
+Hooks live in `.claude/settings.json` and fire on events, regardless of context state. Reduced to **5 hooks** that stay out of the way.
 
 ## Design Principles
 
@@ -115,7 +113,7 @@ Hooks live in `.claude/settings.json` and fire on events, regardless of context 
 - Use **rules** for nuanced judgment
 - Avoid prompt-based hooks that trigger LLM calls on every response
 
-## All 4 Hooks
+## All 5 Hooks
 
 | Hook | Event | What It Does |
 |------|-------|-------------|
@@ -123,6 +121,7 @@ Hooks live in `.claude/settings.json` and fire on events, regardless of context 
 | Context state capture | `PreCompact` | Saves plan state + context survival checklist |
 | Context restoration | `SessionStart[compact\|resume]` | Restores context after compaction |
 | Post-merge reminder | Git post-merge | Reminds to run `/tools learn` after merges |
+| Auto-lint | `PostToolUse` | Lints R/Python/Julia files on every Edit or Write (advisory) |
 
 ---
 
@@ -133,10 +132,71 @@ Four persistent layers plus ephemeral conversation:
 | Layer | File | Updated When | Purpose |
 |-------|------|--------------|---------|
 | Project context | `CLAUDE.md` | Rarely | Project rules, folder structure |
-| Corrections | `MEMORY.md` | On `[LEARN]` tag | Prevent repeating mistakes |
+| Corrections | `MEMORY.md` | Auto-memory (automatic) | Prevent repeating mistakes |
 | Task strategy | `quality_reports/plans/` | Once per task | Plan survives handoff |
 | Decision reasoning | `quality_reports/session_logs/` | Incrementally | Record *why* decisions were made |
 | Conversation | Context window | Every response | Current working memory (**not** persistent) |
+
+---
+
+# Self-Improvement
+
+## Auto-Memory
+
+Claude Code has a built-in memory system that automatically saves corrections and preferences across sessions. No manual tagging needed --- when you correct Claude ("that's UAB, not Emory"), it saves the correction and applies it in future conversations.
+
+Memory is stored in `.claude/projects/.../memory/` and persists across sessions. You can also explicitly ask Claude to remember or forget something.
+
+## Skill Extraction: /tools learn
+
+For discoveries that deserve a reusable workflow (not just a one-liner correction), use `/tools learn` to create a full skill.
+
+| Situation | Use |
+|-----------|-----|
+| Correction or preference | Auto-memory (automatic) |
+| Multi-step workflow | `/tools learn` to create full skill |
+
+---
+
+# Exploration Workflow {#sec-exploration}
+
+The `explorations/` folder provides a structured sandbox for experimental work.
+
+**The problem:** Without structure, experimental code scatters across the repository.
+
+**The solution:** All experimental work goes into `explorations/` first:
+
+```
+explorations/
+├── [active-project]/
+│   ├── README.md           # Goal, hypotheses, status
+│   ├── R/                  # Code iterations (_v1, _v2)
+│   └── output/             # Results
+└── ARCHIVE/
+    ├── completed_[name]/   # Graduated to production
+    └── abandoned_[name]/   # Documented why stopped
+```
+
+### Fast-Track vs Plan-First
+
+| Question | Answer | Workflow |
+|----------|--------|----------|
+| "Will this ship?" | YES | Plan-First (80/100 quality) |
+| "Am I testing an idea?" | YES | Fast-Track (60/100 quality) |
+| "Does this improve the project?" | NO | Don't build it |
+
+---
+
+# Constitutional Governance (Optional) {#sec-constitutional}
+
+::: {.callout-note collapse="true" title="Constitutional Governance"}
+As your project grows, some decisions become non-negotiable. The `templates/constitutional-governance.md` template helps you distinguish between:
+
+- **Immutable principles** (Articles I--V): Non-negotiable rules
+- **User preferences**: Flexible patterns that can vary
+
+Use it **after** you've established 3--7 recurring patterns.
+:::
 
 ---
 

@@ -103,8 +103,8 @@ body {
         0deg,
         transparent,
         transparent 2px,
-        rgba(0, 0, 0, 0.03) 2px,
-        rgba(0, 0, 0, 0.03) 4px
+        rgba(0, 0, 0, 0.015) 2px,
+        rgba(0, 0, 0, 0.015) 4px
       );
   }
 }
@@ -589,6 +589,17 @@ hr {
 .quarto-title-meta-contents {
   font-family: $font-family-monospace;
   color: $text-muted;
+}
+
+// ── Reduced motion preference ──
+@media (prefers-reduced-motion: reduce) {
+  .quarto-title .title {
+    animation: none;
+  }
+
+  .navbar-brand::after {
+    animation: none;
+  }
 }
 
 // ── Responsive: tablets ──

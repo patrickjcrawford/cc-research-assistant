@@ -3,6 +3,37 @@ title: "What's New"
 subtitle: "Release History"
 ---
 
+# v4.1.0 --- Enforcement Layer {#v41}
+
+*Released 2026-04-09*
+
+Adds mechanical enforcement, structured pre-flight reporting, and decision traceability across the pipeline.
+
+## Content Invariants
+
+21 numbered rules (INV-1 through INV-21) in `.claude/rules/content-invariants.md`. Non-negotiable standards for paper, code, and talks --- critics now cite violations by invariant number. Covers table format, figure notes, notation consistency, anti-hedging, reproducibility requirements, and more.
+
+## Pre-Flight Reports
+
+Two new structured reports that agents produce before doing work:
+
+- **Pre-Strategy Report** (Strategist): documents paper type classification, available data, and candidate designs before proposing a strategy
+- **Pre-Code Report** (Coder): documents naming map, script structure, and numerical guards before writing code
+
+## Grep-Based Linter
+
+`/tools lint [file|dir]` runs mechanical checks on R, Python, and Julia scripts --- prohibited patterns, style violations, reproducibility issues. `/review --code` now runs lint as Step 1 before dispatching coder-critic. Fast, deterministic, no LLM calls.
+
+## Decision Records
+
+ADR-style records at discovery and strategy stages. Template: `templates/decision-record.md`. Saved to `quality_reports/decisions/`. Each record captures the decision, alternatives considered, rationale, and status.
+
+## PostToolUse Lint Hook
+
+Auto-lints R, Python, and Julia files on every Edit or Write operation. Advisory only --- reports issues but does not block. Catches problems at write time instead of review time.
+
+---
+
 # v4.0.0 --- Paper-Type Architecture {#v4}
 
 *Released 2026-04-08*

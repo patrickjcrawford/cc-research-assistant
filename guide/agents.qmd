@@ -49,11 +49,29 @@ These agents design and validate your empirical approach before you write a sing
 
 ## Strategist
 
-Given your research question, literature, and available data, designs the empirical strategy. **Paper-type aware** --- first classifies the paper as reduced-form, structural, theory+empirics, or descriptive, then applies the right strategy template. For reduced-form: estimand, estimator (DiD, IV, RDD, synthetic control), assumptions, robustness plan, falsification tests. For structural: model environment, parameter identification (which moments pin down which parameters), estimation method, counterfactual design. For theory+empirics: testable predictions, mapping to data, test power. For descriptive: construct definition, validation plan, decomposition strategy. Can also draft Pre-Analysis Plans in AEA/OSF/EGAP format.
+Given your research question, literature, and available data, designs the empirical strategy. **Paper-type aware** --- first classifies the paper, then applies the right strategy template:
+
+| Paper Type | Strategy Focus |
+|-----------|---------------|
+| Reduced-form | Estimand, estimator (DiD/IV/RDD/SC), assumptions, robustness, falsification |
+| Structural | Model environment, parameter identification, estimation method, counterfactuals |
+| Theory+empirics | Testable predictions, mapping to data, test power |
+| Descriptive | Construct definition, validation plan, decomposition |
+
+Can also draft Pre-Analysis Plans in AEA/OSF/EGAP format (`/strategize --pap`).
 
 ## strategist-critic
 
-The toughest reviewer in the system. **Paper-type aware** --- uses different checklists per type. For reduced-form: design-specific assumption checks (parallel trends for DiD, exclusion restriction for IV, manipulation test for RDD), sanity checks (sign, magnitude, dynamics), inference (clustering, multiple testing), package-specific code checks. For structural: model specification, parameter identification (data variation vs. functional form), estimation convergence, model fit, counterfactual credibility. For theory+empirics: prediction sharpness (do they rule things out?), test power, honesty about failures. Sends it back with specific objections until the design is sound.
+The toughest reviewer in the system. **Paper-type aware** --- uses different checklists per type:
+
+| Paper Type | Critic Focus |
+|-----------|-------------|
+| Reduced-form | Design-specific assumptions (parallel trends, exclusion restriction, manipulation test), sanity checks, inference, package-specific code |
+| Structural | Model specification, parameter identification (data variation vs. functional form), convergence, model fit, counterfactual credibility |
+| Theory+empirics | Prediction sharpness (do they rule things out?), test power, honesty about failures |
+| Descriptive | Construct validity, measurement error, representativeness, decomposition assumptions |
+
+Sends it back with specific objections until the design is sound.
 
 ::: {.callout-note title="What to Expect"}
 Strong on checklists and modern estimator recommendations. The institutional story behind your variation is yours to evaluate --- the Strategist tells you what to check, not whether your setting is convincing.
@@ -71,15 +89,44 @@ Handles the unglamorous but critical work: data cleaning, variable construction,
 
 ## Coder
 
-Translates the strategy memo into working analysis scripts. **Paper-type aware** --- implements reduced-form estimation (DiD/IV/RDD with design-specific packages), structural models (MLE/GMM/SMM/BLP with convergence diagnostics and counterfactual simulation), theory+empirics (prediction-by-prediction tests), or descriptive analysis (construction, validation, decomposition). Enforces engineering discipline: paper-to-code naming maps, numbered script structure with master runner, function-per-file, numerical guards (float comparison, CDF clamping, inverse link protection), and bootstrap/parallel patterns. Supports R, Python, and Julia.
+Translates the strategy memo into working analysis scripts. **Paper-type aware:**
+
+| Paper Type | Implementation |
+|-----------|---------------|
+| Reduced-form | DiD/IV/RDD with design-specific packages |
+| Structural | MLE/GMM/SMM/BLP with convergence diagnostics and counterfactual simulation |
+| Theory+empirics | Prediction-by-prediction tests |
+| Descriptive | Construction, validation, decomposition |
+
+Enforces engineering discipline: paper-to-code naming maps, numbered script structure with master runner, function-per-file, numerical guards (float comparison, CDF clamping, inverse link protection), and bootstrap/parallel patterns. Supports R, Python, and Julia.
 
 ## coder-critic
 
-Reviews all code --- from both the Data-engineer and the Coder. **16 check categories** including strategy alignment, numerical discipline (float guards, CDF clamping, pre-allocation, NaN/Inf checks), paper-to-code naming map, function design, reproducibility, and paper-type-specific checks (convergence for structural, seed handling for simulations). Also enforces prohibited patterns (`setwd()`, `sapply()`, `<<-`, `T`/`F`, hardcoded paths).
+Reviews all code --- from both the Data-engineer and the Coder. When invoked via `/review --code`, a mechanical **grep-based linter** runs first (Step 1) to catch prohibited patterns and style violations before the full review. **16 check categories** including strategy alignment, numerical discipline (float guards, CDF clamping, pre-allocation, NaN/Inf checks), paper-to-code naming map, function design, reproducibility, and paper-type-specific checks (convergence for structural, seed handling for simulations). Also enforces prohibited patterns (`setwd()`, `sapply()`, `<<-`, `T`/`F`, hardcoded paths).
+
+### Score Breakdown Example
+
+```markdown
+- Starting: 100
+- Code-strategy alignment: OK
+- Numerical discipline: -10 (float comparison with == on line 47)
+- Reproducibility: -10 (no set.seed() found)
+- Console hygiene: -3 (print() on lines 23, 89)
+- **Final: 77/100** --- Below commit threshold (80). Fix numerical discipline and reproducibility.
+```
 
 ## Writer
 
-Drafts paper sections using **paragraph-level argument moves** --- each paragraph has one job (motivation, result statement, mechanism, robustness narration, qualification). **Paper-type aware** with full section templates for reduced-form (design-specific: DiD parallel trends, IV exclusion restriction, RDD manipulation), structural (model environment, estimation, counterfactual simulations, welfare), theory+empirics (model predictions, empirical tests, honest assessment), and descriptive (data construction, validation, key facts). Results narration adapts to output type (regression table, event study figure, IV first stage + 2SLS, counterfactual simulation). Cleanup pass strips AI writing patterns after drafting.
+Drafts paper sections using **paragraph-level argument moves** --- each paragraph has one job (motivation, result statement, mechanism, robustness narration, qualification). **Paper-type aware** with full section templates:
+
+| Paper Type | Section Templates |
+|-----------|-----------------|
+| Reduced-form | DiD parallel trends, IV exclusion restriction, RDD manipulation |
+| Structural | Model environment, estimation, counterfactual simulations, welfare |
+| Theory+empirics | Model predictions, empirical tests, honest assessment |
+| Descriptive | Data construction, validation, key facts |
+
+Results narration adapts to output type (regression table, event study figure, IV first stage + 2SLS, counterfactual simulation). Cleanup pass strips AI writing patterns after drafting.
 
 ## writer-critic
 

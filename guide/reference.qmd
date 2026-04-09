@@ -16,7 +16,7 @@ subtitle: "Every Command, Flag, and Subcommand"
 | `/revise [report]` | --- | R&R cycle: classify + route referee comments |
 | `/talk` | `create`, `audit`, `compile` | Beamer presentations |
 | `/submit` | `--target`, `--package`, `--audit`, `--final` | Submission pipeline |
-| `/tools` | `commit`, `compile`, `validate-bib`, `journal`, `context`, `deploy`, `learn` | Utilities |
+| `/tools` | `commit`, `compile`, `validate-bib`, `journal`, `context`, `deploy`, `learn`, `lint`, `upgrade` | Utilities |
 
 ---
 
@@ -84,7 +84,7 @@ End-to-end analysis: data cleaning → main specification → robustness → pub
 | `--dual [langs]` | Data-engineer + 2 Coders in parallel → 2 coder-critics + comparison | Same outputs in both languages + convergence report |
 
 **Languages:** R, Python, Julia
-**Saves to:** `scripts/`, `paper/tables/`, `paper/figures/`, `Output/cross_language_comparison.md`
+**Saves to:** `scripts/`, `paper/tables/`, `paper/figures/`, `quality_reports/cross_language_comparison.md`
 
 **Cross-language replication:** When `--dual` is used, both implementations run the same specification independently. Results are compared against tolerances in `domain-profile.md`. Divergences are flagged. Inspired by Scott Cunningham's approach: if two independent implementations agree, neither has a bug.
 
@@ -225,6 +225,8 @@ Talk scores are **advisory** (non-blocking).
 /tools context                   Context status + session health
 /tools deploy                    Render guide + push to GitHub Pages
 /tools learn                     Extract session discoveries to MEMORY.md
+/tools lint [file|dir]           Mechanical code linting for R/Python/Julia
+/tools upgrade                   Upgrade clo-author infrastructure
 ```
 
 Each subcommand is lightweight --- no multi-agent orchestration.

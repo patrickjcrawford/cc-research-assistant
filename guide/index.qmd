@@ -1,5 +1,5 @@
 ---
-title: "The Clo-Author 4.0"
+title: "The Clo-Author"
 subtitle: "AI Research Architecture for Economics"
 ---
 
@@ -45,14 +45,17 @@ Once setup is done, just describe what you need:
 - `/analyze Data/cleaned/survey.csv` --- cleans data, runs your specification, produces tables and figures
 - `/new-project health insurance` --- walks you through the full pipeline from literature review to submission
 
+::: {.callout-tip title="Just Want to Try 2 Commands?"}
+Already have a paper? `/review paper/main.tex` checks your identification, code, writing, and LaTeX.
+Want to draft a section? `/write intro` produces a structured first draft adapted to your paper type.
+Everything else is optional --- explore when you're ready.
+:::
+
 ## What Happens Behind the Scenes
 
-You talk, Claude orchestrates. The 17 agents work in **worker-critic pairs** --- every creator has a paired critic who can't edit files, only review. An **Editor** does desk review before dispatching two specialized referees (domain + methods) who simulate real journal peer review with dispositions and pet peeves. The orchestrator dispatches agents based on a dependency graph, enforces quality gates (80/90/95), and routes escalations when critics and creators can't agree after 3 rounds.
+You describe tasks in plain English. Claude dispatches specialized agents --- one creates, another reviews --- and presents results for your approval. Quality gates run in the background so broken work never ships. For the full picture: [Walkthrough](user-guide.qmd), [Agents](agents.qmd), [Architecture](architecture.qmd), [Commands](reference.qmd).
 
-For the full picture: [User Guide](user-guide.qmd) (what you can do), [Meet the Agents](agents.qmd) (who does the work), [Architecture](architecture.qmd) (how the system works), [Customization](customization.qmd) (how to make it yours), and [Command Reference](reference.qmd) (every flag and subcommand).
-
-## Day 1 Checklist
-
+::: {.callout-note collapse="true" title="Day 1 Checklist"}
 - [ ] Fork the repo and clone it locally
 - [ ] Run `claude` in the project directory
 - [ ] Paste the starter prompt (fill in your project details)
@@ -62,6 +65,7 @@ For the full picture: [User Guide](user-guide.qmd) (what you can do), [Meet the 
 - [ ] Approve the task plan, watch it work, review the output
 
 That's it. Everything else --- agents, hooks, rules --- runs automatically in the background.
+:::
 
 ::: {.callout-note collapse="true"}
 ## Optional: Manual Setup
