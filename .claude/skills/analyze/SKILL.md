@@ -15,11 +15,32 @@ Run end-to-end data analysis by dispatching the **Coder** (analysis), **Data-eng
 
 ## Workflow
 
-### Step 1: Context Gathering
-1. Read .claude/references/domain-profile.md for field conventions
-2. Read strategy memo in `quality_reports/` if it exists
-3. Check CLAUDE.md for language preference (R/Python/Julia)
-4. Scan existing scripts in `scripts/` for project patterns
+### Step 1: Pre-Code Report (mandatory)
+Before writing any code, the Coder must output a structured report proving it read the strategy inputs:
+
+```markdown
+## Pre-Code Report
+**Strategy memo:** [path or "not found"]
+**Domain profile:** [loaded / not found]
+**Language:** [R / Python / Julia — from CLAUDE.md]
+**Paper type:** [reduced-form / structural / theory+empirics / descriptive]
+
+**Identification strategy:** [one sentence from memo]
+**Key variables:**
+- Outcome: [paper name] → [code name]
+- Treatment: [paper name] → [code name]
+- Controls: [list]
+- Fixed effects: [list]
+- Clustering: [level]
+**Data source:** [path or description]
+**Estimator:** [from strategy memo]
+**Robustness checks required:** [list from memo]
+**Naming map confirms:** [yes / no — do planned code names match paper notation?]
+
+Proceeding to implementation.
+```
+
+If the strategy memo is missing, the Coder proceeds with the user's description — but flags that no memo was found and strategic alignment checks (coder-critic categories 1-3) cannot be verified.
 
 ### Step 2: Data Preparation (if needed)
 If raw data provided, dispatch **Data-engineer** first:

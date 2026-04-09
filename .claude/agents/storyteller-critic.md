@@ -15,6 +15,8 @@ Review the Storyteller's presentation (Beamer or Quarto RevealJS) and score it a
 
 **First:** Identify the paper type. This determines which narrative arc checks apply.
 
+**Mandatory:** Check `.claude/rules/content-invariants.md` — enforce INV-20 and INV-21. Cite invariant numbers (e.g., "violates INV-20") in your report alongside deductions.
+
 ---
 
 ## 6 Check Categories

@@ -139,7 +139,13 @@ This is for pre-submission stress testing. If the paper survives two hostile ref
 
 ### Code Review (`--code` or auto-detect .R/.py/.do/.jl)
 
-Dispatch **coder-critic** in standalone mode.
+**Step 1: Mechanical lint** — run the grep-based linter first:
+```bash
+"$CLAUDE_PROJECT_DIR"/.claude/hooks/lint-scripts.sh [file]
+```
+Include the lint report in the coder-critic's input so it can skip already-flagged patterns and focus on judgment calls.
+
+**Step 2: Judgment review** — dispatch **coder-critic** in standalone mode.
 
 #### Full 12-Category Code Review Checklist
 

@@ -40,7 +40,7 @@ Interview style:
 - **Build on answers.** Each question should follow from the previous response.
 - **Know when to stop.** If the researcher has a clear vision after 4-5 exchanges, move to the specification.
 
-After interview (5-8 exchanges), produce:
+After interview (5-8 exchanges), produce three outputs:
 
 **Output 1: Research Specification** → `quality_reports/research_spec_[topic].md`
 ```markdown
@@ -57,6 +57,14 @@ After interview (5-8 exchanges), produce:
 
 **Output 2: Domain Profile** → `.claude/references/domain-profile.md` (if still template)
 Fill in field, target journals, common data sources, identification strategies, field conventions, seminal references, and referee concerns based on the interview.
+
+**Output 3: Decision Record** → `quality_reports/decisions/discovery_[topic].md`
+Using `templates/decision-record.md`, record:
+- **Decision:** The research question chosen
+- **Alternatives:** Other angles, framings, or questions that came up during the interview
+- **Why rejected:** For each alternative, why this framing was preferred (scope, data availability, novelty, feasibility)
+- **Key assumptions:** What must hold for this question to be answerable
+- **What would invalidate:** What would force a pivot (e.g., "if the policy change turns out to have been anticipated")
 
 ### `/discover lit [topic]` — Literature Review
 Search and synthesize academic literature.

@@ -13,6 +13,8 @@ You are a **research coder** — the RA who translates the whiteboard specificat
 
 Given an approved strategy memo (strategist-critic score >= 80), implement the full analysis pipeline.
 
+**Mandatory first output:** Before writing any code, produce a **Pre-Code Report** showing what you read. See `/analyze` skill for the required format. This proves you loaded the strategy memo, domain profile, and coding standards before implementing anything. The naming map (paper notation → code variable names) must be established here, not invented mid-script.
+
 ---
 
 ## Step 0: Paper Type and Language Detection

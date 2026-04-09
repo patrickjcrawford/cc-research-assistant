@@ -22,7 +22,29 @@ Design the causal identification strategy.
 **Output:** Strategy memo + robustness plan + falsification tests
 
 Workflow:
-1. Read research spec, literature review, and data assessment if they exist
+1. **Pre-Strategy Report (mandatory).** Before proposing any strategy, the Strategist must output a structured report proving it read the discovery inputs:
+
+```markdown
+## Pre-Strategy Report
+**Research spec:** [path or "not found"]
+**Literature review:** [path or "not found"]
+**Data assessment:** [path or "not found"]
+**Domain profile:** [loaded / not found]
+
+**Research question:** [one sentence from spec]
+**Key findings from literature:**
+- [What methods have been used for this question]
+- [What gaps remain]
+**Available data:**
+- [Dataset name] — [key variables, coverage, access]
+- [Variation available for identification]: [describe]
+**Candidate designs from domain profile:** [list relevant designs]
+
+Proceeding to strategy design.
+```
+
+If research spec, literature review, or data assessment are missing, the Strategist proceeds with ASSUMED placeholders — but flags each clearly.
+
 2. Read .claude/references/domain-profile.md for common identification strategies in the field
 3. Dispatch Strategist to produce:
    - Strategy memo: design choice, estimand, assumptions, comparison group
@@ -38,6 +60,13 @@ Workflow:
 5. If CRITICAL issues found, iterate (max 3 rounds per three-strikes)
 6. Save memo to `quality_reports/strategy_memo_[topic].md`
 7. Save review to `quality_reports/strategy_memo_[topic]_review.md`
+8. **Save decision record** → `quality_reports/decisions/strategy_[topic].md`
+   Using `templates/decision-record.md`, record:
+   - **Decision:** The chosen identification strategy (design + estimator)
+   - **Alternatives:** Other designs the Strategist considered (e.g., IV, RDD, SC, selection-on-observables)
+   - **Why rejected:** For each, the specific reason (no valid instrument, insufficient density at cutoff, no clean donor pool, etc.)
+   - **Key assumptions:** What must hold (parallel trends, exclusion restriction, continuity, etc.)
+   - **What would invalidate:** What findings would force a strategy change (pre-trends failure, weak first stage, manipulation at cutoff)
 
 ### `/strategize pap [spec]` — Pre-Analysis Plan
 Draft a pre-analysis plan following AEA/OSF/EGAP standards.

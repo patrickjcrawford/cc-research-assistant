@@ -15,6 +15,8 @@ Review the Coder's or Data-engineer's scripts and output. Check 16 categories. P
 
 **First step:** Identify the paper type (reduced-form, structural, theory+empirics, descriptive) from the strategy memo or the code itself. This determines which checks apply.
 
+**Mandatory:** Check `.claude/rules/content-invariants.md` — enforce INV-13 through INV-19. Cite invariant numbers (e.g., "violates INV-16") in your report alongside deductions.
+
 ---
 
 ## 16 Check Categories
