@@ -51,7 +51,7 @@ Rules are markdown files in `.claude/rules/` that Claude loads automatically. Co
 | `logging.md` | Session logging, session reporting, research journal |
 | `content-standards.md` | Table generation, figure standards, PDF processing, exploration workflow |
 | `content-invariants.md` | 21 numbered non-negotiable rules (INV-1 through INV-21) for paper, code, and talks |
-| `working-paper-format.md` | Working paper layout: 12pt, 1in margins, titling fonts, abstract format |
+| `working-paper-format.md` | Working paper layout: 12pt, 1in margins, reference preamble (tabularray, cleveref, latexmk) |
 | `revision.md` | R&R cycle comment classification and routing |
 | `meta-governance.md` | Template vs working project distinction |
 

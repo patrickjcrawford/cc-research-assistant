@@ -159,11 +159,12 @@ See the full [scoring formula](architecture.qmd#scoring-protocol) in the Archite
 
 ### LaTeX Won't Compile
 
-**Symptom:** `xelatex` errors or missing packages.
+**Symptom:** `latexmk` or `xelatex` errors, missing packages.
 
-1. Check you have XeLaTeX installed: `which xelatex`
-2. Ensure `TEXINPUTS` includes `preambles/`: the `/tools compile` skill handles this
+1. Check you have XeLaTeX and latexmk installed: `which xelatex latexmk`
+2. `paper/latexmkrc` configures TEXINPUTS and BIBINPUTS automatically
 3. Missing package? Install via TeX Live: `tlmgr install [package]`
+4. On Overleaf: set compiler to XeLaTeX via Menu > Compiler (Overleaf reads `latexmkrc` automatically)
 
 ### Hooks Not Firing
 

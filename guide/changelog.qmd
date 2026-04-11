@@ -3,6 +3,34 @@ title: "What's New"
 subtitle: "Release History"
 ---
 
+# v4.1.1 --- Modern LaTeX Stack {#v411}
+
+*Released 2026-04-11*
+
+Modernizes the LaTeX infrastructure with Overleaf-compatible upgrades.
+
+## latexmk Build System
+
+`paper/latexmkrc` configures XeLaTeX, TEXINPUTS, and BIBINPUTS. One command replaces the manual 4-command build: `cd paper && latexmk main.tex`. No dot prefix --- Overleaf reads it automatically. Updated across CLAUDE.md, verifier, `/tools compile`, and `/talk compile`.
+
+## tabularray
+
+Modern table engine with key-value interface. Hand-written tables use `tblr`/`talltblr` (captions, notes, and rules in one declarative block). R/Python/Julia output continues exporting bare `tabular` wrapped with `threeparttable`. Both approaches documented with examples.
+
+## cleveref
+
+`\usepackage[nameinlink]{cleveref}` loaded after `hyperref`. `\cref{fig:x}` auto-generates "Figure 1" --- eliminates `Figure~\ref{}` boilerplate. Writer-critic deducts for missing cleveref and manual ref patterns.
+
+## microtype Promotion
+
+Promoted from Recommended to Required. Writer-critic now deducts -2 for missing `microtype`.
+
+## GitHub Actions CI
+
+`.github/workflows/compile-paper.yml` compiles the paper on push/PR when `paper/**` files change. Skips gracefully in template repos (no `main.tex`). Uploads compiled PDF as artifact.
+
+---
+
 # v4.1.0 --- Enforcement Layer {#v41}
 
 *Released 2026-04-09*
@@ -83,8 +111,8 @@ Journal profiles now include a `Table format` field for overrides.
 
 The preamble standard now distinguishes:
 
-- **Required** (blocking): document class, margins, double-spacing, biblatex+biber, booktabs, hyperref last
-- **Recommended** (advisory): lmodern, microtype, citation color, captionsetup, hidelinks
+- **Required** (blocking): document class, margins, double-spacing, biblatex+biber, booktabs, tabularray, microtype, cleveref, hyperref second-to-last
+- **Recommended** (advisory): lmodern, citation color, captionsetup, hidelinks
 
 Writer-critic deductions adjusted accordingly --- recommended items are reported but don't cost points.
 

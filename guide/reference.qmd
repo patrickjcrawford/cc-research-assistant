@@ -219,7 +219,7 @@ Talk scores are **advisory** (non-blocking).
 
 ```
 /tools commit [message]          Stage + commit (+ optional PR)
-/tools compile [file]            3-pass XeLaTeX + BibTeX
+/tools compile [file]            latexmk compilation (XeLaTeX + biber)
 /tools validate-bib              Cross-reference all \cite{} keys
 /tools journal                   Research journal timeline
 /tools context                   Context status + session health
