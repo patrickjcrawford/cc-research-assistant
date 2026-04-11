@@ -6,7 +6,7 @@ These are non-negotiable. Every agent checks against them. Violations are deduct
 
 ## Paper
 
-**INV-1.** Every table uses `threeparttable` with `tablenotes` explaining key variables, sample, and data source.
+**INV-1.** Every table has notes explaining key variables, sample, and data source — via `threeparttable` + `tablenotes` (traditional) or `talltblr` with `note{}` keys (tabularray).
 
 **INV-2.** Every figure has a `\caption{}` with a note explaining what is shown, how to read it, and the data source.
 
@@ -24,7 +24,7 @@ These are non-negotiable. Every agent checks against them. Violations are deduct
 
 **INV-9.** `biblatex` + `biber`, not `natbib` + `bibtex`.
 
-**INV-10.** `hyperref` loaded last in preamble.
+**INV-10.** `hyperref` loaded second-to-last in preamble; `cleveref` loaded immediately after it.
 
 **INV-11.** Numbers in text match the tables and figures exactly. No rounding discrepancies, no stale values.
 

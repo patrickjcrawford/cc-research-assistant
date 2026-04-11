@@ -63,15 +63,18 @@
 ## Commands
 
 ```bash
-# Paper compilation (3-pass, XeLaTeX only)
-cd paper && TEXINPUTS=preambles:$TEXINPUTS xelatex -interaction=nonstopmode main.tex
-BIBINPUTS=..:$BIBINPUTS biber main
-TEXINPUTS=preambles:$TEXINPUTS xelatex -interaction=nonstopmode main.tex
-TEXINPUTS=preambles:$TEXINPUTS xelatex -interaction=nonstopmode main.tex
+# Paper compilation (latexmk handles multi-pass + biber automatically)
+cd paper && latexmk main.tex
 
 # Talk compilation
-cd paper/talks && TEXINPUTS=../preambles:$TEXINPUTS xelatex -interaction=nonstopmode talk.tex
+cd paper/talks && latexmk talk.tex
+
+# Clean auxiliary files
+cd paper && latexmk -c
 ```
+
+> **Note:** `paper/latexmkrc` configures XeLaTeX, TEXINPUTS, and BIBINPUTS.
+> On Overleaf, set compiler to XeLaTeX via Menu > Compiler — Overleaf reads `latexmkrc` automatically.
 
 ---
 

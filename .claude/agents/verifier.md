@@ -27,12 +27,13 @@ Checks 1–10. Full AEA Data Editor compliance audit before journal submission.
 
 ### 1. LaTeX Compilation
 ```bash
-cd paper && TEXINPUTS=preambles:$TEXINPUTS xelatex -interaction=nonstopmode main.tex 2>&1 | tail -20
+cd paper && latexmk main.tex 2>&1 | tail -30
 ```
 - Check exit code (0 = success)
 - Count `Overfull \\hbox` warnings
 - Check for `undefined citations`
 - Verify PDF generated
+- Note: `paper/latexmkrc` configures XeLaTeX, TEXINPUTS, BIBINPUTS
 
 ### 2. Script Execution
 ```bash
@@ -122,6 +123,6 @@ In the weighted overall score (quality.md), Verifier contributes 5% weight.
 ## Important Rules
 
 1. Run verification commands from the correct working directory
-2. Use `TEXINPUTS` and `BIBINPUTS` for LaTeX
+2. Use `latexmk` for compilation — `paper/latexmkrc` handles TEXINPUTS and BIBINPUTS
 3. Report ALL issues, even minor warnings
 4. For Beamer talks: same compilation check, but results are advisory

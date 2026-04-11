@@ -23,20 +23,19 @@ Stage changes, create commit, optionally create PR and merge.
 - If quality score available and >= 80, note in commit
 
 ### `/tools compile [file]` — LaTeX Compilation
-3-pass XeLaTeX + biber compilation.
+Automated multi-pass compilation via latexmk.
 
 For papers:
 ```bash
-cd paper && TEXINPUTS=preambles:$TEXINPUTS xelatex -interaction=nonstopmode [file]
-BIBINPUTS=..:$BIBINPUTS biber [file_base]
-TEXINPUTS=preambles:$TEXINPUTS xelatex -interaction=nonstopmode [file]
-TEXINPUTS=preambles:$TEXINPUTS xelatex -interaction=nonstopmode [file]
+cd paper && latexmk [file]
 ```
 
 For talks:
 ```bash
-cd paper/talks && TEXINPUTS=../preambles:$TEXINPUTS xelatex -interaction=nonstopmode [file]
+cd paper/talks && latexmk [file]
 ```
+
+Note: `paper/latexmkrc` configures XeLaTeX, TEXINPUTS, and BIBINPUTS. Falls back to manual 3-pass if latexmk is unavailable.
 
 ### `/tools validate-bib` — Bibliography Validation
 Cross-reference all \cite{} keys in paper and talk files against Bibliography_base.bib.
@@ -147,6 +146,6 @@ Step 5: REPORT
 
 ## Principles
 - **Each subcommand is lightweight.** No multi-agent orchestration needed.
-- **Compile always uses 3-pass.** Ensures references and citations resolve.
+- **Compile uses latexmk.** Handles multi-pass and biber automatically.
 - **validate-bib catches drift.** Run before commits to catch broken citations.
 - **Upgrade preserves content.** Infrastructure changes, your paper doesn't.

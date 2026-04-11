@@ -1,0 +1,32 @@
+name: Compile Paper
+
+on:
+  push:
+    paths:
+      - 'paper/**'
+      - 'Bibliography_base.bib'
+  pull_request:
+    paths:
+      - 'paper/**'
+      - 'Bibliography_base.bib'
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compile main paper
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+          working_directory: paper
+          latexmk_use_xelatex: true
+          extra_system_packages: "fontspec"
+
+      - name: Upload PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: paper-pdf
+          path: paper/main.pdf

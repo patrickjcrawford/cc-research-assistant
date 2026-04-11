@@ -4,6 +4,41 @@ All notable changes to the Clo-Author are documented here.
 
 ---
 
+## [4.1.1] — 2026-04-11 — Modern LaTeX Stack
+
+Modernizes the LaTeX infrastructure: automated builds, modern table engine, smart cross-references, and CI compilation. All changes are Overleaf-compatible.
+
+### latexmk Build System
+- **`paper/latexmkrc`** configures XeLaTeX, TEXINPUTS, BIBINPUTS — replaces manual 4-command build
+- **`paper/talks/latexmkrc`** for talk compilation
+- One command: `cd paper && latexmk main.tex` (handles multi-pass + biber automatically)
+- No dot prefix (Overleaf reads `latexmkrc` automatically)
+- Updated: CLAUDE.md, verifier, `/tools compile`, `/talk compile`
+
+### tabularray
+- Added `tabularray` with `booktabs` and `siunitx` libraries to reference preamble
+- **Hand-written tables** use `tblr`/`talltblr` (modern key-value interface for captions, notes, rules)
+- **R/Python/Julia output** continues exporting bare `tabular` wrapped with `threeparttable`
+- Both approaches documented in content-standards.md with examples
+- INV-1 updated to accept both `threeparttable` and `talltblr`
+
+### cleveref
+- Added `\usepackage[nameinlink]{cleveref}` after `hyperref` in reference preamble
+- `\cref{fig:x}` auto-generates "Figure 1" — eliminates `Figure~\ref{}` boilerplate
+- INV-10 updated: `hyperref` second-to-last, `cleveref` last
+- Writer-critic deducts for missing `cleveref` (-2) and manual `\ref{}` patterns (-1 each)
+
+### microtype Promotion
+- Promoted from Recommended to Required in working-paper-format.md
+- Writer-critic now deducts -2 for missing `microtype`
+
+### GitHub Actions CI
+- New `.github/workflows/compile-paper.yml` — compiles paper on push/PR to `paper/**`
+- Uses `xu-cheng/latex-action@v3` with XeLaTeX
+- Uploads compiled PDF as artifact
+
+---
+
 ## [4.1.0] — 2026-04-09 — Enforcement Layer
 
 Adds hard mechanical enforcement underneath the existing creative orchestration. Agents still do judgment work; the new layer catches grep-able violations before judgment is even needed. Inspired by contract-driven, grep-verified patterns from defensive engineering.

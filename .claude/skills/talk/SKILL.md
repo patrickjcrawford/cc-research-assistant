@@ -101,9 +101,9 @@ Run visual quality checks:
 
 ### `/talk compile [file]` — Compile Talk
 
-3-pass XeLaTeX compilation for Beamer:
+Automated compilation via latexmk:
 ```bash
-cd paper/talks && TEXINPUTS=../preambles:$TEXINPUTS xelatex -interaction=nonstopmode [file]
+cd paper/talks && latexmk [file]
 ```
 
 For Quarto:

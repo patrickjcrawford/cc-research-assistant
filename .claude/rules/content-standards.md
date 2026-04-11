@@ -17,22 +17,30 @@ paths:
 
 ## 1. Table Standards
 
-**Target:** Publication-quality tables using standard economics formatting (booktabs, threeparttable, no vertical rules). Journal-specific conventions (significance stars, note format) adapt to the target journal — see journal-profiles.md.
+**Target:** Publication-quality tables using standard economics formatting (booktabs rules, no vertical rules). Two approaches are supported:
+
+- **tabularray (`tblr` / `talltblr`)** — modern key-value interface. Preferred for hand-written tables in `main.tex`.
+- **`tabular` + `booktabs` + `threeparttable`** — traditional stack. Required for R/Python/Julia-generated output (scripts export bare `tabular`).
+
+Journal-specific conventions (significance stars, note format) adapt to the target journal — see journal-profiles.md.
 
 ### No In-Table Titles or Notes
 
 - **Never** embed titles inside the table body or as a table header row
 - **Never** embed notes, sources, or footnotes inside the table itself
-- Table numbering, titles, and notes are added in LaTeX via `\caption{}` and `\begin{tablenotes}`
+- Table numbering, titles, and notes are added in LaTeX via `\caption{}` and `\begin{tablenotes}` (or tabularray's `note{}` key)
 - The file name and folder identify what the table contains
 
 ### Three-Line Format (Booktabs)
 
 Every table uses exactly three horizontal rules and **zero vertical lines**:
 
+**Traditional (R/Python/Julia output):**
 ```latex
 \begin{table}[htbp]
 \centering
+\begin{threeparttable}
+\caption{Effect of X on Y}\label{tab:main}
 \begin{tabular}{lcccc}
 \toprule
             & (1)     & (2)     & (3)     & (4)     \\
@@ -40,14 +48,34 @@ Every table uses exactly three horizontal rules and **zero vertical lines**:
 ...coefficients...
 \bottomrule
 \end{tabular}
+\begin{tablenotes}\small
+\item \textit{Notes:} Standard errors in parentheses.
+\end{tablenotes}
+\end{threeparttable}
 \end{table}
+```
+
+**Modern (hand-written in main.tex):**
+```latex
+\begin{talltblr}[
+  caption = {Effect of X on Y},
+  label = {tab:main},
+  note{*} = {Standard errors in parentheses.},
+]{colspec = {lcccc}, rowsep = 4pt}
+\toprule
+            & (1)     & (2)     & (3)     & (4)     \\
+\midrule
+...coefficients...
+\bottomrule
+\end{talltblr}
 ```
 
 - `\toprule` above column headers
 - `\midrule` below column headers (and to separate panels)
 - `\bottomrule` at the very end
 - `\cmidrule(lr){2-4}` for partial rules spanning column groups
-- **Use `threeparttable`** — wrap tables with `\begin{threeparttable}` for proper alignment of notes via `\begin{tablenotes}`
+- **R/Python/Julia output:** wrap with `threeparttable` for notes via `\begin{tablenotes}`
+- **Hand-written tables:** prefer `talltblr` with `note{}` keys — unifies caption, label, and notes
 - **Never** use `\hline`, `|`, or any vertical rules
 
 ### Coefficient Display
