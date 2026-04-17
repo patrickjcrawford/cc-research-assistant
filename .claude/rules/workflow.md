@@ -99,6 +99,7 @@ The Orchestrator selects agents based on what the task requires:
 | Data sourcing | explorer + explorer-critic |
 | Data engineering | data-engineer + coder-critic |
 | Identification strategy | strategist + strategist-critic |
+| Formal theory (assumptions, theorems, proofs) | theorist + theorist-critic |
 | R/Python/Julia scripts | coder + coder-critic |
 | Paper manuscript | writer + writer-critic |
 | Peer review | Orchestrator → domain-referee + methods-referee |

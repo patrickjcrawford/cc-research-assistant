@@ -79,6 +79,32 @@ If no field is specified, agents default to applied economics.
 
 ---
 
+## Theoretical Foundational References
+
+<!-- The Theorist and theorist-critic default to these anchors when building or reviewing a theory section.
+     Only needed if the paper has a formal theory section (econometric methods, theory+empirics,
+     structural identification, or methodological reduced-form).
+     Leave empty to fall back to the generic econometric theory defaults baked into the theorist agent. -->
+
+| Topic | Anchor references |
+|-------|------------------|
+| [e.g., DiD with staggered adoption] | [e.g., Callaway & Sant'Anna (2021); Sant'Anna & Zhao (2020)] |
+| [e.g., Semiparametric efficiency] | [e.g., Newey (1990, 1994); Bickel-Klaassen-Ritov-Wellner (1993)] |
+
+---
+
+## Paper Author Team
+
+<!-- Used by the theorist-critic to calibrate respect. If the authors are themselves among the reference
+     literature on a topic, the critic avoids lecturing them on their own contributions.
+     List author surnames + the topics they are foundational on. -->
+
+| Author | Foundational on |
+|--------|----------------|
+| [e.g., Callaway] | [DiD with staggered adoption, $ATT(g,t)$] |
+
+---
+
 ## Field-Specific Referee Concerns
 
 <!-- The domain-referee and methods-referee watch for these. -->

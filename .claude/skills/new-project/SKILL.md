@@ -24,7 +24,8 @@ Phase 1: Discovery
   └── /discover data → Data Assessment
 
 Phase 2: Strategy (depends on Phase 1)
-  └── /strategize → Strategy Memo + Robustness Plan
+  ├── /strategize → Strategy Memo + Robustness Plan
+  └── /strategize theory → Theory Section (conditional — econometric methods, theory+empirics, structural, methodological reduced-form)
 
 Phase 3: Execution (depends on Phase 2)
   ├── /analyze → Scripts + Tables + Figures
@@ -78,7 +79,15 @@ Before any work begins:
    - Strategist proposes identification strategy
    - strategist-critic validates the design
 
-**Gate:** Strategy memo must pass strategist-critic review (score >= 80).
+4b. **If paper type is econometric methods, theory+empirics, structural, or methodological reduced-form:**
+   **Run `/strategize theory`** to produce the formal theory section:
+   - Theorist drafts assumptions, theorems, proofs
+   - theorist-critic audits proof validity (4 phases, early-stop on critical gaps)
+   - Theorist-critic score contributes 20% to the weighted aggregate when present (see `quality.md`)
+
+   Skip this step for applied papers using off-the-shelf estimators.
+
+**Gate:** Strategy memo must pass strategist-critic review (score >= 80). If theory section exists, theorist-critic must also pass (score >= 80).
 
 ### Step 3: Execution Phase
 

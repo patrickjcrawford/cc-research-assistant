@@ -1,13 +1,13 @@
 ---
 name: strategize
-description: Design identification strategy or pre-analysis plan. Dispatches Strategist (proposer) and strategist-critic (validator). Replaces /identify and /pre-analysis-plan.
-argument-hint: "[mode: strategy | pap | pap interactive] [research question or spec path]"
+description: Design identification strategy, pre-analysis plan, or formal theory section. Dispatches Strategist / Theorist (proposer) and the paired critic (validator). Replaces /identify and /pre-analysis-plan.
+argument-hint: "[mode: strategy | pap | pap interactive | theory] [research question or spec path]"
 allowed-tools: Read,Grep,Glob,Write,Task
 ---
 
 # Strategize
 
-Design an identification strategy or pre-analysis plan by dispatching the **Strategist** (proposer) and **strategist-critic** (validator).
+Design an identification strategy, pre-analysis plan, or formal theory section by dispatching the appropriate creator (**Strategist** or **Theorist**) and its paired critic.
 
 **Input:** `$ARGUMENTS` — mode keyword followed by research question or path to research spec.
 
@@ -180,9 +180,74 @@ Save PAP to `quality_reports/pre_analysis_plan_[topic].md`
 
 ---
 
+### `/strategize theory [target]` — Formal Theory Section
+
+Produce a formal theory section: assumptions, definitions, lemmas, theorems, and proofs.
+
+**When to use:**
+- Paper type is **econometric methods** (the method is the contribution)
+- Paper type is **theory + empirics** (theoretical predictions are tested)
+- Paper type is **structural** (identification of structural parameters needs formal argument)
+- Paper type is **methodological reduced-form** (the design contributes a new estimator)
+
+**Skip this mode** for applied papers that use off-the-shelf estimators — the strategist's memo is sufficient.
+
+**Input:** `$ARGUMENTS` — research question, path to strategy memo, or path to existing paper/draft.
+
+**Agents:** Theorist → theorist-critic
+**Output:** Theory memo + assumptions.tex + results.tex + proofs.tex + notation glossary
+
+Workflow:
+1. **Pre-Theory Report (mandatory).** Before writing any math, the Theorist must output a structured report showing what was read:
+
+```markdown
+## Pre-Theory Report
+**Research spec:** [path or "not found"]
+**Strategy memo:** [path or "not found"]
+**Existing paper/draft:** [path or "not found"]
+**Domain profile:** [loaded / not found]
+**Notation conventions:** [header.tex path / domain-profile notation table / "not found"]
+**Bibliography base:** [path / "not found"]
+
+**Paper type:** [econometric methods / theory+empirics / structural / methodological reduced-form]
+**Theoretical object(s) to produce:** [identification / consistency / asymp. normality / influence function / DML / bootstrap / test / proposition]
+**Data structure:** [iid / panel / staggered / clustered / triangular array]
+**Target parameter:** [definition as functional of P]
+**Estimator:** [definition]
+**Assumptions anticipated:** [A1 sampling, A2 parallel trends, ...]
+
+Proceeding to theory drafting.
+```
+
+If strategy memo or paper type is missing, the Theorist flags it and asks before proceeding.
+
+2. Read `.claude/references/domain-profile.md` for the Theoretical Foundational References table and Author Team table.
+3. Dispatch **Theorist** to produce:
+   - `quality_reports/theory/[topic]/theory_memo.md`
+   - `quality_reports/theory/[topic]/assumptions.tex`
+   - `quality_reports/theory/[topic]/results.tex`
+   - `quality_reports/theory/[topic]/proofs.tex`
+   - `quality_reports/theory/[topic]/notation_glossary.md`
+4. Dispatch **theorist-critic** to review through 4 sequential phases:
+   - Phase 1: Claim identification (object type, target parameter, estimator, assumptions)
+   - Phase 2: Proof validity (logical, measurability, expansions, identification, asymptotic distribution) — **early-stop on critical gaps**
+   - Phase 3: Assumption minimality + statement calibration + notation consistency (INV-7)
+   - Phase 4: Citation fidelity + linkage to empirical claims + exposition
+5. If CRITICAL issues found, iterate (max 3 rounds per three-strikes). Escalation target: User.
+6. Save review to `quality_reports/theory_[topic]_review.md`
+7. **Save decision record** → `quality_reports/decisions/theory_[topic].md`
+   Record:
+   - **Decision:** The theoretical objects proved (identification, asymptotic distribution, etc.)
+   - **Assumptions:** Full list with interpretation
+   - **What's open:** What the theory does NOT cover (caveats for the writer)
+   - **Linkage:** Which empirical claims each theorem supports
+
+---
+
 ## Principles
 
 - **Strategist proposes, strategist-critic critiques.** Adversarial pairing catches design flaws early.
+- **Theorist proves, theorist-critic checks the proof.** Proof validity gates everything downstream — notation, citations, polish.
 - **Strategy memo is the contract.** Once approved, the Coder implements it faithfully.
 - **Catch problems before coding.** A flawed strategy caught now saves weeks of wasted analysis.
 - **Multiple strategies are OK.** Present trade-offs and let the user choose.
