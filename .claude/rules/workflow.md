@@ -237,27 +237,41 @@ All skills in the reference below work without pipeline context when invoked dir
 ## 5. Context Management
 
 ### General Principles
-- Prefer auto-compression over `/clear`
+- Prefer intentional `/checkpoint` + `/compact` at natural stopping points over letting auto-compression summarize for you
 - Save important context to disk before it's lost
 - `/clear` only when context is genuinely polluted
 
+### Compaction Discipline
+
+Borrowed from Goldsmith-Pinkham's Claude Code for Economists workflow:
+
+- **Manual `/compact` before natural stopping points**, not at the threshold. You control what gets summarized.
+- **Aim for 5–10 turn focused sessions.** Long sessions drift; short, scoped sessions keep output sharp.
+- **Start fresh between phases.** Don't carry "discovery residue" into execution.
+- **Before `/compact` or session end, run `/checkpoint`.** That persists state to memory, SESSION_REPORT, and the research journal — so the next session reads real context, not an auto-summary.
+
 ### Context Survival Strategy
 
-**Before Auto-Compression:**
-When approaching context limits, ensure:
-1. MEMORY.md has all `[LEARN]` entries from this session
-2. Session log is current (updated within 10 minutes)
-3. Active plan is saved to disk
-4. Open questions are documented in session log
+**Before `/compact` or session end:**
+Run `/checkpoint`. It handles:
+1. Auto-memory updates (user corrections, project state, references, user profile)
+2. `SESSION_REPORT.md` append per `logging.md`
+3. `quality_reports/research_journal.md` append
+4. (Optional) Obsidian project note if `.claude/state/obsidian-config.md` is configured
 
-The pre-compact hook will remind you of this checklist.
+Also confirm before compaction:
+- Active plan is saved to disk in `quality_reports/plans/`
+- Open questions are documented
+
+The pre-compact hook reminds you of this checklist.
 
 **After Compression:**
-First message should be: "Resuming after compression. Last task: [read most recent plan + git log]. Status: [next step]."
+First message should be: "Resuming after compression. Last task: [read most recent plan + git log + last SESSION_REPORT entry]. Status: [next step]."
 
 ### Session Recovery
 
-After compression or new session:
+After compression or a new session, in order:
+0. **Read the most recent checkpoint artifacts:** tail of `SESSION_REPORT.md`, tail of `quality_reports/research_journal.md`, and — if `.claude/state/obsidian-config.md` exists and Obsidian MCP is connected — the latest project-note journal entry
 1. Read `CLAUDE.md` + most recent plan in `quality_reports/plans/`
 2. Check `git log --oneline -10` and `git diff`
 3. State what you understand the current task to be

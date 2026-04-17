@@ -105,6 +105,7 @@ See `quality.md` for weighted aggregation formula.
 | `/talk [mode] [format]` | Create, audit, or compile Beamer presentations |
 | `/submit [mode]` | Journal targeting → package → audit → final gate |
 | `/tools [subcommand]` | Utilities: commit, compile, validate-bib, journal, etc. |
+| `/checkpoint [--flag]` | Session handoff: memory + SESSION_REPORT + research journal (+ Obsidian if configured) |
 
 ---
 
