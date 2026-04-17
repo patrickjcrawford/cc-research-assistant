@@ -77,6 +77,34 @@ Sends it back with specific objections until the design is sound.
 Strong on checklists and modern estimator recommendations. The institutional story behind your variation is yours to evaluate --- the Strategist tells you what to check, not whether your setting is convincing.
 :::
 
+## Theorist
+
+The methods coauthor for formal theory sections. Drafts assumptions, definitions, lemmas, theorems, and proofs at the rigor level of *Econometrica*, *Journal of Econometrics*, *Quantitative Economics*, and *Annals of Statistics*. **Paper-type aware** --- activates primarily for:
+
+| Paper Type | When Theorist Contributes |
+|-----------|--------------------------|
+| Econometric methods | Identification + asymptotic theory + inference validity |
+| Theory+empirics | Model, propositions, comparative statics, mapping to data |
+| Structural | Identification of structural parameters + estimation theory |
+| Methodological reduced-form | Identification + asymptotic distribution of proposed estimator |
+
+Covers identification results, consistency, asymptotic normality, non-standard rates, influence functions and efficiency bounds, uniform validity, double/debiased ML, bootstrap validity, test properties, and signed comparative-static propositions. Field-specific citation anchors come from `domain-profile.md`; broad defaults cover DiD, IV, RDD, DML, semiparametric efficiency, GMM, and bootstrap. Invoke via `/strategize theory [target]`.
+
+## theorist-critic
+
+A top methods-journal referee. Reviews through **4 sequential phases with early-stop on critical gaps** --- the proof-validity phase gates everything downstream, so a broken proof doesn't get buried under citation nits:
+
+| Phase | Focus |
+|-------|-------|
+| 1. Claim identification | Object type, target parameter, estimator, assumption list, paper-type fit |
+| 2. Proof validity | Logical validity, measurability / integrability, expansions + remainders, design-specific identification checks, asymptotic distribution |
+| 3. Assumptions + statements | Minimality (each assumption used), primitiveness, over/under-claim, pointwise vs. uniform, notation consistency (INV-7) |
+| 4. Citations + linkage + polish | Citation fidelity, orphan theorems, linkage to empirical claims, exposition |
+
+Deduction rubric: -20 per logic gap, -25 circular, -15 overclaim, -10 unjustified limit interchange, -5 per never-used assumption. Score ≥ 80 to approve.
+
+**Authorship-aware calibration**: reads the `Paper Author Team` table in `domain-profile.md`; if the paper's authors are themselves among the reference literature on the topic, the critic avoids lecturing them on their own contributions. Audit via `/review --theory [target]`.
+
 ---
 
 # The Builders (Execution Phase)
@@ -182,7 +210,7 @@ The Verifier checks compilation and file integrity. The Orchestrator dispatches 
 
 # Quick Reference {#agent-catalog}
 
-All 17 agents at a glance:
+All 19 agents at a glance:
 
 | Agent | File | What It Does |
 |-------|------|-------------|
@@ -192,6 +220,8 @@ All 17 agents at a glance:
 | explorer-critic | `explorer-critic.md` | Reviews data for measurement validity, ID fit |
 | Strategist | `strategist.md` | Empirical strategy (4 paper types), Pre-Analysis Plans |
 | strategist-critic | `strategist-critic.md` | Validates assumptions, inference, robustness (4 paper types) |
+| Theorist | `theorist.md` | Formal theory: assumptions, theorems, proofs (paper-type aware) |
+| theorist-critic | `theorist-critic.md` | 4-phase proof review with early-stop on critical gaps |
 | Data-engineer | `data-engineer.md` | Data cleaning, wrangling, publication figures |
 | Coder | `coder.md` | Analysis implementation (4 paper types, numerical discipline) |
 | coder-critic | `coder-critic.md` | 16 checks: code quality, numerical discipline, strategy alignment |

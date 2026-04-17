@@ -9,14 +9,15 @@ subtitle: "Every Command, Flag, and Subcommand"
 |---------|--------------|-------------|
 | `/new-project [topic]` | --- | Full orchestrated pipeline: idea to paper |
 | `/discover` | `--lit`, `--data`, `--ideate` | Discovery phase: interview, literature, data |
-| `/strategize` | `--pap` | Empirical strategy (4 paper types) or pre-analysis plan |
+| `/strategize` | `--pap`, `theory` | Empirical strategy (4 paper types), pre-analysis plan, or formal theory section |
 | `/analyze [dataset]` | `--dual [langs]` | End-to-end data analysis (single or parallel language) |
-| `/write [section]` | `--humanize` | Draft sections (argument moves, 4 paper types) or strip AI patterns |
-| `/review [file]` | `--peer [journal]`, `--peer --r2`, `--stress [journal]`, `--methods`, `--proofread`, `--code`, `--replicate [lang]`, `--all` | Quality reviews (routes by target + flags) |
+| `/write [section]` | `--humanize`, `style-guide` | Draft sections, strip AI patterns, or extract personal voice from prior papers |
+| `/review [file]` | `--peer [journal]`, `--peer --r2`, `--stress [journal]`, `--methods`, `--theory`, `--proofread`, `--code`, `--replicate [lang]`, `--all` | Quality reviews (routes by target + flags) |
 | `/revise [report]` | --- | R&R cycle: classify + route referee comments |
 | `/talk` | `create`, `audit`, `compile` | Beamer presentations |
 | `/submit` | `--target`, `--package`, `--audit`, `--final` | Submission pipeline |
 | `/tools` | `commit`, `compile`, `validate-bib`, `journal`, `context`, `deploy`, `learn`, `lint`, `upgrade` | Utilities |
+| `/checkpoint` | `--auto`, `--memory-only`, `--scaffold-only`, `--dry-run`, `--setup-obsidian` | Session handoff: memory + SESSION_REPORT + research journal (+ Obsidian if configured) |
 
 ---
 

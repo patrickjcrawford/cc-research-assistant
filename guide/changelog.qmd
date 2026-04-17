@@ -3,6 +3,42 @@ title: "What's New"
 subtitle: "Release History"
 ---
 
+# v4.2.0 --- Theorist Pair, Personal Style Guide, Checkpoint {#v420}
+
+*Released 2026-04-17*
+
+Three feature additions inspired by parallel work in the Claude-Code-for-economists space and by a theorist pair developed in the bad-controls project.
+
+## Theorist + theorist-critic pair
+
+A first-class pair for formal theory sections --- assumptions, definitions, lemmas, theorems, and proofs calibrated to top methods journals (*Econometrica*, *Journal of Econometrics*, *Quantitative Economics*, *Annals of Statistics*).
+
+The **theorist** drafts identification results, consistency, asymptotic normality, influence functions, DML, bootstrap validity, test properties, and comparative-static propositions. Paper-type aware --- activates for econometric methods, theory+empirics, structural identification, and methodological reduced-form papers.
+
+The **theorist-critic** reviews through 4 sequential phases with early-stop on critical gaps: triage, proof validity (logical, measurability, expansions, identification, asymptotic distribution), assumption minimality + statement calibration, citations + linkage + polish.
+
+Field-specific anchors live in a new `Theoretical Foundational References` table in `domain-profile.md`; broad defaults cover DiD, IV, RDD, DML, semiparametric efficiency, GMM, and bootstrap. A `Paper Author Team` table lets the critic avoid lecturing authors on results they themselves wrote.
+
+Scoring: 20% weight in the aggregate when a theory section is present, renormalized otherwise. Invoke via `/strategize theory [target]` or audit via `/review --theory [target]`.
+
+## Personal style guide
+
+A `/write style-guide [paper-dir]` mode that extracts the user's writing voice from their prior papers, then feeds it back to the writer on every subsequent invocation.
+
+Strategic sampling across intros, section openings, abstracts, conclusions, and results paragraphs. Quantitative patterns (sentence-length distribution, passive/active ratio, em dash rate) and qualitative patterns (paragraph openings, section openings, lexicon used and avoided, hedging, comparison style, citation split, tone markers). Self-citation check surfaces author self-citations missing from `Bibliography_base.bib`.
+
+Writes to `.claude/references/personal-style-guide.md` with quoted examples from the corpus --- never invents patterns. The writer auto-loads it if real content is present; voice guide overrides generic academic defaults but never INV-1..21.
+
+## Compaction discipline + `/checkpoint` skill
+
+Codifies compaction hygiene and adds a project-level session-handoff skill.
+
+**Compaction discipline** (workflow.md Section 5): manual `/compact` at natural stopping points over auto-compression; 5--10 turn focused sessions; `/checkpoint` before `/compact` or session end; Session Recovery starts at Step 0 --- read recent checkpoint artifacts before the plan.
+
+**`/checkpoint`** --- scaffold-friendly port. Core (always on, fork-friendly): auto-memory updates, `SESSION_REPORT.md` append, `research_journal.md` append, git-state snapshot. Obsidian integration is gated: activates only when `.claude/state/obsidian-config.md` exists AND Obsidian MCP is connected. Fork users get the template; user-specific paths stay local via `.gitignore`.
+
+---
+
 # v4.1.1 --- Modern LaTeX Stack {#v411}
 
 *Released 2026-04-11*
