@@ -205,7 +205,7 @@ Use it **after** you've established 3--7 recurring patterns.
 When context compaction happens, two hooks preserve and restore state:
 
 ```{mermaid}
-%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#14142a', 'primaryTextColor': '#d0d0e0', 'primaryBorderColor': '#b44dff', 'lineColor': '#b44dff', 'secondaryColor': '#0c0c18', 'tertiaryColor': '#080810', 'edgeLabelBackground': '#080810'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0eee6', 'primaryTextColor': '#141413', 'primaryBorderColor': '#d1cfc5', 'lineColor': '#d97757', 'secondaryColor': '#faf9f5', 'tertiaryColor': '#e6e3da', 'edgeLabelBackground': '#faf9f5', 'clusterBkg': '#f0eee6', 'clusterBorder': '#d1cfc5'}}}%%
 flowchart TD
     RUN[Session running]:::step -->|context fills up| PRE[PreCompact fires]:::hook
     PRE --> SAVE[Saves plan, task, decisions]:::step
@@ -214,8 +214,8 @@ flowchart TD
     POST --> RESTORE[Restores context summary]:::step
     RESTORE --> RESUME[Claude knows where it left off]:::approved
 
-    classDef step fill:#14142a,stroke:#b44dff,color:#b44dff,stroke-width:2px
-    classDef hook fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:2px
-    classDef event fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
-    classDef approved fill:#14142a,stroke:#00cc66,color:#00cc66,stroke-width:2px
+    classDef step fill:#f0eee6,stroke:#87867f,color:#141413,stroke-width:2px
+    classDef hook fill:#f0eee6,stroke:#d97757,color:#141413,stroke-width:2px
+    classDef event fill:#f0eee6,stroke:#b85c3e,color:#141413,stroke-width:2px
+    classDef approved fill:#f0eee6,stroke:#4d7c5a,color:#141413,stroke-width:2px
 ```

@@ -15,6 +15,20 @@ Utility subcommands for project maintenance and infrastructure.
 
 ## Subcommands
 
+### `/tools dashboard [--open]` — Project Dashboard
+Regenerate the project dashboard HTML file.
+
+```bash
+python3 scripts/generate_dashboard.py
+```
+
+If `--open` is specified (or by default), open the dashboard in the browser:
+```bash
+open project_dashboard.html
+```
+
+The dashboard scans the entire project — paper sections, data, scripts, quality reports, bibliography, plans — and renders an interactive HTML overview. Regenerate it after any significant work.
+
 ### `/tools commit [message]` — Git Commit
 Stage changes, create commit, optionally create PR and merge.
 - Run git status to identify changes

@@ -3,6 +3,33 @@ title: "What's New"
 subtitle: "Release History"
 ---
 
+# v4.3.0 --- HTML Dashboard + Guide Overhaul {#v430}
+
+*Released 2026-05-08*
+
+## HTML Report Pipeline
+
+Two Python generators produce self-contained interactive HTML from agent markdown output:
+
+- **`scripts/generate_dashboard.py`** --- project-level overview (manuscript sections, data, code, quality scorecard, review history, active plans)
+- **`scripts/generate_html_report.py`** --- 5 detail report subcommands:
+
+| Subcommand | Report Type |
+|-----------|------------|
+| `peer-review` | Tabbed editorial + domain + methods referee reports |
+| `code-audit` | Score breakdown, paper-to-code map, sanity checks, robustness progress |
+| `strategy-review` | Phased issue accordion with severity cards |
+| `quality-gate` | Gauge + gate bars + component grid |
+| `literature` | Zotero-like filterable bibliography (category, proximity, method filters, sort, search, copy-cite) |
+
+Shared design system in `templates/html/base/` (styles.css + components.js). Dark mode, print support, collapsible sections, filter engine. All skills auto-generate HTML after saving markdown reports.
+
+## Guide Site Overhaul
+
+Migrated from cyberpunk neon (dark, scanlines, pink/cyan glow) to the thariqs aesthetic (ivory background, clay accents, serif headings). All mermaid diagrams updated to match. Readability pass across all pages --- trimmed agent descriptions, broke up dense paragraphs, removed duplicate content.
+
+---
+
 # v4.2.0 --- Theorist Pair, Personal Style Guide, Checkpoint {#v420}
 
 *Released 2026-04-17*

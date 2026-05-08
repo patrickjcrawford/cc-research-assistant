@@ -90,6 +90,12 @@ Workflow:
 6. Dispatch librarian-critic to check coverage, gaps, recency, scope
 7. If gaps found, re-dispatch Librarian for targeted search (max 1 round)
 8. Save to `quality_reports/lit_review_[topic].md`
+9. Generate interactive HTML bibliography and refresh dashboard:
+```bash
+python3 scripts/generate_html_report.py literature quality_reports/lit_review_[topic].md
+python3 scripts/generate_dashboard.py
+```
+Open the HTML report for the user: `open quality_reports/lit_review_[topic].html`
 
 **Unverified citations:** If you cannot verify a citation, mark the BibTeX entry with `% UNVERIFIED`. Do NOT fabricate or guess citation details. Note when working papers have been published — cite the published version.
 

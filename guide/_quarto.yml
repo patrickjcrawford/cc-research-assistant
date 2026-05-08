@@ -29,14 +29,16 @@ website:
 format:
   html:
     theme:
-      - darkly
-      - custom.scss
+      light:
+        - cosmo
+        - custom.scss
+      dark:
+        - darkly
+        - custom-dark.scss
     toc: true
     toc-depth: 3
     code-copy: true
     code-overflow: wrap
     smooth-scroll: true
-    mainfont: "Space Grotesk, Inter, system-ui, sans-serif"
-    monofont: "JetBrains Mono, Fira Code, Cascadia Code, monospace"
     mermaid:
-      theme: dark
+      theme: neutral

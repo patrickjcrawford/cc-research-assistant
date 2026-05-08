@@ -16,7 +16,7 @@ How 17 agents coordinate across the research pipeline. Each phase pairs **worker
 ## The Pipeline
 
 ```{mermaid}
-%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#1a1a36', 'primaryTextColor': '#00f0ff', 'primaryBorderColor': '#00f0ff', 'lineColor': '#b44dff', 'secondaryColor': '#14142a', 'tertiaryColor': '#080810', 'edgeLabelBackground': '#080810', 'clusterBkg': '#0c0c18', 'clusterBorder': '#1e1e35'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0eee6', 'primaryTextColor': '#141413', 'primaryBorderColor': '#d1cfc5', 'lineColor': '#d97757', 'secondaryColor': '#faf9f5', 'tertiaryColor': '#e6e3da', 'edgeLabelBackground': '#faf9f5', 'clusterBkg': '#f0eee6', 'clusterBorder': '#d1cfc5'}}}%%
 flowchart LR
     YOU:::start --> D:::phase1
     D --> S:::phase2
@@ -36,13 +36,13 @@ flowchart LR
     SUB(Submission)
     T(Talks)
 
-    classDef start fill:#080810,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
-    classDef phase1 fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:2px
-    classDef phase2 fill:#14142a,stroke:#00cc66,color:#00cc66,stroke-width:2px
-    classDef phase3 fill:#14142a,stroke:#b44dff,color:#b44dff,stroke-width:2px
-    classDef phase4 fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
-    classDef phase5 fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:2px
-    classDef talks fill:#0c0c18,stroke:#8888a8,color:#8888a8,stroke-width:1px,stroke-dasharray: 5 5
+    classDef start fill:#e6e3da,stroke:#d97757,color:#141413,stroke-width:2px
+    classDef phase1 fill:#f0eee6,stroke:#788c5d,color:#141413,stroke-width:2px
+    classDef phase2 fill:#f0eee6,stroke:#4d7c5a,color:#141413,stroke-width:2px
+    classDef phase3 fill:#f0eee6,stroke:#d97757,color:#141413,stroke-width:2px
+    classDef phase4 fill:#f0eee6,stroke:#b85c3e,color:#141413,stroke-width:2px
+    classDef phase5 fill:#f0eee6,stroke:#87867f,color:#141413,stroke-width:2px
+    classDef talks fill:#faf9f5,stroke:#87867f,color:#141413,stroke-width:1px,stroke-dasharray: 5 5
 ```
 
 ## Agents by Phase
@@ -95,7 +95,7 @@ The Editor does desk review first, then dispatches referees with dispositions (S
 ## The Worker-Critic Loop
 
 ```{mermaid}
-%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#14142a', 'primaryTextColor': '#d0d0e0', 'primaryBorderColor': '#b44dff', 'lineColor': '#b44dff', 'secondaryColor': '#0c0c18', 'tertiaryColor': '#080810', 'edgeLabelBackground': '#080810'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0eee6', 'primaryTextColor': '#141413', 'primaryBorderColor': '#d1cfc5', 'lineColor': '#d97757', 'secondaryColor': '#faf9f5', 'tertiaryColor': '#e6e3da', 'edgeLabelBackground': '#faf9f5', 'clusterBkg': '#f0eee6', 'clusterBorder': '#d1cfc5'}}}%%
 flowchart TD
     W[WORKER creates artifact]:::worker --> C[CRITIC reviews, scores 0-100]:::critic
     C -->|score >= 80| A([APPROVED]):::approved
@@ -104,10 +104,10 @@ flowchart TD
     C2 -->|pass| A
     C2 -->|fail, round 3| ESC([ESCALATE to user]):::escalate
 
-    classDef worker fill:#14142a,stroke:#b44dff,color:#b44dff,stroke-width:2px
-    classDef critic fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:2px
-    classDef approved fill:#14142a,stroke:#00cc66,color:#00cc66,stroke-width:2px
-    classDef escalate fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
+    classDef worker fill:#f0eee6,stroke:#d97757,color:#141413,stroke-width:2px
+    classDef critic fill:#f0eee6,stroke:#788c5d,color:#141413,stroke-width:2px
+    classDef approved fill:#f0eee6,stroke:#4d7c5a,color:#141413,stroke-width:2px
+    classDef escalate fill:#f0eee6,stroke:#b33d3d,color:#141413,stroke-width:2px
 ```
 
 **Why it works:** The critic can't fix files (read-only), so it has no incentive to downplay issues. The worker can't approve itself (the critic re-audits). This prevents Claude from saying "looks good" about its own work.
@@ -136,7 +136,7 @@ The Orchestrator:
 ## Dependency-Driven Dispatch
 
 ```{mermaid}
-%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#14142a', 'primaryTextColor': '#d0d0e0', 'primaryBorderColor': '#b44dff', 'lineColor': '#b44dff', 'secondaryColor': '#0c0c18', 'tertiaryColor': '#080810', 'edgeLabelBackground': '#080810'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0eee6', 'primaryTextColor': '#141413', 'primaryBorderColor': '#d1cfc5', 'lineColor': '#d97757', 'secondaryColor': '#faf9f5', 'tertiaryColor': '#e6e3da', 'edgeLabelBackground': '#faf9f5', 'clusterBkg': '#f0eee6', 'clusterBorder': '#d1cfc5'}}}%%
 flowchart TD
     P1:::phase --> P2:::phase
     P2 --> P3:::phase
@@ -183,11 +183,11 @@ flowchart TD
     P4 --- s4
     P5 --- s5
 
-    classDef phase fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
-    classDef worker fill:#14142a,stroke:#b44dff,color:#b44dff,stroke-width:1px
-    classDef critic fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:1px
-    classDef referee fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:1px
-    classDef infra fill:#14142a,stroke:#00cc66,color:#00cc66,stroke-width:1px
+    classDef phase fill:#f0eee6,stroke:#d97757,color:#141413,stroke-width:2px
+    classDef worker fill:#faf9f5,stroke:#d97757,color:#141413,stroke-width:1px
+    classDef critic fill:#faf9f5,stroke:#788c5d,color:#141413,stroke-width:1px
+    classDef referee fill:#faf9f5,stroke:#b85c3e,color:#141413,stroke-width:1px
+    classDef infra fill:#faf9f5,stroke:#87867f,color:#141413,stroke-width:1px
 ```
 
 Phases activate when dependencies are met, not by forced sequence. Parallel dispatch within phases (e.g., Librarian and Explorer run simultaneously in Phase 1).
@@ -195,7 +195,7 @@ Phases activate when dependencies are met, not by forced sequence. Parallel disp
 ## The Loop
 
 ```{mermaid}
-%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#14142a', 'primaryTextColor': '#d0d0e0', 'primaryBorderColor': '#b44dff', 'lineColor': '#b44dff', 'secondaryColor': '#0c0c18', 'tertiaryColor': '#080810', 'edgeLabelBackground': '#080810'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0eee6', 'primaryTextColor': '#141413', 'primaryBorderColor': '#d1cfc5', 'lineColor': '#d97757', 'secondaryColor': '#faf9f5', 'tertiaryColor': '#e6e3da', 'edgeLabelBackground': '#faf9f5', 'clusterBkg': '#f0eee6', 'clusterBorder': '#d1cfc5'}}}%%
 flowchart TD
     START([Plan approved]):::start --> IMPL[IMPLEMENT]:::step
     IMPL --> VERIFY[VERIFY: compile, render, check]:::step
@@ -207,9 +207,9 @@ flowchart TD
     SCORE -->|score < threshold| REVIEW
     SCORE -.->|max 5 rounds| DONE
 
-    classDef start fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
-    classDef step fill:#14142a,stroke:#b44dff,color:#b44dff,stroke-width:2px
-    classDef approved fill:#14142a,stroke:#00cc66,color:#00cc66,stroke-width:2px
+    classDef start fill:#f0eee6,stroke:#d97757,color:#141413,stroke-width:2px
+    classDef step fill:#f0eee6,stroke:#87867f,color:#141413,stroke-width:2px
+    classDef approved fill:#f0eee6,stroke:#4d7c5a,color:#141413,stroke-width:2px
 ```
 
 ### Three-Strikes Escalation
@@ -262,21 +262,13 @@ Plans are saved to disk so they survive context compression. The rule: **avoid `
 
 Claude Code can spawn **multiple agents simultaneously** using the Task tool.
 
-## When to Use
-
 | Scenario | Sequential (slow) | Parallel (fast) |
 |----------|-------------------|-----------------|
 | Paper review | Run each agent sequentially | Run strategist-critic + coder-critic + writer-critic + Verifier simultaneously |
 | Literature search | Search one database at a time | Spawn agents for journals, NBER, SSRN |
 | Data exploration | Check one source at a time | Spawn agents for each data category |
 
-The orchestrator recognizes independent subtasks and spawns parallel agents automatically.
-
-## Practical Limits
-
-- **3--4 agents** is the sweet spot. More increases overhead without proportional speedup.
-- Agents are **independent** --- they cannot see each other's work. Dependent tasks run sequentially.
-- Parallel agents multiply token usage.
+The orchestrator recognizes independent subtasks and spawns parallel agents automatically. **3--4 agents** is the sweet spot --- more increases overhead without proportional speedup. Agents are independent (they cannot see each other's work), and parallel dispatch multiplies token usage.
 
 ---
 

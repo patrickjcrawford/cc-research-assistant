@@ -61,8 +61,14 @@ Workflow:
 1. Run comprehensive review if not done recently
 2. Run replication audit
 3. Check score gate: aggregate >= 95, all components >= 80
-4. If PASS: generate cover letter draft + submission checklist
-5. If FAIL: list blocking issues and stop
+4. Save gate summary to `quality_reports/quality_gate_[date].md`
+5. Generate HTML quality gate report and refresh dashboard:
+```bash
+python3 scripts/generate_html_report.py quality-gate quality_reports/quality_gate_[date].md
+python3 scripts/generate_dashboard.py
+```
+6. If PASS: generate cover letter draft + submission checklist
+7. If FAIL: list blocking issues and stop
 
 ---
 

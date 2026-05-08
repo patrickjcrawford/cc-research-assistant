@@ -1,23 +1,19 @@
 /*-- scss:defaults --*/
 
-// ── Thariqs: Ivory, Clay, Serif ──
+// ── Thariqs Dark: matches html.dark in templates/html/base/styles.css ──
 
-$ivory: #faf9f5;
-$paper: #ffffff;
-$slate: #141413;
-$clay: #d97757;
-$clay-d: #b85c3e;
-$oat: #e3dacc;
-$olive: #788c5d;
-$g100: #f0eee6;
-$g200: #e6e3da;
-$g300: #d1cfc5;
-$g500: #87867f;
-$g700: #3d3d3a;
-
-$accept: #4d7c5a;
-$warn: #b8860b;
-$reject: #b33d3d;
+$ivory: #1a1917;
+$paper: #222220;
+$slate: #e8e6e0;
+$clay: #e0896a;
+$clay-d: #c97050;
+$oat: #3d3830;
+$olive: #8aad6a;
+$g100: #2a2926;
+$g200: #333230;
+$g300: #4a4945;
+$g500: #9a998f;
+$g700: #c8c6be;
 
 $body-bg: $ivory;
 $body-color: $g700;
@@ -25,7 +21,7 @@ $link-color: $clay;
 $link-hover-color: $clay-d;
 $headings-color: $slate;
 $code-color: $clay-d;
-$code-bg: rgba($oat, 0.35);
+$code-bg: rgba($oat, 0.5);
 $font-family-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 $font-family-monospace: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
 
@@ -60,7 +56,7 @@ body:not(.floating):not(.docked) .page-columns.toc-left {
   background: rgba($paper, 0.95) !important;
   border-bottom: 1.5px solid $g300;
   backdrop-filter: blur(12px);
-  box-shadow: 0 1px 8px rgba(20, 20, 19, 0.04);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.15);
 }
 
 .navbar-brand {
@@ -181,10 +177,10 @@ blockquote code,
   font-size: 0.87em !important;
   font-family: $font-family-monospace !important;
   padding: 0.12em 0.4em !important;
-  background-color: rgba($oat, 0.4) !important;
-  color: $clay-d !important;
+  background-color: rgba($oat, 0.6) !important;
+  color: $clay !important;
   border-radius: 4px !important;
-  border: 1px solid $g200 !important;
+  border: 1px solid $g300 !important;
 }
 
 pre code {
@@ -217,7 +213,7 @@ div.sourceCode {
 
   &:hover {
     border-color: $g500;
-    box-shadow: 0 4px 16px rgba(20, 20, 19, 0.06);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   }
 
   pre {
@@ -281,17 +277,17 @@ div.sourceCode {
 
 .callout-tip {
   border-left: 3px solid $olive;
-  background: rgba($olive, 0.06);
+  background: rgba($olive, 0.08);
 }
 
 .callout-important {
   border-left: 3px solid $clay;
-  background: rgba($clay, 0.06);
+  background: rgba($clay, 0.08);
 }
 
 .callout-warning {
-  border-left: 3px solid $warn;
-  background: rgba($warn, 0.06);
+  border-left: 3px solid #b8860b;
+  background: rgba(184, 134, 11, 0.08);
 }
 
 .callout-note {
@@ -308,7 +304,7 @@ blockquote {
   border-left: 3px solid $clay;
   padding: 0.8em 1.2em;
   margin: 1.2em 0;
-  background: rgba($clay, 0.04);
+  background: rgba($clay, 0.06);
   font-style: italic;
   color: $g700;
   border-radius: 0 10px 10px 0;
@@ -385,7 +381,7 @@ hr {
 
     &:focus {
       border-color: $clay !important;
-      box-shadow: 0 0 0 2px rgba($clay, 0.12) !important;
+      box-shadow: 0 0 0 2px rgba($clay, 0.15) !important;
     }
   }
 }
@@ -404,7 +400,7 @@ hr {
 }
 
 ::selection {
-  background: rgba($clay, 0.2);
+  background: rgba($clay, 0.3);
   color: $slate;
 }
 
@@ -432,7 +428,7 @@ hr {
   transition: box-shadow 0.15s;
 
   &:hover {
-    box-shadow: 0 6px 20px rgba(20, 20, 19, 0.08);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
   }
 }
 

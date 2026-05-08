@@ -117,20 +117,11 @@ Handles the unglamorous but critical work: data cleaning, variable construction,
 
 ## Coder
 
-Translates the strategy memo into working analysis scripts. **Paper-type aware:**
-
-| Paper Type | Implementation |
-|-----------|---------------|
-| Reduced-form | DiD/IV/RDD with design-specific packages |
-| Structural | MLE/GMM/SMM/BLP with convergence diagnostics and counterfactual simulation |
-| Theory+empirics | Prediction-by-prediction tests |
-| Descriptive | Construction, validation, decomposition |
-
-Enforces engineering discipline: paper-to-code naming maps, numbered script structure with master runner, function-per-file, numerical guards (float comparison, CDF clamping, inverse link protection), and bootstrap/parallel patterns. Supports R, Python, and Julia.
+Translates the strategy memo into working analysis scripts. **Paper-type aware** --- uses design-specific packages for reduced-form, convergence diagnostics for structural, prediction-by-prediction tests for theory+empirics, and construction/validation for descriptive. Enforces engineering discipline: naming maps, numbered scripts, function-per-file, numerical guards, and bootstrap/parallel patterns. Supports R, Python, and Julia.
 
 ## coder-critic
 
-Reviews all code --- from both the Data-engineer and the Coder. When invoked via `/review --code`, a mechanical **grep-based linter** runs first (Step 1) to catch prohibited patterns and style violations before the full review. **16 check categories** including strategy alignment, numerical discipline (float guards, CDF clamping, pre-allocation, NaN/Inf checks), paper-to-code naming map, function design, reproducibility, and paper-type-specific checks (convergence for structural, seed handling for simulations). Also enforces prohibited patterns (`setwd()`, `sapply()`, `<<-`, `T`/`F`, hardcoded paths).
+Reviews all code from both the Data-engineer and the Coder. **16 check categories** including strategy alignment, numerical discipline, naming map, function design, reproducibility, and paper-type-specific checks. `/review --code` runs a mechanical grep-based linter first, then the full review.
 
 ### Score Breakdown Example
 
@@ -145,20 +136,11 @@ Reviews all code --- from both the Data-engineer and the Coder. When invoked via
 
 ## Writer
 
-Drafts paper sections using **paragraph-level argument moves** --- each paragraph has one job (motivation, result statement, mechanism, robustness narration, qualification). **Paper-type aware** with full section templates:
-
-| Paper Type | Section Templates |
-|-----------|-----------------|
-| Reduced-form | DiD parallel trends, IV exclusion restriction, RDD manipulation |
-| Structural | Model environment, estimation, counterfactual simulations, welfare |
-| Theory+empirics | Model predictions, empirical tests, honest assessment |
-| Descriptive | Data construction, validation, key facts |
-
-Results narration adapts to output type (regression table, event study figure, IV first stage + 2SLS, counterfactual simulation). Cleanup pass strips AI writing patterns after drafting.
+Drafts paper sections using **paragraph-level argument moves** --- each paragraph has one job (motivation, result statement, mechanism, robustness narration, qualification). **Paper-type aware** with section templates for reduced-form, structural, theory+empirics, and descriptive papers. Results narration adapts to output type. Cleanup pass strips AI writing patterns after drafting.
 
 ## writer-critic
 
-**8 check categories** including argument structure (each paragraph has identifiable purpose, findings lead sentences), claims-evidence alignment, paper-type coherence (does the introduction promise match the strategy delivery?), design-specific completeness (DiD must have parallel trends discussion, IV must have LATE interpretation, structural must estimate and simulate), results narration quality, notation consistency, and LaTeX compilation. Sends it back for fixes.
+**8 check categories**: argument structure, claims-evidence alignment, paper-type coherence, design-specific completeness, results narration quality, notation consistency, and LaTeX compilation. Sends it back for fixes.
 
 ::: {.callout-note title="What to Expect"}
 The Coder produces well-structured, reproducible scripts. The Writer produces structured first drafts using argument moves --- your voice and field knowledge turn them into a paper. Both critics catch mechanical issues reliably; you bring the substance.
@@ -202,6 +184,8 @@ Runs in two modes. **Standard mode** (4 checks): does the paper compile? Do the 
 
 The general contractor. Manages the entire pipeline: dispatches worker-critic pairs based on what phase you're in, enforces quality gates (80 to commit, 90 for PRs, 95 for submission), escalates when pairs can't converge, synthesizes referee reports into editorial decisions, and recommends target journals at submission time. You rarely interact with it directly --- it works behind the scenes when you run `/new-project` or when Claude plans a complex task.
 
+Each agent can run on a different Claude model via the `model:` field in its agent file --- see [Architecture](architecture.qmd) for details.
+
 ::: {.callout-note title="What to Expect"}
 The Verifier checks compilation and file integrity. The Orchestrator dispatches agents and enforces quality gates. Scores track issue resolution --- use them directionally, not as absolute quality measures. For non-standard projects, invoke agents directly.
 :::
@@ -234,20 +218,6 @@ All 19 agents at a glance:
 | storyteller-critic | `storyteller-critic.md` | Talk narrative, visuals, content fidelity |
 | Verifier | `verifier.md` | Compilation + AEA replication audit |
 | Orchestrator | `orchestrator.md` | Agent dispatch, quality gates, editorial synthesis |
-
----
-
-# Multi-Model Strategy
-
-Not all agents need the same model. Each agent file has a `model:` field that controls which Claude model it uses:
-
-| Task Type | Recommended Model | Why |
-|-----------|-------------------|-----|
-| Deep reasoning (strategy, peer review) | `model: opus` | Needs nuanced judgment |
-| Fast, constrained work (code review, compilation) | `model: sonnet` | Speed matters more |
-| Default | `model: inherit` | Uses whatever model your session is running |
-
-This saves cost and time --- a Verifier checking if LaTeX compiles doesn't need the most powerful model. A strategist-critic stress-testing your identification design does.
 
 ---
 

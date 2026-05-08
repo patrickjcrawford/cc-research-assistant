@@ -60,7 +60,12 @@ If research spec, literature review, or data assessment are missing, the Strateg
 5. If CRITICAL issues found, iterate (max 3 rounds per three-strikes)
 6. Save memo to `quality_reports/strategy_memo_[topic].md`
 7. Save review to `quality_reports/strategy_memo_[topic]_review.md`
-8. **Save decision record** → `quality_reports/decisions/strategy_[topic].md`
+8. Generate HTML version and refresh dashboard:
+   ```bash
+   python3 scripts/generate_html_report.py strategy-review quality_reports/strategy_memo_[topic]_review.md
+   python3 scripts/generate_dashboard.py
+   ```
+9. **Save decision record** → `quality_reports/decisions/strategy_[topic].md`
    Using `templates/decision-record.md`, record:
    - **Decision:** The chosen identification strategy (design + estimator)
    - **Alternatives:** Other designs the Strategist considered (e.g., IV, RDD, SC, selection-on-observables)

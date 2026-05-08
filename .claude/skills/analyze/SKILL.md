@@ -89,6 +89,12 @@ Dispatch **coder-critic** agent — run the full 12-category checklist:
 If strategy memo exists, cross-reference code against stated design.
 Save report to `quality_reports/[script]_code_review.md`.
 
+Generate HTML version and refresh dashboard:
+```bash
+python3 scripts/generate_html_report.py code-audit quality_reports/[script]_code_review.md
+python3 scripts/generate_dashboard.py
+```
+
 ### Step 5: Fix Issues
 If coder-critic finds Critical or Major issues:
 1. Re-dispatch Coder with specific fixes (max 3 rounds)

@@ -102,6 +102,19 @@ Save all outputs to `quality_reports/reviews/`:
 
 Log the referee assignments (dispositions + pet peeves) in the editorial decision so the user can re-run with different combinations.
 
+#### Generate HTML Report
+After saving markdown reports, generate the interactive HTML version and refresh the dashboard:
+
+```bash
+python3 scripts/generate_html_report.py peer-review \
+  quality_reports/reviews/YYYY-MM-DD_referee_domain.md \
+  quality_reports/reviews/YYYY-MM-DD_referee_methods.md \
+  quality_reports/reviews/YYYY-MM-DD_editorial_decision.md
+python3 scripts/generate_dashboard.py
+```
+
+Open the HTML report for the user: `open quality_reports/reviews/YYYY-MM-DD_peer_review.html`
+
 ### R&R Second Round (`--peer --r2 [journal]`)
 
 Continues the review cycle after the author has revised the paper.
@@ -190,6 +203,12 @@ Include the lint report in the coder-critic's input so it can skip already-flagg
 
 Save report to `quality_reports/[file]_code_review.md`
 
+Generate HTML version and refresh dashboard:
+```bash
+python3 scripts/generate_html_report.py code-audit quality_reports/[file]_code_review.md
+python3 scripts/generate_dashboard.py
+```
+
 ### Causal Audit (`--methods`)
 
 Dispatch **strategist-critic** standalone for a full 4-phase causal inference review.
@@ -231,6 +250,12 @@ Dispatch **strategist-critic** standalone for a full 4-phase causal inference re
 - **CRITICAL ERRORS** — Fundamental design flaw or incorrect implementation
 
 Save report to `quality_reports/[file]_strategy_review.md`
+
+Generate HTML version and refresh dashboard:
+```bash
+python3 scripts/generate_html_report.py strategy-review quality_reports/[file]_strategy_review.md
+python3 scripts/generate_dashboard.py
+```
 
 ### Manuscript Polish (`--proofread`)
 Dispatch **writer-critic** standalone:

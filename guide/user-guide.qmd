@@ -3,36 +3,23 @@ title: "User Guide"
 subtitle: "What You Can Do with the Clo-Author"
 ---
 
-# How It Works
-
-You describe what you want in plain English. Claude handles the rest.
-
-| You Do | Happens Automatically |
-|--------|----------------------|
-| Describe what you want | Claude selects and runs the right skills |
-| Approve plans | Orchestrator coordinates agents via dependency graph |
-| Review final output | Worker-critic pairs ensure quality |
-| Say "commit" when ready | Quality gates enforce score thresholds |
-
-For complex or ambiguous tasks, Claude may ask 3--5 clarifying questions to create a **requirements specification** before planning. Each requirement is tagged MUST/SHOULD/MAY, and each aspect is marked CLEAR/ASSUMED/BLOCKED.
-
----
-
 # A Typical Workflow
 
+You describe what you want in plain English. Claude plans, dispatches agents, and presents results for your approval. For complex tasks, it may ask 3--5 clarifying questions first.
+
 ```{mermaid}
-%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#14142a', 'primaryTextColor': '#d0d0e0', 'primaryBorderColor': '#b44dff', 'lineColor': '#b44dff', 'secondaryColor': '#0c0c18', 'tertiaryColor': '#080810', 'edgeLabelBackground': '#080810'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0eee6', 'primaryTextColor': '#141413', 'primaryBorderColor': '#d1cfc5', 'lineColor': '#d97757', 'secondaryColor': '#faf9f5', 'tertiaryColor': '#e6e3da', 'edgeLabelBackground': '#faf9f5', 'clusterBkg': '#f0eee6', 'clusterBorder': '#d1cfc5'}}}%%
 flowchart LR
     D(Discovery<br/>Literature + Data):::phase1 --> S(Strategy<br/>Identification Design):::phase2
     S --> E(Execution<br/>Code + Paper):::phase3
     E --> R(Review<br/>Simulated Peer Review):::phase4
     R -->|score >= 95| SUB(Submission<br/>Package + Gate):::phase5
 
-    classDef phase1 fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:2px
-    classDef phase2 fill:#14142a,stroke:#00cc66,color:#00cc66,stroke-width:2px
-    classDef phase3 fill:#14142a,stroke:#b44dff,color:#b44dff,stroke-width:2px
-    classDef phase4 fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
-    classDef phase5 fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:2px
+    classDef phase1 fill:#f0eee6,stroke:#788c5d,color:#141413,stroke-width:2px
+    classDef phase2 fill:#f0eee6,stroke:#4d7c5a,color:#141413,stroke-width:2px
+    classDef phase3 fill:#f0eee6,stroke:#d97757,color:#141413,stroke-width:2px
+    classDef phase4 fill:#f0eee6,stroke:#b85c3e,color:#141413,stroke-width:2px
+    classDef phase5 fill:#f0eee6,stroke:#87867f,color:#141413,stroke-width:2px
 ```
 
 You can enter at any stage. Each phase produces structured output saved to `quality_reports/`.
@@ -109,31 +96,43 @@ For all available sections and flags, see the [Command Reference](reference.qmd)
 
 ## Discovery
 
-`/discover` runs an interactive interview that builds your research specification and produces a **decision record** documenting alternatives considered. Use `/discover --lit` for literature synthesis (Librarian + librarian-critic) or `/discover --data` for data assessment (Explorer + explorer-critic). See the [Command Reference](reference.qmd) for all flags.
+Build your research specification through an interactive interview. Produces a **decision record** documenting alternatives considered.
+
+`/discover --lit` runs literature synthesis (Librarian + librarian-critic). `/discover --data` runs data assessment (Explorer + explorer-critic). See the [Command Reference](reference.qmd) for all flags.
 
 ## Strategy
 
-`/strategize` proposes your identification design via the Strategist + strategist-critic pair. It first produces a **pre-strategy report** (paper type classification, candidate designs), then the full strategy memo with robustness plan and falsification tests. Use `/strategize --pap` for Pre-Analysis Plans (RCT/experimental only). For how strategy adapts to paper types, see [Meet the Agents](agents.qmd).
+Design your identification strategy via the Strategist + strategist-critic pair.
+
+First produces a **pre-strategy report** (paper type classification, candidate designs), then the full strategy memo with robustness plan and falsification tests. Use `/strategize --pap` for Pre-Analysis Plans (RCT/experimental only).
+
+For how strategy adapts to paper types, see [Meet the Agents](agents.qmd).
 
 ## Execution
 
-`/analyze` handles end-to-end data analysis: cleaning, main specification, robustness, publication-ready tables and figures. The Coder produces a **pre-code report** (naming map, script structure, numerical guards) before writing any code. Use `/review --code` to run a mechanical lint pass before the full code review. `/write` drafts paper sections using argument moves (see "Your First Draft" above). Supports R, Python, and Julia.
+`/analyze` handles end-to-end data analysis: cleaning, main specification, robustness, publication-ready tables and figures. Supports R, Python, and Julia.
+
+The Coder produces a **pre-code report** (naming map, script structure, numerical guards) before writing any code. `/write` drafts paper sections using argument moves (see "Your First Draft" above). Use `/review --code` to run a mechanical lint pass before the full code review.
 
 ## Review and Revision
 
-`/review` routes automatically based on file type --- paper files get writer-critic + strategist-critic + Verifier; scripts get coder-critic; `--peer` dispatches the full editorial pipeline (see "Your First Review" above). `/revise` classifies each referee comment as NEW ANALYSIS, CLARIFICATION, DISAGREE, or MINOR, and routes to the right agent. See [Meet the Agents](agents.qmd) for the peer review architecture and [Command Reference](reference.qmd) for all flags.
+`/review` routes automatically based on file type --- paper files get writer-critic + strategist-critic + Verifier; scripts get coder-critic. The `--peer` flag dispatches the full editorial pipeline (see "Your First Review" above).
+
+`/revise` classifies each referee comment as NEW ANALYSIS, CLARIFICATION, DISAGREE, or MINOR, and routes to the right agent. See [Meet the Agents](agents.qmd) for the peer review architecture.
 
 ## Presentations
 
-`/talk create [format]` generates talks derived from your paper in 4 formats: job market (45--60 min), seminar (30--45 min), short (15 min), and lightning (5 min). Supports both **Beamer** (output to `paper/talks/`) and **Quarto RevealJS** (`--quarto`, output to `paper/quarto/`). Talk scores are advisory (non-blocking). See the [Command Reference](reference.qmd) for subcommands.
+`/talk create [format]` generates talks derived from your paper in 4 formats: job market (45--60 min), seminar (30--45 min), short (15 min), and lightning (5 min).
+
+Supports both **Beamer** (output to `paper/talks/`) and **Quarto RevealJS** (`--quarto`, output to `paper/quarto/`). Talk scores are advisory (non-blocking).
 
 ## Submission
 
-`/submit --target` recommends journals. `/submit --package` builds an AEA-format replication package. `/submit --audit` runs the Verifier's 10-check audit. `/submit --final` enforces the submission gate (aggregate >= 95, all components >= 80). See the [Command Reference](reference.qmd) for details.
+`/submit --target` recommends journals. `/submit --package` builds an AEA-format replication package. `/submit --audit` runs the Verifier's 10-check audit. `/submit --final` enforces the submission gate (aggregate >= 95, all components >= 80).
 
 ## Utilities
 
-`/tools` provides commit, compile, validate-bib, lint, journal, deploy, learn, and upgrade subcommands. Use `/tools lint` for mechanical code linting (R, Python, Julia) --- runs prohibited-pattern checks before the full coder-critic review.
+`/tools` provides commit, compile, validate-bib, lint, journal, deploy, learn, and upgrade subcommands. `/tools lint` runs prohibited-pattern checks before the full coder-critic review.
 
 ---
 

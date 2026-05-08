@@ -170,6 +170,13 @@ Entry format for project note journal:
 
 Keep it tight — 3–5 bullets per section max.
 
+### Step 4e. Refresh Project Dashboard
+
+Regenerate the project dashboard to capture latest session state:
+```bash
+python3 scripts/generate_dashboard.py
+```
+
 ### Step 5: Confirm
 
 Report what was saved:
@@ -179,6 +186,7 @@ Checkpoint saved:
 - Memory: [updated/created N files | no changes]
 - SESSION_REPORT.md: [entry added]
 - research_journal.md: [entry added | skipped — no agent work]
+- Dashboard: [refreshed]
 - Obsidian: [entry added to Project Name | not configured]
 ```
 
