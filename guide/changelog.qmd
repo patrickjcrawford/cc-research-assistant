@@ -3,7 +3,7 @@ title: "What's New"
 subtitle: "Release History"
 ---
 
-# v4.3.0 --- HTML Dashboard + Guide Overhaul {#v430}
+# 26.05 --- HTML Dashboard + Guide Overhaul {#r2605}
 
 *Released 2026-05-08*
 
@@ -30,7 +30,7 @@ Migrated from cyberpunk neon (dark, scanlines, pink/cyan glow) to the thariqs ae
 
 ---
 
-# v4.2.0 --- Theorist Pair, Personal Style Guide, Checkpoint {#v420}
+# 26.04.3 --- Theorist Pair, Personal Style Guide, Checkpoint {#r260403}
 
 *Released 2026-04-17*
 
@@ -66,7 +66,7 @@ Codifies compaction hygiene and adds a project-level session-handoff skill.
 
 ---
 
-# v4.1.1 --- Modern LaTeX Stack {#v411}
+# 26.04.2 --- Modern LaTeX Stack {#r260402}
 
 *Released 2026-04-11*
 
@@ -94,7 +94,7 @@ Promoted from Recommended to Required. Writer-critic now deducts -2 for missing 
 
 ---
 
-# v4.1.0 --- Enforcement Layer {#v41}
+# 26.04.1 --- Enforcement Layer {#r260401}
 
 *Released 2026-04-09*
 
@@ -125,7 +125,7 @@ Auto-lints R, Python, and Julia files on every Edit or Write operation. Advisory
 
 ---
 
-# v4.0.0 --- Paper-Type Architecture {#v4}
+# 26.04 --- Paper-Type Architecture {#r2604}
 
 *Released 2026-04-08*
 
@@ -156,9 +156,9 @@ New in the Coder and Coder-critic, derived from C++ Core Guidelines:
 
 ## Scope: Back to Economics
 
-The v3.0 release claimed to serve "all empirical social science." That was too broad --- the pipeline's agents, rules, and section templates are built for economics.
+The 26.03.4 release claimed to serve "all empirical social science." That was too broad --- the pipeline's agents, rules, and section templates are built for economics.
 
-v4.0 is honest about this: **built for economics, adaptable to adjacent fields.** Finance, accounting, marketing, and management researchers can customize the domain profile and journal profiles. The 30 journal profiles across these fields are retained as useful reference data.
+26.04 is honest about this: **built for economics, adaptable to adjacent fields.** Finance, accounting, marketing, and management researchers can customize the domain profile and journal profiles. The 30 journal profiles across these fields are retained as useful reference data.
 
 ## Profile-Aware Table Standards
 
@@ -199,18 +199,18 @@ Writer-critic deductions adjusted accordingly --- recommended items are reported
 
 ---
 
-# v3.1.1 --- 2026-03-24
+# 26.03.6 --- 2026-03-24
 
 Output organization setting (by-script default). Bug fixes for Paper/ → paper/ path migration, domain-profile path, plan mode in /new-project.
 
 ---
 
-# v3.1.0 --- 2026-03-23
+# 26.03.5 --- 2026-03-23
 
-Skill detail restoration --- 22 items lost in the v2→v3 consolidation were restored while keeping v3 structure.
+Skill detail restoration --- 22 items lost in the 26.03 to 26.03.4 consolidation were restored while keeping 26.03.4 structure.
 
 ---
 
-# v3.0.0 --- 2026-03-20
+# 26.03.4 --- 2026-03-20
 
 Major architecture redesign. Peer review simulation with Editor + dispositions + desk reject. 30 journal profiles. Demand-loaded references. Skill consolidation (26 → 10 commands). Scope clarification to economics.

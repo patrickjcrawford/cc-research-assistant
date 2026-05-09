@@ -76,13 +76,24 @@ Before presenting the draft:
 - [ ] Notation consistent throughout
 - [ ] All tables/figures referenced actually exist in `paper/tables/` or `paper/figures/`
 - [ ] Results narrated correctly for output type (tables, event study figures, counterfactuals)
+- [ ] Personal style guide loaded (not template) — or user prompted to run `/write style-guide`
+- [ ] Claim-source map produced for all numerical claims (`quality_reports/claim_source_map_{project}.md`)
+- [ ] Results/Conclusion only drafted after verifying actual output files exist
 
 #### 6. Present to User
 
-Present each section for feedback. Flag items that need attention:
-- **TBD items:** Where empirical results are needed but not yet available
+Present sections through drafting gates, pausing for approval at each:
+
+**GATE 1:** Introduction + Literature positioning → present, wait for approval
+**GATE 2:** Data + Empirical Strategy (or Model) → present, wait for approval
+**GATE 3:** Results + Robustness + Conclusion → present, wait for approval
+
+For single-section drafts, present the section directly. For `full`, use all three gates.
+
+Flag items that need attention:
+- **BLOCKED items:** Results/Conclusion cannot be drafted without output files
 - **VERIFY items:** Citations that need user confirmation
-- **PLACEHOLDER items:** Effect sizes awaiting final estimates
+- **VOICE items:** Style guide not yet extracted (drafting blocked until resolved)
 
 ### `/write style-guide [paper-dir]` — Extract Personal Voice
 

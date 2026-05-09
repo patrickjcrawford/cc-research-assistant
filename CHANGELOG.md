@@ -2,9 +2,36 @@
 
 All notable changes to the Clo-Author are documented here.
 
+**Versioning:** Starting with 26.05, this project uses CalVer (YY.MM). Releases before 26.05 used semver tags in git.
+
 ---
 
-## [4.2.0] — 2026-04-17 — Theorist Pair, Personal Style Guide, Checkpoint
+## [26.05] — 2026-05-08 — HTML Dashboard + Guide Overhaul
+
+### HTML Report Pipeline
+
+Two Python generators produce self-contained interactive HTML from agent markdown output:
+
+- **`scripts/generate_dashboard.py`** — project-level overview (manuscript sections, data, code, quality scorecard, review history, active plans)
+- **`scripts/generate_html_report.py`** — 5 detail report subcommands:
+
+| Subcommand | Report Type |
+|-----------|------------|
+| `peer-review` | Tabbed editorial + domain + methods referee reports |
+| `code-audit` | Score breakdown, paper-to-code map, sanity checks, robustness progress |
+| `strategy-review` | Phased issue accordion with severity cards |
+| `quality-gate` | Gauge + gate bars + component grid |
+| `literature` | Zotero-like filterable bibliography |
+
+Shared design system in `templates/html/base/` (styles.css + components.js). Dark mode, print support, collapsible sections, filter engine. All skills auto-generate HTML after saving markdown reports.
+
+### Guide Site Overhaul
+
+Migrated from cyberpunk neon (dark, scanlines, pink/cyan glow) to the thariqs aesthetic (ivory background, clay accents, serif headings). All mermaid diagrams updated to match. Readability pass across all pages.
+
+---
+
+## [26.04.3] — 2026-04-17 — Theorist Pair, Personal Style Guide, Checkpoint
 
 Three feature additions inspired by parallel work in the Claude-Code-for-economists space (Goldsmith-Pinkham's Markus Academy series) and by a theorist pair developed in the bad-controls project. Generalized and wired into the scaffold.
 
@@ -52,7 +79,7 @@ Codifies compaction hygiene and adds a project-level session-handoff skill.
 
 ---
 
-## [4.1.1] — 2026-04-11 — Modern LaTeX Stack
+## [26.04.2] — 2026-04-11 — Modern LaTeX Stack
 
 Modernizes the LaTeX infrastructure: automated builds, modern table engine, smart cross-references, and CI compilation. All changes are Overleaf-compatible.
 
@@ -87,7 +114,7 @@ Modernizes the LaTeX infrastructure: automated builds, modern table engine, smar
 
 ---
 
-## [4.1.0] — 2026-04-09 — Enforcement Layer
+## [26.04.1] — 2026-04-09 — Enforcement Layer
 
 Adds hard mechanical enforcement underneath the existing creative orchestration. Agents still do judgment work; the new layer catches grep-able violations before judgment is even needed. Inspired by contract-driven, grep-verified patterns from defensive engineering.
 
@@ -129,7 +156,7 @@ Adds hard mechanical enforcement underneath the existing creative orchestration.
 
 ---
 
-## [4.0.0] — 2026-04-08 — Paper-Type Architecture
+## [26.04] — 2026-04-08 — Paper-Type Architecture
 
 Every agent now knows whether it's working on a reduced-form, structural, theory+empirics, or descriptive paper — and adapts accordingly.
 
@@ -186,7 +213,7 @@ Every agent now knows whether it's working on a reduced-form, structural, theory
 
 ---
 
-## [3.1.1] — 2026-03-24
+## [26.03.6] — 2026-03-24
 
 ### Output Organization
 - Added `Output Organization` setting to CLAUDE.md (by-script or by-purpose)
@@ -202,11 +229,11 @@ Every agent now knows whether it's working on a reduced-form, structural, theory
 
 ---
 
-## [3.1.0] — 2026-03-23
+## [26.03.5] — 2026-03-23
 
-### Skill Detail Restoration — v1.0 Depth Returns to v3.0
+### Skill Detail Restoration — 26.02.1 Depth Returns to 26.03.4
 
-The v2.0→v3.0 consolidation accidentally stripped practical detail from 6 skills. This release restores all 22 lost items while keeping the v3.0 structure.
+The 26.03 to 26.03.4 consolidation accidentally stripped practical detail from 6 skills. This release restores all 22 lost items while keeping the 26.03.4 structure.
 
 **`/discover`:**
 - Restored proximity scoring (1-5 scale) for literature papers
@@ -255,7 +282,7 @@ The v2.0→v3.0 consolidation accidentally stripped practical detail from 6 skil
 
 ---
 
-## [3.0.0] — 2026-03-20
+## [26.03.4] — 2026-03-20
 
 ### Scope Clarification
 - clo-author is built for empirical economics; adaptable to adjacent fields (finance, accounting, marketing, management) via domain profile
@@ -309,11 +336,11 @@ The v2.0→v3.0 consolidation accidentally stripped practical detail from 6 skil
 - Added `[YOUR FIELD]` placeholder to CLAUDE.md and starter prompt
 - Agent prompts made field-neutral — read field from `.claude/references/domain-profile.md` (defaults to economics)
 - Deleted archived agents (16 files) and archived skills (20+ files)
-- Guide and documentation fully updated for v3.0
+- Guide and documentation fully updated for 26.03.4
 
 ---
 
-## [2.0.3] — 2026-03-07
+## [26.03.3] — 2026-03-07
 
 ### Working Paper Format Rule
 
@@ -323,7 +350,7 @@ The v2.0→v3.0 consolidation accidentally stripped practical detail from 6 skil
 
 ---
 
-## [2.0.2] — 2026-03-07
+## [26.03.2] — 2026-03-07
 
 ### Figures & Tables Rules
 
@@ -333,7 +360,7 @@ The v2.0→v3.0 consolidation accidentally stripped practical detail from 6 skil
 
 ---
 
-## [2.0.1] — 2026-03-05
+## [26.03.1] — 2026-03-05
 
 ### Cross-Language Replication
 
@@ -345,7 +372,7 @@ The v2.0→v3.0 consolidation accidentally stripped practical detail from 6 skil
 
 ---
 
-## [2.0.0] — 2026-03-05
+## [26.03] — 2026-03-05
 
 **The Great Restructure.** 16-agent worker-critic system, journal-calibrated referees, consolidated rules, 6-page guide with command reference dictionary.
 
@@ -404,7 +431,7 @@ The v2.0→v3.0 consolidation accidentally stripped practical detail from 6 skil
 
 ---
 
-## [1.0.1] — 2026-02-25–26
+## [26.02.2] — 2026-02-25–26
 
 ### Adversarial Architecture
 
@@ -418,7 +445,7 @@ The v2.0→v3.0 consolidation accidentally stripped practical detail from 6 skil
 
 ---
 
-## [1.0.0] — 2026-02-08–15
+## [26.02.1] — 2026-02-08–15
 
 ### Research Workflow
 
@@ -439,7 +466,7 @@ The v2.0→v3.0 consolidation accidentally stripped practical detail from 6 skil
 
 ---
 
-## [0.1.0] — 2026-02-06–07
+## [26.02] — 2026-02-06–07
 
 ### Initial Release
 
@@ -452,10 +479,21 @@ The v2.0→v3.0 consolidation accidentally stripped practical detail from 6 skil
 
 ---
 
-[4.1.0]: https://github.com/hugosantanna/clo-author/compare/v4.0.0...v4.1.0
-[2.0.2]: https://github.com/hugosantanna/clo-author/compare/v2.0.1...v2.0.2
-[2.0.1]: https://github.com/hugosantanna/clo-author/compare/v2.0.0...v2.0.1
-[2.0.0]: https://github.com/hugosantanna/clo-author/compare/v1.0.1...v2.0.0
-[1.0.1]: https://github.com/hugosantanna/clo-author/compare/v1.0.0...v1.0.1
-[1.0.0]: https://github.com/hugosantanna/clo-author/compare/v0.1.0...v1.0.0
-[0.1.0]: https://github.com/hugosantanna/clo-author/commits/v0.1.0
+<!-- Note: Releases before 26.05 used semver git tags. Comparison links below
+     reference those original tags, which remain in the repository. -->
+
+[26.05]: https://github.com/hugosantanna/clo-author/compare/v4.2.0...v4.3.0
+[26.04.3]: https://github.com/hugosantanna/clo-author/compare/v4.1.1...v4.2.0
+[26.04.2]: https://github.com/hugosantanna/clo-author/compare/v4.1.0...v4.1.1
+[26.04.1]: https://github.com/hugosantanna/clo-author/compare/v4.0.0...v4.1.0
+[26.04]: https://github.com/hugosantanna/clo-author/compare/v3.1.1...v4.0.0
+[26.03.6]: https://github.com/hugosantanna/clo-author/compare/v3.1.0...v3.1.1
+[26.03.5]: https://github.com/hugosantanna/clo-author/compare/v3.0.0...v3.1.0
+[26.03.4]: https://github.com/hugosantanna/clo-author/compare/v2.0.3...v3.0.0
+[26.03.3]: https://github.com/hugosantanna/clo-author/compare/v2.0.2...v2.0.3
+[26.03.2]: https://github.com/hugosantanna/clo-author/compare/v2.0.1...v2.0.2
+[26.03.1]: https://github.com/hugosantanna/clo-author/compare/v2.0.0...v2.0.1
+[26.03]: https://github.com/hugosantanna/clo-author/compare/v1.0.1...v2.0.0
+[26.02.2]: https://github.com/hugosantanna/clo-author/compare/v1.0.0...v1.0.1
+[26.02.1]: https://github.com/hugosantanna/clo-author/compare/v0.1.0...v1.0.0
+[26.02]: https://github.com/hugosantanna/clo-author/commits/v0.1.0
