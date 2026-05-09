@@ -3,6 +3,31 @@ title: "What's New"
 subtitle: "Release History"
 ---
 
+# 26.05.1 --- MAS Evolution v2 + Guide Overhaul {#r260501}
+
+*Released 2026-05-09*
+
+## MAS Evolution v2
+
+Five architectural phases drawn from OxyGent, LangGraph, Data-to-Paper, MAR, and Cunningham's Referee 2:
+
+- **Permission Registry** --- centralized agent registry (`permissions.md`) replacing hardcoded dispatch tables across 4 files. Adding a new agent is now a one-file change.
+- **Lifecycle Validation** --- PRE-dispatch and POST-completion checks with fail-fast. The orchestrator verifies artifacts exist before dispatching agents and checks outputs after completion.
+- **Writer Evolution** --- writer-critic rebuilt with 8 categories including voice fidelity and claim-source traceability (INV-22). Writer now refuses to draft results without actual table files, refuses to draft without a personal style guide, and pauses at 3 section-level gates for user approval.
+- **Cold-Read Critics** --- all 7 critics now evaluate blind (no round history, no prior reports). Dual-critic dispatch for gate artifacts: strategy memos get both strategist-critic and coder-critic, manuscripts get both writer-critic and strategist-critic.
+- **Pipeline Checkpointing** --- structured JSON state (`pipeline_state.json`) survives session boundaries. Execution traces with Mermaid graphs generated after pipeline completion.
+- **Learning Loop** --- post-pipeline pattern detection surfaces HIGH-PERF, FRICTION, and ESCALATION patterns as suggested learnings. Learning promotion to template after 3+ project validation.
+
+## CalVer Adoption
+
+All versions converted from semver to CalVer (YY.MM). Releases before 26.05 retain their original git tags.
+
+## Guide Site Overhaul
+
+Expanded from 7 pages to 9. Two new pages (Rules & Invariants, Hooks & Automation) and all existing pages rewritten as pedagogical reference documentation. Full agent profiles with scoring rubrics, every hook documented, all 22 invariants explained, skill dispatch details with output artifacts.
+
+---
+
 # 26.05 --- HTML Dashboard + Guide Overhaul {#r2605}
 
 *Released 2026-05-08*

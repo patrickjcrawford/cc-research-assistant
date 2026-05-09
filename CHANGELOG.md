@@ -6,6 +6,37 @@ All notable changes to the Clo-Author are documented here.
 
 ---
 
+## [26.05.1] — 2026-05-09 — MAS Evolution v2 + Guide Overhaul
+
+### MAS Evolution v2
+
+Five architectural phases drawn from OxyGent (arxiv 2604.25602), LangGraph, Data-to-Paper (arxiv 2404.17605), MAR (arxiv 2512.20845), and Cunningham's Referee 2:
+
+- **Permission Registry** — centralized agent registry (`permissions.md`) replacing hardcoded dispatch tables in orchestrator, workflow, agents, and quality. Adding a new agent is a one-file change.
+- **Lifecycle Validation** — PRE-dispatch and POST-completion handoff checks with fail-fast (`lifecycle.md`)
+- **Writer Evolution** — writer-critic rebuilt with 8 categories (voice fidelity, claim-source traceability INV-22). Writer hard gates: refuses Results without tables, refuses drafting without style guide, section-level approval checkpoints.
+- **Cold-Read Critics** — all 7 critics evaluate blind (no round history). Dual-critic dispatch for gate artifacts (strategy memo, main results, manuscript).
+- **Pipeline Checkpointing** — structured JSON state (`pipeline_state.json`) survives sessions. Execution traces with Mermaid graphs.
+- **Learning Loop** — post-pipeline pattern detection (HIGH-PERF, FRICTION, ESCALATION). Learning promotion to template after 3+ project validation.
+
+### CalVer Adoption
+
+All versions converted from semver to CalVer (YY.MM). Releases before 26.05 retain their original git tags.
+
+### Guide Site Overhaul
+
+Expanded from 7 pages to 9. New pages: Rules & Invariants, Hooks & Automation. All existing pages rewritten as pedagogical reference. Full agent profiles with scoring rubrics, every hook documented, all 22 invariants explained, skill dispatch with output artifacts.
+
+### Files touched
+- Agents: `writer-critic.md` (rebuilt), `writer.md`, `orchestrator.md`, 6 critic agents (cold-read protocol)
+- Rules: `permissions.md` (new), `lifecycle.md` (new), `agents.md`, `quality.md`, `workflow.md`, `content-invariants.md`, `logging.md`, `meta-governance.md`
+- Skills: `write/SKILL.md`
+- Templates: `pipeline-state.json` (new), `execution-trace.md` (new), `claim-source-map.md` (new)
+- Guide: all 9 pages rewritten or created
+- `CHANGELOG.md`, `guide/changelog.qmd`
+
+---
+
 ## [26.05] — 2026-05-08 — HTML Dashboard + Guide Overhaul
 
 ### HTML Report Pipeline
