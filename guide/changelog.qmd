@@ -3,13 +3,35 @@ title: "What's New"
 subtitle: "Release History"
 ---
 
-# 26.05.2 --- Skill-Centric Restructure {#r260502}
+**Versioning:** CalVer (YY.MM) --- one version per month maximum. Git commits provide granularity within a release.
 
-*Released 2026-05-09*
+---
 
-## Skill-Folder Architecture
+# 26.05 --- May 2026 {#r2605}
 
-Skills are now rich directories. Each skill folder contains templates, gotchas, references, and config. Agents slimmed from 200--474 lines to 50--140 lines (identity + voice + constraints only). Operational knowledge lives in skill templates, loaded on demand.
+## HTML Report Pipeline
+
+Two Python generators produce self-contained interactive HTML from agent markdown output:
+
+- **`scripts/generate_dashboard.py`** --- project-level overview (manuscript sections, data, code, quality scorecard, review history, active plans)
+- **`scripts/generate_html_report.py`** --- 5 detail report subcommands (peer-review, code-audit, strategy-review, quality-gate, literature)
+
+Shared design system in `templates/html/base/`. Dark mode, print support, collapsible sections, filter engine.
+
+## MAS Evolution v2
+
+Five architectural phases drawn from OxyGent, LangGraph, Data-to-Paper, MAR, and Cunningham's Referee 2:
+
+- **Permission Registry** --- centralized agent registry replacing hardcoded dispatch tables. Adding a new agent is a one-file change.
+- **Lifecycle Validation** --- PRE-dispatch and POST-completion checks with fail-fast.
+- **Writer Evolution** --- writer-critic rebuilt with 8 categories (voice fidelity, claim-source traceability INV-22). Writer hard gates: refuses Results without tables, refuses drafting without style guide, section-level approval checkpoints.
+- **Cold-Read Critics** --- all 7 critics evaluate blind (no round history). Dual-critic dispatch for gate artifacts.
+- **Pipeline Checkpointing** --- structured JSON state (`pipeline_state.json`) survives sessions. Execution traces with Mermaid graphs.
+- **Learning Loop** --- post-pipeline pattern detection (HIGH-PERF, FRICTION, ESCALATION). Learning promotion after 3+ project validation.
+
+## Skill-Centric Restructure
+
+Skills are now rich directories. Each skill folder contains templates, gotchas, references, and config. Agents slimmed to identity + voice + constraints only.
 
 - **76 new files** across 13 skill folders (templates, gotchas, references, config)
 - **15 agents slimmed** (total lines: 4,454 → 1,898, −57%)
@@ -24,60 +46,17 @@ Skills are now rich directories. Each skill folder contains templates, gotchas, 
 
 ## Quarto-First Talks
 
-`/talk create` defaults to Quarto RevealJS. Beamer via `--beamer`. New `quarto-scaffold.qmd` template.
+`/talk create` defaults to Quarto RevealJS. Beamer via `--beamer`.
 
-## Guide Rewrite
+## Guide Site
 
-All pages rewritten with guide-writer voice. agents.qmd compressed 603 → 205 lines. Skill-folder architecture documented in architecture.qmd and customization.qmd. Nav reordered for user journey.
+9 pages rewritten with guide-writer voice (bold openings, problem-solution arcs, progressive disclosure). Thariqs aesthetic (ivory/clay/serif). agents.qmd compressed 603 → 205 lines. Skill-folder architecture documented. Nav reordered for user journey.
 
-## Rewind Strategy
+## Also
 
-New context management guidance in workflow.md: Rewind vs Correct vs Compact vs Clear.
-
----
-
-# 26.05.1 --- MAS Evolution v2 + Guide Overhaul {#r260501}
-
-*Released 2026-05-09*
-
-## MAS Evolution v2
-
-Five architectural phases drawn from OxyGent, LangGraph, Data-to-Paper, MAR, and Cunningham's Referee 2:
-
-- **Permission Registry** --- centralized agent registry (`permissions.md`) replacing hardcoded dispatch tables across 4 files. Adding a new agent is now a one-file change.
-- **Lifecycle Validation** --- PRE-dispatch and POST-completion checks with fail-fast. The orchestrator verifies artifacts exist before dispatching agents and checks outputs after completion.
-- **Writer Evolution** --- writer-critic rebuilt with 8 categories including voice fidelity and claim-source traceability (INV-22). Writer now refuses to draft results without actual table files, refuses to draft without a personal style guide, and pauses at 3 section-level gates for user approval.
-- **Cold-Read Critics** --- all 7 critics now evaluate blind (no round history, no prior reports). Dual-critic dispatch for gate artifacts: strategy memos get both strategist-critic and coder-critic, manuscripts get both writer-critic and strategist-critic.
-- **Pipeline Checkpointing** --- structured JSON state (`pipeline_state.json`) survives session boundaries. Execution traces with Mermaid graphs generated after pipeline completion.
-- **Learning Loop** --- post-pipeline pattern detection surfaces HIGH-PERF, FRICTION, and ESCALATION patterns as suggested learnings. Learning promotion to template after 3+ project validation.
-
-## CalVer Adoption
-
-All versions converted from semver to CalVer (YY.MM). Releases before 26.05 retain their original git tags.
-
-## Guide Site Overhaul
-
-Expanded from 7 pages to 9. Two new pages (Rules & Invariants, Hooks & Automation) and all existing pages rewritten as pedagogical reference documentation. Full agent profiles with scoring rubrics, every hook documented, all 22 invariants explained, skill dispatch details with output artifacts.
-
----
-
-# 26.05 --- HTML Dashboard + Guide Overhaul {#r2605}
-
-*Released 2026-05-08*
-
-## HTML Report Pipeline
-
-Two Python generators produce self-contained interactive HTML from agent markdown output:
-
-- **`scripts/generate_dashboard.py`** --- project-level overview (manuscript sections, data, code, quality scorecard, review history, active plans)
-- **`scripts/generate_html_report.py`** --- 5 detail report subcommands:
-
-| Subcommand | Report Type |
-|-----------|------------|
-| `peer-review` | Tabbed editorial + domain + methods referee reports |
-| `code-audit` | Score breakdown, paper-to-code map, sanity checks, robustness progress |
-| `strategy-review` | Phased issue accordion with severity cards |
-| `quality-gate` | Gauge + gate bars + component grid |
+- CalVer adoption (YY.MM)
+- Rewind strategy in workflow.md
+- `pre-compact.py` exit code fix
 | `literature` | Zotero-like filterable bibliography (category, proximity, method filters, sort, search, copy-cite) |
 
 Shared design system in `templates/html/base/` (styles.css + components.js). Dark mode, print support, collapsible sections, filter engine. All skills auto-generate HTML after saving markdown reports.

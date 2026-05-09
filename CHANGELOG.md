@@ -2,107 +2,60 @@
 
 All notable changes to the Clo-Author are documented here.
 
-**Versioning:** Starting with 26.05, this project uses CalVer (YY.MM). Releases before 26.05 used semver tags in git.
+**Versioning:** CalVer (YY.MM) — one version per month maximum. Git commits provide granularity within a release. Releases before 26.05 used semver tags.
 
 ---
 
-## [26.05.2] — 2026-05-09 — Skill-Centric Restructure
-
-### Skill-Folder Architecture
-
-Skills are now rich directories — not thin SKILL.md dispatchers. Each skill folder contains templates, gotchas, references, and config. Agents slimmed from 200-474 lines to 50-140 lines (identity + voice + constraints only). Operational knowledge moved to skill templates loaded on demand.
-
-- **76 new template/reference/config files** across 13 skill folders
-- **15 agents slimmed** (total agent lines: 4,454 → 1,898, −57%)
-- **Three-level progressive loading:** metadata (always) → SKILL.md (on trigger) → templates (on demand)
-- **Gotchas as first-class content** — every skill has known failure points documented
-
-### Session-Scoped Guards
-
-Two new user-invocable skills backed by a PreToolUse hook:
-
-- `/freeze [dirs]` — blocks Edit/Write outside specified directories for the session
-- `/careful` — blocks destructive bash commands (rm -rf, git reset --hard, git push --force) for the session
-- `session-guard.py` hook enforces both; zero overhead when inactive
-
-### Quarto-First Talks
-
-`/talk create` now defaults to Quarto RevealJS. Beamer available via `--beamer` flag. Added `quarto-scaffold.qmd` template.
-
-### Guide Site Rewrite
-
-All 9 pages rewritten with guide-writer voice (bold openings, problem-solution arcs, progressive disclosure). Key changes:
-
-- **agents.qmd:** 603 → 205 lines. Catalog replaced with principles + skill-centric model explanation.
-- **architecture.qmd:** Added skill-folder architecture section.
-- **customization.qmd:** Added "Adding a New Skill" section.
-- **hooks.qmd:** 6 → 7 hooks. Session-guard documented.
-- **reference.qmd:** `/freeze`, `/careful` added. `/talk` polarity fixed.
-- **Nav reordered:** Reference moved up (Quick Start → User Guide → Reference → Architecture → ...).
-
-### Rewind Strategy
-
-Added to workflow.md: Rewind (remove failed approach from context) vs Correct (fix a detail) vs Compact (reduce bloat) vs Clear (fresh start).
-
-### Bug Fix
-
-- `pre-compact.py`: exit code 2 → 0 (was blocking compaction)
-
----
-
-## [26.05.1] — 2026-05-09 — MAS Evolution v2 + Guide Overhaul
-
-### MAS Evolution v2
-
-Five architectural phases drawn from OxyGent (arxiv 2604.25602), LangGraph, Data-to-Paper (arxiv 2404.17605), MAR (arxiv 2512.20845), and Cunningham's Referee 2:
-
-- **Permission Registry** — centralized agent registry (`permissions.md`) replacing hardcoded dispatch tables in orchestrator, workflow, agents, and quality. Adding a new agent is a one-file change.
-- **Lifecycle Validation** — PRE-dispatch and POST-completion handoff checks with fail-fast (`lifecycle.md`)
-- **Writer Evolution** — writer-critic rebuilt with 8 categories (voice fidelity, claim-source traceability INV-22). Writer hard gates: refuses Results without tables, refuses drafting without style guide, section-level approval checkpoints.
-- **Cold-Read Critics** — all 7 critics evaluate blind (no round history). Dual-critic dispatch for gate artifacts (strategy memo, main results, manuscript).
-- **Pipeline Checkpointing** — structured JSON state (`pipeline_state.json`) survives sessions. Execution traces with Mermaid graphs.
-- **Learning Loop** — post-pipeline pattern detection (HIGH-PERF, FRICTION, ESCALATION). Learning promotion to template after 3+ project validation.
-
-### CalVer Adoption
-
-All versions converted from semver to CalVer (YY.MM). Releases before 26.05 retain their original git tags.
-
-### Guide Site Overhaul
-
-Expanded from 7 pages to 9. New pages: Rules & Invariants, Hooks & Automation. All existing pages rewritten as pedagogical reference. Full agent profiles with scoring rubrics, every hook documented, all 22 invariants explained, skill dispatch with output artifacts.
-
-### Files touched
-- Agents: `writer-critic.md` (rebuilt), `writer.md`, `orchestrator.md`, 6 critic agents (cold-read protocol)
-- Rules: `permissions.md` (new), `lifecycle.md` (new), `agents.md`, `quality.md`, `workflow.md`, `content-invariants.md`, `logging.md`, `meta-governance.md`
-- Skills: `write/SKILL.md`
-- Templates: `pipeline-state.json` (new), `execution-trace.md` (new), `claim-source-map.md` (new)
-- Guide: all 9 pages rewritten or created
-- `CHANGELOG.md`, `guide/changelog.qmd`
-
----
-
-## [26.05] — 2026-05-08 — HTML Dashboard + Guide Overhaul
+## [26.05] — May 2026
 
 ### HTML Report Pipeline
 
 Two Python generators produce self-contained interactive HTML from agent markdown output:
 
 - **`scripts/generate_dashboard.py`** — project-level overview (manuscript sections, data, code, quality scorecard, review history, active plans)
-- **`scripts/generate_html_report.py`** — 5 detail report subcommands:
+- **`scripts/generate_html_report.py`** — 5 detail report subcommands (peer-review, code-audit, strategy-review, quality-gate, literature)
 
-| Subcommand | Report Type |
-|-----------|------------|
-| `peer-review` | Tabbed editorial + domain + methods referee reports |
-| `code-audit` | Score breakdown, paper-to-code map, sanity checks, robustness progress |
-| `strategy-review` | Phased issue accordion with severity cards |
-| `quality-gate` | Gauge + gate bars + component grid |
-| `literature` | Zotero-like filterable bibliography |
+Shared design system in `templates/html/base/` (styles.css + components.js). Dark mode, print support, collapsible sections, filter engine.
 
-Shared design system in `templates/html/base/` (styles.css + components.js). Dark mode, print support, collapsible sections, filter engine. All skills auto-generate HTML after saving markdown reports.
+### MAS Evolution v2
 
-### Guide Site Overhaul
+Five architectural phases drawn from OxyGent, LangGraph, Data-to-Paper, MAR, and Cunningham's Referee 2:
 
-Migrated from cyberpunk neon (dark, scanlines, pink/cyan glow) to the thariqs aesthetic (ivory background, clay accents, serif headings). All mermaid diagrams updated to match. Readability pass across all pages.
+- **Permission Registry** — centralized agent registry (`permissions.md`) replacing hardcoded dispatch tables. Adding a new agent is a one-file change.
+- **Lifecycle Validation** — PRE-dispatch and POST-completion handoff checks with fail-fast (`lifecycle.md`)
+- **Writer Evolution** — writer-critic rebuilt with 8 categories (voice fidelity, claim-source traceability INV-22). Writer hard gates: refuses Results without tables, refuses drafting without style guide, section-level approval checkpoints.
+- **Cold-Read Critics** — all 7 critics evaluate blind (no round history). Dual-critic dispatch for gate artifacts.
+- **Pipeline Checkpointing** — structured JSON state (`pipeline_state.json`) survives sessions. Execution traces with Mermaid graphs.
+- **Learning Loop** — post-pipeline pattern detection (HIGH-PERF, FRICTION, ESCALATION). Learning promotion after 3+ project validation.
+
+### Skill-Centric Restructure
+
+Skills are now rich directories — not thin dispatchers. Each skill folder contains templates, gotchas, references, and config. Agents slimmed to identity + voice + constraints only.
+
+- **76 new template/reference/config files** across 13 skill folders
+- **15 agents slimmed** (total lines: 4,454 → 1,898, −57%)
+- **Three-level progressive loading:** metadata (always) → SKILL.md (on trigger) → templates (on demand)
+- **Gotchas as first-class content** — every skill documents known failure points
+
+### Session-Scoped Guards
+
+- `/freeze [dirs]` — blocks Edit/Write outside specified directories for the session
+- `/careful` — blocks destructive bash commands for the session
+- `session-guard.py` PreToolUse hook enforces both; zero overhead when inactive
+
+### Quarto-First Talks
+
+`/talk create` now defaults to Quarto RevealJS. Beamer available via `--beamer` flag.
+
+### Guide Site
+
+9 pages rewritten with guide-writer voice (bold openings, problem-solution arcs, progressive disclosure). Migrated to thariqs aesthetic (ivory/clay/serif). agents.qmd compressed 603 → 205 lines. Skill-folder architecture documented. Nav reordered for user journey.
+
+### Also
+
+- CalVer adoption (YY.MM)
+- Rewind strategy added to workflow.md
+- `pre-compact.py` exit code fix (was blocking compaction)
 
 ---
 
