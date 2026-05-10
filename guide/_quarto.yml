@@ -4,6 +4,7 @@ project:
 
 website:
   title: "The Clo-Author"
+  favicon: favicon.svg
   navbar:
     left:
       - text: "Quick Start"
