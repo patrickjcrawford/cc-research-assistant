@@ -72,7 +72,8 @@ Use the clo-author design system from `templates/html/base/styles.css`:
 7. **Status pills on everything** — IN HAND, READY, FOUND, PARTIAL, NEEDS AGG, GAP.
 8. **Self-contained HTML** — one file, no dependencies. Shareable as email attachment.
 9. **All anchor targets use `scroll-margin-top: 60px`** so the sticky nav doesn't overlap content.
-10. **Section navs are sticky too.** `.section-nav` uses `position: sticky; top: 50px` (below the main nav at `top: 0`). Background matches page color so content doesn't bleed through.
+10. **Context-sensitive sub-nav in sticky header.** The sticky header contains the main nav PLUS one sub-nav per section (`.sticky-subnav[data-section="..."]`). JavaScript IntersectionObserver shows/hides the correct sub-nav as the user scrolls into each section. The active main nav link is also highlighted. Sub-navs use pill-style buttons. All anchors use `scroll-margin-top: 100px` to clear the two-row header.
+11. **All scroll-margin-top values must be 100px** to account for the sticky header height (main nav + sub-nav).
 
 ---
 
