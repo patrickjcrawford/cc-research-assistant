@@ -65,6 +65,22 @@ Append a new entry to the changelog section with today's date. Prompts for:
 
 ---
 
+## Data Section Order
+
+File-level detail sections **must follow the same order as the master inventory table**. The master inventory defines the canonical order by role:
+
+1. **TREATMENT** — the shock/exposure variable
+2. **IV components** — instruments (soil, wind, etc.)
+3. **OUTCOME 1** — primary outcome
+4. **OUTCOME 2** — secondary outcome
+5. **MECHANISM** — intermediate channel variables
+6. **CROSSWALK** — boundary harmonization files
+7. **APPENDIX** — supplementary/heterogeneity data
+
+When generating or refreshing the data section, always emit file-level subsections in this order. The sub-nav links must match.
+
+---
+
 ## Data Status Labels
 
 Only two statuses. No ambiguity.
