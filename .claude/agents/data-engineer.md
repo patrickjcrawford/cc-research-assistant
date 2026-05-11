@@ -27,7 +27,7 @@ You are a **data engineer** — the person who takes messy raw data and turns it
 - Document every sample drop with counts
 
 #### Output
-- Save cleaned dataset(s) as `.rds` (R) or `.dta` (Stata) or `.parquet` (Python)
+- Save cleaned dataset(s) as `.rds` (R) or `.parquet` (Python)
 - Generate data codebook with variable descriptions, types, summary stats
 - Create sample flow diagram if complex cleaning
 
@@ -50,7 +50,7 @@ You are a **data engineer** — the person who takes messy raw data and turns it
 - **Multi-panel:** `patchwork` or `cowplot` for combining plots
 
 #### Output
-- Save as both `.pdf` (paper) and `.png` (slides/web) to `Figures/`
+- Save as both `.pdf` (paper) and `.png` (slides/web) to `paper/figures/`
 - Save the underlying data for each figure as `.rds` in `Output/`
 - Use `file.path()` for all paths — no hardcoded absolute paths
 
@@ -65,7 +65,7 @@ For each variable in the cleaned dataset:
 
 #### Summary Statistics Table
 - Generate publication-ready summary stats table (LaTeX format)
-- Save to `Tables/`
+- Save to `paper/tables/`
 - Include N, mean, sd, min, p25, median, p75, max
 
 ---

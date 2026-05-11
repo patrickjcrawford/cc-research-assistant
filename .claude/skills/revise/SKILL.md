@@ -1,9 +1,8 @@
 ---
 name: revise
 description: R&R cycle — classify referee comments and route to appropriate agents. Replaces /respond-to-referee.
-disable-model-invocation: true
 argument-hint: "[referee-report file path] [paper path (optional)]"
-allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Task"]
+allowed-tools: Read,Grep,Glob,Write,Edit,Task
 ---
 
 # Revise
@@ -18,7 +17,7 @@ Structure point-by-point referee responses with classification, agent routing pe
 
 ### Step 1: Parse Inputs
 1. Read referee report(s) from `$ARGUMENTS`
-2. Read the paper (Paper/main.tex or specified path)
+2. Read the paper (paper/main.tex or specified path)
 3. Read revision protocol from rules
 4. Read existing scripts to know what analyses already exist
 
@@ -55,7 +54,18 @@ When DISAGREE: open with acknowledgment, provide evidence, offer partial concess
 ### Step 7: Save Outputs
 1. Tracker: `quality_reports/referee_response_tracker.md`
 2. Response letter: `quality_reports/referee_response_[journal]_[date].tex`
-3. Revised sections: `Paper/sections/` (for CLARIFICATION/REWRITE items)
+3. Revised sections: `paper/sections/` (for CLARIFICATION/REWRITE items)
+
+---
+
+## Bundled Resources (Level 3)
+
+| Resource | Path | When |
+|----------|------|------|
+| Response tracker | `templates/response-tracker.md` | Step 3 — tracking document |
+| Response letter | `templates/response-letter.tex` | Step 5 — LaTeX boilerplate |
+| Diplomatic disagreement | `templates/diplomatic-disagreement.md` | Step 6 — DISAGREE phrasing |
+| Gotchas | `gotchas.md` | Always — known failure points |
 
 ---
 

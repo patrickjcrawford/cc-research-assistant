@@ -1,84 +1,136 @@
-# The Clo-Author: Your Econ AI Research Assistant for Claude Code
+# Clo-Author
 
 [![Version](https://img.shields.io/github/v/release/hugosantanna/clo-author?style=flat-square&color=b44dff&label=version)](CHANGELOG.md)
 
-> **Work in progress.** This is an experiment born out of my discovery of [Pedro's tool](https://github.com/pedrohcgs/claude-code-my-workflow). This repo is a packaging of my own interpretation of that, tailored to pure research. It is evolving as I learn, and I share it in case others find it useful and would like to build upon it. Expect rough edges.
+A Claude Code scaffold for empirical economics research. Literature review to journal submission, with 18 agents that review each other's work.
 
-An open-source [Claude Code](https://docs.anthropic.com/en/docs/claude-code) workflow that turns your terminal into a full-service applied econometrics research assistant — from literature review to journal submission.
-
-**Live guide:** [hugosantanna.github.io/clo-author](https://hugosantanna.github.io/clo-author/)
-<br>**Built on:** [Pedro Sant'Anna's claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow)
+Guide: [hugosantanna.github.io/clo-author](https://hugosantanna.github.io/clo-author/)
 
 ---
 
-## Quick Start
+## To Get Started
 
 ```bash
-# 1. Fork and clone
+# Fork and clone
 gh repo fork hugosantanna/clo-author --clone
 cd clo-author
 
-# 2. Open Claude Code
+# Open Claude Code (terminal, VS Code, or JetBrains)
 claude
 ```
 
-Then paste this prompt:
+Then:
 
-> I am starting a new applied econometrics research project on **[YOUR TOPIC]**.
-> Read CLAUDE.md and help me set up the project structure.
-> Start with a literature review on [YOUR TOPIC].
+```
+I am starting a research project on [YOUR TOPIC]. Read CLAUDE.md and help me set up.
+```
 
-Claude reads the configuration, fills in your project details, and enters contractor mode — planning, implementing, reviewing, and verifying autonomously.
-
-**Using VS Code?** Open the Claude Code panel instead. Everything works the same.
+Claude reads the config, plans the approach, you approve, it runs. Works in the terminal, VS Code extension, or JetBrains.
 
 ---
 
-## What It Does
+## Setup
 
-### Contractor Mode
+1. Fill in `CLAUDE.md` — replace `[BRACKETED PLACEHOLDERS]` with your project details
+2. Fill in `.claude/references/domain-profile.md` — your field, journals, data, methods. Or run `/discover interview` to do it interactively.
+3. Configure your language — R is the default. Python and Julia also supported.
 
-You describe a task. Claude plans the approach, implements it, runs specialized review agents, fixes issues, re-verifies, and scores against quality gates — all autonomously. You approve the plan and see a summary when the work meets quality standards.
+**Other fields:** Economics by default. Adapts to labor, public, health, development, trade, IO, and other applied fields by customizing the domain profile and journal profiles.
 
-### 16 Specialized Agents in Worker-Critic Pairs
+---
 
-Every creator has a paired critic. Critics can't edit files; creators can't score themselves.
+## Commands
 
-| Phase | Worker (Creates) | Critic (Reviews) |
-|-------|-----------------|-----------------|
+13 skills, each with modes:
+
+| Skill | What It Does |
+|-------|-------------|
+| `/new-project` | Full pipeline: idea to paper |
+| `/discover` | Literature search, data discovery, research interviews |
+| `/strategize` | Identification strategy, pre-analysis plan, formal theory |
+| `/analyze` | Data analysis (R, Python, Julia) |
+| `/write` | Draft paper sections with humanizer pass |
+| `/review` | Quality review — routes by target (paper, code, peer) |
+| `/revise` | R&R cycle: classify referee comments and route fixes |
+| `/talk` | Presentations (Quarto RevealJS or Beamer) |
+| `/submit` | Journal targeting, replication package, final gate |
+| `/tools` | Utilities: commit, compile, validate-bib, journal, deploy |
+| `/checkpoint` | Session handoff: saves progress to memory + Obsidian |
+| `/freeze` | Lock directories from accidental edits |
+| `/careful` | Block destructive shell commands |
+
+---
+
+## Agents
+
+18 agents in worker-critic pairs. Critics can't edit files. Creators can't score themselves. If they disagree after 3 rounds, it escalates.
+
+| Phase | Worker | Critic |
+|-------|--------|--------|
 | Discovery | Librarian | librarian-critic |
 | Discovery | Explorer | explorer-critic |
 | Strategy | Strategist | strategist-critic |
+| Strategy | Theorist | theorist-critic |
 | Execution | Coder | coder-critic |
 | Execution | Data-engineer | coder-critic |
 | Paper | Writer | writer-critic |
-| Peer Review | domain-referee + methods-referee | — |
+| Peer Review | Editor + domain-referee + methods-referee | — |
 | Presentation | Storyteller | storyteller-critic |
 | Infrastructure | Orchestrator, Verifier | — |
 
-### 10 Slash Commands
+---
 
-| Category | Commands |
-|----------|----------|
-| **Research** | `/new-project`, `/discover`, `/strategize`, `/analyze`, `/write` |
-| **Review** | `/review`, `/revise` |
-| **Output** | `/talk`, `/submit` |
-| **Tools** | `/tools` (commit, compile, validate-bib, journal, learn, deploy, context) |
+## Peer Review
 
-### Quality Gates
+`/review --peer [journal]` simulates a full journal submission:
 
-Weighted aggregate scoring with per-component minimums:
+1. Editor desk review — novelty check via web search, decides desk reject or send out
+2. Two blind referees with intellectual dispositions (Structuralist, Credibility, Measurement, Policy, Theory, Skeptic) weighted by journal culture
+3. Independent scored reports — every major comment includes "what would change my mind"
+4. Editorial decision — FATAL / ADDRESSABLE / TASTE classification, MUST / SHOULD / MAY action items
 
-| Score | Gate | Applies To |
-|-------|------|------------|
-| 80 | Commit | Weighted aggregate (blocking) |
-| 90 | PR | Weighted aggregate (blocking) |
-| 95 | Submission | Aggregate + all components >= 80 |
-| -- | Advisory | Talks (reported, non-blocking) |
+Additional modes:
+- `--stress` — adversarial referees for pre-submission battle testing
+- `--r2` — R&R second round with referee memory
+- Max 3 rounds, then the editor's patience runs out
 
-### Context Survival
+30 journal profiles across economics and adjacent fields.
 
-Plans, specifications, and session logs survive auto-compression and session boundaries. MEMORY.md accumulates learning across sessions — patterns discovered in one session inform future work.
+---
+
+## HTML Dashboard
+
+One command generates a self-contained HTML dashboard of your entire project — sections, data, scripts, quality scores, review history. No server, no dependencies. Double-click to open.
+
+```bash
+python3 scripts/generate_dashboard.py
+```
+
+Detail reports drill down into individual components:
+
+```bash
+python3 scripts/generate_html_report.py peer-review [files...]
+python3 scripts/generate_html_report.py code-audit [files...]
+python3 scripts/generate_html_report.py strategy [files...]
+python3 scripts/generate_html_report.py quality-gate [files...]
+python3 scripts/generate_html_report.py literature [files...]
+```
+
+Self-contained HTML with dark mode, collapsible sections, and print support. Works on `file://`.
+
+---
+
+## Quality Gates
+
+Weighted aggregate scoring across all components:
+
+| Score | Gate |
+|-------|------|
+| 80 | Commit allowed |
+| 90 | PR allowed |
+| 95 | Submission allowed (all components >= 80) |
+
+Nothing ships below 80.
 
 ---
 
@@ -86,59 +138,56 @@ Plans, specifications, and session logs survive auto-compression and session bou
 
 ```
 your-project/
-├── CLAUDE.md                    # Project configuration (fill in placeholders)
-├── .claude/                     # 16 agents, 10 skills, 8 rules, 4 hooks
-├── Bibliography_base.bib        # Centralized bibliography
-├── Paper/                       # Main LaTeX manuscript (source of truth)
+├── CLAUDE.md                    # Project config (fill in placeholders)
+├── .claude/                     # Agents, skills, rules, hooks
+├── paper/                       # LaTeX manuscript (source of truth)
 │   ├── main.tex
-│   └── sections/
-├── Talks/                       # Derivative Beamer presentations
-├── Data/                        # Raw and cleaned datasets
-├── Figures/                     # Generated figures
-├── Tables/                      # Generated tables
-├── Supplementary/               # Online appendix
-├── Replication/                 # Replication package for deposit
-├── scripts/                     # Analysis code (R, Stata, Python, Julia)
-├── quality_reports/             # Plans, session logs, reviews, scores
-├── explorations/                # Research sandbox
-└── master_supporting_docs/      # Reference papers and data docs
+│   ├── sections/
+│   ├── figures/
+│   ├── tables/
+│   ├── talks/
+│   └── replication/
+├── data/                        # Raw and cleaned datasets
+├── scripts/                     # Analysis code (R, Python, Julia)
+├── quality_reports/             # Reviews, scores, plans, traces
+├── templates/html/              # HTML report design system
+└── explorations/                # Research sandbox
 ```
 
 ---
 
 ## Prerequisites
 
-| Tool | Required For | Install |
-|------|-------------|---------|
-| [Claude Code](https://docs.anthropic.com/en/docs/claude-code) | Everything | `npm install -g @anthropic-ai/claude-code` |
-| XeLaTeX | Paper compilation | [TeX Live](https://tug.org/texlive/) or [MacTeX](https://tug.org/mactex/) |
-| R | Analysis & figures | [r-project.org](https://www.r-project.org/) |
-| [gh CLI](https://cli.github.com/) | GitHub integration | `brew install gh` (macOS) |
+| Tool | Install |
+|------|---------|
+| [Claude Code](https://docs.anthropic.com/en/docs/claude-code) | `npm install -g @anthropic-ai/claude-code` |
+| XeLaTeX | [TeX Live](https://tug.org/texlive/) or [MacTeX](https://tug.org/mactex/) |
+| R | [r-project.org](https://www.r-project.org/) |
 
-Optional: Stata, Python, Julia (for multi-language analysis), [Quarto](https://quarto.org) (web slides).
+Optional: Python, Julia, [Quarto](https://quarto.org), [gh CLI](https://cli.github.com/).
 
 ---
 
-## Adapting for Your Field
+## Upgrading
 
-1. **Fill in `CLAUDE.md`** — replace `[BRACKETED PLACEHOLDERS]` with your project details
-2. **Fill in the domain profile** (`.claude/rules/domain-profile.md`) — your field's journals, data sources, identification strategies, conventions, and seminal references. Use `/discover interview` to populate it interactively.
-3. **Configure your language** — R is the default; Stata, Python, and Julia are also supported. Set your preference in CLAUDE.md.
+The upgrade only touches `.claude/` (infrastructure). Your paper, scripts, data, and bibliography are never modified.
 
-The Clo-Author is designed for applied econometrics, but the infrastructure (contractor mode, quality gates, adversarial review) works for any quantitative research field.
+```bash
+# Download latest, replace .claude/, done
+```
+
+Or use `/tools upgrade` from within Claude Code.
+
+---
+
+## This is a Scaffold
+
+Every output needs human review. Claude plans and executes; you decide what ships. The peer review catches structural issues but doesn't replicate actual referee expertise. Quality scores flag problems but don't measure publishability. The writer produces drafts, not final prose.
 
 ---
 
 ## Origin
 
-This project is a fork of [Pedro Sant'Anna's claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow), which was built for Econ 730 at Emory University (6 lectures, 800+ slides). The Clo-Author reorients that infrastructure from lecture production to applied economics research publication.
+Maintained by [Hugo Sant'Anna](https://hsantanna.org) at UAB.
 
-The core infrastructure (contractor mode, quality gates, context survival, session logging) comes from the original template. The adversarial worker-critic architecture, econometrics-specific agents, paper drafting skills, and submission workflow are new.
-
-Maintained by [Hugo Sant'Anna](https://hsantanna.org).
-
----
-
-## License
-
-MIT License. Fork it, customize it, make it yours.
+MIT License.

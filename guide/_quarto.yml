@@ -4,20 +4,27 @@ project:
 
 website:
   title: "The Clo-Author"
+  favicon: favicon.svg
   navbar:
     left:
       - text: "Quick Start"
         href: index.qmd
       - text: "User Guide"
         href: user-guide.qmd
-      - text: "Agents"
-        href: agents.qmd
-      - text: "Architecture"
-        href: architecture.qmd
-      - text: "Customization"
-        href: customization.qmd
       - text: "Reference"
         href: reference.qmd
+      - text: "Architecture"
+        href: architecture.qmd
+      - text: "Agents"
+        href: agents.qmd
+      - text: "Rules"
+        href: rules.qmd
+      - text: "Hooks"
+        href: hooks.qmd
+      - text: "Customization"
+        href: customization.qmd
+      - text: "What's New"
+        href: changelog.qmd
     right:
       - icon: github
         href: https://github.com/hugosantanna/clo-author
@@ -27,14 +34,16 @@ website:
 format:
   html:
     theme:
-      - darkly
-      - custom.scss
+      light:
+        - cosmo
+        - custom.scss
+      dark:
+        - darkly
+        - custom-dark.scss
     toc: true
     toc-depth: 3
     code-copy: true
     code-overflow: wrap
     smooth-scroll: true
-    mainfont: "Space Grotesk, Inter, system-ui, sans-serif"
-    monofont: "JetBrains Mono, Fira Code, Cascadia Code, monospace"
     mermaid:
-      theme: dark
+      theme: neutral

@@ -5,28 +5,36 @@ All LaTeX papers generated or reviewed by this system must conform to the standa
 ## Document Class and Layout
 
 - `\documentclass[12pt]{article}`
-- Margins: 1 inch all sides (`\usepackage[margin=1in]{geometry}`)
+- Margins: 1 inch all sides
 - Body text: `\doublespacing`
-- References: `\singlespacing`
+- References: `\singlespacing` or `\small`
+- Page numbers centered in footer via `fancyhdr`
 
-## Required Packages
+## Reference Preamble
 
-At minimum, the preamble must load:
-- `geometry` (margins)
-- `setspace` (line spacing)
-- `amsmath`, `amssymb` (math)
-- `graphicx` (figures)
-- `natbib` with `authoryear,round` (citations)
-- `hyperref` with `colorlinks=true` (links)
-- `booktabs` (professional tables)
-- `threeparttable` (table notes)
-- `titling` (title page font control)
-
-## Title Font Sizes
-
-Use `titling` package to set proper sizes — the default article class title is too large:
+The following preamble is the project standard. New papers should use this structure. The writer-critic checks against it.
 
 ```latex
+\documentclass[12pt]{article}
+% ====== Page Layout and Basic Formatting ======
+\usepackage[left=1.0in,right=1.0in,top=1.0in,bottom=1.0in]{geometry}
+\usepackage{setspace}
+\doublespacing
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+% ====== Typography and Fonts ======
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[normalem]{ulem}
+\usepackage[T1]{fontenc}
+
+% ====== Section Styling ======
+\usepackage{titlesec}
+\usepackage[title]{appendix}
 \usepackage{titling}
 \pretitle{\begin{center}\large\bfseries}
 \posttitle{\end{center}}
@@ -34,11 +42,116 @@ Use `titling` package to set proper sizes — the default article class title is
 \postauthor{\end{center}}
 \predate{\begin{center}\normalsize}
 \postdate{\end{center}}
+
+% ====== Math Packages ======
+\usepackage{amssymb, amsmath, amsfonts, mathtools}
+\usepackage{dsfont}
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
+\newtheorem{hyp}{Hypothesis}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\1}[1]{\mathds{1}\left[#1\right]}
+
+% ====== Table Packages ======
+\usepackage{array, booktabs, makecell, cellspace}
+\usepackage{siunitx}
+\usepackage[flushleft]{threeparttable}
+\usepackage{rotating, tabularx}
+\usepackage{tabularray}
+\UseTblrLibrary{booktabs, siunitx}
+
+% ====== Figure and Caption Packages ======
+\usepackage{graphicx, subcaption}
+\usepackage{pdflscape, tikz}
+\usepackage{caption}
+\captionsetup{font=small, labelfont=bf, justification=justified}
+\captionsetup[figure]{labelfont=bf}
+\usepackage{float}
+
+% ====== List Formatting ======
+\usepackage{enumitem}
+
+% ====== Bibliography and Citation (biblatex + biber) ======
+\usepackage{xurl}
+\usepackage{xcolor}
+\definecolor{citationcolor}{RGB}{0, 127, 255}
+
+\usepackage[backend=biber,
+            style=authoryear,
+            maxcitenames=3,
+            mincitenames=1,
+            maxbibnames=99,
+            giveninits=true,
+            uniquename=false,
+            uniquelist=true,
+            dashed=false,
+            urldate=long,
+            url=true,
+            natbib=true]{biblatex}
+\addbibresource{references.bib}
+
+% Citation color settings
+\renewcommand*{\nameyeardelim}{\addcomma\space}
+\DeclareCiteCommand{\cite}
+  {\usebibmacro{prenote}}
+  {\usebibmacro{citeindex}%
+   \printtext[bibhyperref]{\color{citationcolor}\usebibmacro{cite}}}
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+\DeclareCiteCommand{\parencite}[\mkbibparens]
+  {\usebibmacro{prenote}}
+  {\usebibmacro{citeindex}%
+   \printtext[bibhyperref]{\color{citationcolor}\usebibmacro{cite}}}
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+
+% ====== Custom Column Types ======
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\arraybackslash\hspace{0pt}}m{#1}}
+
+% ====== Footnote Settings ======
+\interfootnotelinepenalty=10000
+\setlength{\footnotesep}{0.5cm}
+
+% ====== URL Bleeding Fixes ======
+\setcounter{biburllcpenalty}{7000}
+\setcounter{biburlucpenalty}{8000}
+\setcounter{biburlnumpenalty}{9000}
+
+% ====== Hyperref (loaded second-to-last) ======
+\usepackage[hidelinks, breaklinks, colorlinks=true,
+            linkcolor=citationcolor, citecolor=citationcolor,
+            urlcolor=citationcolor]{hyperref}
+
+% ====== Cleveref (loaded after hyperref) ======
+\usepackage[nameinlink]{cleveref}
 ```
 
-- Title: `\large` (14pt at 12pt base) with bold — NOT the default `\Large` (17pt)
-- Authors: `\normalsize` (12pt)
-- Date: `\normalsize` (12pt)
+## Key Design Decisions
+
+**Required** items are blocking — the writer-critic deducts points for violations. **Recommended** items improve output quality but are not publication blockers.
+
+| Choice | Standard | Rationale |
+|--------|----------|-----------|
+| `biblatex` + `biber` | Required | Replaces `natbib` + `bibtex`. More flexible, better Unicode, `natbib=true` preserves `\citet`/`\citep` |
+| `fancyhdr` | Required | Clean centered page numbers, no header rule |
+| `\doublespacing` | Required | Standard for working paper submissions |
+| `booktabs` + `threeparttable` | Required | Professional tables with proper notes — see content-standards.md |
+| `tabularray` | Required | Modern table engine with key-value interface. Use `tblr`/`talltblr` for new tables; `tabular` + `threeparttable` still accepted for R-generated output |
+| `hyperref` loaded second-to-last | Required | Avoids conflicts with other packages |
+| `cleveref` loaded after `hyperref` | Required | Auto-generates "Figure 1", "Table 2" from `\cref{}` — eliminates `Figure~\ref{}` boilerplate |
+| `lmodern` | Recommended | Clean Latin Modern font; Computer Modern also acceptable |
+| `microtype` | Required | Improved character spacing and margin kerning — standard for modern LaTeX |
+| Citation color `(0,127,255)` | Recommended | Azure — visible but professional. Can be customized |
+| `captionsetup` | Recommended | Small font, bold labels — improves appearance |
+| `hidelinks` in `hyperref` | Recommended | No colored boxes around links; aesthetic preference |
 
 ## Title Page Format
 
@@ -55,7 +168,7 @@ Author Three\thanks{Affiliation.}
 ```
 
 Rules:
-- Do NOT wrap title in `\textbf{}` — `\maketitle` already bolds it
+- Do NOT wrap title in `\textbf{}` — `\maketitle` already bolds it via `\pretitle`
 - Do NOT use `\and` for authors — use `\quad` spacing on a single line
 - Do NOT repeat university name under each author — affiliations go in `\thanks{}` footnotes only
 - Suppress page number on title page: `\thispagestyle{empty}`
@@ -76,10 +189,10 @@ Abstract text here.
 \noindent \textbf{Keywords:} keyword one, keyword two
 ```
 
-- Abstract must have `\noindent` and `\singlespacing` (body is double-spaced but abstract is always single-spaced)
-- Abstract should be 150 words or fewer to fit on the title page with authors and metadata
-- JEL codes and keywords follow the abstract, not inside it
-- The entire title page (title, authors, abstract, JEL, keywords) must fit on one page — if it overflows, shorten the abstract
+- Abstract must have `\noindent` and `\singlespacing`
+- Abstract should be 150 words or fewer
+- JEL codes and keywords follow the abstract, outside `\begin{abstract}`
+- The entire title page must fit on one page
 
 ## Section Structure
 
@@ -98,30 +211,47 @@ Each section uses `\section{}` with `\label{sec:name}`. Subsections use `\subsec
 
 ## Tables and Figures
 
-- Tables and figures may be placed inline (modern standard) or collected after references (traditional)
-- Use `\begin{threeparttable}` for tables with notes
-- Table notes use the project's `\tablenote{}` command
-- Figures include a `\begin{minipage}` notes block with `\footnotesize \textit{Notes.}`
+- Tables and figures placed inline (modern standard)
+- **Hand-written tables:** prefer `tblr` / `talltblr` (tabularray) with key-value interface for captions, notes, and rules
+- **R/Python/Julia-generated tables:** continue exporting bare `tabular` (booktabs rules). Wrap with `threeparttable` in `main.tex`
+- `\captionsetup` handles caption styling globally — no manual `\small` on captions
 - Use `booktabs` rules (`\toprule`, `\midrule`, `\bottomrule`) — never `\hline`
+- Generated `.tex` files contain bare `tabular` only — no `\begin{table}`, `\caption`, or notes
 
 ## Bibliography
 
 ```latex
-\newpage
-\singlespacing
-\bibliographystyle{aer}
-\bibliography{../Bibliography_base}
+\clearpage
+\small \printbibliography
 ```
 
-- `aer` bibliography style (or journal-specific style if targeting a specific journal)
-- Single-spaced references
+- `\printbibliography` replaces `\bibliography{}`/`\bibliographystyle{}`
+- Compile with `latexmk` (handles biber passes automatically): `cd paper && latexmk main.tex`
+- Single-spaced or `\small` references
 - New page before references
+
+## Compilation
+
+```bash
+# Preferred: latexmk handles multi-pass + biber automatically
+cd paper && latexmk main.tex
+
+# Manual fallback (if latexmk unavailable):
+xelatex main.tex
+biber main
+xelatex main.tex
+xelatex main.tex
+```
+
+Note: `paper/latexmkrc` configures XeLaTeX mode, TEXINPUTS, and BIBINPUTS. On Overleaf, set compiler to XeLaTeX via Menu — Overleaf reads `latexmkrc` automatically.
 
 ## What the Writer-Critic Checks
 
-The writer-critic deducts points for:
+**Required (blocking deductions):**
 - Wrong document class or font size (-5)
 - Missing `\doublespacing` in body (-5)
+- Using `natbib` instead of `biblatex` (-3)
+- Missing `fancyhdr` page number setup (-2)
 - `\textbf{}` wrapping `\title{}` (-3)
 - `\and` between authors instead of `\quad` (-3)
 - Repeated affiliation text outside `\thanks{}` (-3)
@@ -129,3 +259,15 @@ The writer-critic deducts points for:
 - `\hline` instead of `booktabs` rules (-3)
 - Missing table notes on any table (-5)
 - Missing figure notes on any figure (-5)
+- `hyperref` not loaded second-to-last (-2)
+- Missing `cleveref` after `hyperref` (-2)
+- Manual `Figure~\ref{}` instead of `\cref{}` (-1 per, max -5)
+- Using `bibtex` instead of `biber` (-3)
+
+- Missing `microtype` (-2)
+
+**Recommended (advisory — reported but not deducted):**
+- Missing `lmodern`
+- Non-default citation color
+- Missing `captionsetup`
+- Missing `hidelinks`

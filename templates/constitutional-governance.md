@@ -146,7 +146,7 @@ Don't create articles for:
 
 ### Economics/Econometrics
 
-1. **Replication-First:** All empirical claims must have accompanying R/Stata scripts
+1. **Replication-First:** All empirical claims must have accompanying R/Python scripts
 2. **Data Provenance:** All datasets documented with source, date, and processing steps
 3. **Robust Standard Errors:** Default to clustered SEs; justify if not used
 

@@ -150,9 +150,8 @@ def format_compaction_message(plan_info: dict | None, decisions: list[str]) -> s
 
     # Context survival checklist (merged from pre-compact.sh)
     lines.append(f"{CYAN}Context Survival Checklist:{NC}")
-    lines.append("  [ ] MEMORY.md updated with [LEARN] entries")
-    lines.append("  [ ] Session log current (last 10 minutes)")
     lines.append("  [ ] Active plan saved to quality_reports/plans/")
+    lines.append("  [ ] SESSION_REPORT.md updated")
     lines.append("  [ ] Open questions documented")
     lines.append("")
 
@@ -208,10 +207,10 @@ def main() -> int:
     # Append note to session log
     append_to_session_log(project_dir, trigger)
 
-    # Print message
-    print(format_compaction_message(plan_info, decisions))
+    # Print message to stderr so it's visible
+    print(format_compaction_message(plan_info, decisions), file=sys.stderr)
 
-    return 2  # Exit code 2 = message visible in transcript
+    return 0  # Exit code 0 = allow compaction to proceed
 
 
 if __name__ == "__main__":

@@ -14,6 +14,7 @@
 | explorer | explorer-critic | Data feasibility, quality, identification fit |
 | data-engineer | coder-critic | Data pipeline quality, reproducibility, transformation correctness |
 | strategist | strategist-critic | Identification validity, assumptions, robustness |
+| theorist | theorist-critic | Proof validity, assumption minimality, notation, citations |
 | coder | coder-critic | Code quality, reproducibility, code-strategy alignment |
 | writer | writer-critic | Manuscript polish, LaTeX quality, hedging |
 | storyteller | storyteller-critic | Talk structure, audience calibration, visual quality |
@@ -64,14 +65,15 @@ A creator cannot evaluate the quality of its own work. The score always comes fr
 | explorer | Data assessment | explorer-critic |
 | data-engineer | Data pipeline and cleaned datasets | coder-critic |
 | strategist | Strategy memo | strategist-critic |
-| coder | R/Stata/Python scripts | coder-critic |
+| theorist | Assumptions, theorems, proofs (theory section) | theorist-critic |
+| coder | R/Python/Julia scripts | coder-critic |
 | writer | Paper manuscript | writer-critic |
 | storyteller | Beamer talk | storyteller-critic |
 
 ### Enforcement
 
 The Orchestrator flags violations:
-- If a critic invocation produces a file in `scripts/`, `Paper/`, or `Talks/` → flag
+- If a critic invocation produces a file in `scripts/`, `paper/`, or `paper/talks/` → flag
 - If a creator reports its own score → discard, dispatch critic
 
 ---
@@ -93,15 +95,7 @@ Round 3: Critic reviews → Worker fixes
 
 ### Escalation Routing
 
-| Pair | Escalation Target | What Happens |
-|------|-------------------|--------------|
-| coder + coder-critic | strategist-critic | Re-evaluates whether the strategy memo is implementable |
-| data-engineer + coder-critic | strategist-critic | Re-evaluates whether the data specification is tractable |
-| writer + writer-critic | Orchestrator | Structural rewrite, not just polish |
-| strategist + strategist-critic | User | Fundamental design question — needs human judgment |
-| librarian + librarian-critic | User | Scope disagreement — user decides breadth vs depth |
-| explorer + explorer-critic | User | Data feasibility deadlock — user decides resource trade-offs |
-| storyteller + storyteller-critic | User | Talk scope/format disagreement |
+Escalation targets are declared in each agent's entry in `.claude/rules/permissions.md` (ESCALATION_TARGET field). The Orchestrator reads this field when a pair hits 3 strikes.
 
 ### Rules
 

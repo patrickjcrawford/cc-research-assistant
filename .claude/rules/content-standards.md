@@ -1,8 +1,12 @@
 ---
 paths:
   - "**/*.R"
+  - "**/*.py"
+  - "**/*.jl"
+  - "**/*.do"
   - "**/*.tex"
-  - "tables/**"
+  - "paper/tables/**"
+  - "paper/figures/**"
   - "master_supporting_docs/**"
   - "explorations/**"
 ---
@@ -13,22 +17,30 @@ paths:
 
 ## 1. Table Standards
 
-**Target:** Publication-quality tables matching AER, QJE, and Econometrica formatting.
+**Target:** Publication-quality tables using standard economics formatting (booktabs rules, no vertical rules). Two approaches are supported:
+
+- **tabularray (`tblr` / `talltblr`)** — modern key-value interface. Preferred for hand-written tables in `main.tex`.
+- **`tabular` + `booktabs` + `threeparttable`** — traditional stack. Required for R/Python/Julia-generated output (scripts export bare `tabular`).
+
+Journal-specific conventions (significance stars, note format) adapt to the target journal — see journal-profiles.md.
 
 ### No In-Table Titles or Notes
 
 - **Never** embed titles inside the table body or as a table header row
 - **Never** embed notes, sources, or footnotes inside the table itself
-- Table numbering, titles, and notes are added in LaTeX via `\caption{}` and `\begin{tablenotes}`
+- Table numbering, titles, and notes are added in LaTeX via `\caption{}` and `\begin{tablenotes}` (or tabularray's `note{}` key)
 - The file name and folder identify what the table contains
 
 ### Three-Line Format (Booktabs)
 
 Every table uses exactly three horizontal rules and **zero vertical lines**:
 
+**Traditional (R/Python/Julia output):**
 ```latex
 \begin{table}[htbp]
 \centering
+\begin{threeparttable}
+\caption{Effect of X on Y}\label{tab:main}
 \begin{tabular}{lcccc}
 \toprule
             & (1)     & (2)     & (3)     & (4)     \\
@@ -36,24 +48,58 @@ Every table uses exactly three horizontal rules and **zero vertical lines**:
 ...coefficients...
 \bottomrule
 \end{tabular}
+\begin{tablenotes}\small
+\item \textit{Notes:} Standard errors in parentheses.
+\end{tablenotes}
+\end{threeparttable}
 \end{table}
+```
+
+**Modern (hand-written in main.tex):**
+```latex
+\begin{talltblr}[
+  caption = {Effect of X on Y},
+  label = {tab:main},
+  note{*} = {Standard errors in parentheses.},
+]{colspec = {lcccc}, rowsep = 4pt}
+\toprule
+            & (1)     & (2)     & (3)     & (4)     \\
+\midrule
+...coefficients...
+\bottomrule
+\end{talltblr}
 ```
 
 - `\toprule` above column headers
 - `\midrule` below column headers (and to separate panels)
 - `\bottomrule` at the very end
 - `\cmidrule(lr){2-4}` for partial rules spanning column groups
+- **R/Python/Julia output:** wrap with `threeparttable` for notes via `\begin{tablenotes}`
+- **Hand-written tables:** prefer `talltblr` with `note{}` keys — unifies caption, label, and notes
 - **Never** use `\hline`, `|`, or any vertical rules
 
 ### Coefficient Display
 
 - Point estimates on one row, standard errors in parentheses on the row below
-- Stars for significance: `*` p < 0.10, `**` p < 0.05, `***` p < 0.01
-- Align significance note at the bottom: `\textit{Notes:} * p < 0.10, ** p < 0.05, *** p < 0.01`
-- Standard errors labeled in the note (e.g., "Robust standard errors in parentheses" or "Clustered at municipality level")
+- Standard errors labeled in the table note (e.g., "Robust standard errors in parentheses" or "Clustered at municipality level")
 
+**Significance reporting depends on the target journal:**
+
+| Context | Convention |
+|---------|-----------|
+| **Working papers (default)** | Stars: `*` p < 0.10, `**` p < 0.05, `***` p < 0.01. Note at bottom: `\textit{Notes:} * p < 0.10, ** p < 0.05, *** p < 0.01` |
+| **AEA journals** (AER, AEJ:Applied, AEJ:Policy, AER:Insights) | No significance stars. Report standard errors in parentheses. Use exact p-values or confidence intervals for key results. See the [AEA Style Guide](https://www.aeaweb.org/journals/aeri/style-guide). |
+| **All other journals** | Stars acceptable. Follow journal-specific conventions in journal-profiles.md. |
+
+Working paper default example:
 ```
 Treatment        & 0.045**  & 0.038*   & 0.052*** \\
+                 & (0.021)  & (0.020)  & (0.019)  \\
+```
+
+AEA journal example:
+```
+Treatment        & 0.045    & 0.038    & 0.052    \\
                  & (0.021)  & (0.020)  & (0.019)  \\
 ```
 
@@ -96,7 +142,7 @@ library(modelsummary)
 modelsummary(
   models,
   output   = "latex_tabular",  # bare tabular, no wrapper
-  stars    = c("*" = 0.10, "**" = 0.05, "***" = 0.01),
+  stars    = c("*" = 0.10, "**" = 0.05, "***" = 0.01),  # set FALSE for AEA journals
   coef_rename = c(
     "treatment"  = "Treatment",
     "log_income" = "Log income"
@@ -119,7 +165,7 @@ fixest::etable(
     yesNo    = c("Yes", "No")
   ),
   se.below = TRUE,
-  signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.10)
+  signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.10)  # omit for AEA journals
 )
 ```
 
@@ -145,12 +191,11 @@ kbl(df, format = "latex", booktabs = TRUE, escape = FALSE,
 ```r
 # Write .tex fragment (no \begin{table} wrapper -- added in main.tex)
 writeLines(tex_output, file.path("paper/tables", "reg_main_specification.tex"))
-writeLines(tex_output, file.path("results/tables", "reg_main_specification.tex"))
 ```
 
 - Output **bare `tabular` environment** (no `\begin{table}` float)
 - The paper's `main.tex` wraps it with `\begin{table}`, `\caption{}`, and `\input{}`
-- Always write to both `paper/tables/` and `results/tables/`
+- Write to `paper/tables/`
 
 ### File Naming
 
@@ -188,9 +233,114 @@ Pattern: `{table_type}_{content_description}.tex`
 | `xtable` without booktabs | Produces non-journal-quality output |
 | `\begin{table}` in R output | R exports bare `tabular`; float wrapper lives in `main.tex` |
 
+### Table Type Templates
+
+Use these as defaults. Adapt columns based on the paper's needs (e.g., add Min/Max, percentiles, or subgroup columns when substantively important).
+
+**Descriptive Statistics:**
+```
+\toprule
+                        &  Mean   &  SD     \\
+\midrule
+\multicolumn{3}{l}{\textit{Continuous variables}} \\
+\quad Wages (USD)       &  45,230 &  12,400 \\
+\quad Years of education&  13.2   &  2.8    \\
+\quad Age               &  38.5   &  11.2   \\
+\\[0.5em]
+\multicolumn{3}{l}{\textit{Categorical variables (\%)}} \\
+\quad Female            &  48.2   &         \\
+\quad College degree    &  32.5   &         \\
+\bottomrule
+```
+- Default: Mean and SD in separate columns (never stacked with parentheses — that's for regression SEs)
+- Categorical/binary: percentage in Mean column, SD blank
+- Sample size stated once in table notes, not as a column
+- Add Min/Max only when the range is substantively important (RDD bandwidth, data coverage)
+
+**Regression Results:**
+```
+\toprule
+                        &  (1)    &  (2)    &  (3)    &  (4)    \\
+                        &  OLS    &  OLS    &  IV     &  IV     \\
+\midrule
+Treatment               &  0.045**&  0.038* &  0.052**&  0.041* \\
+                        & (0.021) & (0.020) & (0.025) & (0.022) \\
+\midrule
+Controls                &  No     &  Yes    &  No     &  Yes    \\
+Fixed Effects           &  No     &  Yes    &  No     &  Yes    \\
+Observations            &  10,000 &  10,000 &  10,000 &  10,000 \\
+R$^2$                   &  0.05   &  0.12   &         &         \\
+\bottomrule
+```
+- Coefficients on one row, standard errors in parentheses below
+- Stars: `*` p < 0.10, `**` p < 0.05, `***` p < 0.01
+- Bottom rows: Controls (Yes/No), Fixed Effects (Yes/No), Observations, R²
+
+**Multi-Outcome (Panel Structure):**
+```
+\toprule
+                        &  (1)    &  (2)    &  (3)    &  (4)    \\
+\midrule
+\multicolumn{5}{l}{\textit{Panel A: Wages}} \\
+\midrule
+Treatment               &  0.045**&  0.038* &  0.052**&  0.041* \\
+                        & (0.021) & (0.020) & (0.025) & (0.022) \\
+\\[0.5em]
+\multicolumn{5}{l}{\textit{Panel B: Employment}} \\
+\midrule
+Treatment               &  0.021  &  0.033* &  0.015  &  0.028  \\
+                        & (0.018) & (0.017) & (0.020) & (0.019) \\
+\midrule
+Controls                &  No     &  Yes    &  No     &  Yes    \\
+Fixed Effects           &  No     &  Yes    &  No     &  Yes    \\
+Observations            &  10,000 &  10,000 &  10,000 &  10,000 \\
+\bottomrule
+```
+- Each outcome gets its own panel with same column structure
+- Panel labels in italics, left-aligned, spanning all columns
+- Controls/FE/Observations rows appear once at the bottom (shared across panels)
+
+**Balance Table:**
+```
+\toprule
+Variable                &  Treatment &  Control &  Difference &  SE     &  p-value \\
+\midrule
+Wages (USD)             &  45,800    &  44,650  &  1,150      &  (890)  &  0.197   \\
+Years of education      &  13.4      &  13.1    &  0.3        &  (0.2)  &  0.134   \\
+Female (\%)             &  47.8      &  48.6    &  -0.8       &  (1.2)  &  0.505   \\
+\bottomrule
+```
+
+**Robustness:**
+```
+\toprule
+                        &  (1)        &  (2)           &  (3)          &  (4)            \\
+                        &  Baseline   &  Alt. controls &  Alt. sample  &  Alt. estimator \\
+\midrule
+```
+- Column headers describe what changes across specifications
+- Same outcome variable across all columns
+
 ---
 
-## 2. PDF Processing
+## 2. Figure Standards
+
+- **Never add titles or subtitles inside ggplot** — use `labs(title = NULL, subtitle = NULL)`
+- **Figure information goes in two places:**
+  1. **File name** — descriptive, e.g., `fig1_hispanic_enrollment_ascm.pdf`
+  2. **LaTeX `\caption{}`** — the authoritative title, numbered and editable without re-running R
+- **Panel labels are the exception** — "Panel A: Employment" inside multi-panel figures (via `patchwork`, `cowplot`, etc.) is fine since they identify sub-panels, not the whole figure
+- **Axis labels must be publication-quality** — "Employment Rate" not "emp_rate". Clean labels stay in the figure; titles and context go in the caption
+- **Use serif fonts** — figures should match the paper's body text. In ggplot, set `theme(text = element_text(family = "serif"))` or use `theme_minimal(base_family = "serif")`
+- **Show all years on the x-axis** when the panel spans ~20 years or fewer — use `scale_x_continuous(breaks = min_year:max_year)`. Only thin out labels when they overlap (roughly >20 ticks)
+- **Output PDF for figures** — vector graphics for LaTeX. Use `ggsave("fig.pdf")`. PNG only for raster content (maps, photos).
+- **Colorblind-friendly palettes** — use `scale_color_brewer(palette = "Set2")`, `viridis`, or similar. Never rely on red/green contrast alone.
+- **Color-independent design** — figures must be readable in grayscale. Combine color with shape (`shape` aesthetic) and linetype (`linetype` aesthetic) so series remain distinguishable without color.
+- **Figure width** — single-panel: `width=0.8\textwidth`. Side-by-side panels: `width=0.48\textwidth` each.
+
+---
+
+## 3. PDF Processing
 
 ### The Safe Processing Workflow
 
@@ -247,7 +397,7 @@ done
 
 ---
 
-## 3. Exploration Folder Protocol
+## 4. Exploration Folder Protocol
 
 **All experimental work goes into `explorations/` first.** Never directly into production folders.
 
@@ -287,7 +437,7 @@ explorations/
 
 ---
 
-## 4. Exploration Fast-Track
+## 5. Exploration Fast-Track
 
 **Lightweight workflow for experimental work.** Quality threshold: 60/100 (vs 80 for production). No planning needed.
 

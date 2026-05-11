@@ -1,9 +1,8 @@
 ---
 name: submit
 description: Submission pipeline — journal targeting, replication package, audit, and final gate. Replaces /submit, /target-journal, /audit-replication, /data-deposit.
-disable-model-invocation: true
 argument-hint: "[mode: target | package | audit | final] [journal name (optional)]"
-allowed-tools: ["Read", "Grep", "Glob", "Write", "Bash", "Task"]
+allowed-tools: Read,Grep,Glob,Write,Bash,Task
 ---
 
 # Submit
@@ -21,7 +20,7 @@ Get ranked journal recommendations.
 
 **Agent:** Orchestrator (journal selection function)
 
-Considers: contribution fit, methodology fit, audience fit, recent publications, desk rejection risk. Consults domain-profile.md for journal tiers.
+Considers: contribution fit, methodology fit, audience fit, recent publications, desk rejection risk. Consults .claude/references/domain-profile.md for journal tiers.
 
 Output: Ranked list of 3 target journals with rationale.
 Save to `quality_reports/journal_recommendations_[date].md`
@@ -36,7 +35,7 @@ Produces:
 - README with data sources, computational requirements, instructions
 - Data documentation and codebook
 - Organized file structure per AEA standards
-Save to `Replication/`
+Save to `paper/replication/`
 
 ### `/submit audit` — Audit Replication Package
 Verify replication package completeness.
@@ -62,8 +61,26 @@ Workflow:
 1. Run comprehensive review if not done recently
 2. Run replication audit
 3. Check score gate: aggregate >= 95, all components >= 80
-4. If PASS: generate cover letter draft + submission checklist
-5. If FAIL: list blocking issues and stop
+4. Save gate summary to `quality_reports/quality_gate_[date].md`
+5. Generate HTML quality gate report and refresh dashboard:
+```bash
+python3 scripts/generate_html_report.py quality-gate quality_reports/quality_gate_[date].md
+python3 scripts/generate_dashboard.py
+```
+6. If PASS: generate cover letter draft + submission checklist
+7. If FAIL: list blocking issues and stop
+
+---
+
+## Bundled Resources (Level 3)
+
+| Resource | Path | When |
+|----------|------|------|
+| Submission checklist | `templates/submission-checklist.md` | `/submit final` — pre-submission verification |
+| Cover letter | `templates/cover-letter.tex` | `/submit final` — draft cover letter |
+| Replication README | `templates/replication-readme.md` | `/submit package` — AEA-compliant README |
+| Audit checklist | `templates/audit-10-checks.md` | `/submit audit` — verifier submission mode |
+| Gotchas | `gotchas.md` | Always — known failure points |
 
 ---
 

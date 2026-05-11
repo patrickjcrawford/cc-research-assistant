@@ -1,9 +1,8 @@
 ---
 name: new-project
 description: Full research pipeline from idea to paper. Orchestrates all phases — discovery, strategy, analysis, writing, peer review, and submission. Use when starting a new research project from scratch.
-disable-model-invocation: true
 argument-hint: "[research topic or 'interactive' for guided start]"
-allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash", "Task", "WebSearch", "WebFetch"]
+allowed-tools: Read,Grep,Glob,Write,Edit,Bash,Task,WebSearch,WebFetch
 ---
 
 # New Project
@@ -25,7 +24,8 @@ Phase 1: Discovery
   └── /discover data → Data Assessment
 
 Phase 2: Strategy (depends on Phase 1)
-  └── /strategize → Strategy Memo + Robustness Plan
+  ├── /strategize → Strategy Memo + Robustness Plan
+  └── /strategize theory → Theory Section (conditional — econometric methods, theory+empirics, structural, methodological reduced-form)
 
 Phase 3: Execution (depends on Phase 2)
   ├── /analyze → Scripts + Tables + Figures
@@ -45,12 +45,22 @@ Phase 5: Submission (depends on Phase 4, score >= 95)
 
 ## Workflow
 
+### Step 0: Enter Plan Mode
+
+Before any work begins:
+1. **Enter plan mode** — use `EnterPlanMode`
+2. **Create the project folder structure** — `data/raw/`, `data/cleaned/`, `scripts/R/`, `paper/sections/`, `paper/figures/`, `paper/tables/`, etc.
+3. **Draft a high-level plan** — what phases are needed, estimated scope
+4. **Save to disk** — `quality_reports/plans/YYYY-MM-DD_new-project.md`
+5. **Present to user** — wait for approval before proceeding
+6. **Exit plan mode** — only after approval
+
 ### Step 1: Discovery Phase
 
 1. **If `interactive` or no research spec exists:**
    Run `/discover interview` to produce:
    - Research specification (`quality_reports/research_spec_*.md`)
-   - Domain profile (`.claude/rules/domain-profile.md`) — if still template
+   - Domain profile (`.claude/references/domain-profile.md`) — if still template
 
 2. **Run `/discover lit`** with the research topic:
    - Librarian collects literature
@@ -69,7 +79,15 @@ Phase 5: Submission (depends on Phase 4, score >= 95)
    - Strategist proposes identification strategy
    - strategist-critic validates the design
 
-**Gate:** Strategy memo must pass strategist-critic review (score >= 80).
+4b. **If paper type is econometric methods, theory+empirics, structural, or methodological reduced-form:**
+   **Run `/strategize theory`** to produce the formal theory section:
+   - Theorist drafts assumptions, theorems, proofs
+   - theorist-critic audits proof validity (4 phases, early-stop on critical gaps)
+   - Theorist-critic score contributes 20% to the weighted aggregate when present (see `quality.md`)
+
+   Skip this step for applied papers using off-the-shelf estimators.
+
+**Gate:** Strategy memo must pass strategist-critic review (score >= 80). If theory section exists, theorist-critic must also pass (score >= 80).
 
 ### Step 3: Execution Phase
 
@@ -115,6 +133,15 @@ The pipeline pauses for user input at these points:
 - Before submission (approve journal choice)
 
 Between pauses, the orchestrator runs autonomously per `workflow.md`.
+
+---
+
+## Bundled Resources (Level 3)
+
+| Resource | Path | When |
+|----------|------|------|
+| Quality gates | `config/quality-gates.json` | Phase transitions — score thresholds |
+| Gotchas | `gotchas.md` | Always — known failure points |
 
 ---
 
