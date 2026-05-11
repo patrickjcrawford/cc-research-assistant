@@ -92,12 +92,15 @@ A single scrollable HTML page that contains **everything** about the project: re
 ### Structure (section order)
 
 1. **Overview** — research question, causal chain, contributions, risk matrix
-2. **Data** — role-based inventory (treatment/IV/outcomes/mechanism) then file-level tables with sizes
+2. **Data** — role-based inventory (treatment/IV/outcomes/mechanism) then file-level tables with sizes. Two status labels only: `downloaded` (green) and `manual download` (amber).
 3. **Identification** — IV components, specifications, exclusion restriction, fallback design
 4. **Literature** — positioning, proximity rankings, gaps
 5. **Code** — analysis scripts and status
 6. **Quality** — component scores and gates
-7. **Changelog** — reverse-chronological milestone log (see below)
+7. **History** — timeline of quality reports and agent outputs
+8. **Plans** — active plans with status (DRAFT/APPROVED/COMPLETED)
+9. **Paper** — figures/tables plan, word allocation, section structure
+10. **Changelog** — reverse-chronological milestone log (see below)
 
 ### Changelog Section
 
