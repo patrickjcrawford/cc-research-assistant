@@ -6,51 +6,141 @@ Every research project gets a single-page HTML dashboard (`research_overview.htm
 
 ## Format: Long Scrollable Page
 
-The dashboard is a **single long scrollable page** with a sticky navigation bar. No tabs that hide content — every section is always visible.
+The dashboard is a **single long scrollable page** with two levels of sticky navigation. No tabs that hide content — every section is always visible.
+
+### Navigation Architecture
+
+```
+┌─────────────────────────────────────────────────────┐
+│  .main-nav (sticky, top: 0)                         │
+│  Overview  Data  Identification  Literature  ...    │
+│  ─────────────────────────────────────────────────  │
+└─────────────────────────────────────────────────────┘
+
+  ... section content scrolls ...
+
+┌─────────────────────────────────────────────────────┐
+│  .section-nav (sticky, top: 46px)                   │
+│  [Inventory] [Treatment & IV] [Outcomes] [Wind] ... │
+│  ─────────────────────────────────────────────────  │
+└─────────────────────────────────────────────────────┘
+
+  ... sub-section content scrolls ...
+```
+
+- **Main nav** (`.main-nav`): sticky at `top: 0`, `z-index: 10`. Links to each `<section id="...">`. Active section highlighted in clay via IntersectionObserver.
+- **Section sub-nav** (`.section-nav`): inline within each section, below the `<h2>`. Sticky at `top: 46px`, `z-index: 5`. Pill-style links to `<h3 id="...">` anchors within that section. Active sub-section highlighted in clay via a second IntersectionObserver.
+
+### Active State Highlighting
+
+Both navs highlight the current position as the user scrolls. This uses two simple IntersectionObservers:
+
+```javascript
+// Main nav: highlight active section
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.main-nav a');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(a => a.classList.toggle('active',
+        a.getAttribute('href') === '#' + entry.target.id));
+    }
+  });
+}, { rootMargin: '-50px 0px -60% 0px' });
+sections.forEach(s => observer.observe(s));
+
+// Sub-nav: highlight active sub-section
+const subHeadings = document.querySelectorAll('h3[id]');
+const subLinks = document.querySelectorAll('.section-nav a');
+const subObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const href = '#' + entry.target.id;
+      subLinks.forEach(a => a.classList.toggle('active',
+        a.getAttribute('href') === href));
+    }
+  });
+}, { rootMargin: '-100px 0px -60% 0px' });
+subHeadings.forEach(h => subObserver.observe(h));
+```
+
+### CSS for Navigation
+
+```css
+/* Main nav: sticky at top */
+.main-nav { position: sticky; top: 0; z-index: 10; background: var(--ivory);
+  padding: 12px 0 0; border-bottom: 2px solid var(--g300); margin: 28px 0 0;
+  display: flex; gap: 6px; flex-wrap: wrap; }
+.main-nav a { font-size: 13px; font-weight: 500; padding: 8px 16px 12px;
+  color: var(--g500); text-decoration: none; border-bottom: 3px solid transparent;
+  margin-bottom: -2px; transition: color 0.12s, border-color 0.12s; }
+.main-nav a:hover { color: var(--slate); text-decoration: none; }
+.main-nav a.active { color: var(--clay); border-bottom-color: var(--clay); }
+
+/* Section sub-nav: sticky below main nav */
+.section-nav { position: sticky; top: 46px; z-index: 5; background: var(--ivory);
+  display: flex; gap: 6px; flex-wrap: wrap; padding: 10px 0;
+  border-bottom: 1px solid var(--g200); margin: 0 0 24px; }
+.section-nav a { font-size: 12.5px; font-weight: 500; padding: 6px 14px;
+  border: 1.5px solid var(--g300); border-radius: 999px; color: var(--g500);
+  text-decoration: none; transition: border-color 0.12s, color 0.12s; }
+.section-nav a:hover { border-color: var(--slate); color: var(--slate); }
+.section-nav a.active { border-color: var(--clay); color: var(--clay); }
+```
+
+### Scroll Margins
+
+```css
+html { scroll-behavior: smooth; }
+section { scroll-margin-top: 52px; }     /* clears main nav */
+h3[id] { scroll-margin-top: 100px; }     /* clears main nav + section nav */
+```
 
 ### Structure
 
 ```
 Header (title, stats row: target journal, word limit, counties, panel years)
-Sticky nav (anchor links to each section)
+Main nav (sticky, anchor links to each section)
 
 Section: Overview
+  Section sub-nav: [Question] [Causal Chain] [Contributions] [Risks]
   - Abstract / research question
   - Causal chain diagram
   - Contributions (grid of cards)
   - Risk matrix (table with status pills)
 
 Section: Data
-  - Master inventory (table: role, dataset, source, status pill)
-  - Treatment & IV details (cards per component)
-  - Outcomes (cards per outcome variable)
-  - Mechanism variables (table)
-  - Wind/instrument deep-dive (if applicable)
-  - Download queue (priority table with time estimates)
+  Section sub-nav: [Inventory] [Treatment & IV] [Outcomes] [Mechanism] [Wind] [Downloads]
+  - Master inventory table
+  - Treatment & IV details (cards)
+  - Outcomes (cards per variable)
+  - Mechanism variables
+  - Wind/instrument deep-dive
+  - Download queue
 
 Section: Identification
-  - First stage / second stage equations
-  - Exclusion restriction threats (table)
+  Section sub-nav: [Design] [Threats] [Fallback] [Prediction]
+  - First/second stage equations
+  - Exclusion restriction threats
   - Fallback design
   - Key prediction
 
 Section: Literature
+  Section sub-nav: [Where We Sit] [Scooping Risk] [Closest] [Related] [Gaps] [Critic] [Titles]
   - Three-literature positioning table
-  - Contribution statement (draft)
-  - Scooping risk (cards: HIGH/MODERATE/LOW)
-  - Key papers by proximity (tables: 1-2, 3, 4)
-  - Gaps we fill (cards)
-  - Critic score (if reviewed)
+  - Contribution statement
+  - Scooping risk cards
+  - Papers by proximity
+  - Gaps we fill
+  - Critic score
   - Title options
 
 Section: Results
   - Empty state until estimation runs
-  - Populated with event-study plots, coefficient tables, robustness
 
 Section: Paper
   - Figure/table budget
   - Word allocation by section
-  - Journal-specific formatting notes
 ```
 
 ### Design System
@@ -59,21 +149,20 @@ Use the clo-author design system from `templates/html/base/styles.css`:
 - Palette: ivory/clay/serif (light) with automatic dark mode
 - Components: cards, pills, stat rows, report tables, collapsibles, alerts
 - Self-contained: all CSS inline, no external dependencies
-- Print-friendly: nav hidden, all content visible
+- Print-friendly: both navs hidden, all content visible
 
 ### Rules
 
-1. **Long page, no tabs.** All sections visible as you scroll. Use sticky nav with anchor links.
-2. **Smooth scroll everywhere.** Set `html { scroll-behavior: smooth; }`. Clicking any link fluidly rolls to the target — never jumps.
-3. **Mini nav bar per section.** Each major section (Data, Literature, etc.) has its own pill-style sub-nav with anchor links to its sub-sections. Class: `.section-nav` with `<a href="#subsection-id">` links.
-4. **No `overflow-x: auto`** on navigation — it creates ugly scrollbars.
-5. **Collapsibles only for genuinely optional detail** (e.g., "13 wind sources assessed").
-6. **Every section keeps full detail** — long page doesn't mean less content.
-7. **Status pills on everything** — IN HAND, READY, FOUND, PARTIAL, NEEDS AGG, GAP.
-8. **Self-contained HTML** — one file, no dependencies. Shareable as email attachment.
-9. **All anchor targets use `scroll-margin-top: 60px`** so the sticky nav doesn't overlap content.
-10. **Context-sensitive sub-nav in sticky header.** The sticky header contains the main nav PLUS one sub-nav per section (`.sticky-subnav[data-section="..."]`). JavaScript IntersectionObserver shows/hides the correct sub-nav as the user scrolls into each section. The active main nav link is also highlighted. Sub-navs use pill-style buttons. All anchors use `scroll-margin-top: 100px` to clear the two-row header.
-11. **All scroll-margin-top values must be 100px** to account for the sticky header height (main nav + sub-nav).
+1. **Long page, no tabs.** All sections visible as you scroll.
+2. **Smooth scroll everywhere.** `html { scroll-behavior: smooth; }` — clicking any link fluidly rolls, never jumps.
+3. **Two levels of sticky nav.** Main nav at `top: 0`, section sub-nav at `top: 46px`. Both inside `.page` (not outside it).
+4. **Both navs highlight active position.** Main nav underlines the current section in clay. Sub-nav pills highlight the current sub-section in clay. Both via IntersectionObserver.
+5. **No `overflow-x: auto`** on navigation — causes ugly scrollbars.
+6. **Collapsibles only for genuinely optional detail.**
+7. **Every section keeps full detail** — long page doesn't mean less content.
+8. **Status pills on everything** — IN HAND, READY, FOUND, PARTIAL, NEEDS AGG, GAP.
+9. **Self-contained HTML** — one file, no dependencies. Shareable as email attachment.
+10. **No complex JS.** Two simple IntersectionObservers for highlighting + collapsible toggles. Nothing else.
 
 ---
 
