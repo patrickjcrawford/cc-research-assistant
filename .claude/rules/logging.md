@@ -121,3 +121,61 @@ Each entry is a dated section appended to the file:
 - **Session logs** (`quality_reports/session_logs/`) — per-session, detailed, ephemeral
 - **Session report** (`SESSION_REPORT.md`) — consolidated operations log
 - **Research journal** (`quality_reports/research_journal.md`) — agent-level research history, append-only
+- **Changelog** (`CHANGELOG.html`) — user-facing project history, milestone-level
+
+---
+
+## 4. Changelog (HTML)
+
+**File:** `CHANGELOG.html` in project root
+**Template:** `templates/changelog.html`
+
+### Purpose
+
+A human-readable, reverse-chronological record of project milestones visible alongside the dashboard. Unlike session logs (internal, verbose) or the research journal (agent-level), the changelog records **what happened at the project level** — data acquired, design decisions made, analyses completed, papers submitted.
+
+### Triggers
+
+Append a new entry when:
+1. **Data acquisition** — new datasets downloaded or received
+2. **Design decisions** — identification strategy chosen, target journal changed, theoretical framework adopted
+3. **Code milestones** — first-stage works, main results table produced, robustness complete
+4. **Paper milestones** — draft complete, submitted, R&R received, revision submitted
+5. **Infrastructure** — project scaffolded, major tooling changes
+
+### Entry Format
+
+Each entry is a `<div class="entry">` block prepended (newest first):
+
+```html
+<div class="entry">
+  <div class="entry-header">
+    <span class="entry-date">YYYY-MM-DD</span>
+    <span class="tag tag-TYPE">TYPE</span>
+  </div>
+  <div class="entry-title">What happened</div>
+  <ul>
+    <li>Bullet describing the change</li>
+    <li>Include <code>file references</code> where relevant</li>
+  </ul>
+</div>
+```
+
+### Tag Types
+
+| Tag class | Use for |
+|-----------|---------|
+| `tag-data` | Data downloads, cleaning milestones, new variables |
+| `tag-design` | Identification strategy, target journal, theoretical framework |
+| `tag-code` | Analysis scripts, estimation results, robustness |
+| `tag-paper` | Drafting, submission, revision, acceptance |
+| `tag-infra` | Project setup, tooling, infrastructure |
+| `tag-review` | Peer review, referee reports, editorial decisions |
+
+### Rules
+
+1. **Reverse chronological** — newest entries at the top
+2. **Milestone-level** — not every session, only meaningful project events
+3. **Link from dashboard** — `project_dashboard.html` nav bar includes a link to `CHANGELOG.html`
+4. **Create on scaffold** — `/new-project` copies the template with the initial "scaffolded" entry
+5. **Human-readable** — this is what a coauthor or advisor opens to see what happened
