@@ -1,0 +1,36 @@
+---
+filters:
+  - abstract-section
+
+execute:
+  echo: false
+  warning: false
+  freeze: false
+---
+
+# Abstract
+
+[Abstract — 150 words or fewer. JEL codes and keywords follow.]
+
+**JEL Codes:** [X00, Y00]
+
+**Keywords:** [keyword one, keyword two, keyword three]
+
+# Introduction
+
+# Institutional Background
+
+# Data
+
+# Empirical Strategy
+
+# Results
+
+# Robustness
+
+# Conclusion
+
+# References {.unnumbered}
+
+::: {#refs}
+:::
