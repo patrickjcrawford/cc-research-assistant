@@ -1,0 +1,75 @@
+# ==============================================================================
+# .gitignore for Academic Claude Code Projects
+# ==============================================================================
+
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+*.synctex.gz
+*.run.xml
+*-blx.bib
+
+# Compiled PDFs (uncomment to track specific PDFs)
+# *.pdf
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# R
+.Rproj.user/
+.Rhistory
+.RData
+.Rdata
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Claude Code local files (not shared across machines)
+.claude/settings.local.json
+.claude/state/*
+!.claude/state/*.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Quarto rendering artifacts
+/.quarto/
+paper/.quarto/
+paper/quarto/*_files/
+paper/quarto/.quarto/
+_output/
+
+# Output artifacts
+docs/
+
+# Generated HTML reports
+project_dashboard.html
+quality_reports/**/*.html
+
+# ── Large data files — add project-specific patterns below ──
+
+# Cleaned datasets (regenerate from scripts)
+data/cleaned/*.rds
+data/cleaned/*.csv
+data/cleaned/*.parquet
+
+# Raw large files (download instructions in data/raw/README or replication package)
+data/raw/*.zip
+data/raw/*.npy
+data/raw/*.csv
