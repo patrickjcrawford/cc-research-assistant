@@ -70,6 +70,7 @@ Quarto
 │   ├── raw/                     # Original data (large files gitignored)
 │   └── cleaned/                 # Analysis-ready datasets (gitignored)
 ├── scripts/
+│   ├── generate_dashboard.py    # Generates project_dashboard.html
 │   ├── python/                  # Python/notebook scripts
 │   └── R/                       # R analysis scripts
 ├── quality_reports/             # Plans, session logs, reviews
@@ -104,6 +105,7 @@ Quarto
 | `/talk [mode] [format]` | Create, audit, or compile presentations |
 | `/submit [mode]` | Journal targeting to package to audit to final gate |
 | `/checkpoint [--flag]` | Session handoff: memory + SESSION_REPORT + research journal |
+| `python3 scripts/generate_dashboard.py` | Regenerate `project_dashboard.html` from current project state |
 
 ------------------------------------------------------------------------
 

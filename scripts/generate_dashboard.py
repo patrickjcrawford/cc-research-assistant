@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate a self-contained HTML project dashboard for a clo-author research project.
+Generate a self-contained HTML project dashboard for a cc-research-assistant project.
 
 Scans the project structure — paper sections, data, scripts, quality reports,
 bibliography, plans — and produces a single interactive HTML file.
@@ -14,7 +14,6 @@ import json
 import os
 import re
 import subprocess
-import sys
 from datetime import datetime
 from html import escape
 from pathlib import Path
@@ -151,7 +150,7 @@ def scan_figures_tables(root):
 
 def scan_bibliography(root):
     """Count bibliography entries."""
-    bib = root / "Bibliography_base.bib"
+    bib = root / "paper" / "references.bib"
     if not bib.exists():
         return 0
     return len(re.findall(r"@\w+\{", bib.read_text(errors="replace")))
@@ -960,7 +959,7 @@ def build_dashboard(root):
   <div class="page">
     {body}
     <footer class="generated-footer">
-      Generated {generated} by clo-author &middot; <a href="https://github.com/hugosantanna/clo-author">github.com/hugosantanna/clo-author</a>
+      Generated {generated} by cc-research-assistant &middot; <a href="https://github.com/patrickjcrawford/cc-research-assistant">github.com/patrickjcrawford/cc-research-assistant</a>
     </footer>
   </div>
   <script>{js}</script>
@@ -969,7 +968,7 @@ def build_dashboard(root):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Generate clo-author project dashboard")
+    parser = argparse.ArgumentParser(description="Generate cc-research-assistant project dashboard")
     parser.add_argument("--project-root", default=".", help="Project root directory")
     parser.add_argument("--output", default=None, help="Output HTML file path")
     parser.add_argument("--fresh", action="store_true",

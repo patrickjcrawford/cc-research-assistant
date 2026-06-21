@@ -70,6 +70,8 @@ data/cleaned/*.csv
 data/cleaned/*.parquet
 
 # Raw large files (download instructions in data/raw/README or replication package)
-data/raw/*.zip
-data/raw/*.npy
-data/raw/*.csv
+data/raw/**/*.zip
+data/raw/**/*.npy
+data/raw/**/*.csv
+data/raw/**/*.dta
+data/raw/**/*.do

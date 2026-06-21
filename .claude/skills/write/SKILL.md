@@ -30,7 +30,7 @@ Before drafting, read all available context:
 2. Read `reference-docs/` for notes, outlines, research specs
 3. Read most recent `quality_reports/research_spec_*.md` or `quality_reports/lit_review_*.md`
 4. Read `.claude/references/domain-profile.md` for field conventions
-5. Check `Bibliography_base.bib` for available citations
+5. Check `paper/references.bib` for available citations
 6. Scan `paper/tables/` and `paper/figures/` for generated output
 7. Read `quality_reports/results_summary.md` if it exists (from Coder)
 
@@ -69,7 +69,7 @@ Before presenting the draft:
 - [ ] Findings lead sentences — not buried after setup
 - [ ] Design-specific elements present (see writer.md for checklists per design)
 - [ ] Every displayed equation is numbered (`\label{eq:...}`)
-- [ ] All `\cite{}` keys exist in `Bibliography_base.bib`
+- [ ] All `\cite{}` keys exist in `paper/references.bib`
 - [ ] Introduction contribution paragraph names specific papers
 - [ ] Effect sizes stated with units
 - [ ] No banned hedging phrases
