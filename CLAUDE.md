@@ -1,9 +1,6 @@
 # CLAUDE.MD -- Empirical Economics Research with Claude Code
 
-**Project:** [PROJECT NAME]
-**Institution:** George Mason University
-**Field:** Economic History & Political Economy
-**Branch:** main
+**Project:** \[PROJECT NAME\] **Institution:** George Mason University **Field:** Economic History & Political Economy **Branch:** main
 
 ------------------------------------------------------------------------
 
@@ -22,7 +19,7 @@
 
 **Quarto** (not LaTeX directly). Main file: `paper/main.qmd`
 
-```bash
+``` bash
 # Compile paper
 quarto render paper/main.qmd
 
@@ -30,7 +27,7 @@ quarto render paper/main.qmd
 quarto preview paper/main.qmd
 ```
 
-Config: `paper/_quarto.yml` | Bibliography: `paper/references.bib`
+Config: `paper/_quarto.yml` \| Bibliography: `paper/references.bib`
 
 ------------------------------------------------------------------------
 
@@ -38,7 +35,7 @@ Config: `paper/_quarto.yml` | Bibliography: `paper/references.bib`
 
 Update this section to reflect your project's analysis pipeline. Example:
 
-```
+```         
 Python notebooks (scripts/python/) OR R scripts (scripts/R/)
     text/data processing
     --> data/cleaned/
@@ -55,7 +52,7 @@ Quarto
 
 ## Folder Structure
 
-```
+```         
 [YOUR-PROJECT]/
 ├── CLAUDE.md
 ├── .claude/                     # Rules, skills, agents, hooks
@@ -77,7 +74,7 @@ Quarto
 │   └── R/                       # R analysis scripts
 ├── quality_reports/             # Plans, session logs, reviews
 ├── explorations/                # Research sandbox
-└── master_supporting_docs/      # Reference papers and data docs
+└── reference-docs/              # Reference papers and data docs
 ```
 
 ------------------------------------------------------------------------
@@ -88,7 +85,7 @@ Quarto
 |-------|------------|-----------------------------------|
 | 80    | Commit     | Weighted aggregate (blocking)     |
 | 90    | PR         | Weighted aggregate (blocking)     |
-| 95    | Submission | Aggregate + all components >= 80  |
+| 95    | Submission | Aggregate + all components \>= 80 |
 | --    | Advisory   | Talks (reported, non-blocking)    |
 
 ------------------------------------------------------------------------
@@ -114,7 +111,7 @@ Quarto
 
 | Environment  | Effect          | Use Case        |
 |--------------|-----------------|-----------------|
-| `[your-env]` | [Description]   | [When to use]   |
+| `[your-env]` | \[Description\] | \[When to use\] |
 
 ------------------------------------------------------------------------
 
@@ -126,8 +123,8 @@ Output organization: by-script
 
 ## Current Project State
 
-| Component | File | Status | Description |
-|-----------|------|--------|-------------|
-| Paper | `paper/main.qmd` | not started | [Brief description] |
-| Data | `scripts/R/` | not started | [Analysis description] |
-| Replication | `paper/replication/` | not started | -- |
+| Component   | File                 | Status      | Description              |
+|-------------|----------------------|-------------|--------------------------|
+| Paper       | `paper/main.qmd`     | not started | \[Brief description\]    |
+| Data        | `scripts/R/`         | not started | \[Analysis description\] |
+| Replication | `paper/replication/` | not started | --                       |

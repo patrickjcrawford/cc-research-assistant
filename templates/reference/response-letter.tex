@@ -1,0 +1,134 @@
+% Response Letter Template — R&R Round [N]
+% Fill in: [JOURNAL], [EDITOR], [PAPER TITLE], [AUTHORS]
+% Each referee comment block: copy the \referee / \response pair as needed.
+
+\documentclass[12pt]{article}
+\usepackage[left=1.25in, right=1.25in, top=1in, bottom=1in]{geometry}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+
+% Color scheme: referee comments in blue-gray, our responses in black
+\definecolor{refcolor}{RGB}{70, 100, 140}
+\definecolor{actioncolor}{RGB}{0, 120, 60}
+
+% Referee comment box
+\newcommand{\referee}[1]{%
+  \vspace{0.5em}
+  \noindent\textcolor{refcolor}{\textbf{Referee:}} \textit{\textcolor{refcolor}{#1}}
+  \vspace{0.3em}
+}
+
+% Our response
+\newcommand{\response}[1]{%
+  \noindent\textbf{Response:} #1
+  \vspace{0.8em}
+}
+
+% Action taken note (green)
+\newcommand{\action}[1]{%
+  \noindent\textcolor{actioncolor}{\textbf{Action:} #1}
+  \vspace{0.8em}
+}
+
+\begin{document}
+
+\begin{center}
+  {\large \textbf{Response to Referees}} \\[0.5em]
+  ``[PAPER TITLE]'' \\[0.3em]
+  \textit{[Journal Full Name]} \\[0.3em]
+  [Month Year]
+\end{center}
+
+\vspace{1em}
+
+We thank the editor and referees for their careful reading and constructive comments.
+The paper has been substantially revised in response. Below we address each comment in turn.
+Changes in the manuscript are indicated [in blue / by tracked changes / by section reference].
+
+\vspace{1em}
+\hrule
+\vspace{1em}
+
+% ============================================================
+\section*{Associate Editor}
+% ============================================================
+
+\referee{[Paste AE comment verbatim]}
+
+\response{[Your response. Be direct. Reference specific changes: ``We have added X in Section Y (p. Z).''
+If you disagree, see diplomatic-disagreement.md for phrasing.]}
+
+\action{[One-line description of what changed and where: ``Revised Section 3.2, added Table A4.'']}
+
+\vspace{1em}
+\hrule
+\vspace{1em}
+
+% ============================================================
+\section*{Referee 1}
+% ============================================================
+
+\noindent We thank Referee 1 for [one genuine compliment: a specific observation the referee made
+that was useful, not generic praise].
+
+\vspace{0.5em}
+
+% --- Comment R1-1 ---
+\noindent \textbf{Comment 1.}
+
+\referee{[Paste comment verbatim]}
+
+\response{[Response. Keep it tight. One paragraph per comment is usually enough.
+For NEW ANALYSIS items: state what you did and cite the new table/figure.
+For CLARIFICATION items: quote the revised text directly.]}
+
+\action{[What changed and where.]}
+
+% --- Comment R1-2 ---
+\noindent \textbf{Comment 2.}
+
+\referee{[Paste comment verbatim]}
+
+\response{[Response.]}
+
+\action{[What changed.]}
+
+% Add more comments as needed by copying the block above.
+
+\vspace{1em}
+\hrule
+\vspace{1em}
+
+% ============================================================
+\section*{Referee 2}
+% ============================================================
+
+\noindent We thank Referee 2 for [genuine specific compliment].
+
+\vspace{0.5em}
+
+% --- Comment R2-1 ---
+\noindent \textbf{Comment 1.}
+
+\referee{[Paste comment verbatim]}
+
+\response{[Response.]}
+
+\action{[What changed.]}
+
+% Add more comments as needed.
+
+\vspace{1em}
+\hrule
+\vspace{1em}
+
+\noindent We hope these revisions address the referees' concerns and that the manuscript
+is now suitable for publication. We remain available to provide any further clarification.
+
+\end{document}
