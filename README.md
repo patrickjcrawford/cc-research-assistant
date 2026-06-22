@@ -17,7 +17,7 @@ cd [your-project-name]
 claude
 ```
 
-Then fill in the `[BRACKETED PLACEHOLDERS]` in `CLAUDE.md` and `paper/_quarto.yml`, and tell Claude:
+Then fill in the `[BRACKETED PLACEHOLDERS]` in `CLAUDE.md` and `_quarto.yml`, and tell Claude:
 
 ```
 I am starting a research project on [YOUR TOPIC]. Read CLAUDE.md and help me set up.

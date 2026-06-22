@@ -21,7 +21,7 @@ format:
     transition: none
     width: 1600
     height: 900
-bibliography: ../../paper/references.bib
+bibliography: ../../references.bib
 csl: apa.csl
 ---
 

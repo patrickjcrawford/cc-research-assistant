@@ -27,7 +27,7 @@ quarto render paper/main.qmd
 quarto preview paper/main.qmd
 ```
 
-Config: `paper/_quarto.yml` \| Bibliography: `paper/references.bib`
+Config: `_quarto.yml` \| Bibliography: `references.bib`
 
 ------------------------------------------------------------------------
 
@@ -55,11 +55,11 @@ Quarto
 ```         
 [YOUR-PROJECT]/
 ├── CLAUDE.md
+├── _quarto.yml                  # Quarto configuration
+├── references.bib               # Bibliography
 ├── .claude/                     # Rules, skills, agents, hooks
 ├── paper/                       # Quarto manuscript (source of truth)
 │   ├── main.qmd                 # Primary paper file
-│   ├── _quarto.yml              # Quarto configuration
-│   ├── references.bib           # Bibliography
 │   ├── figures/                 # Generated figures (by-script subdirs)
 │   ├── tables/                  # Generated tables (by-script subdirs)
 │   ├── sections/                # Section-level .qmd files (optional)

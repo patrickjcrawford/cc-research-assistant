@@ -14,7 +14,7 @@ format:
   #   theme: default            # LaTeX content first (columns environments, \pause, etc.)
   #   css: ../../paper/quarto/custom.scss
   #   slide-number: true
-bibliography: ../../paper/references.bib
+bibliography: ../../references.bib
 ---
 
 ## Research Question

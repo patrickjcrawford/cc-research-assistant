@@ -52,7 +52,7 @@ quarto render paper/talks/[file].qmd
 Note: `paper/latexmkrc` configures XeLaTeX for the paper. Talks are compiled via Quarto; `paper/talks/latexmkrc` is only needed for direct latexmk use outside Quarto.
 
 ### `/tools validate-bib` — Bibliography Validation
-Cross-reference all `\cite{}` / `@` keys in paper and talk files against `paper/references.bib`.
+Cross-reference all `\cite{}` / `@` keys in paper and talk files against `references.bib`.
 Report: missing entries, unused entries, duplicate keys.
 
 ### `/tools lint [file|dir]` — Mechanical Code Linting
