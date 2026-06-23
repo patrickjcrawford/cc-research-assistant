@@ -1,0 +1,36 @@
+$if(title)$
+  \title{
+    $title$
+    $if(thanks)$
+      \thanks{$thanks$}
+    $endif$
+  }
+$endif$
+
+$if(subtitle)$
+  \usepackage{etoolbox}
+  \makeatletter
+  \providecommand{\subtitle}[1]{%
+    \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+  }
+  \makeatother
+  \subtitle{$subtitle$}
+$endif$
+
+\usepackage{hyperref}
+
+\author{%
+  $for(authors)$
+    \textbf{$it.name.literal$}\\[-0.6ex]
+    $if(it.email)$\small\href{mailto:$it.email$}{$it.email$}$endif$%
+    $sep$ \and
+  $endfor$
+}
+
+\date{
+  $if(date)$
+    $date$
+  $else$
+    $today$
+  $endif$
+}

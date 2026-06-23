@@ -1,0 +1,19 @@
+% Essential packages
+\usepackage{setspace, xcolor, lscape, dcolumn, multirow, amsmath, appendix, hyperref, adjustbox}
+\usepackage[flushleft]{threeparttable}
+
+% Custom color and spacing
+\definecolor{medium-green-grey}{HTML}{5A8567}
+\doublespacing
+
+% Fix \thanks handling for titles
+\makeatletter
+\def\thanks#1{\protected@xdef\@thanks{\@thanks \protect\footnotetext{#1}}}
+\makeatother
+
+% % Inline abstract label
+% \makeatletter
+% \renewenvironment{abstract}{
+%   \underline{\textbf{\abstractname}}
+% }{}
+% \makeatother

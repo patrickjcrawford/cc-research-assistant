@@ -1,0 +1,75 @@
+% Add necessary packages
+\usepackage{appendixnumberbeamer, tikz, caption, lmodern, pifont, multirow}
+\usepackage{adjustbox}
+\usepackage[dvipsnames,table]{xcolor}
+
+
+% ---- Custom Color Definitions ----
+\definecolor{soft-cream}{HTML}{F8F8F2}          %"#F8F8F2"  % !='off-white'
+\definecolor{dark-green}{HTML}{314F40}          %"#314F40"
+\definecolor{medium-green-grey}{HTML}{5A8567}   %"#5A8567"  %
+\definecolor{light-green-grey}{HTML}{A3B4A9}    %"#A3B4A9"
+\definecolor{bg-green-grey}{HTML}{DDE5DC}       %"#DDE5DC"
+\definecolor{burgundy}{HTML}{590925}            %"#590925"  %
+\definecolor{light-burgundy}{HTML}{AF3257}      %"#AF3257"
+\definecolor{pink}{HTML}{E7729D}                %"#E7729D"
+
+
+% ---- Setup ----
+\captionsetup{labelformat=empty, labelsep=none}
+\makeatletter
+\makeatother
+\usetikzlibrary{positioning}
+
+% ---- Slide Title Colors ----
+\usecolortheme[named=medium-green-grey]{structure}
+
+
+% ---- Palette Colors ----
+% leave primary and secondary as defaults, they are overwritten
+\setbeamercolor{palette primary}{bg=red, fg=green}
+\setbeamercolor{palette secondary}{bg=blue, fg=yellow}
+\setbeamercolor{palette tertiary}{bg=medium-green-grey, fg=white}
+\setbeamercolor{palette quaternary}{bg=yellow, fg=red} % see affected elements
+
+
+% ---- Headline and Footline ----
+\useoutertheme[subsection=false, footline=authortitle]{miniframes}
+% \setbeamertemplate{footline}[frame number]
+\setbeamertemplate{frametitle continuation}[from second]
+\setbeamercolor{page number in head/foot}{fg=burgundy}
+
+% \setbeamercolor*{mini frame}{fg=blue,bg=red} % affects miniframes dots, fg=active
+% \setbeamercolor{section in head/foot}{fg=green,bg=yellow} % affects head/foot bg and nonactive text
+\setbeamercolor{title in head/foot}{fg=red}
+\setbeamercolor{author in head/foot}{fg=bg-green-grey}
+%  institute in head/foot
+%  date in head/foot
+\setbeamercolor{headline}{fg=red, bg=yellow}
+
+% ---- Block Colors ----
+\setbeamercolor{block title}{bg=bg-green-grey}
+\setbeamercolor{block body}{bg=soft-cream}
+
+
+% ---- Citation colors ----
+\makeatletter
+\renewcommand{\citeproc}[2]{%
+  \leavevmode
+  \begingroup
+    \setlength{\fboxsep}{0pt}%
+    \hyper@linkstart{cite}{#1}%
+      \textcolor{medium-green-grey}{#2}%
+    \hyper@linkend
+  \endgroup
+}
+\makeatother
+\setbeamercolor*{bibliography entry author}{fg=black}
+
+
+% ---- List Symbols and Colors ----
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{itemize subitem}{\ding{229}}
+\setbeamertemplate{itemize subsubitem}{\ding{223}}
+
+% \setbeamercolor{itemize subitem}{fg=burgundy}
