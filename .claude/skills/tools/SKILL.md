@@ -2,7 +2,6 @@
 name: tools
 description: Utility commands — commit, compile, validate-bib, lint, journal, context-status, deploy, learn. Replaces individual utility skills.
 argument-hint: "[subcommand: commit | compile | validate-bib | lint | journal | context | deploy | learn | upgrade] [args]"
-allowed-tools: Read,Grep,Glob,Write,Edit,Bash,Task
 ---
 
 # Tools

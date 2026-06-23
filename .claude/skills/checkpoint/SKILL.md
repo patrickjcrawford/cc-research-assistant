@@ -8,7 +8,6 @@ description: >
   has configured `.claude/state/obsidian-config.md`. Does NOT run briefings,
   calendar, or mail. Just gather, confirm, save.
 argument-hint: "[--auto | --memory-only | --scaffold-only | --dry-run]"
-allowed-tools: Read,Grep,Glob,Write,Edit,Bash
 ---
 
 # Checkpoint: Session Handoff

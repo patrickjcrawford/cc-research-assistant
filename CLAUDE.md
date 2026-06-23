@@ -75,7 +75,9 @@ Quarto
 │   └── R/                       # R analysis scripts
 ├── quality_reports/             # Plans, session logs, reviews
 ├── explorations/                # Research sandbox
-└── reference-docs/              # Reference papers and data docs
+└── reference_docs/              # Reference papers and data docs
+    ├── my_papers/               # Your own prior work (voice corpus, self-citation source)
+    └── supporting/              # Others' papers, data docs, slides
 ```
 
 ------------------------------------------------------------------------

@@ -2,7 +2,6 @@
 name: discover
 description: Discovery phase combining research interviews, literature search, data discovery, and ideation. Routes to appropriate agents based on arguments. Replaces /interview-me, /lit-review, /find-data, /research-ideation.
 argument-hint: "[mode: interview | lit | data | ideate] [topic or query]"
-allowed-tools: Read,Grep,Glob,Write,Edit,WebSearch,WebFetch,Task
 ---
 
 # Discover
@@ -57,7 +56,44 @@ Search and synthesize academic literature.
 
 **Agents:** Librarian (collector) → librarian-critic (reviewer) **Output:** Annotated bibliography + BibTeX entries + frontier map
 
-Workflow: 1. Read `.claude/references/domain-profile.md` for field journals and seminal references 2. Check `reference-docs/` for uploaded papers 3. Read `references.bib` for papers already in the project 4. Dispatch Librarian to search: - Top-5 journals (AER, Econometrica, QJE, JPE, REStud) - Field journals from domain-profile.md - NBER/SSRN/IZA working papers - **Citation chains** — forward and backward citation tracking from key papers. Follow: (a) backward citations (what do the key papers cite?), and (b) forward citations (who cites the key papers?). This is often the most productive search vector. 5. Assign **proximity scores** to each paper: - **1** — Directly competes (same question, similar method) - **2** — Closely related (same question, different method or setting) - **3** — Related (overlapping topic, different angle) - **4** — Background (provides theory, method, or context) - **5** — Tangentially related (useful framing only) 6. Dispatch librarian-critic to check coverage, gaps, recency, scope 7. If gaps found, re-dispatch Librarian for targeted search (max 1 round) 8. Save to `quality_reports/lit_review_[topic].md` 9. Generate interactive HTML bibliography and refresh dashboard:
+Workflow:
+
+**Step 0: Zotero sync (attempt)**
+Try to pull relevant papers from the user's Zotero library using this fallback chain:
+
+1. **`zotero-cli` via Bash (preferred for Claude Code — lower token cost):**
+   ```bash
+   zotero-cli search "[topic keywords]" --limit 50
+   zotero-cli search "[topic keywords]" --mode semantic --limit 20   # if semantic extra installed
+   ```
+   For each result, export BibTeX: `zotero-cli get metadata [KEY] --format bibtex`
+
+2. **MCP tools (if CLI not found):**
+   - `mcp__zotero__zotero_search_items` with the topic as query
+   - `mcp__zotero__zotero_semantic_search` if available
+   - `mcp__zotero__zotero_get_item_metadata` with `format="bibtex"` for each result
+
+3. **If both fail:** log "Zotero unavailable in this context" and continue. Append to output: "**Zotero not synced.** For a complete library check, run `/discover zotero` in the Claude desktop app, then re-run `/discover lit`."
+
+On success: extract titles, authors, BibTeX keys, and tags — hand to the Librarian as pre-known papers to avoid duplication and seed citation chains.
+
+**Step 1: Load context**
+Read `.claude/references/domain-profile.md` for field journals and seminal references. Read `references.bib` for papers already in the project.
+
+**Step 2: Scan `reference_docs/supporting/`**
+Check for uploaded reference material and ingest by file type:
+- `.pdf` — use pdf-processing protocol (`discover/references/pdf-processing.md`)
+- `.tex` — read directly
+- `.bib` — extract all keys, titles, and authors; treat as pre-known papers
+- `.txt` — parse line by line for DOIs (`10.xxxx/yyyy`), arXiv IDs (`arxiv:xxxx.xxxxx`), and URLs; resolve each via WebFetch (`https://doi.org/{doi}` follows to abstract page); hand resolved metadata to Librarian
+
+**Steps 3–8: Search and synthesize**
+3. Dispatch Librarian to search: Top-5 journals (AER, Econometrica, QJE, JPE, REStud), field journals from domain-profile.md, NBER/SSRN/IZA working papers, **citation chains** — forward and backward tracking from key papers (most productive search vector).
+4. Assign **proximity scores**: 1 = directly competes, 2 = closely related, 3 = related, 4 = background, 5 = tangential.
+5. Dispatch librarian-critic to check coverage, gaps, recency, scope.
+6. If gaps found, re-dispatch Librarian for targeted search (max 1 round).
+7. Save to `quality_reports/lit_review_[topic].md`.
+8. Generate interactive HTML bibliography and refresh dashboard:
 
 ``` bash
 python3 scripts/generate_html_report.py literature quality_reports/lit_review_[topic].md
@@ -66,7 +102,10 @@ python3 scripts/generate_dashboard.py
 
 Open the HTML report for the user: `open quality_reports/lit_review_[topic].html`
 
-**Unverified citations:** If you cannot verify a citation, mark the BibTeX entry with `% UNVERIFIED`. Do NOT fabricate or guess citation details. Note when working papers have been published — cite the published version.
+**Step 9: Future reference file offer**
+After saving the lit review, ask: "Save a portable future_reference.bib for use in other projects? (y/n)." If yes, write `reference_docs/supporting/future_reference.bib` containing all verified BibTeX entries from this review. The user can drop this file into any future project's `reference_docs/supporting/` and Step 2 above will pick it up automatically.
+
+**Unverified citations:** Mark BibTeX entries with `% UNVERIFIED` if not confirmed. Do NOT fabricate or guess citation details. Cite published version when a working paper has been published.
 
 Output format for each paper:
 
@@ -79,6 +118,39 @@ Output format for each paper:
 - **Key finding:** [result with effect size]
 - **Relevance:** [why it matters for our research]
 ```
+
+### `/discover zotero [collection]` — Zotero Library Export
+
+Export your Zotero library (or a specific collection) to `reference_docs/supporting/zotero_export.bib` so that `/discover lit` picks it up automatically in Step 2.
+
+**Use this when:** `/discover lit` flagged "Zotero not synced" — typically because you're in Positron and `zotero-cli` isn't on PATH or the local Zotero API isn't running. Run this from Claude Desktop where the environment is configured, then switch back to Positron.
+
+Workflow:
+1. **List available collections:**
+   ```bash
+   zotero-cli collections list
+   ```
+   Or via MCP: `mcp__zotero__zotero_get_collections`
+
+2. **Export BibTeX** — full library or named collection:
+   ```bash
+   # Full library search (topic-agnostic, exports everything)
+   zotero-cli search "" --limit 500 | ...   # pipe item keys to bibtex export
+
+   # Or by collection (pass collection name as argument)
+   zotero-cli collections list   # find the collection key
+   # then get items: mcp__zotero__zotero_get_collection_items with collection key
+   # then export each: zotero-cli get metadata [KEY] --format bibtex
+   ```
+   For bulk export, prefer: `mcp__zotero__zotero_get_item_metadata` with `format="bibtex"` per item — more reliable than piping.
+
+3. **Write to `reference_docs/supporting/zotero_export.bib`** — append, don't overwrite, so prior exports aren't lost.
+
+4. Report: N entries written, collections found.
+
+5. Prompt: "Now run `/discover lit [topic]` — `zotero_export.bib` will be picked up automatically in Step 2."
+
+**If CLI and MCP both fail:** Report the error verbatim. Common causes: Zotero desktop not open, local API not enabled in Zotero preferences (`Tools → Developer → Allow other applications to communicate with Zotero`), or `zotero-mcp` not installed/configured.
 
 ### `/discover data [requirements]` — Data Discovery
 

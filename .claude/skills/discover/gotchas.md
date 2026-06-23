@@ -11,3 +11,8 @@ Known failure points and edge cases for research discovery.
 - Never fabricate citations. If you cannot verify a citation, mark the BibTeX entry with `% UNVERIFIED`.
 - Citation chains (forward and backward) are often the most productive search vector -- don't skip them.
 - Always assign proximity scores (1-5) to every paper found. This is not optional.
+- Zotero access uses `zotero-cli` (Bash) first — preferred for Claude Code because it's lower token cost. MCP tools (`mcp__zotero__*`) are the fallback. Both require the Zotero desktop app to be open with local API enabled (`Tools → Developer → Allow other applications to communicate with Zotero`).
+- In Positron, `zotero-cli` may not be on PATH even if installed — Step 0 of `/discover lit` will silently fail and flag it. Use `/discover zotero` in Claude Desktop to export `zotero_export.bib` first.
+- Optional: after `/discover lit`, newly found papers can be added back to Zotero via `zotero-cli add doi [DOI]` or `mcp__zotero__zotero_add_by_doi`. Only do this if the user asks — don't auto-add.
+- `.txt` files in `reference_docs/supporting/` are parsed for DOIs and URLs line by line. Blank lines and free-text notes are skipped. DOI format: `10.xxxx/yyyy` (with or without `https://doi.org/` prefix).
+- `future_reference.bib` written at the end of `/discover lit` only contains verified entries — `% UNVERIFIED` entries are excluded.

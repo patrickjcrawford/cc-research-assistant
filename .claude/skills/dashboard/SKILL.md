@@ -2,7 +2,6 @@
 name: dashboard
 description: Generate or refresh the unified project dashboard HTML. Scans data files, scripts, quality reports, plans, git history, and literature to build a single-page project overview. Invoke with /dashboard to create from scratch or update an existing dashboard.
 argument-hint: "[refresh | create | add-changelog TITLE]"
-allowed-tools: Read,Grep,Glob,Write,Edit,Bash
 ---
 
 # Dashboard

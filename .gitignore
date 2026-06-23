@@ -1,77 +1,94 @@
 # ==============================================================================
-# .gitignore for Academic Claude Code Projects
+# .gitignore for the cc-research-assistant TEMPLATE repo
+#
+# Philosophy: this repo tracks its full folder structure so forks start with
+# a complete scaffold. Almost nothing is actively ignored here.
+#
+# Downstream projects should UNCOMMENT the sections below to protect data,
+# build artifacts, and generated outputs.
 # ==============================================================================
 
-# LaTeX build artifacts
-*.aux
-*.bbl
-*.blg
-*.fdb_latexmk
-*.fls
-*.log
-*.nav
-*.out
-*.snm
-*.toc
-*.vrb
-*.synctex.gz
-*.run.xml
-*-blx.bib
 
-# Compiled PDFs (uncomment to track specific PDFs)
-# *.pdf
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-
-# R
-.Rproj.user/
-.Rhistory
-.RData
-.Rdata
-
-# OS files
+# ── Always ignored: OS noise and editor swap files ──
+# These are never meaningful content in any repo.
 .DS_Store
 Thumbs.db
-
-# Claude Code local files (not shared across machines)
-.claude/settings.local.json
-.claude/state/*
-!.claude/state/*.example
-
-# IDE
-.vscode/
-.idea/
 *.swp
 *.swo
 *~
 
-# Quarto rendering artifacts
-/.quarto/
-paper/.quarto/
-paper/quarto/*_files/
-paper/quarto/.quarto/
-_output/
+# ── Always ignored: Claude Code machine-local settings ──
+# settings.local.json contains machine-specific paths and should never be shared.
+# Real state files are runtime artifacts; *.example files ARE tracked as scaffolding.
+.claude/settings.local.json
+.claude/state/*
+!.claude/state/*.example
 
-# Output artifacts
-docs/
 
-# Generated HTML reports
-project_dashboard.html
-quality_reports/**/*.html
+# ==============================================================================
+# ── Add in downstream projects ──
+# None of the blocks below apply to the template itself. Uncomment after forking.
+# ==============================================================================
 
-# ── Large data files — add project-specific patterns below ──
+# ── LaTeX build artifacts ──
+# *.aux
+# *.bbl
+# *.blg
+# *.fdb_latexmk
+# *.fls
+# *.log
+# *.nav
+# *.out
+# *.snm
+# *.toc
+# *.vrb
+# *.synctex.gz
+# *.run.xml
+# *-blx.bib
 
-# Cleaned datasets (regenerate from scripts)
-data/cleaned/*.rds
-data/cleaned/*.csv
-data/cleaned/*.parquet
+# ── Compiled PDFs ──
+# *.pdf
 
-# Raw large files (download instructions in data/raw/README or replication package)
-data/raw/**/*.zip
-data/raw/**/*.npy
-data/raw/**/*.csv
-data/raw/**/*.dta
-data/raw/**/*.do
+# ── Python cache ──
+# __pycache__/
+# *.pyc
+# *.pyo
+
+# ── R session files ──
+# .Rhistory
+# .RData
+# .Rdata
+# .Rproj.user/
+
+# ── IDE project files (optional — some teams track these) ──
+# .vscode/
+# .idea/
+
+# ── Quarto / LaTeX compilation outputs ──
+# /.quarto/
+# paper/.quarto/
+# paper/quarto/*_files/
+# paper/quarto/.quarto/
+# _output/
+
+# ── Generated HTML reports ──
+# project_dashboard.html
+# research_overview.html
+# quality_reports/**/*.html
+
+# ── Built documentation site ──
+# docs/
+
+# ── Cleaned datasets (regenerated from scripts; often large) ──
+# data/cleaned/*.rds
+# data/cleaned/*.csv
+# data/cleaned/*.parquet
+
+# ── Raw data (download via replication instructions; never commit) ──
+# data/raw/**/*.zip
+# data/raw/**/*.npy
+# data/raw/**/*.csv
+# data/raw/**/*.dta
+# data/raw/**/*.do
+# data/raw/**/*.xlsx
+# data/raw/**/*.xls

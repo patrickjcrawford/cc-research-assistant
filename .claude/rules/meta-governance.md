@@ -4,7 +4,7 @@ This repository is both a working project and a public template for empirical ec
 
 ## Working Project
 - We develop research papers, seminars, guides, and documentation
-- We accumulate project-specific learnings and institutional context (UAB)
+- We accumulate project-specific learnings and institutional context (read from CLAUDE.md — institution, PI, and project details are set there at project initialization)
 - We test and iterate on the architecture itself
 
 ## Public Template

@@ -89,7 +89,7 @@ These are flexible — tell Claude to change them without invoking the amendment
 - **Citation style:** authoryear (APA-style) by default; can switch per journal
 - **Significance stars:** on by default; suppressed for AEA journals automatically
 - **Plot color scheme:** publication-ready (grayscale-safe) by default
-- **Clustering level:** state-level by default; justify deviations
+- **Clustering level:** match the level of treatment variation; always justify the choice explicitly
 - **Response verbosity:** concise by default; ask for more detail when needed
 - **Commit message style:** imperative mood, present tense
 

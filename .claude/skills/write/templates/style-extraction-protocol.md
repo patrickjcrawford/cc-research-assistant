@@ -10,7 +10,7 @@ This protocol is activated by `/write style-guide [paper-dir]`.
 
 ### 1. Discover Corpus
 
-Glob `.tex` and `.pdf` files in the target directory. If fewer than 2 papers, stop and flag -- one paper overfits.
+Glob `.tex` and `.pdf` files in the target directory (default: `reference_docs/my_papers/`). If fewer than 2 papers, flag the limitation but proceed with a reduced-confidence note — do not hard-stop.
 
 ### 2. Sample Strategically
 

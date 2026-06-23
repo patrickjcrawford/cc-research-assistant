@@ -7,7 +7,7 @@ paths:
   - "**/*.tex"
   - "paper/tables/**"
   - "paper/figures/**"
-  - "reference-docs/**"
+  - "reference_docs/**"
   - "explorations/**"
 ---
 
@@ -17,10 +17,11 @@ paths:
 
 ## 1. Table Standards
 
-**Target:** Publication-quality tables using standard economics formatting (booktabs rules, no vertical rules). Two approaches are supported:
+**Target:** Publication-quality tables using standard economics formatting (booktabs rules, no vertical rules). Three approaches in priority order:
 
-- **tabularray (`tblr` / `talltblr`)** — modern key-value interface. Preferred for hand-written tables in `main.tex`.
-- **`tabular` + `booktabs` + `threeparttable`** — traditional stack. Required for R/Python/Julia-generated output (scripts export bare `tabular`).
+1. **`fixest::etable` or `modelsummary`** — primary workflow for all regression and descriptive tables. Called in R code chunks or scripts; output is a `threeparttable` (etable default) or bare `tabular` wrapped in `main.qmd`.
+2. **`tabular` + `booktabs` + `threeparttable`** — traditional wrapping stack. Used when R output needs a custom wrapper in `main.qmd`.
+3. **tabularray (`tblr` / `talltblr`)** — fallback only, for hand-written tables that can't be generated from R code.
 
 Journal-specific conventions (significance stars, note format) adapt to the target journal — see journal-profiles.md.
 
@@ -28,7 +29,7 @@ Journal-specific conventions (significance stars, note format) adapt to the targ
 
 - **Never** embed titles inside the table body or as a table header row
 - **Never** embed notes, sources, or footnotes inside the table itself
-- Table numbering, titles, and notes are added in LaTeX via `\caption{}` and `\begin{tablenotes}` (or tabularray's `note{}` key)
+- Table numbering, titles, and notes are added via `\caption{}` and `\begin{tablenotes}` (or tabularray's `note{}` key) inside `{=latex}` raw blocks in `main.qmd`
 - The file name and folder identify what the table contains
 
 ### Three-Line Format (Booktabs)
@@ -56,7 +57,7 @@ Every table uses exactly three horizontal rules and **zero vertical lines**:
 \end{table}
 ```
 
-**Modern (hand-written in main.tex):**
+**Modern (hand-written in main.qmd raw LaTeX block):**
 
 ``` latex
 \begin{talltblr}[
@@ -183,6 +184,14 @@ kbl(df, format = "latex", booktabs = TRUE, escape = FALSE,
   kable_styling(latex_options = "hold_position")
 ```
 
+### Number Formatting
+
+- **Coefficients:** 3 decimal places (e.g., `0.045`)
+- **Standard errors:** 3 decimal places in parentheses (e.g., `(0.021)`)
+- **Observation counts and large integers:** comma thousands separator (e.g., `10,453`)
+- **Percentages in text:** 1 decimal place (e.g., `48.2%`)
+- These are the etable/modelsummary defaults — set once via `options()` in the script preamble if needed
+
 ### Typography
 
 - Serif font throughout (inherits from document class — no extra commands needed)
@@ -193,12 +202,12 @@ kbl(df, format = "latex", booktabs = TRUE, escape = FALSE,
 ### Export
 
 ``` r
-# Write .tex fragment (no \begin{table} wrapper -- added in main.tex)
+# Write .tex fragment (no \begin{table} wrapper -- added in main.qmd)
 writeLines(tex_output, file.path("paper/tables", "reg_main_specification.tex"))
 ```
 
 - Output **bare `tabular` environment** (no `\begin{table}` float)
-- The paper's `main.tex` wraps it with `\begin{table}`, `\caption{}`, and `\input{}`
+- The paper's `main.qmd` wraps it via a `{=latex}` raw block with `\begin{table}`, `\caption{}`, and `\input{}`
 - Write to `paper/tables/`
 
 ### File Naming
@@ -235,7 +244,7 @@ Pattern: `{table_type}_{content_description}.tex`
 | `stargazer` package | Deprecated workflow; use `modelsummary` or `fixest::etable` |
 | Raw variable names in labels | Human-readable labels required |
 | `xtable` without booktabs | Produces non-journal-quality output |
-| `\begin{table}` in R output | R exports bare `tabular`; float wrapper lives in `main.tex` |
+| `\begin{table}` in R output | R exports bare `tabular`; float wrapper lives in `main.qmd` raw LaTeX block |
 
 ### Table Type Templates
 
@@ -341,14 +350,47 @@ Female (\%)             &  47.8      &  48.6    &  -0.8       &  (1.2)  &  0.505
 - **Never add titles or subtitles inside ggplot** — use `labs(title = NULL, subtitle = NULL)`
 - **Figure information goes in two places:**
   1.  **File name** — descriptive, e.g., `fig1_hispanic_enrollment_ascm.pdf`
-  2.  **LaTeX `\caption{}`** — the authoritative title, numbered and editable without re-running R
+  2.  **Quarto `fig-cap` chunk option** — the authoritative caption, numbered and editable without re-running R
 - **Panel labels are the exception** — "Panel A: Employment" inside multi-panel figures (via `patchwork`, `cowplot`, etc.) is fine since they identify sub-panels, not the whole figure
 - **Axis labels must be publication-quality** — "Employment Rate" not "emp_rate". Clean labels stay in the figure; titles and context go in the caption
-- **Use serif fonts** — figures should match the paper's body text. In ggplot, set `theme(text = element_text(family = "serif"))` or use `theme_minimal(base_family = "serif")`
+- **Default theme: `theme_minimal(base_family = "serif")`** — use this as the baseline for all paper figures. Override only with explicit justification.
+- **Use serif fonts** — figures should match the paper's body text. In ggplot, `theme_minimal(base_family = "serif")` handles this automatically.
 - **Show all years on the x-axis** when the panel spans \~20 years or fewer — use `scale_x_continuous(breaks = min_year:max_year)`. Only thin out labels when they overlap (roughly \>20 ticks)
 - **Output PDF for figures** — vector graphics for LaTeX. Use `ggsave("fig.pdf")`. PNG only for raster content (maps, photos).
-- **Colorblind-friendly palettes** — use `scale_color_brewer(palette = "Set2")`, `viridis`, or similar. Never rely on red/green contrast alone.
 - **Color-independent design** — figures must be readable in grayscale. Combine color with shape (`shape` aesthetic) and linetype (`linetype` aesthetic) so series remain distinguishable without color.
+- **Colorblind-safe** — never rely on red/green contrast alone. The project palette avoids pure red/green pairs; when overriding with other palettes, verify with a colorblind simulator or use `viridis`/`Set2`.
+
+### Color Palette
+
+Green-forward theming is the **soft default** — use it as the first pass when building figure code. Override freely when the data demands it: diverging color scales for maps, `viridis`/`plasma` for continuous density, `Set2` for 5+ unordered categories.
+
+The palette is defined in `_brand.yml` (project root) and mirrored in `paper/preambles/`. Use these exact hex codes for consistency across figures, slides, and web output:
+
+| Role | Name | Hex | Notes |
+|------|------|-----|-------|
+| **Primary series** | medium-green-grey | `#5A8567` | First series, structure color in slides |
+| **Dark anchor** | dark-green | `#314F40` | Second series, primary color on website |
+| **Light fill** | light-green-grey | `#A3B4A9` | Confidence bands, secondary fills |
+| **Background fill** | bg-green-grey | `#DDE5DC` | Shaded regions, background panels |
+| **Contrast accent** | burgundy | `#590925` | Use when a non-green contrast is needed |
+| **Secondary accent** | light-burgundy | `#AF3257` | Tertiary series or highlights |
+
+**ggplot usage:**
+
+```r
+# Single series
+scale_color_manual(values = c("#5A8567"))
+scale_fill_manual(values  = c("#5A8567"))
+
+# Two series (green + burgundy)
+scale_color_manual(values = c("#5A8567", "#590925"))
+
+# Multi-series: build from palette vector
+project_pal <- c("#314F40", "#5A8567", "#A3B4A9", "#590925", "#AF3257", "#E7729D")
+scale_color_manual(values = project_pal)
+```
+
+**When to override:** continuous variables on maps → `viridis` or `scale_fill_distiller`; 5+ unordered categories where green shades blur → `scale_color_brewer(palette = "Set2")`; any case where the data story is clearer without green-forward theming.
 - **Figure width** — single-panel: `width=0.8\textwidth`. Side-by-side panels: `width=0.48\textwidth` each.
 
 ------------------------------------------------------------------------
@@ -357,7 +399,7 @@ Female (\%)             &  47.8      &  48.6    &  -0.8       &  (1.2)  &  0.505
 
 ### The Safe Processing Workflow
 
-**Step 1: Receive PDF Upload** - User uploads PDF to `reference-docs/supporting_papers/` or `supporting_slides/` - Claude DOES NOT attempt to read it directly
+**Step 1: Receive PDF Upload** - User uploads PDF to `reference_docs/supporting/` - Claude DOES NOT attempt to read it directly
 
 **Step 2: Check PDF Properties**
 

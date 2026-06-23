@@ -2,7 +2,6 @@
 name: write
 description: Draft academic paper sections using paragraph-level argument moves. Cleanup pass strips AI patterns after drafting. Replaces /draft-paper and /humanizer.
 argument-hint: "[section or mode: intro | strategy | results | conclusion | abstract | full | humanize | style-guide] [file path (optional)]"
-allowed-tools: Read,Grep,Glob,Write,Edit,Task
 ---
 
 # Write
@@ -19,7 +18,7 @@ Draft paper sections, apply a cleanup pass, or extract a personal style guide fr
 Draft a specific section: `intro`, `strategy`, `results`, `conclusion`, `abstract`, or `full`.
 
 **Agent:** Writer
-**Output:** LaTeX section file in paper/sections/
+**Output:** Quarto section file in paper/sections/ (`.qmd`)
 
 Workflow:
 
@@ -27,7 +26,7 @@ Workflow:
 
 Before drafting, read all available context:
 1. Read existing paper draft in `paper/` (if it exists)
-2. Read `reference-docs/` for notes, outlines, research specs
+2. Read `reference_docs/` for notes, outlines, research specs
 3. Read most recent `quality_reports/research_spec_*.md` or `quality_reports/lit_review_*.md`
 4. Read `.claude/references/domain-profile.md` for field conventions
 5. Check `references.bib` for available citations
@@ -59,7 +58,7 @@ Based on `$ARGUMENTS`:
 
 #### 4. Dispatch Writer
 
-Dispatch Writer with paper type and argument-move templates for the target section. The writer drafts using paragraph types (motivation, result statement, mechanism, etc.), applies design-specific moves, then runs the cleanup pass. Save to `paper/sections/[section].tex`.
+Dispatch Writer with paper type and argument-move templates for the target section. The writer drafts using paragraph types (motivation, result statement, mechanism, etc.), applies design-specific moves, then runs the cleanup pass. Save to `paper/sections/[section].qmd`.
 
 #### 5. Quality Self-Check
 
@@ -103,7 +102,7 @@ One-shot extraction of the user's writing voice from their published or drafted 
 - Once at the start of a project, after pointing at a directory of the user's prior papers
 - After publishing a new paper that shifts voice (re-run to refresh the profile)
 
-**Input:** `$ARGUMENTS` — path to a directory containing prior papers (.tex or .pdf). If omitted, defaults to `reference-docs/` and scans for .tex/.pdf files.
+**Input:** `$ARGUMENTS` — path to a directory containing prior papers (.tex or .pdf). If omitted, defaults to `reference_docs/my_papers/` and scans for .tex/.pdf files.
 
 **Agent:** Writer (style-extraction mode)
 **Output:** `.claude/references/personal-style-guide.md`
@@ -163,11 +162,14 @@ Strips 24 patterns across 4 categories:
 
 ---
 
-## LaTeX Conventions
+## Citation & Format Conventions
 
-- `\citet{}` for textual citations ("Smith (2024) shows...")
-- `\citep{}` for parenthetical citations ("...is well documented (Smith, 2024)")
-- `booktabs` rules (`\toprule`, `\midrule`, `\bottomrule`) — never `\hline`
+- BibTeX key format: `authorYear3keywordsTitle` (e.g., `smith2024effectMinimumWage`)
+- `@smith2024effectMinimumWage` for textual citations — renders as "Smith (2024) shows..."
+- `[@smith2024effectMinimumWage]` for parenthetical citations — renders as "(Smith, 2024)"
+- Never use `\citet{}`, `\citep{}`, or load `natbib`/`biblatex` manually (INV-9)
+- Cross-references: `@fig-label`, `@tbl-label`, `@sec-label` — never `\ref{}` or `\cref{}` (INV-10)
+- `booktabs` rules (`\toprule`, `\midrule`, `\bottomrule`) in raw LaTeX blocks — never `\hline`
 - Notation protocol: `Y_{it}`, `D_{it}`, `\gamma_i`, `\delta_t`, `\varepsilon_{it}`
 
 ---

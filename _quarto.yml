@@ -1,23 +1,23 @@
 project:
   title: "[PROJECT TITLE]"
   execute-dir: project
-  output-dir: ../_output
+  output-dir: _output
 
 title: "[PAPER TITLE]"
 subtitle: "[SUBTITLE]"
 author:
-  - name: Patrick Crawford
-    email: pcrawfo6@gmu.edu
+  - name: "[AUTHOR NAME]"
+    email: "[EMAIL]"
     affiliation:
-      - gmu
-shortauthor: "Crawford"
+      - primary
+shortauthor: "[LAST NAME]"
 affiliations:
-  - id: gmu
-    name: George Mason University
-    department: Department of Economics
-    address: Fairfax, VA
-institute: George Mason University
-shortinstitute: GMU
+  - id: primary
+    name: "[UNIVERSITY]"
+    department: "[DEPARTMENT]"
+    address: "[CITY, STATE]"
+institute: "[UNIVERSITY]"
+shortinstitute: "[ABBREV]"
 date: last-modified
 date-format: long
 
@@ -27,12 +27,19 @@ citeproc: true
 bibliography: references.bib
 csl: https://www.zotero.org/styles/apa
 
+execute:
+  echo: false
+  warning: false
+  message: false
+  freeze: auto
+
 pandoc:
   wrap: none
 
 format:
   pdf:
     documentclass: article
+    pdf-engine: xelatex
     toc: false
     papersize: letter
     fontsize: 10pt

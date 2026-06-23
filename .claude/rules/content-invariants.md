@@ -8,7 +8,7 @@ These are non-negotiable. Every agent checks against them. Violations are deduct
 
 **INV-1.** Every table has notes explaining key variables, sample, and data source — via `threeparttable` + `tablenotes` (traditional) or `talltblr` with `note{}` keys (tabularray).
 
-**INV-2.** Every figure has a `\caption{}` with a note explaining what is shown, how to read it, and the data source.
+**INV-2.** Every figure has a caption with a note explaining what is shown, how to read it, and the data source — via Quarto's `fig-cap` chunk option or a raw LaTeX `\caption{}`.
 
 **INV-3.** No `\hline` — use `\toprule`, `\midrule`, `\bottomrule` (booktabs). No vertical rules.
 
@@ -22,15 +22,15 @@ These are non-negotiable. Every agent checks against them. Violations are deduct
 
 **INV-8.** Every causal claim has a corresponding identification section. No causal language in descriptive papers.
 
-**INV-9.** `biblatex` + `biber`, not `natbib` + `bibtex`.
+**INV-9.** Citations use Quarto citeproc + CSL (configured in `_quarto.yml`). Do not add `biblatex` or `natbib` packages manually — Quarto handles citation rendering.
 
-**INV-10.** `hyperref` loaded second-to-last in preamble; `cleveref` loaded immediately after it.
+**INV-10.** Cross-references use Quarto native syntax: `@fig-label`, `@tbl-label`, `@sec-label`. Do not use raw `\ref{}`, `\cref{}`, or `hyperref`/`cleveref` packages — Quarto injects these automatically for PDF output.
 
 **INV-11.** Numbers in text match the tables and figures exactly. No rounding discrepancies, no stale values.
 
-**INV-12.** No titles inside ggplot/matplotlib figures. Titles go in LaTeX `\caption{}`. Panel labels ("Panel A: ...") inside multi-panel figures are fine.
+**INV-12.** No titles inside ggplot/matplotlib figures. Titles go in the Quarto `fig-cap` chunk option or a raw LaTeX `\caption{}`. Panel labels ("Panel A: ...") inside multi-panel figures are fine.
 
-**INV-13.** R/Python/Julia scripts export bare `tabular` environments — no `\begin{table}`, `\caption{}`, or notes. The paper's `main.tex` wraps them.
+**INV-13.** R/Python/Julia scripts export bare `tabular` environments — no `\begin{table}`, `\caption{}`, or notes. The paper's `main.qmd` wraps them in a raw LaTeX block with `\caption{}` and `\input{}`.
 
 ## Code
 
@@ -65,5 +65,5 @@ These are non-negotiable. Every agent checks against them. Violations are deduct
 | **writer-critic** | INV-1 through INV-13, INV-22 | Deduct per scoring rubric |
 | **coder-critic** | INV-13 through INV-19 | Deduct per scoring rubric |
 | **storyteller-critic** | INV-20, INV-21 | Deduct per scoring rubric |
-| **verifier** | INV-9, INV-10, INV-14, INV-15, INV-16, INV-19 | FAIL if present |
+| **verifier** | INV-9, INV-10, INV-14, INV-15, INV-16, INV-19 | FAIL if violated |
 | **lint hook** | INV-14, INV-15, INV-16, INV-19 | Advisory warning |

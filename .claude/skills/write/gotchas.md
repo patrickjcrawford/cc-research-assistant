@@ -2,6 +2,8 @@
 
 Known failure points and edge cases for paper drafting.
 
+- **Output format is Quarto (`.qmd`), not LaTeX (`.tex`).** Save to `paper/sections/*.qmd`, not `.tex`. The paper is `paper/main.qmd`.
+- **Citation syntax is Quarto citeproc, not natbib.** Use `@authorYear3keywordsTitle` (textual) or `[@authorYear3keywordsTitle]` (parenthetical) in markdown body. Never generate `\citet{}`, `\citep{}`, or load `biblatex`/`natbib`. Key format: `authorYear3keywordsTitle` (e.g., `smith2024effectMinimumWage`).
 - Writer produces generic academic voice if `personal-style-guide.md` hasn't been extracted first. Run `/write style-guide` before drafting.
 - Writer will draft results from strategy memo predictions if tables don't exist yet -- the hard gate catches this, but watch for it in partial drafts.
 - `\citet` vs `\citep` confusion is the most common LaTeX citation issue. `\citet` for "Author (Year)" in prose, `\citep` for "(Author, Year)" parenthetical.
@@ -9,3 +11,5 @@ Known failure points and edge cases for paper drafting.
 - The cleanup pass catches AI patterns but can over-correct domain-specific hedging that's actually appropriate (e.g., "may" in describing potential mechanisms is fine).
 - Section ordering varies by paper type. Don't force reduced-form structure on structural papers.
 - Abstract word count (150 max per INV-5) is a hard constraint -- the writer sometimes produces 200+ word abstracts on first pass.
+- `/write style-guide` requires at least 2 papers (one paper overfits). If only 1 is available, flag the limitation but proceed with a reduced-confidence note in the output.
+- `personal-style-guide.md` can be hand-edited directly -- the "do not hand-edit" note in the stub header is overly strict. Manual edits are valid; just note they aren't corpus-grounded.

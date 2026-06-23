@@ -1,9 +1,9 @@
 # PDF Processing Workflow
 
-Safe workflow for reading and extracting content from reference papers uploaded to `reference-docs/`.
+Safe workflow for reading and extracting content from reference papers uploaded to `reference_docs/`.
 
 ## Step 1: Receive PDF Upload
-- User uploads PDF to `reference-docs/supporting_papers/` or `supporting_slides/`
+- User uploads PDF to `reference_docs/supporting/`
 - Do NOT attempt to read the full PDF directly -- large PDFs will fail
 
 ## Step 2: Check PDF Properties

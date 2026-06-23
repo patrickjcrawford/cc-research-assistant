@@ -91,9 +91,9 @@ The writer-critic verifies this map against the manuscript (INV-22).
 
 ## Output
 
-- `paper/main.tex` — main document
-- `paper/sections/*.tex` — section files
-- Compile with XeLaTeX to verify
+- `paper/main.qmd` — main document
+- `paper/sections/*.qmd` — section files
+- Compile with `quarto render paper/main.qmd` to verify
 
 ---
 
