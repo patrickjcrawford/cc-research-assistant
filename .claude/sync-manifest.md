@@ -90,9 +90,9 @@ Split: language standards are template-owned; field/journal/style files are proj
 | `coding-standards-r.md` | TEMPLATE | Language conventions, not field-specific. |
 | `coding-standards-python.md` | TEMPLATE | Language conventions, not field-specific. |
 | `coding-standards-julia.md` | TEMPLATE | Language conventions, not field-specific. |
-| `domain-profile.md` | PROJECT | Field-specific: journals, norms, estimators, citation style. Set at project init, do not overwrite. |
-| `journal-profiles.md` | PROJECT | Project's target journal list and submission requirements. |
-| `personal-style-guide.md` | PROJECT | User's writing voice and stylistic preferences. |
+| `domain-profile.md` | PROJECT | Ships empty in the template. Filled in per-researcher at project init. Never overwrite during sync. |
+| `journal-profiles.md` | PROJECT | Ships empty in the template. Filled in per-researcher at project init. Never overwrite during sync. |
+| `personal-style-guide.md` | PROJECT | Ships empty in the template. Filled in per-researcher at project init. Never overwrite during sync. |
 
 ### `.claude/rules/`
 

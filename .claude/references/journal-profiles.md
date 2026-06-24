@@ -42,7 +42,6 @@ Each journal profile includes a **Referee pool** that weights which dispositions
 **Typical concerns:** "Why should economists outside this field care?" "Is the contribution big enough for AER?" "Is this too narrow/specialized?"
 **Referee pool:** CREDIBILITY (high), POLICY (medium), STRUCTURAL (medium), MEASUREMENT (low), THEORY (low), SKEPTIC (low)
 **Table format:** No significance stars. Standard errors in parentheses. Exact p-values or confidence intervals for key results (AEA style).
-**Historical PE note:** Economic history papers must first clear the "why do non-historians care?" bar. The contribution must be framed around a question that matters to economists broadly — institutions, growth, inequality, human capital — not just historical documentation. Referees will ask whether the historical setting provides genuine advantages (cleaner variation, longer time horizons, institutional contrasts) over modern data.
 
 ### Econometrica (ECMA)
 **Focus:** Theoretical and empirical economics with formal rigor
@@ -59,7 +58,6 @@ Each journal profile includes a **Referee pool** that weights which dispositions
 **Methods referee adjusts:** Identification strong, but mechanism evidence equally important. Heterogeneity that illuminates the mechanism. Willing to accept some identification imperfection if the economic insight is deep enough.
 **Typical concerns:** "What's the mechanism?" "Can you decompose the effect?" "What does this tell us about economic behavior?"
 **Referee pool:** STRUCTURAL (high), THEORY (high), CREDIBILITY (medium), SKEPTIC (medium), POLICY (low), MEASUREMENT (low)
-**Historical PE note:** Economic history papers are valued at JPE when they illuminate a mechanism that generalizes beyond the historical episode. Referees push hardest on mechanism evidence — not just "this policy had an effect" but "here's why, grounded in economic theory." Structural thinking or heterogeneity evidence that reveals the mechanism is expected. External validity to modern contexts or other settings should be addressed.
 
 ### Quarterly Journal of Economics (QJE)
 **Focus:** All fields — prizes compelling narrative and important questions
@@ -68,7 +66,6 @@ Each journal profile includes a **Referee pool** that weights which dispositions
 **Methods referee adjusts:** Identification must be clean and intuitive — not just technically correct, but easy to explain. Transparency and simplicity over complexity. Visual evidence (event studies, RD plots) highly valued.
 **Typical concerns:** "Is this surprising?" "Does this change how we think about X?" "Can you explain the identification in one sentence?"
 **Referee pool:** CREDIBILITY (high), POLICY (high), SKEPTIC (medium), STRUCTURAL (low), THEORY (low), MEASUREMENT (low)
-**Historical PE note:** Economic history papers fit QJE when they have a compelling punchline and use creative historical data. "Clever" identification from historical variation is prized. Referees push hard on modern relevance — "what does this mean for us today?" — and on whether the historical setting is the cleanest available laboratory for the question. Visual evidence (event studies, maps) especially valued.
 
 ### Review of Economic Studies (REStud)
 **Focus:** All fields — technically excellent empirical and theoretical work
@@ -220,50 +217,6 @@ Each journal profile includes a **Referee pool** that weights which dispositions
 **Methods referee adjusts:** Spatial econometrics expected when appropriate (spatial lag, spatial error models). Gravity equation estimation (PPML, multilateral resistance). Handling of spatial autocorrelation. Market access instruments. Shift-share designs for local labor market shocks.
 **Typical concerns:** "What about spatial sorting?" "Have you accounted for market access?" "Is this agglomeration or selection?" "Spatial autocorrelation in errors?"
 **Referee pool:** STRUCTURAL (high), MEASUREMENT (high), THEORY (medium), CREDIBILITY (medium), POLICY (medium), SKEPTIC (low)
-
----
-
-**Economic History & Historical Political Economy**
-
-### Journal of Economic History (JEH)
-**Focus:** Cliometrics and economic history — long-run growth, institutions, labor markets, finance, trade, and demographic change studied through historical data
-**Bar:** The flagship field journal. Credible causal identification from historical variation, deep historical context, and a clear contribution to understanding long-run economic patterns. Must meet modern empirical standards.
-**Domain referee adjusts:** Historical context matters as much as econometrics — referees expect deep knowledge of the era, archival sources, and institutional setting. Source criticism is standard: Where did the data come from? What are the selection problems in the archive? How representative is the sample? External validity is always questioned: "What does this tell us about today, or about other historical episodes?" Connection to modern development and growth debates valued.
-**Methods referee adjusts:** Modern causal inference standards apply fully. Staggered DiD must use modern estimators (Callaway-Sant'Anna, Sun-Abraham) — naive TWFE will be flagged. Instrument validity scrutinized: exclusion restrictions in historical IV designs are probed for confounders operating over long time horizons. Pre-trends must be shown for event study designs. Spatial correlation in standard errors addressed when using county/state panel data.
-**Typical concerns:** "Why does this matter beyond economic historians?" (external validity) | "How do you know the data is reliable/representative?" (source criticism) | "Are parallel trends plausible this far back?" (identification) | "What's the mechanism, not just the reduced form?"
-**Referee pool:** CREDIBILITY (high), MEASUREMENT (high), SKEPTIC (medium), POLICY (medium), STRUCTURAL (low), THEORY (low)
-
-### Explorations in Economic History (EEH)
-**Focus:** Quantitative economic history — broader scope than JEH, more methodological flexibility, earlier eras and non-US settings welcome
-**Bar:** Solid empirical contribution to economic history. Slightly below JEH bar — careful descriptive and measurement-focused work accepted alongside identification-heavy designs. Good outlet for data construction papers and institutional analyses.
-**Domain referee adjusts:** Similar historical context requirements as JEH but more tolerant of descriptive and measurement-focused papers. International and pre-industrial settings valued. Archival data construction is itself a contribution if systematic and well-documented.
-**Methods referee adjusts:** Identification expected but bar is somewhat lower than JEH. Pre-trends and balance checks required for DiD. IV exclusion restrictions discussed carefully. For descriptive papers, measurement validity must be rigorously established — that is the methods challenge here.
-**Typical concerns:** "Is this incremental relative to existing economic history work?" | "How robust is the historical measurement?" | "Does this generalize beyond this specific historical episode?"
-**Referee pool:** MEASUREMENT (high), CREDIBILITY (medium), SKEPTIC (medium), POLICY (medium), THEORY (low), STRUCTURAL (low)
-
-### Economic History Review (EHR)
-**Focus:** British Economic History Society flagship — European and global economic history, business history, social history alongside quantitative cliometrics
-**Bar:** Rigorous contribution to economic history. More pluralistic than JEH — accepts traditional historical methodology and qualitative-quantitative combinations alongside pure cliometrics.
-**Domain referee adjusts:** European, British, and colonial history strongly represented. Business history and financial history within scope. More tolerance for institutional and descriptive analysis than JEH — "thick description" of historical contexts can be a contribution here. Source criticism and archival methodology receive heavy weight from referees trained in traditional history.
-**Methods referee adjusts:** Quantitative work held to high standards, but qualitative and mixed-methods work also accepted. For empirical papers: similar expectations to JEH on identification, pre-trends, robustness. For non-quantitative papers: systematic source handling, clear comparative logic. Cross-country long-run growth regressions are common but critiqued heavily.
-**Typical concerns:** "Have you engaged with the historical literature sufficiently?" | "What about archival sources beyond official statistics?" | "Does this generalize to the broader European context?" | "Is the periodization appropriate?"
-**Referee pool:** MEASUREMENT (high), SKEPTIC (medium), CREDIBILITY (medium), POLICY (medium), THEORY (medium), STRUCTURAL (low)
-
-### Journal of Historical Political Economy (JHPE)
-**Focus:** Historical political economy — institutions, state capacity, elite politics, colonial legacies, democratization, redistribution, and long-run political development studied through historical evidence
-**Bar:** Newer journal (founded 2021). Accepts formal theory, quantitative empirics, and qualitative-quantitative combinations. High-quality empirical work on historically-grounded political economy questions is the target.
-**Domain referee adjusts:** Historical institutionalism and state formation. Colonial origins of institutions. Elite networks and political power. Democratization and franchise extension. Land reform and redistribution. Understanding of political economy theory expected — not just historical facts. Connection to modern political economy debates valued.
-**Methods referee adjusts:** Flexible on methods — formal models welcome, structural estimation accepted, reduced-form causal inference welcome, comparative case studies accepted. For empirical papers: credible identification from historical variation. Instrument relevance in colonial or geographic IV designs scrutinized. Balance checks for DiD around political events.
-**Typical concerns:** "How does this connect to political economy theory?" | "What's the mechanism — economic or political?" | "Does this speak to the modern political economy literature?" | "Is the historical comparison valid across contexts?"
-**Referee pool:** CREDIBILITY (high), MEASUREMENT (high), THEORY (medium), STRUCTURAL (medium), POLICY (medium), SKEPTIC (low)
-
-### Cliometrica
-**Focus:** Quantitative economic history — European focus, all eras, emphasizing rigorous application of economics and statistics to historical questions
-**Bar:** Sound quantitative economic history. Somewhat below JEH/EEH bar — good outlet for solid empirical work that is narrower in scope or more measurement-focused. European and non-US settings especially welcome.
-**Domain referee adjusts:** European economic history well represented. Pre-modern and early modern periods valued. Demographic history, agricultural history, and living standards alongside growth and institutions. Less pressure on modern policy relevance than JEH — historical understanding is itself the goal.
-**Methods referee adjusts:** Quantitative methods expected — regression, panel data, spatial analysis, historical GIS. Identification standards less stringent than JEH for non-quasi-experimental papers, but measurement quality is paramount. Data construction papers valued if systematic and reproducible.
-**Typical concerns:** "How do you handle the underlying data quality?" | "Is this finding specific to this country/era or more general?" | "Have you compared your results to existing cliometric evidence on this question?"
-**Referee pool:** MEASUREMENT (high), CREDIBILITY (medium), STRUCTURAL (medium), SKEPTIC (medium), THEORY (low), POLICY (low)
 
 ---
 
