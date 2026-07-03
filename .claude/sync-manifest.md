@@ -93,6 +93,7 @@ Split: language standards are template-owned; field/journal/style files are proj
 | `domain-profile.md` | PROJECT | Ships empty in the template. Filled in per-researcher at project init. Never overwrite during sync. |
 | `journal-profiles.md` | PROJECT | Ships empty in the template. Filled in per-researcher at project init. Never overwrite during sync. |
 | `personal-style-guide.md` | PROJECT | Ships empty in the template. Filled in per-researcher at project init. Never overwrite during sync. |
+| `zotero-search-protocol.md` | TEMPLATE | Tool surface, degradation behavior, and add-only-when-asked rule for Zotero MCP integration across librarian/explorer/critics. |
 
 ### `.claude/rules/`
 

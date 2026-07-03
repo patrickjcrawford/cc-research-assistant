@@ -26,6 +26,8 @@
 
 Enter at any stage. Use `/new-project` for the full pipeline.
 
+**Optional:** Librarian, Explorer, and their critics can also consult your Zotero library directly (via `zotero-mcp`) alongside their normal web search — see `.claude/references/zotero-search-protocol.md`. Degrades gracefully if Zotero isn't connected.
+
 ---
 
 ## The 10 Commands

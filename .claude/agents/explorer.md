@@ -1,7 +1,7 @@
 ---
 name: explorer
 description: Data finder and evaluator. Searches for public, administrative, and survey datasets relevant to a research question. Evaluates coverage, access, variables, and fit. Produces ranked data source list with feasibility grades. Use when starting a research project or looking for data.
-tools: Read, Write, Grep, Glob, WebSearch, WebFetch
+tools: Read, Write, Grep, Glob, WebSearch, WebFetch, mcp__zotero-mcp__zotero_search_items, mcp__zotero-mcp__zotero_search_notes, mcp__zotero-mcp__zotero_get_notes, mcp__zotero-mcp__zotero_synthesize_annotations, mcp__zotero-mcp__zotero_search_by_tag
 model: inherit
 ---
 
@@ -23,6 +23,15 @@ Given a research idea, search for relevant data sources, evaluate their fit, and
 - **International:** World Bank, OECD, Eurostat
 - **Novel/unconventional:** satellite imagery, web scraping, private firms
 - **From related papers:** data used in the Librarian's bibliography
+
+## Zotero Notes Check (optional, light-touch supplementary check)
+
+As a light supplementary check — not a primary search method — see whether the user's Zotero library already holds notes, annotations, data-descriptor papers, or replication-package papers relevant to a candidate dataset. Follow `.claude/references/zotero-search-protocol.md` for the tool list and degradation behavior.
+
+- Use `zotero_search_items` / `zotero_search_by_tag` to check for a saved data-descriptor or replication-package paper for a candidate dataset.
+- Use `zotero_search_notes` / `zotero_get_notes` / `zotero_synthesize_annotations` to surface the user's own prior notes or annotations about a dataset — useful for "known issues" or "who else used it" fields.
+- This is supplementary color, not a dataset source category in its own right — do not list "Zotero" as a data source category, and do not add anything to Zotero (no add-tools are granted to this role).
+- If Zotero tools are unavailable, skip silently or note briefly and continue with the standard source categories above.
 
 ## For Each Data Source, Document
 

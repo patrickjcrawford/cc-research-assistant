@@ -15,6 +15,7 @@ Adding a new agent: create the agent file in `.claude/agents/`, add an entry her
 - **CRITIC:** librarian-critic
 - **ESCALATION_TARGET:** User — scope disagreement, user decides breadth vs. depth
 - **QUALITY_WEIGHT:** 10% (literature coverage)
+- **OPTIONAL CAPABILITY:** May consult/add-to the user's Zotero library via `mcp__zotero-mcp__*` tools when connected; see `.claude/references/zotero-search-protocol.md`. Does not change REQUIRES/PRODUCES.
 
 ## explorer
 - **PHASE:** Discovery
@@ -25,6 +26,7 @@ Adding a new agent: create the agent file in `.claude/agents/`, add an entry her
 - **CRITIC:** explorer-critic
 - **ESCALATION_TARGET:** User — data feasibility deadlock, user decides resource trade-offs
 - **QUALITY_WEIGHT:** 10% (data quality)
+- **OPTIONAL CAPABILITY:** May consult (read-only) the user's Zotero library via `mcp__zotero-mcp__*` tools when connected; see `.claude/references/zotero-search-protocol.md`. Does not change REQUIRES/PRODUCES.
 
 ## strategist
 - **PHASE:** Strategy

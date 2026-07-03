@@ -69,11 +69,13 @@ Try to pull relevant papers from the user's Zotero library using this fallback c
    For each result, export BibTeX: `zotero-cli get metadata [KEY] --format bibtex`
 
 2. **MCP tools (if CLI not found):**
-   - `mcp__zotero__zotero_search_items` with the topic as query
-   - `mcp__zotero__zotero_semantic_search` if available
-   - `mcp__zotero__zotero_get_item_metadata` with `format="bibtex"` for each result
+   - `mcp__zotero-mcp__zotero_search_items` with the topic as query
+   - `mcp__zotero-mcp__zotero_semantic_search` if available
+   - `mcp__zotero-mcp__zotero_get_item_metadata` with `format="bibtex"` for each result
 
 3. **If both fail:** log "Zotero unavailable in this context" and continue. Append to output: "**Zotero not synced.** For a complete library check, run `/discover zotero` in the Claude desktop app, then re-run `/discover lit`."
+
+**Note:** if the Librarian agent itself has direct `mcp__zotero-mcp__*` tools available (see `.claude/references/zotero-search-protocol.md`), it will already check Zotero directly as part of its own Search Protocol — this Step 0 CLI/export fallback exists for contexts where the agent has no direct MCP tool access (e.g. the `zotero-cli` bridge in Positron) and is safe to run either way; it is idempotent with agent-level checks (dedupe by DOI/title happens downstream).
 
 On success: extract titles, authors, BibTeX keys, and tags — hand to the Librarian as pre-known papers to avoid duplication and seed citation chains.
 
@@ -130,7 +132,7 @@ Workflow:
    ```bash
    zotero-cli collections list
    ```
-   Or via MCP: `mcp__zotero__zotero_get_collections`
+   Or via MCP: `mcp__zotero-mcp__zotero_get_collections`
 
 2. **Export BibTeX** — full library or named collection:
    ```bash
@@ -139,10 +141,10 @@ Workflow:
 
    # Or by collection (pass collection name as argument)
    zotero-cli collections list   # find the collection key
-   # then get items: mcp__zotero__zotero_get_collection_items with collection key
+   # then get items: mcp__zotero-mcp__zotero_get_collection_items with collection key
    # then export each: zotero-cli get metadata [KEY] --format bibtex
    ```
-   For bulk export, prefer: `mcp__zotero__zotero_get_item_metadata` with `format="bibtex"` per item — more reliable than piping.
+   For bulk export, prefer: `mcp__zotero-mcp__zotero_get_item_metadata` with `format="bibtex"` per item — more reliable than piping.
 
 3. **Write to `reference_docs/supporting/zotero_export.bib`** — append, don't overwrite, so prior exports aren't lost.
 
@@ -201,3 +203,4 @@ Generate: 1. 3-5 research questions with clear hypotheses 2. For each: potential
 - **5-point data critique:** Measurement validity, sample selection, external validity, identification compatibility, known issues. Never skip this.
 - **Domain-profile aware:** Always read `.claude/references/domain-profile.md` first for field calibration.
 - **Worker-critic pairing:** Librarian + librarian-critic, Explorer + explorer-critic. Never skip the critic.
+- **Zotero integration:** Librarian/explorer agents and their critics may have direct Zotero MCP tools; see `.claude/references/zotero-search-protocol.md` for the full tool surface and add-only-when-asked rule. This skill's Step 0 sync is a CLI/export-based fallback for agent contexts without direct MCP access.
