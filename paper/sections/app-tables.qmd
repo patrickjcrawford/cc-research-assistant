@@ -1,0 +1,3 @@
+# Additional Tables {#sec-appendix-tables}
+
+[Appendix tables — full regression output, additional specifications, or descriptive breakdowns that don't fit in the main text. Load `.rds` model objects from `paper/tables/` and style with `etable()`/`modelsummary()` here, same convention as `main.qmd` (INV-13).]

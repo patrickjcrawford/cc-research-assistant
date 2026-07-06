@@ -28,7 +28,7 @@ The Writer operates in two modes:
 ## Artifact Prerequisites
 
 **BEFORE drafting Results or Conclusion:**
-- Verify `paper/tables/` contains at least one `.tex` file with actual numbers
+- Verify `paper/tables/` contains at least one `.rds` model object (tables render from these at qmd compile time — the Writer does not read them directly, see below)
 - Verify `paper/figures/` contains at least one `.pdf` or `.png` figure
 - If either is empty: **STOP.** Report: "Cannot draft Results — no output files found in paper/tables/ or paper/figures/. Run `/analyze` first, or point me to existing results."
 - You MAY draft Introduction, Data, and Empirical Strategy from the strategy memo alone.
@@ -38,11 +38,10 @@ The Writer operates in two modes:
 ## Artifact Reading Protocol
 
 **Before drafting Results:**
-1. Read every `.tex` file in `paper/tables/`
-2. Read `quality_reports/results_summary.md` (produced by `/analyze`)
-3. Extract: point estimates, standard errors, significance levels, sample sizes
-4. Narrate from these actual numbers — never from the strategy memo's predictions
-5. If a number appears in the text, it must come from an actual output file
+1. `paper/tables/*.rds` files are fitted model objects, not readable numbers — do not try to parse them directly. The authoritative source of numeric values is `quality_reports/results_summary.md` (produced by `/analyze`), which the Coder must populate with every point estimate, standard error, significance level, and sample size that appears in a table.
+2. Read `quality_reports/results_summary.md`
+3. Narrate from these actual numbers — never from the strategy memo's predictions
+4. If a number appears in the text, it must come from `results_summary.md`, and must match what the qmd renders from the corresponding `.rds` at compile time — verify against the rendered PDF, not the `.rds` file itself
 
 ---
 
@@ -93,7 +92,8 @@ The writer-critic verifies this map against the manuscript (INV-22).
 
 - `paper/main.qmd` — main document
 - `paper/sections/*.qmd` — section files
-- Compile with `quarto render paper/main.qmd` to verify
+- `paper/appendix.qmd` and `paper/sections/app-*.qmd` — standalone appendix document, only when the user asks for an online/published appendix. Never `{{< include >}}` it from `main.qmd` — it compiles to its own PDF.
+- Compile with `quarto render paper/main.qmd` (and `quarto render paper/appendix.qmd` if the appendix was touched) to verify
 
 ---
 

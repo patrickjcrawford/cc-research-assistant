@@ -71,7 +71,7 @@ Adding a new agent: create the agent file in `.claude/agents/`, add an entry her
 ## writer
 - **PHASE:** Execution
 - **PARALLEL_GROUP:** execution-write
-- **REQUIRES:** coder-critic score >= 80 AND `paper/tables/` contains `.tex` files
+- **REQUIRES:** coder-critic score >= 80 AND `paper/tables/` contains `.rds` model objects
 - **PRODUCES:** `paper/main.qmd`, `paper/sections/*.qmd`, `quality_reports/claim_source_map_{project}.md`
 - **CRITIC:** writer-critic
 - **ESCALATION_TARGET:** Orchestrator — structural rewrite, not just polish

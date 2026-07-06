@@ -2,8 +2,8 @@
 
 Publication-quality tables using standard economics formatting (booktabs rules, no vertical rules). Two approaches are supported:
 
-- **tabularray (`tblr` / `talltblr`)** -- modern key-value interface. Preferred for hand-written tables in `main.tex`.
-- **`tabular` + `booktabs` + `threeparttable`** -- traditional stack. Required for R/Python/Julia-generated output (scripts export bare `tabular`).
+- **tabularray (`tblr` / `talltblr`)** -- modern key-value interface. Preferred for hand-written tables in `main.qmd`.
+- **`fixest::etable` / `modelsummary`** -- required for R-generated regression output. The script saves the fitted model objects as `.rds` to `paper/tables/`; the styling call (`tex = TRUE`, stars, notes) happens in the `main.qmd` chunk that loads them, not in the script. See INV-13.
 
 Journal-specific conventions (significance stars, note format) adapt to the target journal -- see journal-profiles.md.
 
@@ -22,7 +22,7 @@ Journal-specific conventions (significance stars, note format) adapt to the targ
 
 Every table uses exactly three horizontal rules and **zero vertical lines**:
 
-**Traditional (R/Python/Julia output):**
+**R-generated (rendered at qmd chunk time via `etable(tex = TRUE, ...)` or `modelsummary(output = "latex_tabular", ...)`):**
 ```latex
 \begin{table}[htbp]
 \centering
@@ -41,8 +41,9 @@ Every table uses exactly three horizontal rules and **zero vertical lines**:
 \end{threeparttable}
 \end{table}
 ```
+The `.rds` a script saves holds the *model objects*, not this LaTeX — this is what the qmd chunk produces when it calls `etable()`/`modelsummary()` on those objects.
 
-**Modern (hand-written in main.tex):**
+**Modern (hand-written in main.qmd):**
 ```latex
 \begin{talltblr}[
   caption = {Effect of X on Y},
@@ -61,7 +62,7 @@ Every table uses exactly three horizontal rules and **zero vertical lines**:
 - `\midrule` below column headers (and to separate panels)
 - `\bottomrule` at the very end
 - `\cmidrule(lr){2-4}` for partial rules spanning column groups
-- **R/Python/Julia output:** wrap with `threeparttable` for notes via `\begin{tablenotes}`
+- **R-generated tables:** `etable(tex = TRUE, ...)`/`modelsummary(output = "latex_tabular", ...)` wraps with `threeparttable` for notes via the `notes =`/`tablenotes` argument -- set this in the qmd chunk, not the script
 - **Hand-written tables:** prefer `talltblr` with `note{}` keys -- unifies caption, label, and notes
 - **Never** use `\hline`, `|`, or any vertical rules
 
@@ -129,10 +130,32 @@ For tables with multiple panels:
 
 ## Preferred R Packages
 
-**Primary: `modelsummary`**
+The script fits the models and saves them as a named list `.rds`; the calls below run in the `main.qmd` chunk that loads that `.rds`, not in the script.
+
+**Primary: `fixest::etable`** (all models are `fixest` fits)
 
 ```r
-library(modelsummary)
+models <- readRDS(here("paper", "tables", "estimation", "reg_main_specification.rds"))
+
+fixest::etable(
+  models,
+  vcov     = "hetero",       # or the clustering structure for display
+  tex      = TRUE,
+  style.tex = style.tex(
+    main     = "aer",
+    depvar.title = "",
+    fixef.title  = "",
+    yesNo    = c("Yes", "No")
+  ),
+  se.below = TRUE,
+  signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.10)  # omit for AEA journals
+)
+```
+
+**Alternative: `modelsummary`** (mixed estimators -- lm, ivreg, fixest, etc.)
+
+```r
+models <- readRDS(here("paper", "tables", "estimation", "reg_mixed_specification.rds"))
 
 modelsummary(
   models,
@@ -147,27 +170,10 @@ modelsummary(
 )
 ```
 
-**Alternative: `fixest::etable`**
-
-```r
-fixest::etable(
-  models,
-  tex      = TRUE,
-  style.tex = style.tex(
-    main     = "aer",
-    depvar.title = "",
-    fixef.title  = "",
-    yesNo    = c("Yes", "No")
-  ),
-  se.below = TRUE,
-  signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.10)  # omit for AEA journals
-)
-```
-
 **For summary / descriptive tables: `kableExtra`**
 
 ```r
-library(kableExtra)
+df <- readRDS(here("paper", "tables", "descriptive", "sumstats_main_sample.rds"))
 
 kbl(df, format = "latex", booktabs = TRUE, escape = FALSE,
     align = c("l", rep("c", ncol(df) - 1))) |>
@@ -188,12 +194,12 @@ kbl(df, format = "latex", booktabs = TRUE, escape = FALSE,
 ## Export
 
 ```r
-# Write .tex fragment (no \begin{table} wrapper -- added in main.tex)
-writeLines(tex_output, here("paper", "tables", "reg_main_specification.tex"))
+# Save the fitted models/data frame, not a rendered table
+saveRDS(models, here("paper", "tables", "estimation", "reg_main_specification.rds"))
 ```
 
-- Output **bare `tabular` environment** (no `\begin{table}` float)
-- The paper's `main.tex` wraps it with `\begin{table}`, `\caption{}`, and `\input{}`
+- Save the **model objects** (or a plain summary-stats data frame) -- never a script-side `etable()`/`modelsummary()` call, never rendered `.tex`
+- The paper's `main.qmd` loads the `.rds` and calls the styling function with `tex = TRUE`/`output = "latex_tabular"`, stars, and notes
 - Write to `paper/tables/`
 
 ---
@@ -203,17 +209,17 @@ writeLines(tex_output, here("paper", "tables", "reg_main_specification.tex"))
 ```
 tables/
   descriptive/
-    sumstats_main_sample.tex
-    balance_treatment_control.tex
+    sumstats_main_sample.rds
+    balance_treatment_control.rds
   estimation/
-    reg_main_specification.tex
-    reg_heterogeneity_gender.tex
-    did_event_study_coefficients.tex
+    reg_main_specification.rds
+    reg_heterogeneity_gender.rds
+    did_event_study_coefficients.rds
   robustness/
-    reg_alternative_controls.tex
+    reg_alternative_controls.rds
 ```
 
-Pattern: `{table_type}_{content_description}.tex`
+Pattern: `{table_type}_{content_description}.rds`
 
 - `sumstats_` for summary statistics
 - `balance_` for balance / pre-treatment tests
@@ -318,4 +324,4 @@ Female (\%)             &  47.8      &  48.6    &  -0.8       &  (1.2)  &  0.505
 | `stargazer` package | Deprecated workflow; use `modelsummary` or `fixest::etable` |
 | Raw variable names in labels | Human-readable labels required |
 | `xtable` without booktabs | Produces non-journal-quality output |
-| `\begin{table}` in R output | R exports bare `tabular`; float wrapper lives in `main.tex` |
+| `etable()`/`modelsummary()` called inside the R script | Bakes styling in; restyling requires a re-run. Script saves the `.rds` model objects, styling call lives in `main.qmd` (INV-13) |

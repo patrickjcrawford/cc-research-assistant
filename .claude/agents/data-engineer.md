@@ -64,7 +64,7 @@ For each variable in the cleaned dataset:
 - Summary statistics (mean, sd, min, max, N non-missing)
 
 #### Summary Statistics Table
-- Generate publication-ready summary stats table (LaTeX format)
+- Save the summary-stats data frame as `.rds` (not rendered LaTeX -- INV-13); the qmd chunk in `main.qmd` styles it via `kableExtra`/`modelsummary::datasummary`
 - Save to `paper/tables/`
 - Include N, mean, sd, min, p25, median, p75, max
 

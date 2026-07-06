@@ -19,8 +19,8 @@ paths:
 
 **Target:** Publication-quality tables using standard economics formatting (booktabs rules, no vertical rules). Three approaches in priority order:
 
-1. **`fixest::etable` or `modelsummary`** — primary workflow for all regression and descriptive tables. Called in R code chunks or scripts; output is a `threeparttable` (etable default) or bare `tabular` wrapped in `main.qmd`.
-2. **`tabular` + `booktabs` + `threeparttable`** — traditional wrapping stack. Used when R output needs a custom wrapper in `main.qmd`.
+1. **`fixest::etable` or `modelsummary`** — primary workflow for all regression and descriptive tables. The R script fits the models and saves them as `.rds` to `paper/tables/`; the `etable()`/`modelsummary()` call itself happens in the `main.qmd` chunk that loads the `.rds`, not in the script (INV-13). Output is a `threeparttable` (etable default) or bare `tabular` rendered inline in `main.qmd`.
+2. **`tabular` + `booktabs` + `threeparttable`** — traditional wrapping stack, produced by the same qmd-side `etable()`/`modelsummary()` call above. Not something the script writes directly.
 3. **tabularray (`tblr` / `talltblr`)** — fallback only, for hand-written tables that can't be generated from R code.
 
 Journal-specific conventions (significance stars, note format) adapt to the target journal — see journal-profiles.md.
@@ -139,27 +139,13 @@ For tables with multiple panels:
 
 ### Preferred R Packages
 
-**Primary: `modelsummary`**
+The script fits the models and saves them as a named list `.rds` to `paper/tables/`. The calls below run in the `main.qmd` chunk that loads that `.rds` — not in the script.
+
+**Primary: `fixest::etable`** (all models are `fixest` fits)
 
 ``` r
-library(modelsummary)
+models <- readRDS(here("paper", "tables", "estimation", "reg_main_specification.rds"))
 
-modelsummary(
-  models,
-  output   = "latex_tabular",  # bare tabular, no wrapper
-  stars    = c("*" = 0.10, "**" = 0.05, "***" = 0.01),  # set FALSE for AEA journals
-  coef_rename = c(
-    "treatment"  = "Treatment",
-    "log_income" = "Log income"
-  ),
-  gof_map = c("nobs", "r.squared", "adj.r.squared"),
-  escape  = FALSE
-)
-```
-
-**Alternative: `fixest::etable`**
-
-``` r
 fixest::etable(
   models,
   tex      = TRUE,
@@ -174,15 +160,48 @@ fixest::etable(
 )
 ```
 
-**For summary / descriptive tables: `kableExtra`**
+**Alternative: `modelsummary`** (mixed estimators — lm, ivreg, fixest, etc.)
 
 ``` r
+models <- readRDS(here("paper", "tables", "estimation", "reg_mixed_specification.rds"))
+
+modelsummary(
+  models,
+  output   = "latex_tabular",  # bare tabular, no wrapper
+  stars    = c("*" = 0.10, "**" = 0.05, "***" = 0.01),  # set FALSE for AEA journals
+  coef_rename = c(
+    "treatment"  = "Treatment",
+    "log_income" = "Log income"
+  ),
+  gof_map = c("nobs", "r.squared", "adj.r.squared"),
+  escape  = FALSE
+)
+```
+
+**For summary / descriptive tables: `kableExtra`**
+
+Caption via the Quarto chunk options (`tbl-cap:`), never `\caption{}` inside the pipeline — this keeps `@tbl-` cross-references working (INV-10). Notes via `footnote()`, not a bare comment or in-cell text — this satisfies the every-table-has-notes requirement (INV-1).
+
+```` markdown
+```{r}
+#| label: tbl-summary-stats
+#| tbl-cap: "Summary Statistics"
+
 library(kableExtra)
 
 kbl(df, format = "latex", booktabs = TRUE, escape = FALSE,
-    align = c("l", rep("c", ncol(df) - 1))) |>
-  kable_styling(latex_options = "hold_position")
+    align = c("l", rep("c", ncol(df) - 1))) %>%
+  kable_styling(latex_options = "hold_position") %>%
+  footnote(
+    general = "Sample restricted to ... Data source: ...",
+    general_title = "Note: ",
+    title_format = c("italic"),
+    threeparttable = TRUE,
+    footnote_as_chunk = TRUE,
+    escape = FALSE
+  )
 ```
+````
 
 ### Number Formatting
 
@@ -202,12 +221,12 @@ kbl(df, format = "latex", booktabs = TRUE, escape = FALSE,
 ### Export
 
 ``` r
-# Write .tex fragment (no \begin{table} wrapper -- added in main.qmd)
-writeLines(tex_output, file.path("paper/tables", "reg_main_specification.tex"))
+# Save the fitted models (or summary-stats data frame), not a rendered table
+saveRDS(models, file.path("paper/tables", "reg_main_specification.rds"))
 ```
 
-- Output **bare `tabular` environment** (no `\begin{table}` float)
-- The paper's `main.qmd` wraps it via a `{=latex}` raw block with `\begin{table}`, `\caption{}`, and `\input{}`
+- Save the **model objects** — never a script-side `etable()`/`modelsummary()` call, never rendered `.tex`
+- The paper's `main.qmd` loads the `.rds` and calls the styling function with `tex = TRUE`/`output = "latex_tabular"`, stars, and notes
 - Write to `paper/tables/`
 
 ### File Naming
@@ -215,17 +234,17 @@ writeLines(tex_output, file.path("paper/tables", "reg_main_specification.tex"))
 ```         
 tables/
 ├── descriptive/
-│   ├── sumstats_main_sample.tex
-│   └── balance_treatment_control.tex
+│   ├── sumstats_main_sample.rds
+│   └── balance_treatment_control.rds
 ├── estimation/
-│   ├── reg_main_specification.tex
-│   ├── reg_heterogeneity_gender.tex
-│   └── did_event_study_coefficients.tex
+│   ├── reg_main_specification.rds
+│   ├── reg_heterogeneity_gender.rds
+│   └── did_event_study_coefficients.rds
 └── robustness/
-    └── reg_alternative_controls.tex
+    └── reg_alternative_controls.rds
 ```
 
-Pattern: `{table_type}_{content_description}.tex`
+Pattern: `{table_type}_{content_description}.rds`
 
 - `sumstats_` for summary statistics
 - `balance_` for balance / pre-treatment tests
@@ -244,7 +263,7 @@ Pattern: `{table_type}_{content_description}.tex`
 | `stargazer` package | Deprecated workflow; use `modelsummary` or `fixest::etable` |
 | Raw variable names in labels | Human-readable labels required |
 | `xtable` without booktabs | Produces non-journal-quality output |
-| `\begin{table}` in R output | R exports bare `tabular`; float wrapper lives in `main.qmd` raw LaTeX block |
+| `etable()`/`modelsummary()` called inside the R script | Bakes styling in; restyling requires a re-run. Script saves `.rds` model objects, styling call lives in `main.qmd` (INV-13) |
 
 ### Table Type Templates
 

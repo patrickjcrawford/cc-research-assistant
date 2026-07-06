@@ -1,0 +1,3 @@
+# Additional Robustness Checks {#sec-appendix-robustness}
+
+[Robustness checks referenced in the main text's Robustness section but detailed here — alternative specifications, placebo tests, sensitivity analyses.]

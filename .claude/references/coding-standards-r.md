@@ -23,7 +23,7 @@ These standards apply to all R code produced by the Coder agent. Derived from C+
 | `here` | Project-root-relative paths |
 | `furrr` | Parallel bootstrap/simulation (mirrors purrr::map syntax, future backend) |
 
-**Table output rule:** use `fixest::etable` when all models in a table are `fixest` objects. Use `modelsummary` when mixing estimators (lm, ivreg, fixest, etc.) or for complex table layouts.
+**Table output rule:** scripts save fitted model objects (a named list of `fixest`/`lm`/`ivreg` fits) as `.rds` to `paper/tables/` — they do not call `etable()`/`modelsummary()` themselves. The paper's `main.qmd` loads the `.rds` and calls `fixest::etable` (when all models are `fixest` objects) or `modelsummary` (mixed estimators, complex layouts) with `tex = TRUE`/`output = "latex_tabular"`, stars, and notes applied at render time. See `working-paper-format.md` § Tables and INV-13.
 
 **Wrangling rule:** tibbles/dplyr are the default. Use `data.table` only when speed is demonstrably necessary: loops with in-place mutation, large joins (>100k rows), or bootstrap iteration where copying is the bottleneck. If dplyr is fast enough, prefer it. Never mix idioms within a single pipeline chain.
 
@@ -266,7 +266,7 @@ Scripts follow a numbered pipeline pattern:
 scripts/R/
   01_build_panel.R       # Data construction → data/cleaned/
   02_descriptives.R      # Summary stats and data checks
-  03_estimation.R        # Main regressions → paper/tables/, paper/figures/
+  03_estimation.R        # Main regressions → paper/tables/ (.rds model objects), paper/figures/
   04_robustness.R        # Robustness checks
   functions/             # Reusable helpers (one function per file)
     estimate_att.R

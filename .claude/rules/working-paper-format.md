@@ -12,6 +12,9 @@ quarto render paper/main.qmd
 
 # Live preview (auto-reloads on save)
 quarto preview paper/main.qmd
+
+# Render the online/published appendix (standalone document, not included in main.qmd)
+quarto render paper/appendix.qmd
 ```
 
 Quarto manages all LaTeX passes internally. Do not run `latexmk` or `xelatex` directly.
@@ -80,23 +83,28 @@ Use Quarto's native cross-reference syntax. Do not use `\ref{}`, `\cref{}`, or l
 
 ### From R/Python/Julia scripts
 
-Scripts export bare `tabular` environments (no float wrapper). Include them in `main.qmd` via a raw LaTeX block:
+Scripts do **not** export rendered `.tex`, and do not call `etable()`/`modelsummary()` themselves. They save the fitted model objects — a named list of `fixest` fits, or `lm`/`ivreg` objects — as an `.rds` to `paper/tables/`. Styling (significance stars, journal-specific format, notes, caption) and the `vcov`/clustering choice used for display happen in `main.qmd`, in a chunk that loads the models and calls the table function directly:
 
 ````markdown
-```{=latex}
-\begin{table}[htbp]
-\centering
-\begin{threeparttable}
-\caption{Effect of X on Y}\label{tab:main}
-\input{paper/tables/estimation/reg_main_specification.tex}
-\begin{tablenotes}\small
-  \item \textit{Notes:} Robust standard errors in parentheses.
-  * p < 0.10, ** p < 0.05, *** p < 0.01
-\end{tablenotes}
-\end{threeparttable}
-\end{table}
+```{r}
+#| label: tbl-main
+#| output: asis
+
+models <- readRDS(here("paper", "tables", "estimation", "reg_main_specification.rds"))
+
+etable(
+  models,
+  vcov        = "hetero",
+  cluster     = ~county,
+  tex         = TRUE,
+  title       = "Effect of X on Y",
+  signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.10),  # omit for AEA journals
+  notes       = "Robust standard errors clustered at the county level in parentheses."
+)
 ```
 ````
+
+This keeps table styling and the target-journal significance convention as a one-time change in the `.qmd` — flipping to an AEA no-stars table, renaming coefficients, or editing notes never requires re-running the estimation script.
 
 ### Hand-written tables
 

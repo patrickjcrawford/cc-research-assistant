@@ -79,7 +79,7 @@
 ### Tables
 | File | Description | Paper location |
 |------|-------------|---------------|
-| `paper/tables/[name].tex` | [what it shows] | Table [N] |
+| `paper/tables/[name].rds` | [what it shows] | Table [N] |
 
 ### Figures
 | File | Description | Paper location |

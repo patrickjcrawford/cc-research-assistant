@@ -54,10 +54,10 @@ Translate the strategy memo's specification into working code using the recommen
 Every robustness test from the strategy memo. Reduced-form: placebos, sensitivity, Oster bounds, alternative clustering. Structural: alternative functional forms, parameter sensitivity. Descriptive: alternative construction choices.
 
 ### Stage 3: Output
-- Publication-ready tables (LaTeX via `modelsummary` or `fixest::etable`) -- bare `tabular`, no wrappers (INV-13)
+- Fitted model objects (a named list of `fixest`/`lm`/`ivreg` fits, or a summary-stats data frame) saved as `.rds` -- never a script-side `etable()`/`modelsummary()` call, never rendered `.tex` (INV-13). Styling and LaTeX rendering happen in `main.qmd`.
 - Publication-ready figures (ggplot2, no titles inside plots -- INV-12)
 - All outputs to `paper/tables/` and `paper/figures/`
-- `results_summary.md` with key findings, effect sizes, interpretation notes for the Writer
+- `results_summary.md` with every point estimate, standard error, significance level, and sample size that will appear in the paper -- this is the Writer's only source of numbers, since it cannot read `.rds` files directly
 - Paper-to-code naming map included in results summary
 
 ---
@@ -89,7 +89,7 @@ scripts/R/
   04_estimation.R          # Main specification
   05_robustness.R          # All robustness checks
   06_figures.R             # All figures
-  07_tables.R              # All tables (exports bare tabular)
+  07_tables.R              # All tables (exports fitted model objects as .rds)
   functions/               # One function per file, file name = function name
 ```
 

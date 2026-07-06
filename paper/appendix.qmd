@@ -1,0 +1,31 @@
+---
+title: "[PAPER TITLE]"
+subtitle: "Online Appendix"
+
+execute:
+  echo: false
+  warning: false
+  freeze: false
+
+format:
+  pdf:
+    toc: false
+    number-sections: true
+---
+
+```{=latex}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{3cm}
+{\fontsize{48}{56}\selectfont \bfseries Appendix}
+\end{center}
+\vspace{2cm}
+\appendix
+\clearpage
+```
+
+{{< include sections/app-tables.qmd >}}
+
+{{< include sections/app-figures.qmd >}}
+
+{{< include sections/app-robustness.qmd >}}

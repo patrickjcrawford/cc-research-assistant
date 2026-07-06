@@ -46,7 +46,7 @@ Rscript scripts/R/FILENAME.R 2>&1 | tail -20
 
 ### 3. File Integrity
 - Every `\input{}`, `\include{}` reference resolves to an existing file
-- Every referenced table in `paper/tables/` exists
+- Every `readRDS()` call in `main.qmd` resolves to an existing `.rds` in `paper/tables/`
 - Every referenced figure in `paper/figures/` exists
 
 ### 4. Output Freshness

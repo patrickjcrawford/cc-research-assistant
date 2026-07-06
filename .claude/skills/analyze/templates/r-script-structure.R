@@ -4,7 +4,7 @@
 # Project: [Project Name]
 # Paper: [Author (Year)], Section [X]
 # Inputs: [data/cleaned/analysis_sample.rds]
-# Outputs: [paper/tables/reg_main.tex, paper/figures/event_study.pdf]
+# Outputs: [paper/tables/reg_main.rds, paper/figures/event_study.pdf]
 # ==============================================================================
 
 # --- Packages ----------------------------------------------------------------
@@ -52,8 +52,9 @@ message("Variables: ", ncol(df))
 # saveRDS(main_results, here("scripts", "R", "output", "main_results.rds"))
 
 # --- Export Tables -----------------------------------------------------------
-# Export bare tabular (no \begin{table} wrapper) -- INV-13
-# writeLines(tex_output, here("paper", "tables", "reg_main.tex"))
+# Save fitted model objects, not rendered LaTeX -- styling call lives in
+# main.qmd, not here (INV-13)
+# saveRDS(list(model1 = model1, model2 = model2), here("paper", "tables", "reg_main.rds"))
 
 # --- Export Figures ----------------------------------------------------------
 # No titles inside ggplot -- INV-12. Titles go in LaTeX \caption{}

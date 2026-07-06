@@ -30,7 +30,7 @@ These are non-negotiable. Every agent checks against them. Violations are deduct
 
 **INV-12.** No titles inside ggplot/matplotlib figures. Titles go in the Quarto `fig-cap` chunk option or a raw LaTeX `\caption{}`. Panel labels ("Panel A: ...") inside multi-panel figures are fine.
 
-**INV-13.** R/Python/Julia scripts export bare `tabular` environments — no `\begin{table}`, `\caption{}`, or notes. The paper's `main.qmd` wraps them in a raw LaTeX block with `\caption{}` and `\input{}`.
+**INV-13.** R/Python/Julia scripts export fitted model objects (or summary-stats data frames) as `.rds` to `paper/tables/` — never rendered `.tex`, and never a script-side call to `etable()`/`modelsummary()`. The paper's `main.qmd` loads the object and calls the styling function (`etable()`, `modelsummary()`, `kableExtra::kbl()`) with the caption, notes, and significance convention applied at render time.
 
 ## Code
 
