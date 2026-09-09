@@ -1,3 +1,0 @@
-# Additional Figures {#sec-appendix-figures}
-
-[Appendix figures — supporting plots, maps, or diagnostics referenced but not shown in the main text. Pull from `paper/figures/`, same conventions as `main.qmd` (fig-cap chunk option, no in-plot titles — INV-12).]

@@ -21,7 +21,7 @@ $endif$
 
 \author{%
   $for(authors)$
-    \textbf{$it.name.literal$}\\[-0.6ex]
+    $if(it.name.literal)$\textbf{$it.name.literal$}\\[-0.6ex]$endif$
     $if(it.email)$\small\href{mailto:$it.email$}{$it.email$}$endif$%
     $sep$ \and
   $endfor$

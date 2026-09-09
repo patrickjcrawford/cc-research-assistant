@@ -51,6 +51,10 @@ format:
     fig-pos: "!t"
     keep-tex: false
     number-sections: true
+    include-in-header:
+      - text: |
+          \usepackage{setspace}
+          \doublespacing
 
   beamer:
     navigation: horizontal

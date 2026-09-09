@@ -96,3 +96,7 @@ Thumbs.db
 # data/raw/**/*.do
 # data/raw/**/*.xlsx
 # data/raw/**/*.xls
+
+/.quarto/
+**/*.quarto_ipynb
+/_output/

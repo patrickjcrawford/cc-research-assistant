@@ -1,36 +1,33 @@
 ---
 filters:
   - abstract-section
+  
+keywords: ["keyword one", "keyword two", "keyword three"]
+jel-codes: ["X00", "Y00"]
 
 execute:
   echo: false
   warning: false
-  freeze: false
+  freeze: auto
+  cache: false
+
+format:
+  pdf:
+    toc: false
+    number-sections: true
 ---
 
 # Abstract
 
-[Abstract — 150 words or fewer. JEL codes and keywords follow.]
+[Abstract — 150 words or fewer.]
 
-**JEL Codes:** [X00, Y00]
+<!-- {{< include [section QMDs] >}} -->
 
-**Keywords:** [keyword one, keyword two, keyword three]
-
-# Introduction
-
-# Institutional Background
-
-# Data
-
-# Empirical Strategy
-
-# Results
-
-# Robustness
-
-# Conclusion
+\clearpage
 
 # References {.unnumbered}
+
+\singlespacing
 
 ::: {#refs}
 :::

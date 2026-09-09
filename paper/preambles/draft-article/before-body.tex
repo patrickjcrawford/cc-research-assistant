@@ -6,15 +6,12 @@ $if(title)$
 $if(abstract)$
 \begin{abstract}
 $abstract$
-\end{abstract}
-$endif$
-
-\vfill % Push what follows to bottom of page
-
 $if(keywords)$
 \noindent\textit{\textbf{Keywords:}} $for(keywords)$$it$$sep$, $endfor$\\
 $endif$
 $if(jel-codes)$
 \noindent\textit{\textbf{JEL Codes:}} $for(jel-codes)$$it$$sep$, $endfor$ \vspace{0.5em}
 $endif$
+$endif$
+\end{abstract}
 $endif$
