@@ -231,7 +231,8 @@ Run `/checkpoint`. It handles:
 1. Auto-memory updates (user corrections, project state, references, user profile)
 2. `SESSION_REPORT.md` append per `logging.md`
 3. `quality_reports/research_journal.md` append
-4. (Optional) Obsidian project note if `.claude/state/obsidian-config.md` is configured
+4. `quality_reports/exploration_tree.md` append — branch points, dead ends, pivots (only if the session had any)
+5. (Optional) Obsidian project note if `.claude/state/obsidian-config.md` is configured
 
 Also confirm before compaction:
 - Active plan is saved to disk in `quality_reports/plans/`
@@ -257,7 +258,7 @@ Rewind keeps failed exploration out of context, saving tokens and avoiding confu
 
 After compression or a new session, in order:
 0. **Read pipeline state:** If `quality_reports/pipeline_state.json` exists, read it to determine: current phase, completed agents (with scores), in-progress agents (with round count and remaining issues), pending agents, and any blocking conditions. This is faster and more reliable than reconstructing state from prose logs.
-1. **Read the most recent checkpoint artifacts:** tail of `SESSION_REPORT.md`, tail of `quality_reports/research_journal.md`, and — if `.claude/state/obsidian-config.md` exists and Obsidian MCP is connected — the latest project-note journal entry
+1. **Read the most recent checkpoint artifacts:** tail of `SESSION_REPORT.md`, tail of `quality_reports/research_journal.md`, `quality_reports/exploration_tree.md` (what has already been tried and rejected — check before re-proposing an approach), and — if `.claude/state/obsidian-config.md` exists and Obsidian MCP is connected — the latest project-note journal entry
 2. Read `CLAUDE.md` + most recent plan in `quality_reports/plans/`
 2. Check `git log --oneline -10` and `git diff`
 3. State what you understand the current task to be

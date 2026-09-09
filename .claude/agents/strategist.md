@@ -15,6 +15,8 @@ Given a research idea, literature review, and data assessment, propose the best 
 
 **Mandatory first output:** Before proposing any strategy, produce a **Pre-Strategy Report** (see `strategize/templates/pre-strategy-report.md`). This proves you loaded the discovery inputs before designing anything. If an input is missing, say so -- don't silently assume.
 
+**Also read `quality_reports/exploration_tree.md`** if it exists. Any approach recorded there as a `dead_end` or `pivot` belongs in the strategy memo's Threats section as a pre-empted objection -- cite the node id and its `Lesson`, and state what the memo does instead.
+
 ---
 
 ## Step 0: Classify the Paper Type

@@ -12,12 +12,13 @@ argument-hint: "[--auto | --memory-only | --scaffold-only | --dry-run]"
 
 # Checkpoint: Session Handoff
 
-Captures what happened in the current session and pushes it to three places (plus optionally a fourth):
+Captures what happened in the current session and pushes it to several places:
 
 1.  **Claude Code auto-memory** (`~/.claude/projects/.../memory/`) — learnings for future conversations
 2.  **`SESSION_REPORT.md`** (project root) — append-only session log per `.claude/rules/logging.md`
 3.  **`quality_reports/research_journal.md`** — agent-invocation trail
-4.  **Obsidian vault** (optional, gated) — project-note journal, dashboard, daily journal
+4.  **`quality_reports/exploration_tree.md`** — branch points, dead ends, pivots (only when the session had any)
+5.  **Obsidian vault** (optional, gated) — project-note journal, dashboard, daily journal
 
 You are fast and minimal. One confirmation prompt, then save.
 
@@ -36,7 +37,7 @@ git diff --stat
 git diff --cached --stat
 ```
 
-Then scan: - `CLAUDE.md` header for the project name - `quality_reports/plans/` for files modified today - `quality_reports/session_logs/` for files modified today (if the project uses session logs) - The conversation context for key decisions, corrections, or learnings that qualify for auto-memory
+Then scan: - `CLAUDE.md` header for the project name - `quality_reports/plans/` for files modified today - `quality_reports/session_logs/` for files modified today (if the project uses session logs) - The conversation context for key decisions, corrections, or learnings that qualify for auto-memory - The conversation for **branch points**: a choice made between real alternatives, a specification or approach tried and abandoned, or a change of direction — these become exploration-tree nodes
 
 ### Step 2: Detect Obsidian Configuration
 
@@ -70,6 +71,7 @@ Present a compact summary:
 ### Scaffold updates
 - **SESSION_REPORT.md:** [entry to append]
 - **quality_reports/research_journal.md:** [entry to append — if any agent work happened]
+- **quality_reports/exploration_tree.md:** [new nodes, e.g. "N07 dead_end — rainfall IV, weak first stage" — or "None this session"]
 
 ### Obsidian updates
 - [if configured: project note journal entry, dashboard row, daily journal]
@@ -133,7 +135,20 @@ Append only if agent work happened this session (writer, coder, strategist, etc.
 **Report:** [path to full report]
 ```
 
-#### 4d. Obsidian (optional, only if `.claude/state/obsidian-config.md` exists)
+#### 4d. quality_reports/exploration_tree.md
+
+Append only if the session had **branch points** — a decision between real alternatives, an approach tried and abandoned, or a change of direction. Routine work (edits, reruns, fixes) produces no nodes.
+
+Read the file first (if it exists) to get the next `N{NN}` and the valid parent ids. Then, per `.claude/rules/logging.md` § Exploration Tree, append one node per branch point:
+
+- Pick the type: `question` / `decision` / `experiment` / `dead_end` / `pivot`
+- Set **Parent:** to the node it follows (or `root`)
+- Assign provenance: `user` / `ai-suggested` / `ai-executed` / `user-revised` — default `ai-suggested`; never `user` without an explicit confirmation in the transcript
+- Append-only — never edit an existing node; supersede it with a new node carrying **Supersedes:** `N{XX}`
+
+If the file does not exist and there is at least one node to write, create it from `templates/exploration-tree.md` and delete the example nodes.
+
+#### 4e. Obsidian (optional, only if `.claude/state/obsidian-config.md` exists)
 
 Follow the project's `obsidian-config.md` for vault path and project mapping. Then:
 
@@ -155,7 +170,7 @@ Entry format for project note journal:
 
 Keep it tight — 3–5 bullets per section max.
 
-### Step 4e. Refresh Project Dashboard
+### Step 4f. Refresh Project Dashboard
 
 The dashboard (`project_dashboard.html`) may be hand-crafted with custom sections. **Never overwrite it blindly.**
 
@@ -172,6 +187,7 @@ Checkpoint saved:
 - Memory: [updated/created N files | no changes]
 - SESSION_REPORT.md: [entry added]
 - research_journal.md: [entry added | skipped — no agent work]
+- exploration_tree.md: [N nodes added | skipped — no branch points]
 - Dashboard: [refreshed]
 - Obsidian: [entry added to Project Name | not configured]
 ```
@@ -184,7 +200,7 @@ Checkpoint saved:
 |-------------------------------|-----------------------------------------|
 | `--auto` | Skip user confirmation, just save |
 | `--memory-only` | Only update Claude Code memory |
-| `--scaffold-only` | Update memory + SESSION_REPORT + research_journal, skip Obsidian |
+| `--scaffold-only` | Update memory + SESSION_REPORT + research_journal + exploration_tree, skip Obsidian |
 | `--dry-run` | Show what would be saved, don't save |
 | `--setup-obsidian` | Walk the user through creating `.claude/state/obsidian-config.md` from the example template |
 
@@ -210,6 +226,7 @@ Do NOT run this on every checkpoint — only when the user explicitly opts in.
 |---------------------|-----------------|-----------------------------------|
 | Session report entry | `checkpoint/templates/session-report-entry.md` | Append format for SESSION_REPORT.md |
 | Research journal entry | `checkpoint/templates/research-journal-entry.md` | Append format for research_journal.md |
+| Exploration tree | `templates/exploration-tree.md` | Node schema for `quality_reports/exploration_tree.md` |
 | Memory entry types | `checkpoint/templates/memory-entry-types.md` | 4 memory types with when-to-save guidance |
 | Gotchas | `checkpoint/gotchas.md` | Known failure points and edge cases |
 
@@ -218,6 +235,7 @@ Do NOT run this on every checkpoint — only when the user explicitly opts in.
 ## Rules
 
 - **Never invent progress.** Only log what actually happened — from git, conversation, or user confirmation.
+- **Exploration tree is epilogue-only.** Never read or write `quality_reports/exploration_tree.md` while a task is in progress — only here, reviewing the finished session. Provenance never gets upgraded: `ai-suggested` stays `ai-suggested` until the user explicitly confirms.
 - **Be fast.** The whole checkpoint should take under 60 seconds including user confirmation.
 - **Don't duplicate.** Check existing memory files before creating new ones. Check if today's journal entry already covers this project.
 - **Respect meta-governance.** Fork users get memory + SESSION_REPORT + research_journal out of the box. Obsidian integration is opt-in and gated behind local config.

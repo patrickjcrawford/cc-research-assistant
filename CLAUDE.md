@@ -106,7 +106,7 @@ Quarto
 | `/revise [report]` | R&R cycle: classify + route referee comments |
 | `/talk [mode] [format]` | Create, audit, or compile presentations |
 | `/submit [mode]` | Journal targeting to package to audit to final gate |
-| `/checkpoint [--flag]` | Session handoff: memory + SESSION_REPORT + research journal |
+| `/checkpoint [--flag]` | Session handoff: memory + SESSION_REPORT + research journal + exploration tree |
 | `python3 scripts/generate_dashboard.py` | Regenerate `project_dashboard.html` from current project state |
 
 ------------------------------------------------------------------------

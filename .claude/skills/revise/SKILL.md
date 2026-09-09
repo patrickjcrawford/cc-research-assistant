@@ -19,6 +19,7 @@ Structure point-by-point referee responses with classification, agent routing pe
 2. Read the paper (paper/main.tex or specified path)
 3. Read revision protocol from rules
 4. Read existing scripts to know what analyses already exist
+5. Read `quality_reports/exploration_tree.md` if it exists — the `dead_end` and `pivot` nodes are approaches already tried and rejected, with the reason recorded
 
 ### Step 2: Classify Every Comment
 
@@ -29,6 +30,8 @@ Structure point-by-point referee responses with classification, agent routing pe
 | **REWRITE** | → Writer agent | Draft structural revision |
 | **DISAGREE** | → User (mandatory) | Draft diplomatic pushback, flag for review |
 | **MINOR** | → Writer agent | Draft fix directly |
+
+**Cross-check the exploration tree.** If a NEW ANALYSIS comment asks for something already recorded as a `dead_end`, still flag it for the user — but attach the prior attempt and its `Lesson`. The response letter can then report what was tried and why it failed, with the alternative that replaced it, rather than silently re-running it.
 
 ### Step 3: Build Tracking Document
 Save to `quality_reports/referee_response_tracker.md` with:
