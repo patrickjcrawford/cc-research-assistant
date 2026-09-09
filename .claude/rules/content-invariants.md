@@ -56,14 +56,17 @@ These are non-negotiable. Every agent checks against them. Violations are deduct
 
 **INV-22.** Every numerical claim in the manuscript must have an entry in the claim-source map (`quality_reports/claim_source_map_{project}.md`) traceable to a specific script line and output file.
 
+**INV-23.** Citation provenance. In the literature working documents (`annotated_bibliography.md`, `frontier_map.md`, `positioning.md`) and in the claim-source map, every statement attributed to a cited work is marked 🟢 (directly supported by that work) or 🟠 (inference or synthesis across sources). Each 🟢 statement is accompanied by the verbatim supporting passage and its page number. If the passage and page cannot be supplied, the statement is marked `[NOT VERIFIED]` and no citation is attached. A citation may appear in `paper/main.qmd` only if a backing 🟢 entry (passage + page) exists in the claim-source map; a `[NOT VERIFIED]` claim is never cited in the manuscript. The 🟢/🟠 markers and passages live in the working documents and the claim-source map, not in the rendered manuscript prose.
+
 ---
 
 ## How Agents Use This File
 
 | Agent | Checks | Action on Violation |
 |-------|--------|-------------------|
-| **writer-critic** | INV-1 through INV-13, INV-22 | Deduct per scoring rubric |
+| **writer-critic** | INV-1 through INV-13, INV-22, INV-23 | Deduct per scoring rubric |
+| **librarian-critic** | INV-23 | Deduct per scoring rubric |
 | **coder-critic** | INV-13 through INV-19 | Deduct per scoring rubric |
 | **storyteller-critic** | INV-20, INV-21 | Deduct per scoring rubric |
-| **verifier** | INV-9, INV-10, INV-14, INV-15, INV-16, INV-19 | FAIL if violated |
+| **verifier** | INV-9, INV-10, INV-14, INV-15, INV-16, INV-19, INV-23 | FAIL if violated |
 | **lint hook** | INV-14, INV-15, INV-16, INV-19 | Advisory warning |

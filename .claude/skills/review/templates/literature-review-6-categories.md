@@ -2,6 +2,8 @@
 
 Extracted from `librarian-critic.md`. Used by the librarian-critic agent for literature assessment review.
 
+Also enforce **Citation Provenance (INV-23)** — see the "Citation Provenance Check" section in `librarian-critic.md`. Deductions: unmarked attribution −3 each (max −15); 🟢 statement missing passage or page −3 each (max −15); passage that does not appear in / does not support the cited work −15 each; claim carrying a citation that should be `[NOT VERIFIED]` (fabricated support) −20 each.
+
 ---
 
 ## 1. Coverage Gaps

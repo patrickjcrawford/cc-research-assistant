@@ -6,18 +6,33 @@
 
 ---
 
-## Map
+## Map — Numerical Claims (INV-22)
 
 | Claim | Location | Source Script | Source Line | Table/Figure |
 |-------|----------|---------------|-------------|--------------|
-| [e.g., "4.2 pp increase"] | [results.tex:L23] | [09_estimation.R] | [L142] | [main_results.tex:col3] |
+| [e.g., "4.2 pp increase"] | [results.qmd:L23] | [09_estimation.R] | [L142] | [tbl-main:col3] |
+
+---
+
+## Map — Cited Claims (INV-23)
+
+Every statement in the manuscript attributed to a cited work. Mark 🟢 (the cited work directly states this — record the verbatim passage and page) or 🟠 (your inference/synthesis across sources). If a 🟢 passage and page cannot be supplied, mark the claim `[NOT VERIFIED]`, remove the citation, and rephrase or drop the sentence in `main.qmd`.
+
+| Claim | Location | Cite key | 🟢 / 🟠 | Supporting passage (verbatim) | Page |
+|-------|----------|----------|---------|-------------------------------|------|
+| [e.g., "wind direction is quasi-random"] | [intro.qmd:L18] | [smith2020windPollution] | 🟢 | "prevailing wind direction is orthogonal to…" | p. 4 |
+| [e.g., "no prior work links X to Y"] | [intro.qmd:L42] | — | 🟠 | synthesis across cited set | — |
+| [e.g., "the effect persists for a decade"] | [intro.qmd:L55] | [jones2019longRun] | `[NOT VERIFIED]` | — | — |
 
 ---
 
 ## Verification Status
 
-- [ ] All numerical claims in manuscript have entries
+- [ ] All numerical claims in manuscript have entries (INV-22)
 - [ ] All source scripts exist at listed paths
 - [ ] All table/figure files exist at listed paths
 - [ ] Numbers match between manuscript text and source output
 - [ ] No stale entries (all timestamps current)
+- [ ] Every citation key in the manuscript has a Cited-Claims row (INV-23)
+- [ ] Every 🟢 row has a verbatim passage and a page number
+- [ ] No `[NOT VERIFIED]` row carries a citation key, and no `[NOT VERIFIED]` string appears in `main.qmd`

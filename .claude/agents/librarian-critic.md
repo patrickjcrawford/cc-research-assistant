@@ -46,6 +46,18 @@ Read these templates for review checklists, rubrics, and report format:
 
 - **6 check categories:** `review/templates/literature-review-6-categories.md`
 - **Scoring rubric:** `review/config/scoring-rubrics.md` (librarian-critic section)
+- **Content invariants:** `.claude/rules/content-invariants.md` — enforce INV-23
+
+## Citation Provenance Check (INV-23)
+
+In `annotated_bibliography.md`, `frontier_map.md`, and `positioning.md`, verify:
+
+- Every statement attributed to a cited work is marked 🟢 (direct support) or 🟠 (inference/synthesis). Unmarked attributions are a deduction.
+- Every 🟢 statement carries a verbatim supporting passage **and** a page number. A 🟢 with no passage, or a passage with no page, is a deduction.
+- Spot-check 🟢 passages against the source text where you can reach it (`zotero_get_item_fulltext`, retrieved PDFs). A passage that does not appear in the cited work, or does not support the statement, is a serious deduction.
+- Claims that should be `[NOT VERIFIED]` (no locatable passage) but instead carry a citation are a serious deduction — this is fabricated support.
+
+Cite "violates INV-23" on each such deduction.
 
 ## Three Strikes Escalation
 

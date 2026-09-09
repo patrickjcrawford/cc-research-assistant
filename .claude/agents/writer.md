@@ -86,6 +86,21 @@ Save to: `quality_reports/claim_source_map_{project}.md` (use the template in `w
 
 The writer-critic verifies this map against the manuscript (INV-22).
 
+### Cited-claim provenance (INV-23)
+
+The claim-source map also covers every statement in the manuscript attributed to a cited work (typically in the Introduction and literature review). Add a prose-claims table:
+
+| Claim | Location | Cite key | 🟢 / 🟠 | Supporting passage | Page |
+|-------|----------|----------|---------|--------------------|------|
+| "wind patterns are quasi-random" | intro.qmd:L18 | smith2020windPollution | 🟢 | "prevailing wind direction is orthogonal to…" | p. 4 |
+| "no prior work links X to Y" | intro.qmd:L42 | — | 🟠 | (synthesis across cited set) | — |
+
+Rules:
+- 🟢 = the cited work directly states the claim. Record the verbatim passage and page. Pull it from the source, don't paraphrase. Reuse the librarian's 🟢 entries in `quality_reports/literature/{project}/` where they exist.
+- 🟠 = your inference or synthesis across sources. No passage required.
+- If you cannot supply the passage and page for a 🟢 claim, write `[NOT VERIFIED]` in the map and **do not cite it in `main.qmd`** — rephrase as your own framing or drop it.
+- The 🟢/🟠 markers stay in the map, never in the rendered `.qmd` prose.
+
 ---
 
 ## Output

@@ -13,6 +13,9 @@ Consolidated deduction tables from all critic agents. Each critic starts at 100 
 | Paper doesn't compile | -20 |
 | Causal language without identification (INV-8) | -20 |
 | No claim-source map (INV-22) | -15 |
+| `[NOT VERIFIED]` claim shipped in manuscript text (INV-23) | -10 per, max -30 |
+| Claim-source-map row marked `[NOT VERIFIED]` carries a citation key — fabricated support (INV-23) | -10 per |
+| 🟢 passage does not appear in / does not support the cited work (INV-23) | -10 per |
 | Numbers in text don't match tables (INV-11) | -10 per, max -30 |
 | Strategy section misrepresents the actual design | -15 |
 | Missing table notes on any table (INV-1) | -5 per, max -15 |
@@ -26,6 +29,7 @@ Consolidated deduction tables from all critic agents. Each critic starts at 100 
 | AI vocabulary (3+ instances) | -2 per, max -10 |
 | Missing JEL codes or keywords (INV-6) | -5 |
 | Claim-source map entries missing | -5 per, max -20 |
+| Citation key in manuscript with no 🟢/🟠 row in the claim-source map (INV-23) | -5 per, max -20 |
 | Broken links in claim-source map | -10 per |
 | Sentence length median off by >5 words | -5 |
 | Wrong document class or formatting | -5 |
@@ -177,6 +181,10 @@ The strategist-critic does not use a point-deduction rubric. Instead, it classif
 | No frontier map / gap identification | -10 |
 | Proximity scores inconsistent | -5 |
 | Missing BibTeX entries | -5 per paper |
+| Attributed statement not marked 🟢 / 🟠 (INV-23) | -3 per, max -15 |
+| 🟢 statement missing verbatim passage or page number (INV-23) | -3 per, max -15 |
+| 🟢 passage absent from / not supporting the cited work (INV-23) | -15 per |
+| Claim carries a citation that should be `[NOT VERIFIED]` — fabricated support (INV-23) | -20 per |
 
 ---
 

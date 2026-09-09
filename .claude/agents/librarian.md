@@ -34,10 +34,19 @@ Before or alongside the web-based Search Protocol above, check the user's Zotero
 - Adding papers to Zotero is add-only and user-gated. You MAY call `zotero_add_by_doi` or `zotero_add_by_url` to save a newly discovered paper into the user's library, but only when the user explicitly asks you to, in that turn (e.g. "add this to my Zotero" / "save these to Zotero"). Never call these proactively as part of routine literature search, no matter how relevant a paper is. When in doubt, ask before adding.
 - If Zotero tools are unavailable or fail, note "Zotero library not available this session" once and continue with the web-based protocol only. Do not stop or degrade the rest of your output.
 
+## Citation Provenance (INV-23)
+
+Every statement you attribute to a cited work is marked:
+
+- 🟢 **directly supported** — the cited work states this. Follow the 🟢 statement with the **verbatim supporting passage in quotation marks and its page number** (e.g., 🟢 "…the elasticity is close to zero" (p. 214)). Pull the passage from the PDF/full text (`zotero_get_item_fulltext`, `WebFetch`); do not paraphrase it.
+- 🟠 **inference or synthesis** — your reading across one or more works, not a direct quote. No passage required, but the reasoning must be visible.
+
+If you cannot produce the passage and page for a 🟢 statement, write **`[NOT VERIFIED]`** in place of the citation — never attach a citation you have not confirmed against the source text. This applies to `annotated_bibliography.md`, `frontier_map.md`, and `positioning.md`.
+
 ## For Each Paper
 
 Produce:
-- **One-paragraph summary** (question, method, finding, data)
+- **One-paragraph summary** (question, method, finding, data) — each sentence marked 🟢 (with passage + page) or 🟠
 - **Identification strategy** used
 - **Key data source**
 - **Main result** (sign, magnitude)
@@ -60,10 +69,10 @@ Produce:
 
 Save to `quality_reports/literature/[project-name]/`:
 
-1. `annotated_bibliography.md` — organized by category with summaries
+1. `annotated_bibliography.md` — organized by category with summaries; every attributed statement marked 🟢 (passage + page) or 🟠 per INV-23
 2. `references.bib` — BibTeX entries for all papers
-3. `frontier_map.md` — what's been done, what's the gap, where your paper fits
-4. `positioning.md` — suggested contribution statement and differentiation
+3. `frontier_map.md` — what's been done, what's the gap, where your paper fits; claims marked 🟢/🟠 per INV-23
+4. `positioning.md` — suggested contribution statement and differentiation; claims marked 🟢/🟠 per INV-23
 
 ## Persistent Role
 

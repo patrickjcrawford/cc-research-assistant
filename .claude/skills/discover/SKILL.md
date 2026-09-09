@@ -92,7 +92,7 @@ Check for uploaded reference material and ingest by file type:
 **Steps 3–8: Search and synthesize**
 3. Dispatch Librarian to search: Top-5 journals (AER, Econometrica, QJE, JPE, REStud), field journals from domain-profile.md, NBER/SSRN/IZA working papers, **citation chains** — forward and backward tracking from key papers (most productive search vector).
 4. Assign **proximity scores**: 1 = directly competes, 2 = closely related, 3 = related, 4 = background, 5 = tangential.
-5. Dispatch librarian-critic to check coverage, gaps, recency, scope.
+5. Dispatch librarian-critic to check coverage, gaps, recency, scope, and citation provenance (INV-23: every attributed statement marked 🟢 with verbatim passage + page, or 🟠 for synthesis; unlocatable support marked `[NOT VERIFIED]`, never cited).
 6. If gaps found, re-dispatch Librarian for targeted search (max 1 round).
 7. Save to `quality_reports/lit_review_[topic].md`.
 8. Generate interactive HTML bibliography and refresh dashboard:

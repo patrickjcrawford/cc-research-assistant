@@ -77,6 +77,7 @@ Before presenting the draft:
 - [ ] Results narrated correctly for output type (tables, event study figures, counterfactuals)
 - [ ] Personal style guide loaded (not template) — or user prompted to run `/write style-guide`
 - [ ] Claim-source map produced for all numerical claims (`quality_reports/claim_source_map_{project}.md`)
+- [ ] Claim-source map covers every cited claim, marked 🟢 (verbatim passage + page) or 🟠 (synthesis); no `[NOT VERIFIED]` claim cited in the text (INV-23)
 - [ ] Results/Conclusion only drafted after verifying actual output files exist
 
 #### 6. Present to User
@@ -185,7 +186,7 @@ Loaded on demand by the writer agent:
 | Cleanup patterns | `templates/cleanup-patterns.md` | After drafting -- cleanup pass |
 | Style extraction | `templates/style-extraction-protocol.md` | `/write style-guide` mode |
 | Drafting gates | `templates/drafting-gates.md` | Full draft mode |
-| Claim-source map | `templates/claim-source-map.md` | After results section |
+| Claim-source map | `templates/claim-source-map.md` | After results section; also for cited claims in Intro / lit review (INV-23) |
 | Notation protocol | `references/notation-protocol.md` | Strategy + results sections |
 
 See also: `gotchas.md` for known failure points and edge cases.
@@ -195,5 +196,5 @@ See also: `gotchas.md` for known failure points and edge cases.
 ## Principles
 - **This is the user's paper, not Claude's.** Match their voice and style.
 - **Never fabricate results.** Use TBD placeholders.
-- **Citations must be verifiable.** Only cite confirmed papers.
+- **Citations must be verifiable.** Only cite confirmed papers. Every cited claim is 🟢 (verbatim passage + page in the claim-source map) or recast as your own 🟠 synthesis; if you cannot locate the passage, mark it `[NOT VERIFIED]` and do not cite it (INV-23).
 - **Argument moves first, cleanup second.** Draft with structure, then strip AI patterns.

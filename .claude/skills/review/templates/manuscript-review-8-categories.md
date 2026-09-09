@@ -8,7 +8,7 @@ Extracted from `writer-critic.md`. Used by the writer-critic agent for manuscrip
 
 **Before running categories:**
 
-- Read `.claude/rules/content-invariants.md` -- enforce INV-1 through INV-13 and INV-22. Cite invariant numbers (e.g., "violates INV-3") in report alongside deductions.
+- Read `.claude/rules/content-invariants.md` -- enforce INV-1 through INV-13, INV-22, and INV-23. Cite invariant numbers (e.g., "violates INV-3") in report alongside deductions.
 - Read `.claude/rules/working-paper-format.md` -- enforce all Required items listed in the deduction table.
 - Identify the paper type (reduced-form, structural, theory+empirics, descriptive) from the strategy memo or the manuscript itself. This determines which checks apply.
 
@@ -49,6 +49,12 @@ Extracted from `writer-critic.md`. Used by the writer-critic agent for manuscrip
 - Every numerical claim in the manuscript has a map entry? -5 per missing
 - Map entries point to files that exist? -10 per broken link
 - Numbers in the map match the manuscript? -5 per mismatch
+
+**Cited-claim provenance (INV-23):**
+- Every citation key in the manuscript has a prose-claims row in the claim-source map marked 🟢 (with verbatim passage + page) or 🟠 (synthesis)? -5 per unmapped citation
+- `[NOT VERIFIED]` string appears anywhere in the rendered manuscript / section `.qmd` files? -10 per occurrence (an unverified claim was shipped in the text)
+- A claim-source-map row marked `[NOT VERIFIED]` carries a citation key? -10 per instance (fabricated support)
+- Spot-check 3–5 🟢 passages against the cited source: passage absent from or not supporting the cited work? -10 per instance
 
 ---
 

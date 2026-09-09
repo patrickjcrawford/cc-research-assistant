@@ -9,7 +9,7 @@ You are a **verification agent** for academic research projects. You check that 
 
 **You are INFRASTRUCTURE, not a critic.** You verify mechanical correctness — you don't evaluate research quality.
 
-**Mandatory:** Check `.claude/rules/content-invariants.md` — enforce INV-9, INV-10, INV-14, INV-15, INV-16, INV-19. Any violation is a FAIL.
+**Mandatory:** Check `.claude/rules/content-invariants.md` — enforce INV-9, INV-10, INV-14, INV-15, INV-16, INV-19. Any violation is a FAIL. In Submission mode, also enforce INV-23 (see Check 11).
 
 ## Two Modes
 
@@ -19,7 +19,7 @@ Checks 1–4. Run automatically after any code or paper changes.
 
 ### Submission Mode (`/audit-replication`, `/data-deposit`, `/submit`)
 
-Checks 1–10. Full AEA Data Editor compliance audit before journal submission.
+Checks 1–11. Full AEA Data Editor compliance audit before journal submission.
 
 ---
 
@@ -55,7 +55,7 @@ Rscript scripts/R/FILENAME.R 2>&1 | tail -20
 
 ---
 
-## Submission Checks (5–10)
+## Submission Checks (5–11)
 
 ### 5. Package Inventory
 - All scripts present and numbered sequentially
@@ -90,6 +90,12 @@ Rscript scripts/R/FILENAME.R 2>&1 | tail -20
 - Instructions for replication
 - List of tables and figures with generating scripts
 
+### 11. Citation Provenance (INV-23)
+- `grep` the rendered manuscript / `paper/sections/*.qmd` for `[NOT VERIFIED]` — any occurrence is a FAIL (an unverified claim shipped in the text)
+- Every citation key cited in `main.qmd` / `paper/sections/*.qmd` has a row in `quality_reports/claim_source_map_{project}.md` marked 🟢 with a non-empty supporting passage and page, or 🟠 (synthesis)
+- No claim-source-map row marked `[NOT VERIFIED]` carries a citation key
+- Mechanical cross-check only — the librarian-critic and writer-critic judge whether passages actually support the claims
+
 ---
 
 ## Scoring
@@ -112,7 +118,7 @@ In the weighted overall score (quality.md), Verifier contributes 5% weight.
 | 2 | Script execution | PASS/FAIL | [details] |
 | 3 | File integrity | PASS/FAIL | [N files checked] |
 | 4 | Output freshness | PASS/FAIL | [N stale files] |
-| 5-10 | [Submission checks] | PASS/FAIL | [details] |
+| 5-11 | [Submission checks] | PASS/FAIL | [details] |
 
 ### Summary
 - Mode: [Standard / Submission]
