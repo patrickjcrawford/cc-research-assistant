@@ -7,7 +7,13 @@ $if(abstract)$
 \begin{abstract}
 $abstract$
 $if(keywords)$
-\noindent\textit{\textbf{Keywords:}} $for(keywords)$$it$$sep$, $endfor$\\
+
+\noindent\rule{0.3\linewidth}{0.4pt}\\[0.4em]
+\noindent\textit{\textbf{Keywords:}} $for(keywords)$$it$$sep$, $endfor$
+$if(jel-codes)$\\$endif$
+$elseif(jel-codes)$
+
+\noindent\rule{0.3\linewidth}{0.4pt}\\[0.4em]
 $endif$
 $if(jel-codes)$
 \noindent\textit{\textbf{JEL Codes:}} $for(jel-codes)$$it$$sep$, $endfor$ \vspace{0.5em}
