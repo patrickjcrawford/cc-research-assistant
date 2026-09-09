@@ -55,6 +55,10 @@ format:
       - text: |
           \usepackage{setspace}
           \doublespacing
+      - paper/preambles/draft-article/article-header.tex
+    template-partials:
+      - paper/preambles/draft-article/title.tex
+      - paper/preambles/draft-article/before-body.tex
 
   beamer:
     navigation: horizontal
