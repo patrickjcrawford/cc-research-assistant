@@ -1,7 +1,8 @@
 ---
 name: tools
-description: Utility commands — commit, compile, validate-bib, lint, journal, context-status, deploy, learn. Replaces individual utility skills.
-argument-hint: "[subcommand: commit | compile | validate-bib | lint | journal | context | deploy | learn | upgrade] [args]"
+description: Utility commands — commit, compile, validate-bib, lint, journal, context-status, deploy, learn.
+argument-hint: "[subcommand: commit | compile | validate-bib | lint | journal | context | dashboard | deploy | learn | upgrade] [args]"
+allowed-tools: Read,Grep,Glob,Write,Edit,Bash,Agent,Task
 ---
 
 # Tools
@@ -32,8 +33,11 @@ The dashboard scans the entire project — paper sections, data, scripts, qualit
 Stage changes, create commit, optionally create PR and merge.
 - Run git status to identify changes
 - Stage relevant files (never stage .env or credentials)
-- Create commit with descriptive message
-- If quality score available and >= 80, note in commit
+- Run `python3 scripts/score.py --gate commit`. If it fails, stop and report which components pull
+  the score below 80. On a project nothing has scored yet it passes with a notice; say so and commit.
+- Create commit with descriptive message; note the score when there is one
+- The git pre-commit hook (`scripts/install-hooks.sh` installs it) runs scaffold integrity and lint
+  checks on every commit, including ones made outside this skill
 
 ### `/tools compile [file]` — LaTeX Compilation
 Automated multi-pass compilation via latexmk.
@@ -106,6 +110,37 @@ Check context usage, whether auto-compact is approaching, what state will be pre
 
 ### `/tools learn` — Extract Learnings
 Extract reusable knowledge from the current session. Auto-memory handles corrections automatically; this is for multi-step workflows worth turning into a full skill.
+
+### `/tools upgrade` — Pull a New Upstream Release
+Merge a new clo-author release into this fork.
+
+This fork is Quarto-based and diverges from upstream (LaTeX) by design, so **upstream's
+delete-and-replace `.claude/` procedure does not apply here**: it would wipe the Quarto rules,
+prose-critic, citation provenance (INV-27), the exploration tree, and the Zotero protocol. The
+upstream release is tracked as a git ancestor (each sync ends with a `-s ours` merge of the release
+tag), so a normal merge finds the right base. Show the user this plan and wait for approval.
+
+```
+Step 1: PREPARE
+  - git status clean on main; git fetch upstream --tags
+  - read the release's CHANGELOG.md entries since the last synced tag
+  - git switch -c upgrade/<tag>
+
+Step 2: MERGE
+  - git merge <tag>   (the release tag, not upstream/main, so the sync point is exact)
+  - resolve conflicts by .claude/sync-manifest.md: TEMPLATE files take upstream logic but keep
+    fork additions; PROJECT files keep ours; MERGE files by hand
+  - LaTeX-only upstream changes (main.tex, latexmkrc, header.tex, \cref, biblatex) are translated
+    to Quarto or excluded — never taken as-is. Excluded paths are listed in sync-manifest.md
+  - scripts marked "clo-author: infrastructure-fork" carry Quarto patches: re-apply them on top of
+    upstream's new version
+
+Step 3: VERIFY AND REPORT
+  - python3 scripts/check_scaffold.py, scripts/test_hooks.py, scripts/test_scripts.py pass
+  - quarto render paper/main.qmd still renders
+  - list what changed, what was translated or excluded, and any judgment calls left for the user
+  - nothing merges to main or pushes without the user's review
+```
 
 ---
 

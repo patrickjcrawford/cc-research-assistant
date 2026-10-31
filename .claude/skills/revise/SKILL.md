@@ -1,7 +1,8 @@
 ---
 name: revise
-description: R&R cycle — classify referee comments and route to appropriate agents. Replaces /respond-to-referee.
+description: R&R cycle — classify referee comments and route to appropriate agents.
 argument-hint: "[referee-report file path] [paper path (optional)]"
+allowed-tools: Read,Grep,Glob,Write,Edit,Agent,Task
 ---
 
 # Revise
@@ -17,7 +18,7 @@ Structure point-by-point referee responses with classification, agent routing pe
 ### Step 1: Parse Inputs
 1. Read referee report(s) from `$ARGUMENTS`
 2. Read the paper (paper/main.tex or specified path)
-3. Read revision protocol from rules
+3. Read the revision protocol, `.claude/rules/revision.md`
 4. Read existing scripts to know what analyses already exist
 5. Read `quality_reports/exploration_tree.md` if it exists — the `dead_end` and `pivot` nodes are approaches already tried and rejected, with the reason recorded
 

@@ -1,3 +1,10 @@
+---
+paths:
+  - "paper/**"
+  - "**/*.qmd"
+  - "**/*.tex"
+---
+
 # Working Paper Format Standard
 
 All papers in this project are authored in Quarto (`.qmd`). The primary file is `paper/main.qmd`. PDF output is produced via `quarto render` using XeLaTeX under the hood. This rule applies to the writer, writer-critic, and verifier agents.

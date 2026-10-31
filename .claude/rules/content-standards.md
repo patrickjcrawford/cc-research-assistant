@@ -4,6 +4,7 @@ paths:
   - "**/*.py"
   - "**/*.jl"
   - "**/*.do"
+  - "**/*.qmd"
   - "**/*.tex"
   - "paper/tables/**"
   - "paper/figures/**"
@@ -17,7 +18,7 @@ paths:
 
 ## 1. Table Standards
 
-**Target:** Publication-quality tables using standard economics formatting (booktabs rules, no vertical rules). Three approaches in priority order:
+**Target:** Publication-quality tables using standard economics formatting (booktabs rules, no vertical rules). Table 1, float placement, and the canonical table chunk follow `.claude/rules/paper-organization.md` (house style); this section covers the table body. Three approaches in priority order:
 
 1. **`fixest::etable` or `modelsummary`** — primary workflow for all regression and descriptive tables. The R script fits the models and saves them as `.rds` to `paper/tables/`; the `etable()`/`modelsummary()` call itself happens in the `main.qmd` chunk that loads the `.rds`, not in the script (INV-13). Output is a `threeparttable` (etable default) or bare `tabular` rendered inline in `main.qmd`.
 2. **`tabular` + `booktabs` + `threeparttable`** — traditional wrapping stack, produced by the same qmd-side `etable()`/`modelsummary()` call above. Not something the script writes directly.
@@ -50,11 +51,6 @@ Every table uses exactly three horizontal rules and **zero vertical lines**:
 ...coefficients...
 \bottomrule
 \end{tabular}
-\begin{tablenotes}\small
-\item \textit{Notes:} Standard errors in parentheses.
-\end{tablenotes}
-\end{threeparttable}
-\end{table}
 ```
 
 **Modern (hand-written in main.qmd raw LaTeX block):**
@@ -77,8 +73,6 @@ Every table uses exactly three horizontal rules and **zero vertical lines**:
 - `\midrule` below column headers (and to separate panels)
 - `\bottomrule` at the very end
 - `\cmidrule(lr){2-4}` for partial rules spanning column groups
-- **R/Python/Julia output:** wrap with `threeparttable` for notes via `\begin{tablenotes}`
-- **Hand-written tables:** prefer `talltblr` with `note{}` keys — unifies caption, label, and notes
 - **Never** use `\hline`, `|`, or any vertical rules
 
 ### Coefficient Display
@@ -269,9 +263,8 @@ Pattern: `{table_type}_{content_description}.rds`
 
 Use these as defaults. Adapt columns based on the paper's needs (e.g., add Min/Max, percentiles, or subgroup columns when substantively important).
 
-**Descriptive Statistics:**
-
-```         
+**Descriptive Statistics** (full-sample or appendix summary statistics; Table 1 follows `paper-organization.md` §2):
+```
 \toprule
                         &  Mean   &  SD     \\
 \midrule
@@ -338,9 +331,8 @@ Observations            &  10,000 &  10,000 &  10,000 &  10,000 \\
 - Panel labels in italics, left-aligned, spanning all columns
 - Controls/FE/Observations rows appear once at the bottom (shared across panels)
 
-**Balance Table:**
-
-```         
+**Appendix balance tests** (not Table 1, which has only treated and control columns — INV-24):
+```
 \toprule
 Variable                &  Treatment &  Control &  Difference &  SE     &  p-value \\
 \midrule
@@ -416,43 +408,9 @@ scale_color_manual(values = project_pal)
 
 ## 3. PDF Processing
 
-### The Safe Processing Workflow
-
-**Step 1: Receive PDF Upload** - User uploads PDF to `reference_docs/supporting/` - Claude DOES NOT attempt to read it directly
-
-**Step 2: Check PDF Properties**
-
-``` bash
-pdfinfo paper_name.pdf | grep "Pages:"
-ls -lh paper_name.pdf
-```
-
-**Step 3: Create Subfolder and Split**
-
-``` bash
-mkdir -p paper_name/
-
-for i in {0..9}; do
-  start=$((i*5 + 1))
-  end=$(((i+1)*5))
-  gs -sDEVICE=pdfwrite -dNOPAUSE -dBATCH -dSAFER \
-     -dFirstPage=$start -dLastPage=$end \
-     -sOutputFile="paper_name/paper_name_p$(printf '%03d' $start)-$(printf '%03d' $end).pdf" \
-     paper_name.pdf 2>/dev/null
-done
-```
-
-**Step 4: Process Chunks Intelligently** - Read chunks ONE AT A TIME using the Read tool - Extract key information from each chunk - Build understanding progressively - Don't try to hold all chunks in working memory
-
-**Step 5: Selective Deep Reading** - After scanning all chunks, identify the most relevant sections - Only read those sections in detail for slide development - Skip appendices, references, or less relevant sections unless needed
-
-### Error Handling Protocol
-
-**If a chunk fails to process:** 1. Note the problematic chunk (e.g., "Chunk p021-025 failed") 2. Try splitting into 1-2 page pieces 3. If still failing, skip and document the gap
-
-**If splitting fails:** 1. Check if Ghostscript is installed: `gs --version` 2. Try alternative: `pdftk paper.pdf burst output paper_%03d.pdf` 3. If all else fails, ask user to upload specific page ranges manually
-
-**If memory/token issues persist:** 1. Process only 2-3 chunks per session 2. Focus on specific sections user identifies as most important
+Read PDFs in `reference_docs/` with the Read tool, passing `pages` ranges (up to 20 pages per
+call) for longer documents; charts and tables in the PDF are read directly. If a read fails, split
+the file with `gs` or `pdftk ... burst` and read the parts.
 
 ------------------------------------------------------------------------
 

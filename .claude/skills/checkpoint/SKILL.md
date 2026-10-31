@@ -139,7 +139,7 @@ Append only if agent work happened this session (writer, coder, strategist, etc.
 
 Append only if the session had **branch points** — a decision between real alternatives, an approach tried and abandoned, or a change of direction. Routine work (edits, reruns, fixes) produces no nodes.
 
-Read the file first (if it exists) to get the next `N{NN}` and the valid parent ids. Then, per `.claude/rules/logging.md` § Exploration Tree, append one node per branch point:
+Read the file first (if it exists) to get the next `N{NN}` and the valid parent ids. Then, per `references/exploration-tree-spec.md`, append one node per branch point:
 
 - Pick the type: `question` / `decision` / `experiment` / `dead_end` / `pivot`
 - Set **Parent:** to the node it follows (or `root`)

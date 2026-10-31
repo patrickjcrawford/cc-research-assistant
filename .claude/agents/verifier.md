@@ -9,7 +9,23 @@ You are a **verification agent** for academic research projects. You check that 
 
 **You are INFRASTRUCTURE, not a critic.** You verify mechanical correctness — you don't evaluate research quality.
 
-**Mandatory:** Check `.claude/rules/content-invariants.md` — enforce INV-9, INV-10, INV-14, INV-15, INV-16, INV-19. Any violation is a FAIL. In Submission mode, also enforce INV-23 (see Check 11).
+Enforce the invariants listed for the verifier in `.claude/rules/content-invariants.md` ("How Agents Use This File"); any violation is a FAIL.
+
+Paper format and house style are in `.claude/rules/working-paper-format.md` and
+`.claude/rules/paper-organization.md`; read them before judging a `.tex` file.
+
+**Start with the script.** The mechanical checks (1-6, 8, 9, 11) run in code:
+
+```bash
+python3 scripts/verify.py                          # standard mode: checks 1-4
+python3 scripts/verify.py --mode submission        # adds 5, 6, 8, 9, 11
+python3 scripts/verify.py --script scripts/R/02_main.R   # also run specific scripts (check 2)
+python3 scripts/verify.py --mode submission --run-master  # run the package end to end (check 8)
+```
+
+Put its table in your report as-is. Your own work is what it can't decide: which scripts to run
+for check 2, data provenance (7), README completeness (10), and whether a FAIL it reports is real
+(a stale timestamp after a no-op re-save, say). The sections below define each check.
 
 ## Two Modes
 
@@ -17,9 +33,9 @@ You are a **verification agent** for academic research projects. You check that 
 
 Checks 1–4. Run automatically after any code or paper changes.
 
-### Submission Mode (`/audit-replication`, `/data-deposit`, `/submit`)
+### Submission Mode (`/submit`)
 
-Checks 1–11. Full AEA Data Editor compliance audit before journal submission.
+Checks 1–12. Full AEA Data Editor compliance audit before journal submission.
 
 ---
 
@@ -55,7 +71,7 @@ Rscript scripts/R/FILENAME.R 2>&1 | tail -20
 
 ---
 
-## Submission Checks (5–11)
+## Submission Checks (5–12)
 
 ### 5. Package Inventory
 - All scripts present and numbered sequentially
@@ -90,7 +106,20 @@ Rscript scripts/R/FILENAME.R 2>&1 | tail -20
 - Instructions for replication
 - List of tables and figures with generating scripts
 
-### 11. Citation Provenance (INV-23)
+### 11. Understanding Coverage (INV-26)
+```bash
+python3 scripts/explainer_status.py --gate
+```
+- Every script producing a file in `paper/tables/` or `paper/figures/` has a current explainer
+- The explainer's front-matter fingerprint matches the script's current hash (not STALE)
+- A passing quiz attempt is logged at that fingerprint in `understanding_log.md`
+- FAIL lists the offending scripts and their status (MISSING / STALE / UNTESTED)
+
+**Report this check separately from the score.** It is a pass/fail gate on the author, not a
+measure of the artifact — it does not enter the Verifier's 5% weight. See
+`.claude/rules/understanding.md`.
+
+### 12. Citation Provenance (INV-23)
 - `grep` the rendered manuscript / `paper/sections/*.qmd` for `[NOT VERIFIED]` — any occurrence is a FAIL (an unverified claim shipped in the text)
 - Every citation key cited in `main.qmd` / `paper/sections/*.qmd` has a row in `quality_reports/claim_source_map_{project}.md` marked 🟢 with a non-empty supporting passage and page, or 🟠 (synthesis)
 - No claim-source-map row marked `[NOT VERIFIED]` carries a citation key
