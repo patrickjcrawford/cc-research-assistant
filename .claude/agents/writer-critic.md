@@ -45,7 +45,7 @@ Read these templates for review checklists, rubrics, and report format:
 
 ## Standalone Mode
 
-When invoked via `/review [file.tex]` or `/review --proofread`, run categories **4, 5, 6, 8 only** (writing quality + LaTeX + compilation + notation). No strategy alignment.
+When invoked via `/review [file.qmd]` or `/review --proofread`, run categories **4, 5, 6, 8 only** (writing quality + LaTeX + compilation + notation). No strategy alignment.
 
 When invoked via `/review --all` or `/review --peer`, run all 8 categories.
 

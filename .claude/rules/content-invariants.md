@@ -32,11 +32,11 @@ These are non-negotiable. Every agent checks against them. Violations are deduct
 
 **INV-13.** R/Python/Julia scripts export fitted model objects (or summary-stats data frames) as `.rds` to `paper/tables/` — never rendered `.tex`, and never a script-side call to `etable()`/`modelsummary()`. The paper's `main.qmd` loads the object and calls the styling function (`etable()`, `modelsummary()`, `kableExtra::kbl()`) with the caption, notes, and significance convention applied at render time.
 
-**INV-23.** Tables and figures are collected in dedicated TABLES and FIGURES blocks at the **end of `main.tex`** (after the bibliography), never inline. Section files (`sections/*.tex`) contain prose and `\cref{}` only — no `\begin{table}`/`\begin{figure}`. Per `.claude/rules/paper-organization.md`.
+**INV-23.** Exhibits are collected in TABLES and FIGURES blocks at the **end of `paper/main.qmd`** (after the `::: {#refs}` div), never inline. Section files (`paper/sections/*.qmd`) contain prose and `@tbl-`/`@fig-` references only — no `tbl-`/`fig-` chunks, image exhibits, or `{=latex}` table/figure blocks. Per `.claude/rules/paper-organization.md` §1.
 
-**INV-24.** Table 1 is the pre-treatment characteristics table: two group columns (treated vs. control), grouped into thematic panels, with unit counts at the bottom. **No difference column, no SD column, no p-value column.**
+**INV-24.** When the design has treated and control groups, Table 1 is the pre-treatment characteristics table: two group columns (treated vs. control), grouped into thematic panels, with unit counts as bottom rows — no difference, SD, or p-value column. Otherwise Table 1 is the summary-statistics table. Per `paper-organization.md` §2.
 
-**INV-25.** Tables use the canonical `threeparttable` wrapper with exhaustive notes (sample, variable definitions, specification columns, SE clustering, stars); figures use the `subcaption` multi-panel wrapper with the overall `\caption{}` on top. Templates in `.claude/rules/paper-organization.md`.
+**INV-25.** Every table is one canonical chunk in `main.qmd` that loads an `.rds` and styles it at render time, with a `tbl-` label, a title-case descriptive caption, and notes per INV-1; multi-panel figures use `fig-subcap` + `layout-ncol` with the caption on top. Per `paper-organization.md` §3–4.
 
 ## Code
 

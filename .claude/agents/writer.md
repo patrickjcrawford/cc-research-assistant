@@ -81,7 +81,7 @@ For every numerical claim in the manuscript, maintain a claim-source map:
 
 | Claim | Location | Source Script | Source Line | Table/Figure |
 |-------|----------|---------------|-------------|--------------|
-| "4.2 pp increase" | results.tex:L23 | 09_estimation.R | L142 | main_results.tex:col3 |
+| "4.2 pp increase" | sections/05_results.qmd:L23 | 09_estimation.R | L142 | tbl-main (reg_main.rds):col3 |
 
 Save to: `quality_reports/claim_source_map_{project}.md` (use the template in `write/templates/claim-source-map.md`).
 

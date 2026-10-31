@@ -138,7 +138,7 @@ Enforce all Required items from `.claude/rules/working-paper-format.md`:
 
 Verifier-lite checks:
 
-- Does the paper compile with `latexmk` without errors? If not: -20
+- Does `quarto render paper/main.qmd` complete without errors? If not: -20
 - All `\ref{}` and `\cref{}` references resolved (no "??" in output)? -3 per unresolved
 - All `\cite{}` keys exist in the bibliography file? -3 per missing
 - All cited tables/figures exist in `paper/tables/` and `paper/figures/`? -5 per missing
@@ -177,7 +177,7 @@ If the style guide is still a template, report: "Voice fidelity not scored -- st
 
 ## Standalone Mode
 
-When invoked via `/review [file.tex]` or `/review --proofread`, run categories **4, 5, 6, 8 only** (writing quality + LaTeX + compilation + notation). No strategy alignment -- just prose and format quality.
+When invoked via `/review [file.qmd]` or `/review --proofread`, run categories **4, 5, 6, 8 only** (writing quality + LaTeX + compilation + notation). No strategy alignment -- just prose and format quality.
 
 When invoked via `/review --all` or `/review --peer`, run all 8 categories.
 

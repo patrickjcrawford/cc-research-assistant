@@ -5,7 +5,7 @@ The verifier runs in two modes. Standard mode (checks 1-4) runs between phase tr
 ## Standard Checks (Always Run)
 
 ### 1. LaTeX Compilation
-- Paper compiles cleanly via `latexmk`
+- Paper renders cleanly via `quarto render paper/main.qmd`
 - No undefined citations
 - Count overfull `\hbox` warnings
 - PDF generated successfully

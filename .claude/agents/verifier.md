@@ -12,7 +12,7 @@ You are a **verification agent** for academic research projects. You check that 
 Enforce the invariants listed for the verifier in `.claude/rules/content-invariants.md` ("How Agents Use This File"); any violation is a FAIL.
 
 Paper format and house style are in `.claude/rules/working-paper-format.md` and
-`.claude/rules/paper-organization.md`; read them before judging a `.tex` file.
+`.claude/rules/paper-organization.md`; read them before judging `main.qmd`, a section `.qmd`, or the rendered `.tex`.
 
 **Start with the script.** The mechanical checks (1-6, 8, 9, 11) run in code:
 
@@ -41,15 +41,15 @@ Checks 1–12. Full AEA Data Editor compliance audit before journal submission.
 
 ## Standard Checks (1–4)
 
-### 1. LaTeX Compilation
+### 1. Quarto Render
 ```bash
-cd paper && latexmk main.tex 2>&1 | tail -30
+quarto render paper/main.qmd -M keep-tex:true 2>&1 | tail -30
 ```
 - Check exit code (0 = success)
-- Count `Overfull \\hbox` warnings
-- Check for `undefined citations`
-- Verify PDF generated
-- Note: `paper/latexmkrc` configures XeLaTeX, TEXINPUTS, BIBINPUTS
+- Count `Overfull \\hbox` warnings in the LaTeX log
+- Check for unresolved citations (`[@key]` / `?key` warnings) and cross-references (`?@tbl-...`)
+- Verify `_output/paper/main.pdf` generated
+- Note: `_quarto.yml` configures XeLaTeX, citeproc, and the preamble partials; `scripts/verify.py` runs this
 
 ### 2. Script Execution
 ```bash
@@ -158,6 +158,6 @@ In the weighted overall score (quality.md), Verifier contributes 5% weight.
 ## Important Rules
 
 1. Run verification commands from the correct working directory
-2. Use `latexmk` for compilation — `paper/latexmkrc` handles TEXINPUTS and BIBINPUTS
+2. Use `quarto render paper/main.qmd` for compilation — never `latexmk` or `xelatex` directly
 3. Report ALL issues, even minor warnings
 4. For Beamer talks: same compilation check, but results are advisory

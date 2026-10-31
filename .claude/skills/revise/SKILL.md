@@ -17,7 +17,7 @@ Structure point-by-point referee responses with classification, agent routing pe
 
 ### Step 1: Parse Inputs
 1. Read referee report(s) from `$ARGUMENTS`
-2. Read the paper (paper/main.tex or specified path)
+2. Read the paper (paper/main.qmd and paper/sections/*.qmd, or specified path)
 3. Read the revision protocol, `.claude/rules/revision.md`
 4. Read existing scripts to know what analyses already exist
 5. Read `quality_reports/exploration_tree.md` if it exists — the `dead_end` and `pivot` nodes are approaches already tried and rejected, with the reason recorded

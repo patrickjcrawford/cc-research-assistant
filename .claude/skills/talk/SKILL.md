@@ -36,7 +36,7 @@ Generate a presentation from the paper.
 **Step 1: Parse Arguments**
 
 - **Format** (required): `job-market` | `seminar` | `short` | `lightning`
-- **Paper path** (optional): defaults to `paper/main.tex`
+- **Paper path** (optional): defaults to `paper/main.qmd`
 - **Engine**: Beamer via Quarto (default) or RevealJS (`--revealjs`)
 - If no format specified, ask the user.
 

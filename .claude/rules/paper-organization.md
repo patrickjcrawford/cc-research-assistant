@@ -1,159 +1,166 @@
 ---
 paths:
   - "paper/**"
+  - "**/*.qmd"
   - "**/*.tex"
 ---
 
 # Paper Organization — House Style (Tables, Figures, Structure)
 
-This is the house layout for every paper in this project (content invariants INV-23, INV-24, INV-25).
-Follow it unless the user asks otherwise: coauthors and target journals expect it, the writer-critic
-deducts for deviations, and the verifier fails on them. It is the single source for float placement,
-Table 1, the table and figure wrappers, and section order; other rules point here for those topics.
+This is the house layout for every paper in this project (content invariants INV-23, INV-24, INV-25),
+translated from upstream clo-author's LaTeX house style to this fork's Quarto workflow. Follow it
+unless the user asks otherwise: the writer-critic deducts for deviations and the verifier fails on
+them. It is the single source for float placement, Table 1, the table and figure chunks, and section
+order; `working-paper-format.md` covers Quarto mechanics (YAML, citations, cross-reference syntax).
 
-**Reference exemplars.** Keep one or two well-organized prior papers as the local gold standard and open
-them when a case isn't covered here (set the paths in `.claude/state/` if you want them remembered).
+**Reference exemplars.** Keep one or two well-organized prior papers (e.g. in
+`reference_docs/my_papers/`) as the local gold standard and open them when a case isn't covered here.
 
 ---
 
-## 1. Float placement — collect at the END, never inline
+## 1. Float placement — collect at the END, never inline (INV-23)
 
-Section files (`sections/*.tex`) contain **only prose and `\cref{}` cross-references — no floats.**
-All tables and figures live in `main.tex` in two dedicated blocks placed **after** the body
-(after `\printbibliography`, or after the last text section), in this order:
+Section files (`paper/sections/*.qmd`) contain **only prose and `@tbl-`/`@fig-` cross-references —
+no exhibits.** No chunk with a `tbl-`/`fig-` label, no `![...](...){#fig-...}` image, no
+`{=latex}` table or figure block. All tables and figures live in `paper/main.qmd`, in two blocks
+placed **after** the references div:
 
-```
-... \input{sections/...} ...        % all text, no floats
+````markdown
+{{< include sections/01_introduction.qmd >}}
+{{< include sections/02_background.qmd >}}
+...                                          <!-- all text, no exhibits -->
+
 \clearpage
-\small \printbibliography
-% ============================================================
-% TABLES
-% ============================================================
+
+# References {.unnumbered}
+
+::: {#refs}
+:::
+
+<!-- ============================================================ -->
+<!-- TABLES                                                       -->
+<!-- ============================================================ -->
+
 \clearpage
-\begin{table}[p] ... \end{table}    % each table, separated by \clearpage when large
-% ============================================================
-% FIGURES
-% ============================================================
+
+```{r}
+#| label: tbl-pretreatment
+...                                          <!-- one chunk per table, \clearpage between large ones -->
+```
+
+<!-- ============================================================ -->
+<!-- FIGURES                                                      -->
+<!-- ============================================================ -->
+
 \clearpage
-\begin{figure}[p] ... \end{figure}  % each figure
-\begin{appendices} ... \end{appendices}   % appendix floats follow the same conventions
+
+```{r}
+#| label: fig-event-study
+...                                          <!-- one chunk per figure -->
 ```
+````
 
-- Big exhibits use `[p]` (own page); smaller ones `[htbp]`. Insert `\clearpage` between full-page floats.
-- Wide tables/figures use `\begin{landscape} ... \end{landscape}` (pdflscape).
-- The reader navigates by `\cref{tab:x}` / `\cref{fig:y}` from the text; LaTeX places the floats at the end.
+- Large exhibits get their own page: `\clearpage` between them (`fig-pos: "p"` on a chunk where needed).
+- Wide tables/figures: wrap the chunk in raw `{=latex}` `\begin{landscape}` / `\end{landscape}`
+  (load `pdflscape` in `paper/preambles/draft-article/article-header.tex`).
+- The reader navigates by `@tbl-x` / `@fig-y` from the text; Quarto numbers and links them.
+- Appendix exhibits follow the same convention at the end of `paper/appendix.qmd`.
 
-## 2. Table 1 is always pre-treatment characteristics (treated vs. control)
+## 2. Table 1 is pre-treatment characteristics (INV-24)
 
-The first table describes the experimental sample as a **two-group comparison at baseline**:
+**When the design compares a treated and a control group**, the first table describes the sample as a
+**two-group comparison at baseline**:
 
-- **Two value columns only: the treated group and the control group. NO difference column, NO SD column, NO p-value.** (Group means / percentages, one value per cell. This is intentional house style — a difference/test column is *not* used here.)
-- Rows grouped into **thematic panels** via `\multicolumn{ncol}{l}{\textit{Panel name}}` + `\midrule`
-  (e.g. *Firm dynamics*, *Labor & demographics*, *Sector composition (\%)*, *Education (\%)*).
-- **Bottom rows:** unit counts (e.g. `Workers`, `Municipalities`) — the N lives here, not in a column.
-- Caption names the baseline window: e.g. `Pre-Treatment Characteristics, 2014`.
+- **Two value columns only: treated and control. No difference column, no SD column, no p-value.**
+  Group means / percentages, one value per cell. Balance *tests* go in an appendix table.
+- Rows grouped into **thematic panels** (panel label row + `\midrule`), e.g. *Demographics*,
+  *Economic structure*, *Sector composition (%)*.
+- **Bottom rows:** unit counts (e.g. `Counties`, `Individuals`) — the N lives here, not in a column.
+- Caption names the baseline window: e.g. "Pre-Treatment Characteristics, 1860".
 
-Model (bare `tabular` exported by R, wrapped in `main.tex`):
+The script saves a summary data frame (`.rds`, INV-13), not a rendered table; `main.qmd` styles it:
 
-```latex
-\begin{tabular}{@{}l cc@{}}
-\toprule
- & Treated Group & Control Group \\
-\midrule
-\multicolumn{3}{l}{\textit{Demographics}} \\
-Log hourly wage & 0.807 & 0.835 \\
-Age             & 34.1  & 34.4  \\
-\midrule
-\multicolumn{3}{l}{\textit{Sector composition (\%)}} \\
-Manufacturing   & 17.1  & 20.4  \\
-\midrule
-Workers         & 549,598 & 4,826,901 \\
-Municipalities  & 194     & 659       \\
-\bottomrule
-\end{tabular}
+````markdown
+```{r}
+#| label: tbl-pretreatment
+#| tbl-cap: "Pre-Treatment Characteristics, 1860"
+#| output: asis
+
+t1 <- readRDS(here("paper", "tables", "01_descriptives", "pretreatment_characteristics.rds"))
+kbl(t1, format = "latex", booktabs = TRUE, align = c("l", "c", "c"),
+    col.names = c("", "Treated Group", "Control Group")) |>
+  pack_rows(index = attr(t1, "panels")) |>
+  footnote(general = "...", general_title = "Notes: ", threeparttable = TRUE)
 ```
+````
 
-## 3. Canonical table wrapper
+With a continuous treatment or no control group, Table 1 is the main-sample summary statistics
+table; the rest of this section does not apply.
 
-R/Julia/Python export a **bare `tabular`** (no float, no caption, no notes). `main.tex` wraps it:
+## 3. Canonical table chunk (INV-25)
 
-```latex
-\begin{table}[p]                      % [htbp] for small tables
-\small
-\centering
-\begin{threeparttable}
-\captionsetup{font=small, skip=1em}
-\caption{Descriptive Title (Cohort/Method)}
-\label{tab:xxx}
-\input{tables/scriptNN_name/file.tex} % bare tabular
-\begin{tablenotes}[flushleft]
-\small
-\setlength{\leftskip}{0em}
-\item \footnotesize\textit{Notes:} <sample> <variable definitions> <specification columns>
-  <SE clustering> <significance stars>.
-\end{tablenotes}
-\end{threeparttable}
-\end{table}
+Scripts save model objects or summary data frames as `.rds` (INV-13). Every table in `main.qmd` is
+one chunk that loads the `.rds` and calls the styling function — the "wrapper" is that chunk:
+
+- `#| label: tbl-...` and a caption: a **full descriptive title in title case**, method or cohort in
+  parentheses (`etable(title = ...)` or `#| tbl-cap:`).
+- `#| output: asis`; `etable(..., tex = TRUE)` / `modelsummary(..., output = "latex")` /
+  `kbl(..., booktabs = TRUE)` per `working-paper-format.md` § Tables.
+- **Notes** via `etable(notes = ...)`, `modelsummary(notes = ...)`, or `kableExtra::footnote(threeparttable = TRUE)`.
+  Notes follow **INV-1** (roughly 40–70 words: what the table shows, how to read it, sample details
+  the table does not print; data sources in the prose). This fork's INV-1 overrides upstream's
+  "exhaustive notes".
+- Booktabs rules only, no `\hline`, no vertical rules (INV-3). Stars per the journal profile (INV-4).
+- "Total effect" rows (base + interaction) report **delta-method SEs in brackets**.
+- Hand-written tables: a raw `{=latex}` `talltblr` block with `note{}` keys (`working-paper-format.md`).
+
+## 4. Canonical figure chunk (multi-panel)
+
+````markdown
+```{r}
+#| label: fig-event-study
+#| fig-cap: "Event Study: County Outcomes (Sun-Abraham)"
+#| fig-cap-location: top
+#| fig-subcap:
+#|   - "Panel title A"
+#|   - "Panel title B"
+#| layout-ncol: 2
+
+knitr::include_graphics(here("paper", "figures", "03_event_study", c("panel_a.pdf", "panel_b.pdf")))
 ```
+````
 
-**Notes are exhaustive** (4–8 sentences): the estimating sample and N, what each variable is, what
-each numbered specification adds, the FE structure, the SE clustering level, and the star thresholds.
-
-- **tabularray variant** (hand-written multi-panel with interactions): use
-  `\inputtblr{\input{...}}` then `\par\vspace{0.3em}\parbox{\linewidth}{\scriptsize \textit{Notes:} ...}`
-  instead of `threeparttable`/`tablenotes`.
-- Booktabs rules only (`\toprule/\midrule/\bottomrule`), no `\hline`, no vertical rules.
-- Stars `^{*}p<0.10, ^{**}p<0.05, ^{***}p<0.01` (omit stars for AEA targets — see `content-standards.md`).
-- "Total effect" rows (sums of base + interaction) report **delta-method SEs in brackets**.
-
-## 4. Canonical figure wrapper (multi-panel)
-
-```latex
-\begin{figure}[p]
-    \centering \singlespacing
-    \caption{Descriptive Title (Method)}\label{fig:xxx}   % caption ABOVE the panels
-    \begin{subfigure}[b]{0.48\linewidth}                  % 0.32 for 3-up, 0.48 for 2-up
-        \centering
-        \caption{Panel Title}                             % short panel label
-        \includegraphics[width=\textwidth]{figures/scriptNN_name/panel_a.pdf}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.48\linewidth}
-        \centering
-        \caption{Panel Title}
-        \includegraphics[width=\textwidth]{figures/scriptNN_name/panel_b.pdf}
-    \end{subfigure}
-\end{figure}
-```
-
-- The overall `\caption{}`+`\label{}` sit at the **top** of the figure; panel sub-captions are short.
-- Exported PDFs are **bare** — no titles/subtitles inside the plot (INV-12). Axis labels publication-quality.
-- Single-panel: `\includegraphics[width=0.8\textwidth]`. Vector PDF (PNG only for maps/rasters).
+- The overall caption sits at the **top**; sub-captions are short panel labels. Captions follow INV-2.
+- Exported PDFs are **bare** — no titles inside the plot (INV-12). Use `layout-ncol: 3` for 3-up.
+- Single panel: one path, `out-width: "80%"`. Vector PDF (PNG only for maps/rasters).
 
 ## 5. Section order
 
-Standard applied-micro structure (omit/merge as the paper needs):
+Standard structure (omit or merge as the paper needs):
 
-1. Introduction (Related Literature as a subsection or folded in)
+1. Introduction (related literature as a subsection or folded in)
 2. Background / Institutional Setting
-3. Data (Data Sources, Descriptive Statistics subsections)
-4. Identification / Empirical Strategy (Design, Specification, Event Study subsections)
-5. Results (Main Results first, then Event Study, Heterogeneity, ...)
+3. Data (sources, descriptive statistics)
+4. Identification / Empirical Strategy (design, specification, event study)
+5. Results (main results first, then event study, heterogeneity, ...)
 6. Mechanism (when present)
 7. Robustness
-8. Discussion / Policy Implications
+8. Discussion
 9. Conclusion
 
-## 6. Caption and naming conventions
+Each section is `## Title {#sec-name}` so `@sec-name` resolves.
 
-- Captions are **full descriptive titles in title case**, method/cohort in parentheses:
-  *"Main Results: Wages and Job Separations (2014 Cohort)"*, *"Event Study: Establishment Dynamics
-  (Sun-Abraham)"*, *"Pre-Treatment Characteristics, 2014"*.
-- Floats organized **by-script** in subfolders: `tables/scriptNN_name/file.tex`,
-  `figures/scriptNN_name/panel.pdf`. R writes the bare exhibit; `main.tex` owns numbering/caption/notes.
+## 6. Caption and file naming
 
-## 7. Exhibit numbering convention
+- Captions are full descriptive titles in title case, method/cohort in parentheses:
+  *"Main Results: County Wealth and Unrest (1860 Cohort)"*, *"Pre-Treatment Characteristics, 1860"*.
+- Exhibits are organized **by script** (CLAUDE.md Output Organization): `paper/tables/NN_name/*.rds`,
+  `paper/figures/NN_name/*.pdf`. The script writes the bare exhibit; `main.qmd` owns numbering,
+  caption, and notes.
 
-- **Table 1:** pre-treatment characteristics (§2).
+## 7. Exhibit numbering
+
+- **Table 1:** pre-treatment characteristics (§2), or summary statistics.
 - **Table 2:** main results.
-- Then mechanism → heterogeneity → robustness/welfare.
+- Then mechanism → heterogeneity → robustness.
 - **Figures:** context/maps first, then main event studies, then heterogeneity / dose-response / placebo.
