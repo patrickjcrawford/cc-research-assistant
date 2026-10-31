@@ -119,7 +119,7 @@ python3 scripts/explainer_status.py --gate
 measure of the artifact — it does not enter the Verifier's 5% weight. See
 `.claude/rules/understanding.md`.
 
-### 12. Citation Provenance (INV-23)
+### 12. Citation Provenance (INV-27)
 - `grep` the rendered manuscript / `paper/sections/*.qmd` for `[NOT VERIFIED]` — any occurrence is a FAIL (an unverified claim shipped in the text)
 - Every citation key cited in `main.qmd` / `paper/sections/*.qmd` has a row in `quality_reports/claim_source_map_{project}.md` marked 🟢 with a non-empty supporting passage and page, or 🟠 (synthesis)
 - No claim-source-map row marked `[NOT VERIFIED]` carries a citation key

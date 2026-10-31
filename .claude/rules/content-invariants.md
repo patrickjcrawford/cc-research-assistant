@@ -62,7 +62,8 @@ These are non-negotiable. Every agent checks against them. Violations are deduct
 
 **INV-22.** Every numerical claim in the manuscript must have an entry in the claim-source map (`quality_reports/claim_source_map_{project}.md`) traceable to a specific script line and output file.
 
-**INV-23.** Citation provenance. In the literature working documents (`annotated_bibliography.md`, `frontier_map.md`, `positioning.md`) and in the claim-source map, every statement attributed to a cited work is marked 🟢 (directly supported by that work) or 🟠 (inference or synthesis across sources). Each 🟢 statement is accompanied by the verbatim supporting passage and its page number. If the passage and page cannot be supplied, the statement is marked `[NOT VERIFIED]` and no citation is attached. A citation may appear in `paper/main.qmd` only if a backing 🟢 entry (passage + page) exists in the claim-source map; a `[NOT VERIFIED]` claim is never cited in the manuscript. The 🟢/🟠 markers and passages live in the working documents and the claim-source map, not in the rendered manuscript prose.
+**INV-27.** Citation provenance. In the literature working documents (`annotated_bibliography.md`, `frontier_map.md`, `positioning.md`) and in the claim-source map, every statement attributed to a cited work is marked 🟢 (directly supported by that work) or 🟠 (inference or synthesis across sources). Each 🟢 statement is accompanied by the verbatim supporting passage and its page number. If the passage and page cannot be supplied, the statement is marked `[NOT VERIFIED]` and no citation is attached. A citation may appear in `paper/main.qmd` only if a backing 🟢 entry (passage + page) exists in the claim-source map; a `[NOT VERIFIED]` claim is never cited in the manuscript. The 🟢/🟠 markers and passages live in the working documents and the claim-source map, not in the rendered manuscript prose.
+
 ## Understanding
 
 **INV-26.** Every script producing a file in `paper/tables/` or `paper/figures/` has a current explainer in `quality_reports/explainers/` and a passing quiz attempt logged at the script's current fingerprint. Current = the explainer's front-matter fingerprint matches `python3 scripts/explainer_status.py --hash <script>`. See `.claude/rules/understanding.md`. Pass/fail gate at `/submit`, warning at `/write results`, never a score.
@@ -73,10 +74,11 @@ These are non-negotiable. Every agent checks against them. Violations are deduct
 
 | Agent | Checks | Action on Violation |
 |-------|--------|-------------------|
-| **writer-critic** | INV-1 through INV-13, INV-22, INV-23, INV-24, INV-25 | Deduct per scoring rubric |
+| **writer-critic** | INV-1 through INV-13, INV-22, INV-23, INV-24, INV-25, INV-27 | Deduct per scoring rubric |
+| **librarian-critic** | INV-27 | Deduct per scoring rubric |
 | **coder-critic** | INV-13 through INV-19 | Deduct per scoring rubric |
 | **storyteller-critic** | INV-20, INV-21 | Deduct per scoring rubric |
-| **verifier** | INV-9, INV-10, INV-14, INV-15, INV-16, INV-19, INV-23, INV-24, INV-25, INV-26 | FAIL if present |
+| **verifier** | INV-9, INV-10, INV-14, INV-15, INV-16, INV-19, INV-23, INV-24, INV-25, INV-26, INV-27 | FAIL if present |
 | **explainer** | INV-26 | Produces the artifacts the invariant requires |
 | **/coherence** (deterministic) | INV-5, INV-7, INV-11, INV-13, INV-23, INV-24 | Major findings block; minor findings block only under `--strict` |
 | **/coherence --deep** finders (reasoning) | INV-7, INV-8, INV-11 | Advisory finding — never blocks |

@@ -14,7 +14,7 @@
 
 ---
 
-## Map — Cited Claims (INV-23)
+## Map — Cited Claims (INV-27)
 
 Every statement in the manuscript attributed to a cited work. Mark 🟢 (the cited work directly states this — record the verbatim passage and page) or 🟠 (your inference/synthesis across sources). If a 🟢 passage and page cannot be supplied, mark the claim `[NOT VERIFIED]`, remove the citation, and rephrase or drop the sentence in `main.qmd`.
 
@@ -33,6 +33,6 @@ Every statement in the manuscript attributed to a cited work. Mark 🟢 (the cit
 - [ ] All table/figure files exist at listed paths
 - [ ] Numbers match between manuscript text and source output
 - [ ] No stale entries (all timestamps current)
-- [ ] Every citation key in the manuscript has a Cited-Claims row (INV-23)
+- [ ] Every citation key in the manuscript has a Cited-Claims row (INV-27)
 - [ ] Every 🟢 row has a verbatim passage and a page number
 - [ ] No `[NOT VERIFIED]` row carries a citation key, and no `[NOT VERIFIED]` string appears in `main.qmd`

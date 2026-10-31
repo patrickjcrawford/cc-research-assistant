@@ -87,7 +87,7 @@ Save to: `quality_reports/claim_source_map_{project}.md` (use the template in `w
 
 The writer-critic verifies this map against the manuscript (INV-22).
 
-### Cited-claim provenance (INV-23)
+### Cited-claim provenance (INV-27)
 
 The claim-source map also covers every statement in the manuscript attributed to a cited work (typically in the Introduction and literature review). Add a prose-claims table:
 
