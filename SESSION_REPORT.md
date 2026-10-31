@@ -45,3 +45,42 @@
 **Status:**
 - Done: README overhaul, table-pipeline convention change across all affected rule/agent files, appendix scaffold
 - Pending: commit these changes; sweep remaining minor `.tex`-convention references in `python-script-structure.py` and `pre-code-report.md` if desired (flagged, not yet done)
+
+## 2026-10-31 05:30 — Upgrade to clo-author 26.09 (Quarto-preserving port)
+
+**Operations:**
+- Committed the pending WIP on `main` first: `67f6d47` (INV-1/2 note length), `fa0e608` (prose-critic), `fce47cc` (newest-version link, abstract page break)
+- Installed a `python3` shim via `uv python install 3.14 --default` (`~/.local/bin`); before this, every `python3` hook had been failing silently on this machine
+- Branch `upgrade/26.09`: applied upstream's 26.05..26.09 delta with `git apply -3` (26.05 as synthetic base) — 66 files clean, 20 hand-resolved
+- Quarto translation of the house style (`paper-organization.md`, `/paper-format`, INV-23–25); citation provenance renumbered INV-23 → INV-27
+- Fork patches (marked `clo-author: infrastructure-fork`): `paper_coherence.py`, `verify.py`, `style_metrics.py`, `check_scaffold.py`, `test_hooks.py`, `test_scripts.py`; hooks `post-edit-lint.py`, `session-guard.py`; `.githooks/pre-commit`
+- Moved the html-dashboard rule into `.claude/skills/dashboard/references/` and the exploration-tree spec into `.claude/skills/checkpoint/references/` (always-loaded budget)
+- Ran `scripts/install-hooks.sh` (`core.hooksPath=.githooks`); final `git merge -s ours 26.09` records the release as an ancestor
+- Plan: `quality_reports/plans/2026-10-30_clo-author-26.09-upgrade.md`
+
+**Decisions:**
+- Selective port, not `/tools upgrade` — upstream's delete-and-replace would wipe the Quarto rules and every fork addition
+- House style translated to Quarto; Table 1 = treated vs. control only when the design has those groups; table notes follow the fork's INV-1 (40–70 words), not upstream's "exhaustive notes"
+- `/explain` + INV-26 and `/coherence` adopted; `/deepread` excluded (Codex CLI not installed)
+- Always-loaded budget raised to 850 in the fork (constitutional-governance.md stays always loaded)
+- Upstream `allowed-tools` restored on skills (the fork had removed them in `eea13f7` without a stated reason); `/review` now has `disallowed-tools: Edit`
+
+**Results:**
+- `check_scaffold.py` 0 errors; `test_hooks.py` and `test_scripts.py` all pass (with `PYTHONUTF8=1`, as the pre-commit gate sets)
+- `verify.py` renders via Quarto and catches unresolved citations/cross-refs and orphan `.rds` (tested in a scratch copy); `paper_coherence.py` clean on the scaffold
+- Windows bugs found and fixed: post-edit-lint hit the broken WSL `bash.exe`; `/freeze` path checks failed on backslash paths
+
+**Commits (branch `upgrade/26.09`, not merged to `main`):**
+- `7777454` Port clo-author 26.09 onto the Quarto fork (3-way from 26.05)
+- `1b81d3e` Renumber citation provenance to INV-27
+- `b289033` Translate the 26.09 paper house style to Quarto
+- `285101b` Adapt 26.09 gate scripts and hooks to Quarto and Windows
+- `7f7b3cc` Document the 26.09 sync and raise the fork's rule budget
+- `1516e1c` Record clo-author 26.09 as merged
+- `a5acc4d` Replace LaTeX-era format checks in review and submit templates
+
+**Status:**
+- Done: upgrade implemented and verified on `upgrade/26.09`
+- Pending: user review of `git diff main...upgrade/26.09`, then merge to `main` (user's call); no push
+- Pending: review `hanlulong/econ-writing-skill` (proposal #11, memory) — not started
+- Note: `test_hooks.py`/`test_scripts.py` need `PYTHONUTF8=1` when run by hand on Windows

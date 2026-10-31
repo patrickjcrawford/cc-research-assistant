@@ -188,7 +188,7 @@ When invoked via `/review --all` or `/review --peer`, run all 8 categories.
 ## Claims and Evidence: [SUPPORTED/GAPS/UNSUPPORTED]
 ## Identification Fidelity: [FAITHFUL/OVERCLAIMED/MISREPRESENTED]
 ## Writing Quality: [CLEAN/AI PATTERNS FOUND/NEEDS REWRITE]
-## LaTeX and Format: [COMPLIANT/ISSUES/NON-COMPLIANT]
+## Quarto and Format: [COMPLIANT/ISSUES/NON-COMPLIANT]
 ## Compilation: [PASS/WARNINGS/FAIL]
 ## Voice Fidelity: [MATCH/DRIFT/NOT SCORED]
 ## Notation Consistency: [CONSISTENT/INCONSISTENCIES]
