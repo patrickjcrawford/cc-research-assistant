@@ -2,6 +2,8 @@ project:
   title: "[PROJECT TITLE]"
   execute-dir: project
   output-dir: _output
+  render:
+    - paper/main.qmd   # only render the manuscript; keeps `quarto render` from walking stray .md/.qmd files
 
 title: "[PAPER TITLE]"
 subtitle: "[SUBTITLE]"
@@ -20,6 +22,7 @@ institute: "[UNIVERSITY]"
 shortinstitute: "[ABBREV]"
 date: last-modified
 date-format: long
+# newest-version: "https://..."   # optional: renders a "most recent version" link below the date, above the abstract
 
 tbl-cap-location: top
 
