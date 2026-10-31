@@ -8,12 +8,40 @@ Use this file when pushing template updates to downstream projects. Each entry i
 
 ---
 
+## Upstream sync (clo-author → this fork)
+
+This fork tracks `hugosantanna/clo-author` (remote `upstream`) but is **Quarto-based**; upstream is LaTeX.
+Last synced release: **26.09** (2026-10-30), recorded as a git ancestor by `git merge -s ours 26.09`.
+
+**Method:** `git fetch upstream --tags`, branch `upgrade/<tag>`, `git merge <tag>`, resolve by the labels
+below, verify (`check_scaffold.py`, `test_hooks.py`, `test_scripts.py`, `quarto render`), review before
+merging to `main`. `/tools upgrade` documents the same steps. Never use upstream's delete-and-replace
+`.claude/` upgrade here.
+
+**Excluded from upstream (do not take):** the deepread skill, its script, and its prompts folder
+(need the Codex CLI); upstream's latexmkrc and LaTeX header preamble (LaTeX manuscript); upstream's
+generate_html_report script (replaced by `generate_dashboard.py`).
+
+**Translated, not taken as-is:** LaTeX-specific upstream rules become Quarto equivalents —
+`working-paper-format.md`, `content-standards.md` (table workflow), `paper-organization.md`,
+`/paper-format`, INV-1/2/9/10/12/13 and INV-23–25. Fork-only invariant: **INV-27** (citation provenance).
+
+**Fork-patched scripts** (first lines carry `clo-author: infrastructure-fork`; MERGE — take upstream's
+new version, then re-apply the patch described in each file's docstring): `scripts/paper_coherence.py`,
+`scripts/verify.py`, `scripts/style_metrics.py`, `scripts/check_scaffold.py` (always-loaded budget 850),
+`scripts/test_hooks.py`, `scripts/test_scripts.py`.
+Fork-patched hooks (MERGE, same rule): `.claude/hooks/post-edit-lint.py`, `.claude/hooks/session-guard.py`,
+`.githooks/pre-commit`.
+
+---
+
 ## Root
 
 | File | Label | Notes |
 |------|-------|-------|
 | `CLAUDE.md` | MERGE | Template owns the structure and comments; project owns the header (project name, institution, branch), pipeline state table, pipeline diagram, and Beamer environments table. |
-| `CHANGELOG.md` | TEMPLATE | Tracks template-level changes only. Projects do not edit this. |
+| `CHANGELOG.md` | TEMPLATE | Tracks template-level changes only. Projects do not edit this. Upstream sync: keep the `[Fork]` section above upstream's entries. |
+| `LICENSE` | TEMPLATE | MIT with fork attribution (from upstream 26.09). |
 | `README.md` | TEMPLATE | Generic template README. Projects that want a project-specific README create `README-project.md`. |
 | `SESSION_REPORT.md` | PROJECT | Project session history. Never overwrite. |
 | `_quarto.yml` | PROJECT | Paper-specific: title, author, font choices, custom preamble includes, citation CSL. Sync only if the project's version is missing required keys (see MERGE note below). |
@@ -52,11 +80,16 @@ All agent definition files are **TEMPLATE**. Downstream projects do not edit age
 | `editor.md` | TEMPLATE |
 | `explorer.md` | TEMPLATE |
 | `explorer-critic.md` | TEMPLATE |
+| `coherence-consolidator.md` | TEMPLATE |
+| `coherence-finder.md` | TEMPLATE |
+| `coherence-skeptic.md` | TEMPLATE |
+| `explainer.md` | TEMPLATE |
 | `guide-writer.md` | TEMPLATE |
 | `librarian.md` | TEMPLATE |
 | `librarian-critic.md` | TEMPLATE |
 | `methods-referee.md` | TEMPLATE |
 | `orchestrator.md` | TEMPLATE |
+| `prose-critic.md` | TEMPLATE | Fork-only agent. |
 | `storyteller.md` | TEMPLATE |
 | `storyteller-critic.md` | TEMPLATE |
 | `strategist.md` | TEMPLATE |
@@ -73,13 +106,23 @@ All hook scripts are **TEMPLATE**. Downstream projects do not edit hook logic.
 
 | File | Label |
 |------|-------|
+| `_hooklib.py` | TEMPLATE |
+| `hook-health.py` | TEMPLATE |
 | `lint-scripts.sh` | TEMPLATE |
 | `post-compact-restore.py` | TEMPLATE |
-| `post-edit-lint.sh` | TEMPLATE |
-| `post-merge.sh` | TEMPLATE |
+| `post-edit-lint.py` | MERGE (fork patch: Git Bash resolution on Windows) |
 | `pre-compact.py` | TEMPLATE |
-| `protect-files.sh` | TEMPLATE |
-| `session-guard.py` | TEMPLATE |
+| `protect-files.py` | TEMPLATE |
+| `session-guard.py` | MERGE (fork patch: normalized paths for `/freeze`) |
+
+`post-merge` moved to `.githooks/` in 26.09; `post-edit-lint.sh` and `protect-files.sh` were retired.
+
+### `.githooks/`
+
+| File | Label | Notes |
+|------|-------|-------|
+| `pre-commit` | MERGE | Fork patch: `PYTHONUTF8=1`; coherence advisory on `.qmd` with `--no-render`. Activate per clone with `bash scripts/install-hooks.sh`. |
+| `post-merge` | TEMPLATE | |
 
 ### `.claude/references/`
 
@@ -102,16 +145,17 @@ All rules files are **TEMPLATE**. Constitutional governance, invariants, and pip
 | File | Label |
 |------|-------|
 | `agents.md` | TEMPLATE |
-| `constitutional-governance.md` | TEMPLATE |
+| `constitutional-governance.md` | TEMPLATE | Fork keeps it as an always-loaded rule (upstream ships it in `templates/`). |
 | `content-invariants.md` | TEMPLATE |
 | `content-standards.md` | TEMPLATE |
-| `html-dashboard.md` | TEMPLATE |
 | `lifecycle.md` | TEMPLATE |
 | `logging.md` | TEMPLATE |
 | `meta-governance.md` | TEMPLATE |
+| `paper-organization.md` | TEMPLATE | Quarto translation of upstream's LaTeX house style. |
 | `permissions.md` | TEMPLATE |
 | `quality.md` | TEMPLATE |
 | `revision.md` | TEMPLATE |
+| `understanding.md` | TEMPLATE |
 | `workflow.md` | TEMPLATE |
 | `working-paper-format.md` | TEMPLATE |
 
@@ -124,10 +168,13 @@ All skill files are **TEMPLATE**. Downstream projects do not edit skill logic, t
 | `analyze/` | TEMPLATE |
 | `careful/` | TEMPLATE |
 | `checkpoint/` | TEMPLATE |
+| `coherence/` | TEMPLATE |
 | `dashboard/` | TEMPLATE |
 | `discover/` | TEMPLATE |
+| `explain/` | TEMPLATE |
 | `freeze/` | TEMPLATE |
 | `new-project/` | TEMPLATE |
+| `paper-format/` | TEMPLATE |
 | `review/` | TEMPLATE |
 | `revise/` | TEMPLATE |
 | `strategize/` | TEMPLATE |
@@ -168,6 +215,8 @@ All skill files are **TEMPLATE**. Downstream projects do not edit skill logic, t
 | Path | Label | Notes |
 |------|-------|-------|
 | `generate_dashboard.py` | TEMPLATE | Dashboard generator. Overwrite unconditionally. |
+| `{score,pipeline,journal,explainer_status}.py`, `install-hooks.sh` | TEMPLATE | Gate scripts (26.09). |
+| `{paper_coherence,verify,style_metrics,check_scaffold,test_hooks,test_scripts}.py` | MERGE | Fork-patched for Quarto/Windows/budget; see Upstream sync above. |
 | `R/` | PROJECT | Project analysis scripts. Never overwrite. |
 | `python/` | PROJECT | Project analysis scripts. Never overwrite. |
 
@@ -237,9 +286,15 @@ When syncing template updates, you can unconditionally overwrite everything in t
 .claude/WORKFLOW_QUICK_REF.md
 templates/
 scripts/generate_dashboard.py
+scripts/{score,pipeline,journal,explainer_status}.py
+scripts/install-hooks.sh
+.githooks/post-merge
 paper/preambles/
 CHANGELOG.md
 README.md
 ```
+
+Except the MERGE items inside those paths: the fork-patched hooks (`post-edit-lint.py`,
+`session-guard.py`) and `.githooks/pre-commit`.
 
 Everything else is either **PROJECT** (skip entirely) or **MERGE** (review manually).

@@ -107,7 +107,12 @@ Quarto
 | `/talk [mode] [format]` | Create, audit, or compile presentations |
 | `/submit [mode]` | Journal targeting to package to audit to final gate |
 | `/checkpoint [--flag]` | Session handoff: memory + SESSION_REPORT + research journal + exploration tree |
+| `/explain [script]` | Explainer + quiz on agent-written analysis code (INV-26 gate at `/submit`) |
+| `/coherence [--deep]` | Internal-consistency audit: refs, citations, numbers vs. tables, notation |
+| `/paper-format [mode]` | Audit/apply the Quarto house style: exhibits at end, Table 1, chunks (INV-23–25) |
 | `python3 scripts/generate_dashboard.py` | Regenerate `project_dashboard.html` from current project state |
+
+**Setup (once per clone):** Claude Code ≥ 2.1.295; a `python3` on PATH (Windows: `uv python install --default`); `bash scripts/install-hooks.sh` for the pre-commit gate.
 
 ------------------------------------------------------------------------
 

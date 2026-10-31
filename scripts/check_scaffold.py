@@ -2,7 +2,7 @@
 """
 check_scaffold.py — integrity checks for the .claude/ scaffold itself.
 
-clo-author: infrastructure (not analysis code; explainer_status.py skips it)
+clo-author: infrastructure-fork (not analysis code; explainer_status.py skips it)
 
 The scaffold is prose that points at other prose, scripts, and settings. When
 one side moves and the other doesn't, nothing fails: a rule names an agent
@@ -46,7 +46,9 @@ KNOWN_TOOLS = {
 SKILL_MAX_LINES = 500
 # Lines of CLAUDE.md plus every .claude/rules/*.md without `paths:` frontmatter. Everything here
 # loads into every session, and Claude Code's docs put the adherence limit near 200 lines per file.
-ALWAYS_LOADED_BUDGET = 700
+# Fork patch (cc-research-assistant): 850, not upstream's 700 — constitutional-governance.md
+# (110 lines) is an always-loaded rule here; upstream ships it only as a template.
+ALWAYS_LOADED_BUDGET = 850
 PATH_RE = re.compile(r"`((?:\.claude|scripts|templates)/[^`\s]+)`")
 
 Problem = Tuple[str, str, str]  # (level, check, message)
