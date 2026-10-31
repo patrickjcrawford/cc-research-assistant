@@ -2,7 +2,7 @@
 """
 Smoke tests for the Claude Code hooks in .claude/hooks/.
 
-clo-author: infrastructure (not analysis code; explainer_status.py skips it)
+clo-author: infrastructure-fork (not analysis code; explainer_status.py skips it)
 
 Each hook is fed a synthetic payload in a throwaway project directory and
 checked for the three outcomes the hooks promise: it acts when it should,
@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -206,7 +207,10 @@ if __name__ == "__main__":
     # Point the real-settings check at a scratch copy so it never writes state into the repo.
     REPO_COPY = new_project()
     (REPO_COPY / ".claude" / "settings.json").write_text((REPO / ".claude" / "settings.json").read_text())
-    os.symlink(HOOKS, REPO_COPY / ".claude" / "hooks")
+    try:
+        os.symlink(HOOKS, REPO_COPY / ".claude" / "hooks")
+    except OSError:  # fork patch: Windows without Developer Mode cannot symlink; a copy serves the same check
+        shutil.copytree(HOOKS, REPO_COPY / ".claude" / "hooks", ignore=shutil.ignore_patterns("__pycache__"))
 
     for test in (test_post_edit_lint, test_protect_files, test_session_guard,
                  test_compaction_pair, test_hook_health, test_real_settings_resolve):

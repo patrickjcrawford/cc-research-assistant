@@ -50,6 +50,12 @@ python3 scripts/paper_coherence.py \
 
 Standard library only, no dependencies, exits 1 when a blocking finding exists.
 
+**Quarto (this fork).** The parser reads LaTeX, so for `paper/main.qmd` it audits Quarto's keep-tex
+output, `paper/main.tex` (gitignored). It re-renders first (`quarto render paper/main.qmd -M
+keep-tex:true`) when that file is missing or older than any `.qmd`; `--no-render` refuses instead.
+Findings cite lines in the rendered `main.tex`, which inlines every section — map each one back to
+the `.qmd` by searching for the quoted text. `--scope` takes the rendered file, not a section `.qmd`.
+
 | Check | Severity | What it proves |
 |---|---|---|
 | `undefined-ref` | major | A `\ref`/`\cref` target has no `\label` |
@@ -222,7 +228,7 @@ tables could not be parsed, not that the paper is sound; say so plainly.
 
 | Context | Rule |
 |---|---|
-| Commit | Advisory: the git pre-commit gate prints findings for staged `.tex` files but does not block; fix blocking ones before the PR |
+| Commit | Advisory: the git pre-commit gate prints findings for staged `.tex`/`.qmd` files (without re-rendering) but does not block; fix blocking ones before the PR |
 | PR | Blocking zero; minor reported |
 | `/submit final` | Run with `--strict`; blocking and minor both zero |
 | Talks | Advisory (INV-21 traceability still applies) |

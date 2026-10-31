@@ -10,10 +10,15 @@ The linting itself lives in lint-scripts.sh.
 
 Hook Event: PostToolUse (matcher: "Edit|Write")
 Returns: Exit 0; findings as hookSpecificOutput.additionalContext
+
+Fork patch (cc-research-assistant, Windows): a bare "bash" resolves to the WSL
+launcher in System32 before PATH is searched; find_bash() picks Git Bash.
 """
 
 from __future__ import annotations
 
+import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -23,6 +28,22 @@ from _hooklib import HookError, emit, run  # noqa: E402
 
 SCRIPT_EXTENSIONS = {".R", ".py", ".jl"}
 LINTER = Path(__file__).resolve().parent / "lint-scripts.sh"
+
+
+def find_bash() -> str:
+    """Git Bash on Windows (never the WSL stubs); plain `bash` elsewhere."""
+    if os.name != "nt":
+        return "bash"
+    found = shutil.which("bash")
+    if found and not any(s in found.lower() for s in ("\\system32\\", "\\windowsapps\\")):
+        return found
+    git = shutil.which("git")
+    if git:
+        for rel in ("../bin/bash.exe", "../usr/bin/bash.exe", "../../bin/bash.exe"):
+            cand = (Path(git).parent / rel).resolve()
+            if cand.is_file():
+                return str(cand)
+    return "bash"
 
 
 def body(hook) -> None:
@@ -39,8 +60,8 @@ def body(hook) -> None:
         raise HookError(f"linter missing: {LINTER}")
 
     result = subprocess.run(
-        ["bash", str(LINTER), str(path)],
-        capture_output=True, text=True, timeout=8,
+        [find_bash(), str(LINTER), str(path)],
+        capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=8,
     )
     report = result.stdout.strip()
     if not report:

@@ -2,7 +2,11 @@
 """
 style_metrics.py — the countable part of the writer-critic's style review.
 
-clo-author: infrastructure (not analysis code; explainer_status.py skips it)
+clo-author: infrastructure-fork (not analysis code; explainer_status.py skips it)
+
+Fork patch (cc-research-assistant, Quarto): .qmd files are measured too, with
+YAML, code chunks, raw blocks, divs, shortcodes, and citation/cross-ref keys
+stripped first. Re-apply on top of upstream when merging a new release.
 
 Several writer-critic deductions are counts: AI-vocabulary hits, hedging and
 filler phrases, em dashes per page, sentence-length median and spread. The
@@ -16,7 +20,8 @@ comparison target.
 
 Usage:
     python3 scripts/style_metrics.py paper/sections/introduction.tex
-    python3 scripts/style_metrics.py paper/            # every .tex under paper/sections
+    python3 scripts/style_metrics.py paper/sections/01_introduction.qmd
+    python3 scripts/style_metrics.py paper/            # every .qmd/.tex under paper/sections (else main.qmd)
     python3 scripts/style_metrics.py paper/ --json
 """
 
@@ -75,6 +80,23 @@ def prose_from_tex(text: str) -> str:
     return re.sub(r"[ \t]+", " ", text)
 
 
+def prose_from_qmd(text: str) -> str:
+    """Body prose from Quarto markdown: drop YAML, chunks, raw blocks, divs, shortcodes, keys."""
+    text = re.sub(r"\A---\n.*?\n---\n", "", text, flags=re.DOTALL)
+    text = re.sub(r"^(`{3,}|~{3,}).*?^\1\s*$", " ", text, flags=re.DOTALL | re.MULTILINE)
+    text = re.sub(r"<!--.*?-->", " ", text, flags=re.DOTALL)
+    text = re.sub(r"\{\{<.*?>\}\}", " ", text)
+    text = re.sub(r"^:{3,}.*$", " ", text, flags=re.MULTILINE)
+    text = re.sub(r"^-{3,}\s*$", " ", text, flags=re.MULTILINE)
+    text = re.sub(r"!\[[^\]]*\]\([^)]*\)(\{[^}]*\})?", " ", text)
+    text = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", text)
+    text = re.sub(r"\[-?@[^\]]*\]|-?@[\w:.-]*\w", " X ", text)
+    text = re.sub(r"\{[#.][^}]*\}", " ", text)
+    text = re.sub(r"^#+\s.*$", " ", text, flags=re.MULTILINE)
+    text = re.sub(r"[*_`]", "", text)
+    return prose_from_tex(text)
+
+
 def sentences(prose: str) -> List[str]:
     flat = re.sub(r"\s+", " ", prose)
     flat = re.sub(r"\b(e\.g|i\.e|et al|cf|vs|Fig|Eq|Sec|No)\.", r"\1<dot>", flat)
@@ -84,7 +106,8 @@ def sentences(prose: str) -> List[str]:
 
 def measure(files: List[Path], root: Path) -> dict:
     lists = load_lists(root)
-    prose = "\n".join(prose_from_tex(f.read_text(errors="replace")) for f in files)
+    prose = "\n".join((prose_from_qmd if f.suffix == ".qmd" else prose_from_tex)(f.read_text(encoding="utf-8", errors="replace"))
+                      for f in files)
     sents = sentences(prose)
     lengths = [len(s.split()) for s in sents]
     words = sum(lengths)
@@ -140,7 +163,7 @@ def render(m: dict) -> str:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Countable writing-style metrics for the writer-critic.")
-    ap.add_argument("target", help="A .tex file, or a directory (uses paper/sections/*.tex when present)")
+    ap.add_argument("target", help="A .qmd/.tex file, or a directory (paper/sections/*.qmd|*.tex when present, else main.qmd)")
     ap.add_argument("--root", default=".")
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args(argv)
@@ -148,12 +171,15 @@ def main(argv=None) -> int:
     target = Path(args.target)
     if target.is_dir():
         sections = target / "sections"
-        files = sorted((sections if sections.is_dir() else target).rglob("*.tex"))
+        base = sections if sections.is_dir() else target
+        files = sorted(f for ext in ("*.qmd", "*.tex") for f in base.rglob(ext))
+        if not files and (target / "main.qmd").is_file():
+            files = [target / "main.qmd"]
     else:
         files = [target]
     files = [f for f in files if f.exists()]
     if not files:
-        print(f"style_metrics: no .tex files at {args.target}", file=sys.stderr)
+        print(f"style_metrics: no .qmd or .tex files at {args.target}", file=sys.stderr)
         return 2
     m = measure(files, root)
     print(json.dumps(m, indent=2) if args.json else render(m))

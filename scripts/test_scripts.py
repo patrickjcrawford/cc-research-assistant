@@ -4,7 +4,7 @@ Tests for the enforcement scripts: score.py, pipeline.py, verify.py,
 check_scaffold.py, style_metrics.py, and the INV-5 / INV-24 checks in
 paper_coherence.py. Each runs against a throwaway fixture project.
 
-clo-author: infrastructure (not analysis code; explainer_status.py skips it)
+clo-author: infrastructure-fork (not analysis code; explainer_status.py skips it)
 
 Usage:
     python3 scripts/test_scripts.py        # exit 1 on any failure
@@ -229,7 +229,7 @@ def test_check_scaffold():
     code, out, _ = run("check_scaffold.py", "--quiet", root=root)
     check("weight disagreement caught", "permissions.md says 15%, quality-gates.json says 20%" in out, out[-600:])
     check("phantom path caught", "does_not_exist.py" in out, out[-600:])
-    check("empty block-scalar description caught", "zz-broken/SKILL.md: 'description: >' has no indented body" in out, out[-900:])
+    check("empty block-scalar description caught", "zz-broken/SKILL.md: 'description: >' has no indented body" in out.replace("\\", "/"), out[-900:])  # fork patch: Windows paths
     check("boolean key that swallowed text caught", "'disable-model-invocation' must be true or false" in out, out[-900:])
     check("exit 1 on errors", code == 1)
 

@@ -2,7 +2,13 @@
 """
 paper_coherence.py — deterministic coherence engine for LaTeX papers.
 
-clo-author: infrastructure (not analysis code; explainer_status.py skips it)
+clo-author: infrastructure-fork (not analysis code; explainer_status.py skips it)
+
+Fork patch (cc-research-assistant, Quarto): when paper/main.qmd exists, the
+engine audits Quarto's keep-tex output (paper/main.tex), rendering it first
+when it is missing or older than the .qmd sources (--no-render to refuse).
+Duplicate-macro ignores ifdefined/else branches, which Quarto's generated
+preamble uses. Re-apply on top of upstream when merging a new release.
 
 Builds an index of a paper's cross-reference, citation, and numeric structure,
 then runs checks that have a right answer. Every finding it emits is verifiable
@@ -33,6 +39,7 @@ import argparse
 import json
 import os
 import re
+import subprocess
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -986,6 +993,7 @@ def check_structure(idx: Index) -> List[Finding]:
                     )
                 )
     for name, locs in sorted(idx.commands.items()):
+        locs = [l for l in locs if not (l.file in idx.sources and _in_conditional_branch(idx.sources[l.file].lines, l.line))]
         if len(locs) > 1 and not any("renewcommand" in idx.sources[l.file].lines[l.line - 1] for l in locs[1:] if l.file in idx.sources and l.line - 1 < len(idx.sources[l.file].lines)):
             out.append(
                 Finding(
@@ -1818,6 +1826,39 @@ def apply_fixes(idx: Index, findings: List[Finding]) -> List[str]:
 # --------------------------------------------------------------------------
 
 
+QUARTO_DEPS = ("_quarto.yml", "references.bib")
+
+
+def find_quarto_main(paper_dir: Path) -> Optional[Path]:
+    cand = paper_dir / "main.qmd"
+    return cand if cand.is_file() else None
+
+
+def quarto_tex_stale(qmd: Path, root: Path) -> bool:
+    """True when the keep-tex output is missing or older than any .qmd or config it renders from."""
+    tex = qmd.with_suffix(".tex")
+    if not tex.is_file():
+        return True
+    built = tex.stat().st_mtime
+    deps = list(qmd.parent.rglob("*.qmd")) + [root / name for name in QUARTO_DEPS]
+    return any(p.is_file() and p.stat().st_mtime > built for p in deps)
+
+
+def render_quarto(qmd: Path, root: Path) -> subprocess.CompletedProcess:
+    """Render with keep-tex so the LaTeX parser has a manuscript to read (written next to the .qmd)."""
+    cmd = ["quarto", "render", os.path.relpath(qmd, root), "-M", "keep-tex:true"]
+    try:
+        return subprocess.run(cmd, cwd=root, capture_output=True, text=True, encoding="utf-8", errors="replace")
+    except FileNotFoundError:
+        return subprocess.CompletedProcess(cmd, 127, "", "quarto not found on PATH")
+
+
+def _in_conditional_branch(lines: List[str], line_no: int) -> bool:
+    r"""A definition guarded by \ifdefined ... \else is one definition, not two."""
+    prev = [l.strip() for l in lines[max(0, line_no - 3):line_no - 1] if l.strip()]
+    return bool(prev) and (prev[-1].startswith(r"\ifdefined") or prev[-1].startswith(r"\else"))
+
+
 def find_main(paper_dir: Path) -> Optional[Path]:
     for name in ("main.tex", "paper.tex", "manuscript.tex"):
         cand = paper_dir / name
@@ -1874,6 +1915,11 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     )
     ap.add_argument("--fix", action="store_true", help="Apply unambiguous mechanical fixes")
     ap.add_argument("--quiet", action="store_true", help="Suppress stdout report")
+    ap.add_argument(
+        "--no-render",
+        action="store_true",
+        help="Quarto papers: fail instead of re-rendering when paper/main.tex is missing or stale",
+    )
     args = ap.parse_args(argv)
 
     root = Path(args.root).resolve()
@@ -1886,6 +1932,19 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         if not paper_dir.is_dir():
             sys.stderr.write("error: paper directory not found: %s\n" % paper_dir)
             return 2
+        qmd = find_quarto_main(paper_dir)
+        if qmd is not None and quarto_tex_stale(qmd, root):
+            if args.no_render:
+                sys.stderr.write(
+                    "error: %s is missing or older than its .qmd sources; run `quarto render %s -M keep-tex:true`\n"
+                    % (qmd.with_suffix(".tex").name, os.path.relpath(qmd, root))
+                )
+                return 2
+            proc = render_quarto(qmd, root)
+            if proc.returncode != 0:
+                tail = (proc.stderr.strip().splitlines() or [""])[-1]
+                sys.stderr.write("error: quarto render failed (%d): %s\n" % (proc.returncode, tail[:200]))
+                return 2
         found = find_main(paper_dir)
         if found is None:
             sys.stderr.write("error: no main .tex found in %s\n" % paper_dir)

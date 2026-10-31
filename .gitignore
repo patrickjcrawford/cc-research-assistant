@@ -100,3 +100,10 @@ Thumbs.db
 /.quarto/
 **/*.quarto_ipynb
 /_output/
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Quarto keep-tex output (audited by scripts/paper_coherence.py and verify.py; regenerated on render)
+paper/main.tex

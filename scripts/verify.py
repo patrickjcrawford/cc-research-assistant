@@ -2,7 +2,12 @@
 """
 verify.py — the verifier's mechanical checks.
 
-clo-author: infrastructure (not analysis code; explainer_status.py skips it)
+clo-author: infrastructure-fork (not analysis code; explainer_status.py skips it)
+
+Fork patch (cc-research-assistant, Quarto): when paper/main.qmd exists, check 1
+runs `quarto render -M keep-tex:true` and the index reads the kept paper/main.tex;
+.rds tables count as exhibits, referenced when a .qmd under paper/ names them.
+Re-apply on top of upstream when merging a new release.
 
 The verifier agent used to run these by hand: compile and read the log, glob
 for files, compare timestamps, count scripts. Their inputs fully determine the
@@ -10,7 +15,7 @@ result, so they run here; the verifier agent keeps the checks that need
 judgment (data provenance, README completeness) and reads this report.
 
 Checks (numbering follows .claude/agents/verifier.md):
-   1  LaTeX compilation         latexmk exit code, undefined refs/cites, overfull boxes, PDF
+   1  Compilation               quarto render (Quarto) or latexmk: exit code, unresolved refs/cites, PDF
    2  Script execution          only for scripts passed with --script
    3  File integrity            every \\input / \\includegraphics target exists
    4  Output freshness          no exhibit older than the script that writes it
@@ -45,7 +50,7 @@ import paper_coherence as pc  # noqa: E402
 from explainer_status import SCRIPT_SUFFIXES, SKIP_DIRS, is_infrastructure  # noqa: E402
 
 INTERPRETERS = {".R": ["Rscript"], ".r": ["Rscript"], ".py": [sys.executable], ".jl": ["julia"], ".do": ["stata-mp", "-b", "do"]}
-EXHIBIT_SUFFIXES = {".tex", ".pdf", ".png", ".jpg", ".jpeg", ".eps", ".svg"}
+EXHIBIT_SUFFIXES = {".tex", ".rds", ".pdf", ".png", ".jpg", ".jpeg", ".eps", ".svg"}
 MASTER_RE = re.compile(r"^(00[_-].*|master.*|main|run[_-]?all.*|makefile)$", re.IGNORECASE)
 
 
@@ -125,7 +130,39 @@ def index(root: Path) -> Optional[pc.Index]:
 
 # ---------------------------------------------------------------------------
 
+QUARTO_WARN_CITE = re.compile(r"Citeproc: citation \S+ not found|citation .* not found", re.IGNORECASE)
+QUARTO_WARN_XREF = re.compile(r"Unable to resolve crossref", re.IGNORECASE)
+
+
+def check_render(root: Path, qmd: Path, compile_: bool) -> Result:
+    r = Result(1, "Quarto render")
+    if not compile_:
+        if pc.quarto_tex_stale(qmd, root):
+            return r.skip("--no-compile and paper/main.tex is missing or stale", "MANUAL")
+        r.note("--no-compile: using the existing keep-tex output")
+        return r
+    proc = pc.render_quarto(qmd, root)
+    log = (proc.stdout or "") + (proc.stderr or "")
+    if proc.returncode != 0:
+        r.fail(f"quarto render exited {proc.returncode}: " + (log.strip().splitlines() or [""])[-1][:160])
+    cites, xrefs = len(QUARTO_WARN_CITE.findall(log)), len(QUARTO_WARN_XREF.findall(log))
+    if cites:
+        r.fail(f"{cites} unresolved citation(s)")
+    if xrefs:
+        r.fail(f"{xrefs} unresolved cross-reference(s)")
+    overfull = len(re.findall(r"Overfull \\hbox", log))
+    if overfull:
+        r.note(f"{overfull} overfull \\hbox warning(s)")
+    pdfs = [p for p in root.glob("_output/**/main.pdf")] + [qmd.with_suffix(".pdf")]
+    if proc.returncode == 0 and not any(p.exists() and p.stat().st_mtime >= qmd.stat().st_mtime for p in pdfs):
+        r.fail("no fresh main.pdf after render")
+    return r
+
+
 def check_compile(root: Path, compile_: bool) -> Result:
+    qmd = pc.find_quarto_main(root / "paper") if (root / "paper").is_dir() else None
+    if qmd is not None:
+        return check_render(root, qmd, compile_)
     r = Result(1, "LaTeX compilation")
     main = pc.find_main(root / "paper") if (root / "paper").is_dir() else None
     if main is None:
@@ -260,6 +297,11 @@ def check_crossref(root: Path, idx: Optional[pc.Index], scripts: List[Path]) -> 
     if idx is None:
         return r.skip("no main .tex in paper/")
     referenced = set()
+    qmd_text = "\n".join(q.read_text(encoding="utf-8", errors="replace")
+                         for q in (root / "paper").rglob("*.qmd"))
+    for e in exhibits(root):
+        if e.name in qmd_text:
+            referenced.add(e.resolve())
     for loc in list(idx.inputs) + list(idx.graphics):
         target = loc.value
         for cand in (root / "paper" / target, root / "paper" / (target + ".tex"), root / target):
@@ -310,7 +352,7 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Mechanical verification checks.")
     ap.add_argument("--root", default=".")
     ap.add_argument("--mode", choices=("standard", "submission"), default="standard")
-    ap.add_argument("--no-compile", action="store_true", help="Read the existing .log instead of running latexmk")
+    ap.add_argument("--no-compile", action="store_true", help="Skip rendering: read the existing .log (LaTeX) or keep-tex output (Quarto)")
     ap.add_argument("--script", action="append", default=[], help="Run this script (repeatable)")
     ap.add_argument("--run-master", action="store_true", help="Run the master script end to end (submission)")
     ap.add_argument("--json", action="store_true")
@@ -318,8 +360,9 @@ def main(argv=None) -> int:
 
     root = Path(args.root).resolve()
     scripts = analysis_scripts(root)
+    compiled = check_compile(root, not args.no_compile)  # first: a Quarto render refreshes main.tex
     idx = index(root)
-    results = [check_compile(root, not args.no_compile), check_scripts(root, args.script),
+    results = [compiled, check_scripts(root, args.script),
                check_integrity(idx), check_freshness(root, scripts)]
     if args.mode == "submission":
         inv, master = check_inventory(root, scripts)

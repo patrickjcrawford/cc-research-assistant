@@ -56,16 +56,22 @@ def check_freeze(tool_name: str, tool_input: dict, guards: dict) -> tuple:
 
     project_dir = os.environ.get("CLAUDE_PROJECT_DIR", "")
 
+    # Fork patch (Windows): compare normalized paths — separators and drive-letter case vary.
+    def norm(p: str) -> str:
+        return os.path.normcase(os.path.abspath(p))
+
+    target = norm(file_path)
+
     # .claude/ is always editable
-    if "/.claude/" in file_path or file_path.endswith("/.claude"):
+    if os.sep + ".claude" + os.sep in target + os.sep:
         return True, ""
 
     # Check against allowed paths
     allowed = freeze.get("allowed_paths", [])
     for allowed_path in allowed:
         # Resolve relative to project dir
-        full_allowed = os.path.join(project_dir, allowed_path)
-        if file_path.startswith(full_allowed):
+        full_allowed = norm(os.path.join(project_dir, allowed_path)).rstrip(os.sep)
+        if target == full_allowed or target.startswith(full_allowed + os.sep):
             return True, ""
 
     return False, (

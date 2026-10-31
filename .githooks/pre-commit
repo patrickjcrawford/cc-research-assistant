@@ -25,6 +25,9 @@
 
 set -uo pipefail
 [ "${SKIP_GATE:-0}" = "1" ] && { echo "pre-commit: SKIP_GATE=1, checks skipped"; exit 0; }
+# Fork patch (cc-research-assistant): UTF-8 mode so Python reads and writes UTF-8 on Windows,
+# where the default is cp1252 and the test fixtures' em dashes would not round-trip.
+export PYTHONUTF8=1
 
 ROOT="$(git rev-parse --show-toplevel)" || exit 2
 cd "$ROOT" || exit 2
@@ -61,9 +64,10 @@ if [ -n "$ANALYSIS" ]; then
   done <<<"$ANALYSIS"
 fi
 
-if has '^paper/.+\.tex$' && [ -f scripts/paper_coherence.py ]; then
+if has '^paper/.+\.(tex|qmd)$' && [ -f scripts/paper_coherence.py ]; then
   echo "── pre-commit: paper coherence (advisory) ──"
-  python3 scripts/paper_coherence.py --min-severity major 2>/dev/null | tail -15 || true
+  # --no-render: a Quarto render is too slow for every commit; a stale keep-tex output just says so.
+  python3 scripts/paper_coherence.py --no-render --min-severity major 2>&1 | tail -15 || true
 fi
 
 if [ "$FAIL" -ne 0 ]; then
