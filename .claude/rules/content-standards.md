@@ -193,7 +193,7 @@ kbl(df, format = "latex", booktabs = TRUE, escape = FALSE,
     align = c("l", rep("c", ncol(df) - 1))) %>%
   kable_styling(latex_options = "hold_position") %>%
   footnote(
-    general = "Sample restricted to ... Data source: ...",
+    general = "Sample restricted to ... (data source goes in the prose, INV-1)",
     general_title = "Note: ",
     title_format = c("italic"),
     threeparttable = TRUE,

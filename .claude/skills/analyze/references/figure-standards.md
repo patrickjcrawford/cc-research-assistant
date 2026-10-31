@@ -181,7 +181,7 @@ Pattern: `fig_{description}.pdf`
 \caption{Event study estimates of treatment effect. The figure plots point estimates
 and 95\% confidence intervals for each period relative to treatment. The dashed
 vertical line marks treatment onset. Pre-treatment coefficients are not statistically
-different from zero, consistent with parallel trends. Source: [data source].}
+different from zero, consistent with parallel trends.}
 \label{fig:event_study}
 \end{figure}
 ```
@@ -189,7 +189,7 @@ different from zero, consistent with parallel trends. Source: [data source].}
 Key elements of figure captions (INV-2):
 - What is shown
 - How to read it
-- Data source
+- Short (roughly 40–70 words); the data source goes in the prose, not the caption
 
 ---
 

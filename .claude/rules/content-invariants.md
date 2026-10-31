@@ -6,9 +6,9 @@ These are non-negotiable. Every agent checks against them. Violations are deduct
 
 ## Paper
 
-**INV-1.** Every table has notes explaining key variables, sample, and data source — via `threeparttable` + `tablenotes` (traditional) or `talltblr` with `note{}` keys (tabularray).
+**INV-1.** Every table has notes explaining key variables and the sample — via `threeparttable` + `tablenotes` (traditional) or `talltblr` with `note{}` keys (tabularray). Notes are short (roughly 40–70 words): what the table shows, how to read it, and sample details the table does not print. Data sources and method detail belong in the prose, not the notes; do not repeat what the table body already prints (fixed effects, standard-error type).
 
-**INV-2.** Every figure has a caption with a note explaining what is shown, how to read it, and the data source — via Quarto's `fig-cap` chunk option or a raw LaTeX `\caption{}`.
+**INV-2.** Every figure has a caption explaining what is shown and how to read it — via Quarto's `fig-cap` chunk option or a raw LaTeX `\caption{}`. Captions are short (roughly 40–70 words); data sources and method detail belong in the prose, not the caption.
 
 **INV-3.** No `\hline` — use `\toprule`, `\midrule`, `\bottomrule` (booktabs). No vertical rules.
 
