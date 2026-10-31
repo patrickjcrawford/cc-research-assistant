@@ -13,10 +13,11 @@
 - [ ] No `\hline` -- booktabs only (INV-3)
 - [ ] Notation consistent throughout (INV-7)
 - [ ] Numbers in text match tables (INV-11)
-- [ ] Compiles cleanly with no warnings
-- [ ] `biblatex` + `biber`, not `natbib` (INV-9)
-- [ ] `hyperref` second-to-last, `cleveref` after (INV-10)
-- [ ] No `Figure~\ref{}` -- use `\cref{}` throughout
+- [ ] `quarto render paper/main.qmd` completes cleanly with no warnings
+- [ ] Citations via Quarto citeproc + CSL; no `biblatex`/`natbib` loaded manually (INV-9)
+- [ ] Cross-references via `@fig-`/`@tbl-`/`@sec-`; no raw `\ref{}`/`\cref{}` (INV-10)
+- [ ] Exhibits collected at the end of `main.qmd`; Table 1 per house style (INV-23, INV-24)
+- [ ] Every cited claim backed by a 🟢 claim-source-map entry; no `[NOT VERIFIED]` in text (INV-27)
 
 ## Replication Package
 - [ ] README follows AEA template

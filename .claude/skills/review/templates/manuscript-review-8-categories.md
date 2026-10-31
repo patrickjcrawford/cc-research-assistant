@@ -105,32 +105,23 @@ Run the 24-pattern AI detection check from the Writer's cleanup pass:
 
 ---
 
-## 5. LaTeX and Format
+## 5. Quarto and Format
 
 Enforce all Required items from `.claude/rules/working-paper-format.md`:
 
 | Issue | Deduction |
 |-------|-----------|
-| Wrong document class or font size (not 12pt article) | -5 |
-| Missing `\doublespacing` in body | -5 |
-| Using `natbib` instead of `biblatex` (INV-9) | -3 |
-| Using `bibtex` instead of `biber` (INV-9) | -3 |
-| Missing `fancyhdr` page number setup | -2 |
-| `\textbf{}` wrapping `\title{}` | -3 |
-| `\and` between authors instead of `\quad` | -3 |
-| Repeated affiliation text outside `\thanks{}` | -3 |
+| `_quarto.yml` / `main.qmd` YAML drops required settings (`pdf-engine: xelatex`, `citeproc: true`, `number-sections`, `\doublespacing`) | -5 |
+| `biblatex` or `natbib` loaded manually in a raw LaTeX block (INV-9) | -5 |
 | Missing JEL codes or keywords (INV-6) | -5 |
 | `\hline` instead of booktabs rules (INV-3) | -3 |
 | Missing table notes (INV-1) | -5 per table, max -15 |
-| Missing figure notes (INV-2) | -5 per figure, max -15 |
-| `hyperref` not loaded second-to-last (INV-10) | -2 |
-| Missing `cleveref` after `hyperref` (INV-10) | -2 |
-| Manual `Figure~\ref{}` instead of `\cref{}` | -1 per, max -5 |
-| Missing `microtype` | -2 |
-| Missing abstract `\noindent` and `\singlespacing` | -2 |
-| Abstract exceeds 150 words (INV-5) | -3 |
-| No titles inside figures -- titles in `\caption{}` only (INV-12) | -3 per, max -9 |
-| R/Python/Julia output includes `\begin{table}` wrapper (INV-13) | -3 per, max -9 |
+| Missing figure caption (`fig-cap`) (INV-2) | -5 per figure, max -15 |
+| Raw `\ref{}`/`\cref{}`, or `hyperref`/`cleveref` loaded manually, instead of Quarto `@fig-`/`@tbl-`/`@sec-` (INV-10) | -3 per, max -10 |
+| Abstract exceeds 150 words (INV-5) | -5 |
+| No titles inside figures -- titles in `fig-cap` only (INV-12) | -3 per, max -9 |
+| Script writes rendered `.tex` or calls `etable()`/`modelsummary()` instead of saving `.rds` (INV-13) | -3 per, max -9 |
+| Exhibit chunk inside a section `.qmd` instead of the end blocks of `main.qmd` (INV-23) | -3 per, max -9 |
 
 ---
 
@@ -139,7 +130,7 @@ Enforce all Required items from `.claude/rules/working-paper-format.md`:
 Verifier-lite checks:
 
 - Does `quarto render paper/main.qmd` complete without errors? If not: -20
-- All `\ref{}` and `\cref{}` references resolved (no "??" in output)? -3 per unresolved
+- All `@fig-`/`@tbl-`/`@sec-` references and citations resolved (no `?@` or `?key` in output)? -3 per unresolved
 - All `\cite{}` keys exist in the bibliography file? -3 per missing
 - All cited tables/figures exist in `paper/tables/` and `paper/figures/`? -5 per missing
 - No overfull/underfull hbox warnings exceeding 10pt? -1 per, max -5
