@@ -77,6 +77,16 @@ Adding a new agent: create the agent file in `.claude/agents/`, add an entry her
 - **ESCALATION_TARGET:** Orchestrator — structural rewrite, not just polish
 - **QUALITY_WEIGHT:** 10% (manuscript polish)
 
+## prose-critic
+- **PHASE:** Execution
+- **PARALLEL_GROUP:** execution-write
+- **REQUIRES:** `paper/sections/*.qmd` exist
+- **PRODUCES:** `quality_reports/reviews/prose_critique_{date}.md`
+- **CRITIC:** None -- infrastructure critic, complements writer-critic
+- **ESCALATION_TARGET:** User -- voice and register are the author's call
+- **QUALITY_WEIGHT:** Advisory (reported, non-blocking)
+- **NOTE:** Scores prose quality only -- prosody, rhythm, register, jargon, sentence length, AI tells. Does not overlap writer-critic's structural, format, or claims-evidence checks.
+
 ## editor
 - **PHASE:** Peer Review
 - **PARALLEL_GROUP:** peer-review
