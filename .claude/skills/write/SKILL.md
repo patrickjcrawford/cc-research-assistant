@@ -1,7 +1,7 @@
 ---
 name: write
 description: Draft academic paper sections using paragraph-level argument moves. Cleanup pass strips AI patterns after drafting.
-argument-hint: "[section or mode: intro | strategy | results | conclusion | abstract | full | humanize | style-guide] [file path (optional)]"
+argument-hint: "[section or mode: intro | strategy | results | conclusion | abstract | full | humanize | style-guide | outreach] [file path or venue (optional)]"
 allowed-tools: Read,Grep,Glob,Write,Edit,Agent,Task
 ---
 
@@ -83,8 +83,8 @@ Before presenting the draft:
 - [ ] Every paragraph has an identifiable purpose (argument move type)
 - [ ] Findings lead sentences — not buried after setup
 - [ ] Design-specific elements present (see writer.md for checklists per design)
-- [ ] Every displayed equation is numbered (`\label{eq:...}`)
-- [ ] All `\cite{}` keys exist in `references.bib`
+- [ ] Every displayed equation the text refers to carries an `{#eq-...}` label (number only referenced equations)
+- [ ] All `@key` citations exist in `references.bib`
 - [ ] Introduction contribution paragraph names specific papers
 - [ ] Effect sizes stated with units
 - [ ] No banned hedging phrases
@@ -161,6 +161,27 @@ Strips 24 patterns across 4 categories:
 - Lexical: "delve, leverage, nuanced, robust"
 - Rhetorical: rule-of-three, negative parallelisms, em dash overuse
 - Formatting: excessive bullet points, promotional language
+
+### `/write outreach [venue] [slug]` — Op-ed, Policy Blog, or Press Piece
+Draft a public-facing piece from the paper.
+
+**Agent:** Writer (outreach mode) · **Reads:** `.claude/references/outreach-style.md` (general rules +
+venue profile), the paper's abstract, introduction, and `results_summary.md`.
+
+1. **Ask before drafting** (one question each, skip what the user already said):
+   - **Output format:** Word (`.docx`), PDF, HTML, or Markdown (`gfm`)? — no default; the venue decides.
+   - **Venue** (and whether a venue profile exists in `outreach-style.md`), target length, and authors
+     for this piece.
+2. Copy `paper/outreach/_outreach-scaffold.qmd` to `paper/outreach/<venue>/<slug>.qmd`; keep only the
+   chosen `format:` block; set the author array.
+3. If the user has a venue factsheet or example pieces, ask for them and save them beside the draft
+   (`paper/outreach/<venue>/`) as style benchmarks; derive a venue profile from them if none exists and
+   offer to add it to `outreach-style.md`.
+4. Draft; every number traceable to the paper (INV-21 applies to outreach as it does to talks).
+5. Render (`quarto render paper/outreach/<venue>/<slug>.qmd`) and check the output opens in the chosen
+   format.
+
+No critic score — outreach is advisory, like talks. Offer a prose-critic pass on request.
 
 ---
 

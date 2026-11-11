@@ -1,0 +1,40 @@
+# Alternate-layout profile skeleton (see .claude/rules/working-paper-format.md § Alternate layouts).
+#
+# Setup — replace PROFILE with a short name (e.g. "coauthor", "jeh") everywhere:
+#   cp templates/quarto-profile/_quarto-PROFILE.yml        _quarto-PROFILE.yml
+#   mkdir -p paper/preambles/PROFILE-article
+#   cp templates/quarto-profile/{header.tex,pre-render.R,post-render.R,drop-refs-heading.lua} paper/preambles/PROFILE-article/
+#   then set PROFILE in pre-render.R, post-render.R, and the marker comment in header.tex.
+#
+# Render:  quarto render paper/main.qmd --profile PROFILE
+# Output:  _output/paper/main-PROFILE.pdf and paper/main-PROFILE.tex.
+#
+# _quarto.yml stays the default; this file is merged on top of it only when the profile is requested.
+# Quarto always writes the kept .tex as paper/main.tex, which /coherence and verify.py audit, so the
+# pre/post-render scripts back up the default main.tex, move the profile's .tex aside, and restore it.
+
+project:
+  pre-render: paper/preambles/PROFILE-article/pre-render.R
+  post-render: paper/preambles/PROFILE-article/post-render.R
+
+format:
+  pdf:
+    output-file: main-PROFILE
+    keep-tex: true
+    include-in-header: paper/preambles/PROFILE-article/header.tex
+    # Layout changes go here, e.g.:
+    # fontsize: 12pt
+    # fontfamily: baskervald
+    # pdf-engine: pdflatex
+    # template-partials:
+    #   - paper/preambles/PROFILE-article/title.tex
+
+# BibTeX/natbib output (for a coauthor or journal that needs \citep/\citet in the .tex). This is the
+# one sanctioned exception to INV-9: Quarto, not a raw LaTeX block, switches the citation method.
+# citeproc: false
+# format:
+#   pdf:
+#     cite-method: natbib
+#     biblio-config: true
+#     filters:
+#       - paper/preambles/PROFILE-article/drop-refs-heading.lua

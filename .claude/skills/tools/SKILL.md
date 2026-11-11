@@ -1,7 +1,7 @@
 ---
 name: tools
-description: Utility commands — commit, compile, validate-bib, lint, journal, context-status, deploy, learn.
-argument-hint: "[subcommand: commit | compile | validate-bib | lint | journal | context | dashboard | deploy | learn | upgrade] [args]"
+description: Utility commands — commit, compile, validate-bib, lint, journal, context-status, deploy, learn, upgrade (from clo-author), sync-template (template → this project).
+argument-hint: "[subcommand: commit | compile | validate-bib | lint | journal | context | dashboard | deploy | learn | upgrade | sync-template] [args]"
 allowed-tools: Read,Grep,Glob,Write,Edit,Bash,Agent,Task
 ---
 
@@ -39,20 +39,21 @@ Stage changes, create commit, optionally create PR and merge.
 - The git pre-commit hook (`scripts/install-hooks.sh` installs it) runs scaffold integrity and lint
   checks on every commit, including ones made outside this skill
 
-### `/tools compile [file]` — LaTeX Compilation
-Automated multi-pass compilation via latexmk.
+### `/tools compile [file]` — Quarto Render
+Everything renders through Quarto, which runs all LaTeX passes itself (`working-paper-format.md`).
+Never call `latexmk`, `xelatex`, or `biber` directly.
 
-For papers:
 ```bash
-cd paper && latexmk [file]
+quarto render paper/main.qmd                          # paper
+quarto render paper/appendix.qmd                      # online appendix (separate PDF)
+quarto render paper/talks/[file].qmd --to beamer      # talk, Beamer PDF
+quarto render paper/talks/[file].qmd --to revealjs    # talk, HTML deck
+quarto render paper/main.qmd --profile [name]         # alternate layout (_quarto-[name].yml)
+quarto render paper/main.qmd --cache-refresh          # after a pipeline rerun when knitr cache is on
 ```
 
-For talks (all formats — Beamer and RevealJS):
-```bash
-quarto render paper/talks/[file].qmd
-```
-
-Note: `paper/latexmkrc` configures XeLaTeX for the paper. Talks are compiled via Quarto; `paper/talks/latexmkrc` is only needed for direct latexmk use outside Quarto.
+After rendering, check the exit code, `?@` unresolved references and `[WARNING] Citeproc` lines,
+and `Overfull \hbox` in the log (`-M latex-clean:false` keeps it).
 
 ### `/tools validate-bib` — Bibliography Validation
 Cross-reference all `\cite{}` / `@` keys in paper and talk files against `references.bib`.
@@ -142,6 +143,44 @@ Step 3: VERIFY AND REPORT
   - nothing merges to main or pushes without the user's review
 ```
 
+### `/tools sync-template [--init <url-or-path> | --apply]` — Pull Template Updates into a Project
+Run inside a research project spawned from this template (not in the template itself). Labels come
+from the project's copy of `.claude/sync-manifest.md` — after the first sync, from the template's.
+
+```
+--init <url-or-path>   once per project (also done by /new-project)
+  - git remote add template <url-or-path>; git fetch template
+  - create .claude/template-sync.log with a header line
+
+(no flag) STATUS — read-only
+  - git status + git log --oneline -5 (Article V: flag uncommitted work in files a sync would touch)
+  - git fetch template
+  - git diff --name-status HEAD template/main -- .claude templates scripts/*.py scripts/*.sh
+      .githooks paper/preambles paper/outreach/_outreach-scaffold.qmd _extensions
+      .gitignore .Rprofile.example CLAUDE.md
+  - classify every path by sync-manifest label and print three lists:
+      TAKE    (TEMPLATE: overwrite)      incl. files deleted in the template (e.g. retired hooks)
+      REVIEW  (MERGE: hand-merge)        CLAUDE.md, settings.json, .gitignore, fork-patched scripts
+      SKIP    (PROJECT: never touched)   domain/journal profiles, style guide, settings.local.json
+  - show the last line of .claude/template-sync.log (what the project last aligned to)
+  - stop; wait for the user to approve the lists
+
+--apply  (after approval)
+  - git switch -c template-sync/YYYY-MM-DD
+  - TAKE:   git checkout template/main -- <paths>;  git rm <paths deleted in the template>
+  - REVIEW: git diff HEAD template/main -- <file>; merge by hand — CLAUDE.md keeps the project's
+            header, pipeline, variables, decisions, and constraints and takes template structure;
+            settings.json takes the template's hooks and keeps the project's allow list;
+            .gitignore keeps project whitelists
+  - append to .claude/template-sync.log: date, `git rev-parse template/main`, TAKE/REVIEW counts
+  - verify: check_scaffold.py, test_hooks.py, test_scripts.py (PYTHONUTF8=1); quarto render
+  - report; never merge to main or push without the user's review
+```
+
+Content that lives in PROJECT files (e.g., new journal profiles added to the template's
+`journal-profiles.md`) is not pulled automatically — the status list names such files so the user can
+copy sections by hand.
+
 ---
 
 ## Bundled Resources (Level 3)
@@ -154,6 +193,6 @@ Step 3: VERIFY AND REPORT
 
 ## Principles
 - **Each subcommand is lightweight.** No multi-agent orchestration needed.
-- **Compile uses latexmk.** Handles multi-pass and biber automatically.
+- **Compile uses Quarto.** It handles every LaTeX pass and citeproc; latexmk is never needed.
 - **validate-bib catches drift.** Run before commits to catch broken citations.
 - **Upgrade preserves content.** Infrastructure changes, your paper doesn't.

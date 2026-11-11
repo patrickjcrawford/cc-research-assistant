@@ -153,3 +153,5 @@ Between pauses, the orchestrator runs autonomously per `workflow.md`.
 - **Quality-gated.** Each phase transition requires passing quality checks.
 - **User retains control.** Pipeline pauses at key decision points.
 - **Resumable.** If interrupted, the pipeline resumes from the last completed phase.
+- **Fresh judgment for sibling topics.** A sibling project's data and infrastructure may be reused; its prose, framing, and specification choices may not (`.claude/references/working-practices.md`).
+- **Track the template.** Add the template remote at setup so later template fixes can be pulled: `/tools sync-template --init`.

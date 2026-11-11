@@ -209,6 +209,7 @@ Inspired by Scott Cunningham's replication methodology: **if two independent imp
 | `analyze/templates/pre-code-report.md` | Mandatory pre-check report format before writing code |
 | `analyze/templates/paper-to-code-map.md` | Naming map protocol: paper notation to code variables |
 | `analyze/templates/r-script-structure.R` | Boilerplate R script scaffold following INV-14..19 |
+| `analyze/templates/_paths.R`, `_cache.R`, `run_all.R` | Pipeline scaffold — copy to `scripts/R/` when the first script is written: one source of paths (external roots from `.Rprofile`), cache hand-off instead of `source()` chains, fresh process per script, `PROJECT_DRY_RUN=1` to skip `data/cleaned/` writes (Article II) |
 | `analyze/templates/python-script-structure.py` | Boilerplate Python script scaffold |
 | `analyze/templates/results-summary.md` | Mandatory results summary output for writer handoff |
 

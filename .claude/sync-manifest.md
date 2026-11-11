@@ -33,6 +33,23 @@ new version, then re-apply the patch described in each file's docstring): `scrip
 Fork-patched hooks (MERGE, same rule): `.claude/hooks/post-edit-lint.py`, `.claude/hooks/session-guard.py`,
 `.githooks/pre-commit`.
 
+**Fork-only files** (no upstream counterpart; never conflict on upstream merges): `prose-critic.md`;
+references `empirical-practice.md`, `writing-practice.md`, `citation-practice.md`, `quarto-gotchas.md`,
+`windows-environment.md`, `text-as-data.md`, `working-practices.md`, `zotero-search-protocol.md`;
+`analyze/templates/{_paths,_cache,run_all}.R`; `paper/preambles/revealjs/`; `.Rprofile.example`.
+Fork additions inside upstream files are kept to one-line pointers to these references (agents) or
+short, marked passages (rules), so upstream merges stay small.
+
+---
+
+## Downstream sync (this template → research projects)
+
+Projects spawned from this template pull its updates with `/tools sync-template` (see
+`.claude/skills/tools/SKILL.md`). Mechanism: a `template` git remote in the project, a path-scoped
+checkout of TEMPLATE-labeled files, hand-merge of MERGE files, and a log line in
+the project's `template-sync.log` in its .claude folder (PROJECT; absent from the template itself) recording the template commit synced to. Never copy files
+through chat; never overwrite PROJECT-labeled files.
+
 ---
 
 ## Root
@@ -46,6 +63,11 @@ Fork-patched hooks (MERGE, same rule): `.claude/hooks/post-edit-lint.py`, `.clau
 | `SESSION_REPORT.md` | PROJECT | Project session history. Never overwrite. |
 | `_quarto.yml` | PROJECT | Paper-specific: title, author, font choices, custom preamble includes, citation CSL. Sync only if the project's version is missing required keys (see MERGE note below). |
 | `references.bib` | PROJECT | Project bibliography. Never overwrite. |
+| `.gitignore` | MERGE | Template owns the "Always ignored" blocks; project owns whitelists (hand-built data) and extras. |
+| `.Rprofile.example` | TEMPLATE | The real `.Rprofile` is machine-local and gitignored. |
+| `pyproject.toml`, `uv.lock` | PROJECT | Seeded from the template once; the project owns its dependencies. |
+| `_quarto-*.yml` | PROJECT | Alternate-layout profiles. |
+| `template-sync.log` (in .claude, projects only) | PROJECT | One line per `/tools sync-template --apply`: date, template commit, paths taken. |
 
 ### `_quarto.yml` MERGE guidance
 
@@ -136,6 +158,7 @@ Split: language standards are template-owned; field/journal/style files are proj
 | `domain-profile.md` | PROJECT | Ships empty in the template. Filled in per-researcher at project init. Never overwrite during sync. |
 | `journal-profiles.md` | PROJECT | Ships empty in the template. Filled in per-researcher at project init. Never overwrite during sync. |
 | `personal-style-guide.md` | PROJECT | Ships empty in the template. Filled in per-researcher at project init. Never overwrite during sync. |
+| `empirical-practice.md`, `writing-practice.md`, `citation-practice.md`, `quarto-gotchas.md`, `windows-environment.md`, `text-as-data.md`, `working-practices.md`, `outreach-style.md` | TEMPLATE | Fork-only practice references (2026-11-11). Projects do not edit; propose changes to the template. |
 | `zotero-search-protocol.md` | TEMPLATE | Tool surface, degradation behavior, and add-only-when-asked rule for Zotero MCP integration across librarian/explorer/critics. |
 
 ### `.claude/rules/`
@@ -207,6 +230,11 @@ All skill files are **TEMPLATE**. Downstream projects do not edit skill logic, t
 | `preambles/draft-article/article-header.tex` | TEMPLATE | Shared article preamble. |
 | `preambles/draft-article/before-body.tex` | TEMPLATE | Shared article preamble. |
 | `preambles/draft-article/title.tex` | TEMPLATE | Shared title page template. |
+| `preambles/revealjs/slides.scss` | TEMPLATE | RevealJS theme (Beamer palette). |
+| `claim-margin.lua` | TEMPLATE | Fork-only: margin-annotated review build (`-M annotate-claims:true`). |
+| `preambles/outreach/` | TEMPLATE | Outreach spacing header. |
+| `preambles/<profile>/` (other folders) | PROJECT | Alternate-layout profiles (coauthor/journal). |
+| `outreach/_outreach-scaffold.qmd` | TEMPLATE | Scaffold only; the project's pieces in `outreach/` are PROJECT. |
 
 ---
 
@@ -216,6 +244,7 @@ All skill files are **TEMPLATE**. Downstream projects do not edit skill logic, t
 |------|-------|-------|
 | `generate_dashboard.py` | TEMPLATE | Dashboard generator. Overwrite unconditionally. |
 | `{score,pipeline,journal,explainer_status}.py`, `install-hooks.sh` | TEMPLATE | Gate scripts (26.09). |
+| `claim_comments.py` | TEMPLATE | Fork-only: indexes inline CLAIM comments (2026-11-11). |
 | `{paper_coherence,verify,style_metrics,check_scaffold,test_hooks,test_scripts}.py` | MERGE | Fork-patched for Quarto/Windows/budget; see Upstream sync above. |
 | `R/` | PROJECT | Project analysis scripts. Never overwrite. |
 | `python/` | PROJECT | Project analysis scripts. Never overwrite. |
@@ -283,13 +312,19 @@ When syncing template updates, you can unconditionally overwrite everything in t
 .claude/rules/
 .claude/skills/
 .claude/references/coding-standards-*.md
+.claude/references/{empirical,writing,citation}-practice.md
+.claude/references/{quarto-gotchas,windows-environment,text-as-data,working-practices,outreach-style,zotero-search-protocol}.md
+.claude/sync-manifest.md
 .claude/WORKFLOW_QUICK_REF.md
+.Rprofile.example
 templates/
 scripts/generate_dashboard.py
-scripts/{score,pipeline,journal,explainer_status}.py
+scripts/{score,pipeline,journal,explainer_status,claim_comments}.py
 scripts/install-hooks.sh
+paper/claim-margin.lua
 .githooks/post-merge
-paper/preambles/
+paper/preambles/{beamer,draft-article,revealjs,outreach}/
+paper/outreach/_outreach-scaffold.qmd
 CHANGELOG.md
 README.md
 ```

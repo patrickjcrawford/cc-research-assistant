@@ -16,13 +16,28 @@
 
 ## Map — Cited Claims (INV-27)
 
-Every statement in the manuscript attributed to a cited work. Mark 🟢 (the cited work directly states this — record the verbatim passage and page) or 🟠 (your inference/synthesis across sources). If a 🟢 passage and page cannot be supplied, mark the claim `[NOT VERIFIED]`, remove the citation, and rephrase or drop the sentence in `main.qmd`.
+Every statement in the manuscript attributed to a cited work. Mark 🟢 (the cited work directly states this — record the verbatim passage and page) or 🟠 (your inference/synthesis across sources). If a 🟢 passage and page cannot be supplied, mark the claim `[NOT VERIFIED]`, remove the citation, and rephrase or drop the sentence in `main.qmd` — unless the **user** marks it 🔵 *author-attested* (they or a named coauthor vouch for a source with no available full text). Agents never assign 🔵. Rules: `.claude/references/citation-practice.md`.
 
-| Claim | Location | Cite key | 🟢 / 🟠 | Supporting passage (verbatim) | Page |
+| Claim | Location | Cite key | 🟢 / 🟠 / 🔵 | Supporting passage (verbatim) — or for 🔵: attested by, date, why no passage | Page |
 |-------|----------|----------|---------|-------------------------------|------|
 | [e.g., "wind direction is quasi-random"] | [intro.qmd:L18] | [smith2020windPollution] | 🟢 | "prevailing wind direction is orthogonal to…" | p. 4 |
 | [e.g., "no prior work links X to Y"] | [intro.qmd:L42] | — | 🟠 | synthesis across cited set | — |
 | [e.g., "the effect persists for a decade"] | [intro.qmd:L55] | [jones2019longRun] | `[NOT VERIFIED]` | — | — |
+| [e.g., "the parish petition circulated in 1834"] | [bg.qmd:L12] | [archive1834Petition] | 🔵 | attested by [coauthor], 2026-11-11; archival volume not digitized | p. 88 |
+
+---
+
+## Optional: inline CLAIM comments
+
+Provenance can also live next to the sentence it backs, with the marker as the first token:
+`...persists for a decade. <!--# CLAIM 🟢 jones2019LongRun p. 12: "..." -->`
+
+- `python3 scripts/claim_comments.py` indexes every comment into `quality_reports/claim_index.md`
+  (and `--check` fails on a comment without a valid marker).
+- `quarto render paper/main.qmd -M annotate-claims:true -o main_claims.pdf` prints a review PDF with each
+  claim numbered in the margin (`paper/claim-margin.lua`); the normal render is unchanged.
+- Comments the user deletes mean "verified" — never restore them. Claims inside the abstract are not
+  annotated (the abstract is metadata).
 
 ---
 
@@ -34,5 +49,6 @@ Every statement in the manuscript attributed to a cited work. Mark 🟢 (the cit
 - [ ] Numbers match between manuscript text and source output
 - [ ] No stale entries (all timestamps current)
 - [ ] Every citation key in the manuscript has a Cited-Claims row (INV-27)
-- [ ] Every 🟢 row has a verbatim passage and a page number
+- [ ] Every 🟢 row has a verbatim passage and a page number, and the passage supports the claim's direction (CP-1)
+- [ ] Every 🔵 row names who attested it and was marked by the user, not an agent
 - [ ] No `[NOT VERIFIED]` row carries a citation key, and no `[NOT VERIFIED]` string appears in `main.qmd`

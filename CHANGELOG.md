@@ -10,6 +10,40 @@ All notable changes to this template are documented here.
 
 Changes in this fork (cc-research-assistant) not in upstream clo-author.
 
+### Lessons from three dissertation projects (2026-11-11)
+
+About 100 corrections recorded while writing three economic-history papers with this template, triaged
+and generalized. Plan: `quality_reports/plans/2026-11-11_upstream-and-dissertation-learnings.md`.
+
+- **Bugs fixed.**
+  - Section headings: the template prescribed `## Section`, which makes the `abstract-section` filter render the whole paper inside the abstract. Sections are now level-1 `#`.
+  - Beamer: the format never loaded `slides-header.tex`; a talk scaffold pointed to a preamble that doesn't exist.
+  - `/tools compile` called `latexmk` and a `latexmkrc` that doesn't exist; it now uses Quarto.
+  - Table guidance contradicted INV-1 (SE type and star thresholds repeated in notes); the examples used `\label{}` and `hold_position`.
+  - Smaller fixes: a stale `Bibliography_base.bib` gotcha, a tracked `.pyc`, and data gitignore lines that were commented out contrary to Article II.
+- **New fork-only references** (agents get one-line pointers, so upstream merges stay small):
+  - `empirical-practice.md`: no specification search, check the event-time sign, family-wise re-tests, estimator p-values, strip data from saved fixest fits.
+  - `writing-practice.md`: verdict words for significance in prose, inline-code numbers, never narrate the build.
+  - `citation-practice.md`: passage direction, original-language sources, 🔵 author-attested.
+  - Also `quarto-gotchas.md`, `windows-environment.md`, `text-as-data.md`, `working-practices.md` and `outreach-style.md`.
+- **Rules.**
+  - INV-11: pipeline numbers enter prose as inline code.
+  - INV-27: 🔵 author-attested, assigned by the user only.
+  - Article II (**constitutional amendment**): hand-built datasets may be committed when whitelisted; corrections to raw data go through a paste-ready CSV.
+  - Float placement is `"!t"`, or `"p"` for page-sized exhibits; never `H`/`h`.
+  - Citation keys are Zotero's Better BibTeX keys (`authorYear2keywords`).
+  - Event-study zero line faint and solid, reference period dotted.
+  - Critic rounds past three are allowed when the remaining items are mechanical.
+- **Scaffold.**
+  - Quarto config: link colours, `date: today`, `threeparttablex`.
+  - New files: a RevealJS theme, `.Rprofile.example`, `pyproject.toml`, R pipeline templates (`_paths.R`, `_cache.R`, `run_all.R` with `PROJECT_DRY_RUN`), and economic-history journal profiles (JEH, EEH, EHR, EREH, Cliometrica).
+  - New CLAUDE.md sections: Key Variables & Design Decisions, and Data & Publishing Constraints.
+- **Features.**
+  - `/tools sync-template` (template → project).
+  - `/write outreach`, which asks for the output format first.
+  - Alternate-layout Quarto profiles (`templates/quarto-profile/`).
+  - Claim-margin review PDF: `paper/claim-margin.lua` and `scripts/claim_comments.py`.
+
 - Added optional Zotero MCP integration: Librarian, Explorer, and their paired critics can now consult a connected `zotero-mcp` server as a supplementary search/verification method alongside their existing web-based search. Read-only for critics and Explorer; Librarian additionally gets user-gated add-to-library tools. See `.claude/references/zotero-search-protocol.md`. Also fixed a stale `mcp__zotero__*` tool-prefix reference in the `/discover` skill (correct prefix is `mcp__zotero-mcp__*`).
 ## [26.09] — September 2026
 

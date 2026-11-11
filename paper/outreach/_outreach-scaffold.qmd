@@ -1,0 +1,32 @@
+---
+# Outreach scaffold — copy to paper/outreach/<venue>/<slug>.qmd (created by /write outreach).
+# Render: quarto render paper/outreach/<venue>/<slug>.qmd
+title: "[Headline]"
+subtitle: ""
+# Structured array: REPLACES the _quarto.yml author list (a scalar would be appended to it).
+author:
+  - name: "[Author Name]"
+    email: "[email]"
+# Keep exactly one format, chosen with the user when the piece is created:
+format:
+  docx:
+    number-sections: false
+  # pdf:
+  #   number-sections: false
+  #   include-in-header: ../../preambles/outreach/outreach-header.tex   # single spacing
+  # html:
+  #   number-sections: false
+  # gfm: default                     # Markdown for blogs/newsletters that take plain text
+abstract: ""          # outreach pieces have no abstract; keep empty so _quarto.yml's is not inherited
+bibliography: ""      # link sources in the text instead of citing
+---
+
+[Context or puzzle — one or two paragraphs a non-economist can follow.]
+
+[The finding, in plain words, linked to "our new research" (SSRN/working-paper page).]
+
+[How we know — the evidence in one paragraph, no statistics apparatus.]
+
+[A named contemporary example.]
+
+[Implications — for policymakers / for managers / for readers.]

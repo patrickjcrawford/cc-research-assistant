@@ -1,7 +1,8 @@
 ---
 filters:
   - abstract-section
-  
+  - claim-margin.lua   # inert unless rendered with -M annotate-claims:true (review PDF with claims in the margin)
+
 keywords: ["keyword one", "keyword two", "keyword three"]
 jel-codes: ["X00", "Y00"]
 
