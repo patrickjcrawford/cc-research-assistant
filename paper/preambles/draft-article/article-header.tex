@@ -1,6 +1,7 @@
 % Essential packages
 \usepackage{setspace, xcolor, lscape, dcolumn, multirow, amsmath, appendix, hyperref, adjustbox}
 \usepackage[flushleft]{threeparttable}
+\usepackage{threeparttablex} % needed by kableExtra footnote(threeparttable = TRUE) on longtables
 \usepackage{booktabs}
 \usepackage{tabularray}
 \UseTblrLibrary{booktabs}
@@ -9,6 +10,8 @@
 % Custom color and spacing
 \definecolor{medium-green-grey}{HTML}{5A8567}
 \doublespacing
+% Tighter gap between a table title and the table (caption package default is 10pt)
+\AtBeginDocument{\captionsetup[table]{skip=3pt}}
 
 % Fix \thanks handling for titles
 \makeatletter

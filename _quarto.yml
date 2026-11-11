@@ -20,7 +20,7 @@ affiliations:
     address: "[CITY, STATE]"
 institute: "[UNIVERSITY]"
 shortinstitute: "[ABBREV]"
-date: last-modified
+date: today
 date-format: long
 # newest-version: "https://..."   # optional: renders a "most recent version" link below the date, above the abstract
 
@@ -53,12 +53,12 @@ format:
     fig-width: 7.5
     fig-pos: "!t"
     keep-tex: false
+    # output-file: Lastname_[repo].pdf   # optional: stable PDF name for a personal website (pair with newest-version)
+    linkcolor: medium-green-grey
+    citecolor: medium-green-grey
+    urlcolor: medium-green-grey
     number-sections: true
-    include-in-header:
-      - text: |
-          \usepackage{setspace}
-          \doublespacing
-      - paper/preambles/draft-article/article-header.tex
+    include-in-header: paper/preambles/draft-article/article-header.tex   # loads setspace, sets \doublespacing
     template-partials:
       - paper/preambles/draft-article/title.tex
       - paper/preambles/draft-article/before-body.tex
@@ -68,6 +68,9 @@ format:
     keep-tex: true
     incremental: true
     link-citations: true
+    linkcolor: bg-green-grey
+    urlcolor: medium-green-grey
     section-titles: false
     fonttheme: structurebold
     aspectratio: 169
+    include-in-header: paper/preambles/beamer/slides-header.tex

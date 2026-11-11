@@ -60,7 +60,15 @@ placed **after** the references div:
 ```
 ````
 
-- Large exhibits get their own page: `\clearpage` between them (`fig-pos: "p"` on a chunk where needed).
+- **Float placement by size.** Never `H`, `h`, or `hold_position` — they leave blank half-pages.
+  Normal tables/figures: `tbl-pos: "!t"` / `fig-pos: "!t"`. Page-sized exhibits (roughly more than
+  half a page): `"p"`, with `\clearpage` between them. After rendering, grep the kept tex for
+  `begin{table}[` / `begin{figure}[` to confirm.
+- **One canonical home per repeated fact.** Sample construction, sign conventions, and caveats are
+  stated in one section; other sections point there with `@sec-`.
+- **Appendix references.** The main text says "(online appendix)" — never an appendix letter,
+  section, or table number, which drift and do not resolve across documents. Inside
+  `appendix.qmd`, use `@sec-app-…` / `@tbl-app-…` cross-references, never hard-coded letters.
 - Wide tables/figures: wrap the chunk in raw `{=latex}` `\begin{landscape}` / `\end{landscape}`
   (load `pdflscape` in `paper/preambles/draft-article/article-header.tex`).
 - The reader navigates by `@tbl-x` / `@fig-y` from the text; Quarto numbers and links them.
@@ -88,8 +96,8 @@ The script saves a summary data frame (`.rds`, INV-13), not a rendered table; `m
 
 t1 <- readRDS(here("paper", "tables", "01_descriptives", "pretreatment_characteristics.rds"))
 kbl(t1, format = "latex", booktabs = TRUE, align = c("l", "c", "c"),
-    col.names = c("", "Treated Group", "Control Group")) |>
-  pack_rows(index = attr(t1, "panels")) |>
+    col.names = c("", "Treated Group", "Control Group")) %>%
+  pack_rows(index = attr(t1, "panels")) %>%
   footnote(general = "...", general_title = "Notes: ", threeparttable = TRUE)
 ```
 ````
@@ -104,6 +112,8 @@ one chunk that loads the `.rds` and calls the styling function — the "wrapper"
 
 - `#| label: tbl-...` and a caption: a **full descriptive title in title case**, method or cohort in
   parentheses (`etable(title = ...)` or `#| tbl-cap:`).
+- `#| tbl-pos: "!t"` (or `"p"` when page-sized, §1). Table notes are a single string; an `!expr`
+  caption is single-quoted. Never wrap the chunk in a `::: {#tbl-}` div or add a raw `\label{}`.
 - `#| output: asis`; `etable(..., tex = TRUE)` / `modelsummary(..., output = "latex")` /
   `kbl(..., booktabs = TRUE)` per `working-paper-format.md` § Tables.
 - **Notes** via `etable(notes = ...)`, `modelsummary(notes = ...)`, or `kableExtra::footnote(threeparttable = TRUE)`.
@@ -148,7 +158,9 @@ Standard structure (omit or merge as the paper needs):
 8. Discussion
 9. Conclusion
 
-Each section is `## Title {#sec-name}` so `@sec-name` resolves.
+Each section is a **level-1** heading, `# Title {#sec-name}`, so `@sec-name` resolves; subsections
+are `##`. Level 1 is required, not stylistic: the `abstract-section` filter ends the `# Abstract`
+section at the next level-1 heading, so `##` sections would all render inside the abstract.
 
 ## 6. Caption and file naming
 

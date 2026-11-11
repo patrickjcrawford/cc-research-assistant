@@ -1,6 +1,6 @@
 # Tools Skill -- Gotchas
 
-- `latexmk` handles multi-pass compilation automatically -- don't run xelatex/biber manually unless debugging.
+- Compile only through `quarto render` (Quarto/TinyTeX). An error mentioning MiKTeX, `latexmk`, or Perl never comes from Quarto — it comes from an editor's LaTeX extension auto-building a kept `.tex` file. Don't install Perl; set `"latex-workshop.latex.autoBuild.run": "never"` in VS Code/Positron settings. See `.claude/references/windows-environment.md`.
 - `validate-bib` checks for common issues but doesn't verify that citation keys match the .bib file.
 - Journal selection (`/tools journal`) reads journal-profiles.md -- if the target field isn't profiled, results will be generic.
 - Commit skill runs `score.py --gate commit`. Once critics have scored, an aggregate below 80 blocks the commit; before that it passes with a notice.

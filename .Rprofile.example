@@ -1,0 +1,17 @@
+# .Rprofile.example — template for machine-specific configuration.
+#
+# HOW TO USE:
+#   1. Copy this file to .Rprofile in the project root.
+#   2. Edit the paths below to match your machine.
+#   3. .Rprofile is gitignored — never commit it.
+#
+# Scripts read these environment variables through scripts/R/_paths.R
+# (template: .claude/skills/analyze/templates/_paths.R). Keep absolute,
+# machine-specific paths HERE and nowhere else (INV-16).
+
+Sys.setenv(
+  # External data that does not live in this repo's data/ folder, e.g. a shared drive:
+  # EXTERNAL_DATA_ROOT = "C:/Users/YourName/OneDrive - University/ProjectData",
+  # Set to "1" to skip every gated write to data/cleaned/ (Article II) while testing:
+  PROJECT_DRY_RUN = "0"
+)

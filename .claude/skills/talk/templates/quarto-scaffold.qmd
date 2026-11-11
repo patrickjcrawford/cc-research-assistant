@@ -1,11 +1,14 @@
 ---
 title: "[Title]"
-author: "[Author]"
-institute: "[Institution]"
 date: "[Date/Venue]"
+# Author and institute come from _quarto.yml. To override, use a structured array — a scalar
+# `author: "Name"` is APPENDED to the _quarto.yml authors:
+# author:
+#   - name: "[Name]"
 format:
   revealjs:
-    theme: [default, custom.scss]
+    theme: [default, ../preambles/revealjs/slides.scss]   # path relative to paper/talks/
+    institute: ""                                          # no duplicate affiliation line
     slide-number: true
     navigation-mode: linear
     controls: true
@@ -22,7 +25,6 @@ format:
     width: 1600
     height: 900
 bibliography: ../../references.bib
-csl: apa.csl
 ---
 
 ## Research Question {.center}

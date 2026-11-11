@@ -1,19 +1,22 @@
 ---
 title: "[Title]"
-author: "Patrick Crawford"
-institute: "George Mason University"
 date: "[Date/Venue]"
+# Author, institute, palette, and the Beamer preamble come from _quarto.yml.
+# To override the author list, use a structured array — a scalar `author: "Name"` is
+# APPENDED to the _quarto.yml authors, not substituted:
+# author:
+#   - name: "[Name]"
 format:
   beamer:
-    aspectratio: 169
-    fonttheme: structurebold
-    navigation: horizontal
     keep-tex: false
-    # include-in-header: ../../paper/preambles/beamer-preamble.tex  # your custom preamble
-  # revealjs:                   # Uncomment to switch to RevealJS; resolve any Beamer-specific
-  #   theme: default            # LaTeX content first (columns environments, \pause, etc.)
-  #   css: ../../paper/quarto/custom.scss
-  #   slide-number: true
+  revealjs:                     # same source, HTML deck: quarto render <file>.qmd --to revealjs
+    theme: [default, ../preambles/revealjs/slides.scss]       # Beamer palette in SCSS
+    slide-number: true
+    institute: ""               # avoid a duplicate affiliation line on the title slide
+# Render one format at a time: --to beamer / --to revealjs. Keep Beamer-only LaTeX (\pause,
+# columns environments) inside ::: {.content-visible when-format="beamer"} blocks.
+# Talk chunks with cache: true serve stale table labels after setFixest_dict changes —
+# render with --cache-refresh. Images live at ../../images/ relative to paper/talks/.
 bibliography: ../../references.bib
 ---
 

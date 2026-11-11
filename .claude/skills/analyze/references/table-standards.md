@@ -24,10 +24,10 @@ Every table uses exactly three horizontal rules and **zero vertical lines**:
 
 **R-generated (rendered at qmd chunk time via `etable(tex = TRUE, ...)` or `modelsummary(output = "latex_tabular", ...)`):**
 ```latex
-\begin{table}[htbp]
+\begin{table}[!t]
 \centering
 \begin{threeparttable}
-\caption{Effect of X on Y}\label{tab:main}
+\caption{Effect of X on Y}
 \begin{tabular}{lcccc}
 \toprule
             & (1)     & (2)     & (3)     & (4)     \\
@@ -36,7 +36,7 @@ Every table uses exactly three horizontal rules and **zero vertical lines**:
 \bottomrule
 \end{tabular}
 \begin{tablenotes}\small
-\item \textit{Notes:} Standard errors in parentheses.
+\item \textit{Notes:} Sample: ... (INV-1; etable's footer prints the SE type and stars)
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -47,8 +47,7 @@ The `.rds` a script saves holds the *model objects*, not this LaTeX — this is 
 ```latex
 \begin{talltblr}[
   caption = {Effect of X on Y},
-  label = {tab:main},
-  note{*} = {Standard errors in parentheses.},
+  note{*} = {Sample: ... (INV-1).},
 ]{colspec = {lcccc}, rowsep = 4pt}
 \toprule
             & (1)     & (2)     & (3)     & (4)     \\
@@ -71,13 +70,13 @@ The `.rds` a script saves holds the *model objects*, not this LaTeX — this is 
 ## Coefficient Display
 
 - Point estimates on one row, standard errors in parentheses on the row below
-- Standard errors labeled in the table note (e.g., "Robust standard errors in parentheses" or "Clustered at municipality level")
+- The SE type/clustering and star thresholds come from the estimator's footer (`etable`, `modelsummary`); do not repeat them in the notes (INV-1). A hand-built `kbl()` table without such a footer states them once in its note.
 
-**Significance reporting depends on the target journal:**
+**Significance reporting in tables depends on the target journal** (prose never quotes p-values or SEs — `.claude/references/writing-practice.md` WP-1):
 
 | Context | Convention |
 |---------|-----------|
-| **Working papers (default)** | Stars: `*` p < 0.10, `**` p < 0.05, `***` p < 0.01. Note at bottom: `\textit{Notes:} * p < 0.10, ** p < 0.05, *** p < 0.01` |
+| **Working papers (default)** | Stars: `*` p < 0.10, `**` p < 0.05, `***` p < 0.01, defined in the estimator's footer |
 | **AEA journals** (AER, AEJ:Applied, AEJ:Policy, AER:Insights) | No significance stars. Report standard errors in parentheses. Use exact p-values or confidence intervals for key results. |
 | **All other journals** | Stars acceptable. Follow journal-specific conventions in journal-profiles.md. |
 
@@ -176,8 +175,7 @@ modelsummary(
 df <- readRDS(here("paper", "tables", "descriptive", "sumstats_main_sample.rds"))
 
 kbl(df, format = "latex", booktabs = TRUE, escape = FALSE,
-    align = c("l", rep("c", ncol(df) - 1))) |>
-  kable_styling(latex_options = "hold_position")
+    align = c("l", rep("c", ncol(df) - 1)))   # no hold_position: it forces [!h] (see paper-organization.md §1)
 ```
 
 ---

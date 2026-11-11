@@ -25,6 +25,12 @@ quarto render paper/main.qmd
 
 # Preview paper (live reload)
 quarto preview paper/main.qmd
+
+# Online appendix (separate PDF) | talks | alternate layout | after a pipeline rerun
+quarto render paper/appendix.qmd
+quarto render paper/talks/slides.qmd --to beamer   # or --to revealjs
+quarto render paper/main.qmd --profile [name]      # _quarto-[name].yml
+quarto render paper/main.qmd --cache-refresh       # only if knitr cache is on
 ```
 
 Config: `_quarto.yml` \| Bibliography: `references.bib`
@@ -40,13 +46,34 @@ Python notebooks (scripts/python/) OR R scripts (scripts/R/)
     text/data processing
     --> data/cleaned/
 
-R scripts (scripts/R/)
-    01_build_panel.R  -->  data/cleaned/*.rds
-    02_analysis.R     -->  paper/figures/02_analysis/, paper/tables/02_analysis/
+R scripts (scripts/R/) — run in order by scripts/R/run_all.R, each in a fresh R process
+    01_build_panel.R  [ACTIVE]*  reads data/raw/...       writes data/cleaned/*.rds, data/cache/panel.rds
+    02_analysis.R     [ACTIVE]   reads data/cache/panel   writes paper/tables/02_analysis/, paper/figures/02_analysis/
+    old_v1_panel.R    [RETIRED]  superseded by 01 on YYYY-MM-DD — do not run or extend
 
 Quarto
     paper/main.qmd    -->  _output/main.pdf
 ```
+
+`*` = writes `data/cleaned/` (Article II: confirm first; `PROJECT_DRY_RUN=1` skips those writes).
+
+## Key Variables & Design Decisions
+
+Frozen choices every session must respect; change only with the user.
+
+| Item | Choice / definition | Why / built in |
+|------|---------------------|----------------|
+| `[outcome]`, `[treatment]` | [definition, unit, timing, sign convention] | `01_build_panel.R` |
+| Estimator · Sample · Inference | [e.g., LPM + unit/period FE · filters, window · cluster level] | [reason] |
+
+## Data & Publishing Constraints
+
+| Source | Commit? | In replication package? | Notes |
+|--------|---------|-------------------------|-------|
+| [dataset] | No (data/raw/) | [Yes / summary only / No] | [license, access terms] |
+| [hand-built dataset] | Yes (whitelisted, Article II exception) | Yes | [no upstream source] |
+
+**Files to ignore:** [legacy folders, superseded outputs Claude should not read or edit]
 
 ------------------------------------------------------------------------
 
@@ -112,7 +139,7 @@ Quarto
 | `/paper-format [mode]` | Audit/apply the Quarto house style: exhibits at end, Table 1, chunks (INV-23–25) |
 | `python3 scripts/generate_dashboard.py` | Regenerate `project_dashboard.html` from current project state |
 
-**Setup (once per clone):** Claude Code ≥ 2.1.295; a `python3` on PATH (Windows: `uv python install --default`); `bash scripts/install-hooks.sh` for the pre-commit gate.
+**Setup (once per clone):** Claude Code ≥ 2.1.295; a `python3` on PATH (Windows: `uv python install --default`); `bash scripts/install-hooks.sh` for the pre-commit gate; copy `.Rprofile.example` → `.Rprofile` (never commit); project Python via `uv run python`. R path if `Rscript` is not on PATH: `[C:/Program Files/R/R-x.y.z/bin/Rscript.exe]`. On Windows read `.claude/references/windows-environment.md`.
 
 ------------------------------------------------------------------------
 

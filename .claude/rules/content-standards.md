@@ -30,20 +30,20 @@ Journal-specific conventions (significance stars, note format) adapt to the targ
 
 - **Never** embed titles inside the table body or as a table header row
 - **Never** embed notes, sources, or footnotes inside the table itself
-- Table numbering, titles, and notes are added via `\caption{}` and `\begin{tablenotes}` (or tabularray's `note{}` key) inside `{=latex}` raw blocks in `main.qmd`
+- Table numbering, titles, and notes are added by the table's chunk in `main.qmd` (`tbl-cap` / `etable(title=)`, `etable(notes=)` / `footnote()`) — see `paper-organization.md` §3 (INV-25)
 - The file name and folder identify what the table contains
 
 ### Three-Line Format (Booktabs)
 
 Every table uses exactly three horizontal rules and **zero vertical lines**:
 
-**Traditional (R/Python/Julia output):**
+**Traditional (what `etable()`/`kbl()` render in the `main.qmd` chunk — never hand-written, never `\label{}`; the chunk's `tbl-` label carries the cross-reference):**
 
 ``` latex
-\begin{table}[htbp]
+\begin{table}[!t]
 \centering
 \begin{threeparttable}
-\caption{Effect of X on Y}\label{tab:main}
+\caption{Effect of X on Y}
 \begin{tabular}{lcccc}
 \toprule
             & (1)     & (2)     & (3)     & (4)     \\
@@ -58,8 +58,7 @@ Every table uses exactly three horizontal rules and **zero vertical lines**:
 ``` latex
 \begin{talltblr}[
   caption = {Effect of X on Y},
-  label = {tab:main},
-  note{*} = {Standard errors in parentheses.},
+  note{*} = {Sample: ... (INV-1).},
 ]{colspec = {lcccc}, rowsep = 4pt}
 \toprule
             & (1)     & (2)     & (3)     & (4)     \\
@@ -78,13 +77,13 @@ Every table uses exactly three horizontal rules and **zero vertical lines**:
 ### Coefficient Display
 
 - Point estimates on one row, standard errors in parentheses on the row below
-- Standard errors labeled in the table note (e.g., "Robust standard errors in parentheses" or "Clustered at municipality level")
+- The SE type/clustering and star thresholds are printed by `etable()`'s footer (or `modelsummary`'s `stars` note). Do **not** repeat them in the table notes (INV-1); a hand-built `kbl()` table without such a footer states them once in its note.
 
-**Significance reporting depends on the target journal:**
+**Significance reporting in tables depends on the target journal** (prose never quotes p-values or SEs, whatever the journal — see `.claude/references/writing-practice.md` WP-1):
 
 | Context | Convention |
 |---------------------------------|---------------------------------------|
-| **Working papers (default)** | Stars: `*` p \< 0.10, `**` p \< 0.05, `***` p \< 0.01. Note at bottom: `\textit{Notes:} * p < 0.10, ** p < 0.05, *** p < 0.01` |
+| **Working papers (default)** | Stars: `*` p \< 0.10, `**` p \< 0.05, `***` p \< 0.01, defined in the estimator's footer |
 | **AEA journals** (AER, AEJ:Applied, AEJ:Policy, AER:Insights) | No significance stars. Report standard errors in parentheses. Use exact p-values or confidence intervals for key results. See the [AEA Style Guide](https://www.aeaweb.org/journals/aeri/style-guide). |
 | **All other journals** | Stars acceptable. Follow journal-specific conventions in journal-profiles.md. |
 
@@ -180,12 +179,11 @@ Caption via the Quarto chunk options (`tbl-cap:`), never `\caption{}` inside the
 ```{r}
 #| label: tbl-summary-stats
 #| tbl-cap: "Summary Statistics"
-
-library(kableExtra)
+#| tbl-pos: "!t"
+#| output: asis
 
 kbl(df, format = "latex", booktabs = TRUE, escape = FALSE,
     align = c("l", rep("c", ncol(df) - 1))) %>%
-  kable_styling(latex_options = "hold_position") %>%
   footnote(
     general = "Sample restricted to ... (data source goes in the prose, INV-1)",
     general_title = "Note: ",

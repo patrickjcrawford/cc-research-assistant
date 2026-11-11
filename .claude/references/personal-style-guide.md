@@ -8,8 +8,8 @@ and calibrates its drafting to match the patterns recorded here.
 If this file contains only the template below, the writer defaults to the generic academic voice
 described in `.claude/references/domain-profile.md` and `writer.md`.
 
-Do NOT hand-edit without re-running `/write style-guide` — fragmentary edits leave the writer
-drafting against a stale voice profile.
+Hand edits are allowed (e.g. voice rules the author has stated directly). Mark hand-added rules
+"(stated by author, not corpus-extracted)" so a later `/write style-guide` run knows which to keep.
 -->
 
 ## Source Corpus

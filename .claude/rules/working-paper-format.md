@@ -44,16 +44,9 @@ format:
     toc: false
 ```
 
-Double-spacing is **always on** for working papers and submissions. It is included in `_quarto.yml` by default:
+Double-spacing is **always on** for working papers and submissions. `paper/preambles/draft-article/article-header.tex` (included from `_quarto.yml`) loads `setspace` and sets `\doublespacing`.
 
-```yaml
-format:
-  pdf:
-    include-in-header:
-      - text: |
-          \usepackage{setspace}
-          \doublespacing
-```
+**Preamble files are multi-line.** A `.tex` partial collapsed onto one line silently comments itself out after the first `%`, with no error. Keep one command per line.
 
 To temporarily disable (e.g., for a department seminar handout), override in the individual `.qmd` YAML with `\singlespacing`.
 
@@ -69,7 +62,9 @@ bibliography: references.bib
 csl: https://www.zotero.org/styles/apa
 ```
 
-Cite in text with `@authorYear3keywordsTitle` (inline) or `[@authorYear3keywordsTitle]` (parenthetical). BibTeX key format: `authorYear3keywordsTitle` (e.g., `smith2024effectMinimumWage`). Do not add `biblatex` or `natbib` packages manually.
+Cite in text with `@key` (narrative: "@smith2024MinimumWage show...") or `[@key]` (parenthetical). When the sentence names the author, use the narrative form rather than "Smith ... [@key]". Do not add `biblatex` or `natbib` packages manually.
+
+**Citation keys come from Zotero.** The Better BibTeX key Zotero generates is authoritative — format `authorYear2keywords` (lowercase author(s) + year + two title words, e.g. `gelosokufenko2019CanMarkets`). Never hand-write or hand-shorten a key in `references.bib`; re-export from Zotero instead. Better BibTeX pins keys, so editing an item's creators does not regenerate its key.
 
 ---
 
@@ -81,7 +76,7 @@ Use Quarto's native cross-reference syntax. Do not use `\ref{}`, `\cref{}`, or l
 |--------|-------------|-----------------|
 | Figure | `#| label: fig-name` | `@fig-name` |
 | Table | `#| label: tbl-name` | `@tbl-name` |
-| Section | `## Title {#sec-name}` | `@sec-name` |
+| Section | `# Title {#sec-name}` (level 1; subsections `##`) | `@sec-name` |
 | Equation | `$$ ... $$ {#eq-name}` | `@eq-name` |
 
 ---
@@ -106,7 +101,7 @@ etable(
   tex         = TRUE,
   title       = "Effect of X on Y",
   signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.10),  # omit for AEA journals
-  notes       = "Robust standard errors clustered at the county level in parentheses."
+  notes       = "Sample: ... Outcome is ... (INV-1: what the table shows and sample details; etable's footer already prints the SE type and star thresholds)"
 )
 ```
 ````
@@ -115,14 +110,13 @@ This keeps table styling and the target-journal significance convention as a one
 
 ### Hand-written tables
 
-Write directly in `.qmd` using a raw LaTeX block with `tabularray`:
+Prefer building the table as a data frame in an R chunk (`kbl(df, booktabs = TRUE)` with a `tbl-` label), so `@tbl-` cross-references work. Fall back to a raw LaTeX `tabularray` block only when that is impossible — a raw block's `\label{}` is not reachable by `@tbl-` (INV-10):
 
 ````markdown
 ```{=latex}
 \begin{talltblr}[
   caption = {Effect of X on Y},
-  label   = {tab:main},
-  note{*} = {Robust standard errors in parentheses.},
+  note{*} = {Sample: ... (INV-1)},
 ]{colspec = {lcccc}, rowsep = 4pt}
 \toprule
   & (1) & (2) & (3) & (4) \\
@@ -204,7 +198,23 @@ Standard economics paper order:
 6. Robustness
 7. Conclusion
 
-Sections use standard markdown headings: `## Introduction {#sec-intro}`. The `{#sec-intro}` anchor enables `@sec-intro` cross-references.
+Sections are level-1 headings: `# Introduction {#sec-intro}`; subsections use `##`. The `{#sec-intro}` anchor enables `@sec-intro` cross-references. Level 1 is required: the `abstract-section` filter treats everything up to the next level-1 heading as the abstract.
+
+---
+
+## Alternate Layouts (Quarto Profiles)
+
+When a coauthor or journal needs the same paper in a different LaTeX layout (fonts, title page,
+natbib/BibTeX citations in the `.tex`), add a Quarto profile instead of a second manuscript:
+`_quarto-<name>.yml` at the root, its partials in `paper/preambles/<name>-article/`, rendered with
+`quarto render paper/main.qmd --profile <name>`. `main.qmd` stays the single source (Article I);
+`_quarto.yml` stays the default layout.
+
+Skeleton: `templates/quarto-profile/` (profile YAML, marked header, pre/post-render guards, a filter
+that drops the duplicate References heading under natbib). The pre/post-render guards matter:
+Quarto always writes the kept tex to `paper/main.tex`, which `/coherence` and `scripts/verify.py`
+audit, so without them a profile render silently replaces the audited file. Switching to
+`cite-method: natbib` inside a profile is the one sanctioned exception to INV-9.
 
 ---
 

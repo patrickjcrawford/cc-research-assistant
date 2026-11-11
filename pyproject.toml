@@ -1,0 +1,8 @@
+# Minimal Python environment so `uv run python ...` and `uv add <pkg>` work out of the box.
+# Run Python through uv (never bare `python`/`python3`, which may not be the project env).
+# Commit uv.lock alongside this file.
+[project]
+name = "research-project-scripts"   # rename per project
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = []

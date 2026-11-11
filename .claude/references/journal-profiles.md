@@ -220,6 +220,50 @@ Each journal profile includes a **Referee pool** that weights which dispositions
 
 ---
 
+**Economic History**
+
+### Journal of Economic History (JEH)
+**Focus:** Quantitative and analytical economic history — any period or region; long-run economic and institutional change
+**Bar:** A clear contribution to understanding long-run change, built on carefully sourced data. Cliometric method expected; narrative alone is insufficient, but the history must be right.
+**Domain referee adjusts:** Knows the period's standard datasets and historiography and will notice missing ones. Checks how the archival or constructed dataset was built, whether source coverage is uneven across places and time, and whether the paper engages the historians' literature as well as the economists'.
+**Methods referee adjusts:** Panel FE designs common; spatial correlation (Conley SEs) expected for spatial panels. Asks why the unit and temporal aggregation are appropriate given how the data were constructed. Robustness to alternative inference and to sample-window choices.
+**Typical concerns:** "How reliable is the source, and how are events/units identified?" "Are coverage biases in the sources addressed?" "Is the temporal aggregation justified?" "Are the institutional variables endogenous to the outcome?"
+**Referee pool:** MEASUREMENT (high), CREDIBILITY (high), THEORY (medium), SKEPTIC (medium), STRUCTURAL (medium), POLICY (low)
+
+### Explorations in Economic History (EEH)
+**Focus:** Empirical economic history — receptive to new datasets and descriptive/measurement contributions
+**Bar:** Somewhat lower "big question" bar than JEH; a well-built new dataset is a contribution in itself. Panel analyses with substantial descriptive content are welcome.
+**Domain referee adjusts:** Broader referee pool, possibly outside the paper's period or region; evaluates the argument on general grounds (institutions, markets, political economy) rather than the specialist historiography. Wants the contribution stated relative to the closest quantitative study.
+**Methods referee adjusts:** Panel FE with appropriate SEs is fine; less pressure for elaborate identification, but causal language must match the design. Marginal-effects tables and standard robustness suffice.
+**Typical concerns:** "What is new relative to [closest paper]?" "Causal or descriptive?" "How sensitive are results to the sample start/end?"
+**Referee pool:** MEASUREMENT (high), CREDIBILITY (medium), THEORY (medium), SKEPTIC (medium), STRUCTURAL (low), POLICY (low)
+
+### Economic History Review (EHR)
+**Focus:** Economic and social history, strong British and European presence; quantitative and mixed qualitative-quantitative work
+**Bar:** Deeper engagement with the historiography than JEH or EEH, including non-English literatures where relevant. Referees may be historians; methods must be explained accessibly.
+**Domain referee adjusts:** Reads the historiography section closely and may know the specialist literature in its original language. Values social-history framings alongside cliometric ones and expects quantitative results tied to specific historical episodes.
+**Methods referee adjusts:** Econometrics explained in plain language; justify model choices a historian would question (e.g., LPM vs. logit, aggregation). Qualitative examples from the sources to ground the estimates.
+**Typical concerns:** "Does the paper engage the specialist historiography?" "Are results interpreted against concrete episodes?" "Is the source adequately introduced and criticized?" "Too much jargon for a history readership?"
+**Referee pool:** THEORY (high), SKEPTIC (high), MEASUREMENT (medium), CREDIBILITY (medium), STRUCTURAL (low), POLICY (low)
+
+### European Review of Economic History (EREH)
+**Focus:** Economic history with a European emphasis (and comparative work), quantitative orientation
+**Bar:** Between EEH and JEH; clean quantitative contribution with good sourcing and comparative relevance.
+**Domain referee adjusts:** Expects positioning within the European economic-history literature and attention to cross-country comparability of sources and definitions.
+**Methods referee adjusts:** Standard panel and cross-sectional methods; careful measurement and harmonization of historical series; robustness to source and definition choices.
+**Typical concerns:** "Are the series comparable across regions?" "How does this fit the European comparative evidence?"
+**Referee pool:** MEASUREMENT (high), CREDIBILITY (medium), THEORY (medium), SKEPTIC (medium), STRUCTURAL (low), POLICY (low)
+
+### Cliometrica
+**Focus:** Quantitative economic history explicitly using economic theory and econometrics
+**Bar:** Formal or econometric framing is central; contributions can be methodological (new historical measurement) or substantive.
+**Domain referee adjusts:** Wants the economic model or mechanism explicit; historiography matters less than at EHR.
+**Methods referee adjusts:** Econometric rigor emphasized — time-series properties of historical series, identification, structural or theory-derived tests welcome.
+**Typical concerns:** "What economic model generates this prediction?" "Are the historical series stationary/comparable?" "Is the estimator appropriate for the data-generating process?"
+**Referee pool:** STRUCTURAL (high), THEORY (high), MEASUREMENT (medium), CREDIBILITY (medium), SKEPTIC (low), POLICY (low)
+
+---
+
 ## Finance
 
 ### The Journal of Finance (JF)

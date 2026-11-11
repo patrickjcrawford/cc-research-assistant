@@ -1,0 +1,49 @@
+/*-- scss:defaults --*/
+// RevealJS theme for paper/talks/*.qmd. Palette shared with the Beamer slides
+// (paper/preambles/beamer/slides-header.tex) and the figure palette (content-standards.md §2).
+// Use from a talk: theme: [default, ../preambles/revealjs/slides.scss]
+$dark-green: #314F40;
+$medium-green-grey: #5A8567;
+$light-green-grey: #A3B4A9;
+$bg-green-grey: #DDE5DC;
+$burgundy: #590925;
+$soft-cream: #F8F8F2;
+
+$body-bg: #FFFFFF;
+$body-color: #222222;
+$link-color: $burgundy;
+$presentation-heading-color: $medium-green-grey;
+$presentation-heading-font-weight: 600;
+$presentation-font-size-root: 32px;
+
+/*-- scss:rules --*/
+.reveal .slide-number,
+.reveal .footer {
+  color: $medium-green-grey;
+}
+
+.reveal h3 {
+  color: $dark-green;
+}
+
+// Regression tables rendered to HTML for slides (give the table class "slide-table")
+.reveal table.slide-table {
+  font-size: 0.65em;
+  margin: 0 auto;
+}
+
+.reveal table.slide-table td,
+.reveal table.slide-table th {
+  padding: 0.05em 0.45em;
+  border-bottom: none;
+}
+
+.reveal table.slide-table thead th {
+  border-bottom: 1px solid $dark-green;
+}
+
+// Small source/notes line under a figure or table
+.reveal .slide-note {
+  font-size: 0.6em;
+  color: #555555;
+}
