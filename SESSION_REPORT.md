@@ -84,3 +84,33 @@
 - Pending: user review of `git diff main...upgrade/26.09`, then merge to `main` (user's call); no push
 - Pending: review `hanlulong/econ-writing-skill` (proposal #11, memory) — not started
 - Note: `test_hooks.py`/`test_scripts.py` need `PYTHONUTF8=1` when run by hand on Windows
+
+## 2026-11-11 — Upstream check + dissertation-project learnings into the template
+
+**Operations:**
+- Upstream: `upstream/main` unchanged since 26.09 (already ported); only unmerged upstream work is `feat/aej-writing-style-guide` — skipped by user
+- Fast-forwarded `main` to `upgrade/26.09` (7011801); work on branch `template/dissertation-learnings`
+- Compared every tooling file in Civil-War-News, HRE-Unrest, LC-Newspapers against all historical template versions; triaged ~100 feedback/reference memories via 3 read-only agents; reviewed hanlulong/econ-writing-skill
+- Plan: `quality_reports/plans/2026-11-11_upstream-and-dissertation-learnings.md` (APPROVED)
+- New references: empirical-practice, writing-practice, citation-practice, quarto-gotchas, windows-environment, text-as-data, working-practices, outreach-style; one-line pointers in 13 agents
+- Features: `/tools sync-template`, `/write outreach`, `templates/quarto-profile/`, `paper/claim-margin.lua` + `scripts/claim_comments.py`, R pipeline templates
+
+**Decisions:**
+- [CONSTITUTIONAL AMENDMENT] Article II — hand-built datasets with no upstream source and no licensing restriction may be committed when whitelisted in `.gitignore`; raw-data corrections go through a paste-ready CSV; no-overwrite rule unchanged. Approved by user 2026-11-11 (rationale: git may be the only backup of hand-coded data)
+- INV-27 adds 🔵 author-attested (user-assigned only); INV-11 requires inline-code numbers (R or Python)
+- Significance in prose = verdict words, a template rule (not journal-dependent)
+- Floats `"!t"`, or `"p"` for page-sized exhibits; citation keys = Zotero BBT `authorYear2keywords`
+- Fork additions live in fork-owned files; upstream files get pointers only
+
+**Results:**
+- Template bug found while testing: sections prescribed as `##` render inside the abstract (abstract-section filter) — fixed to level-1 `#`
+- Verified: check_scaffold 0 errors (always-loaded 828/850), test_hooks and test_scripts pass, scaffold paper renders, Beamer and RevealJS talk scaffolds render, annotated claim PDF renders (scratch copy)
+
+**Commits:**
+- `e7ec988` Add practice references distilled from three dissertation projects
+- `794bc4c` Fix Quarto scaffold bugs found in the dissertation projects
+- `c6cf5be` Add template sync, outreach, layout profiles, and claim-margin review
+
+**Status:**
+- Done: Tiers A–D implemented on `template/dissertation-learnings` (not merged to main, not pushed)
+- Pending: user review of drafts for `~/.claude/CLAUDE.md` and personal style guide (scratchpad); decide econ-writing-skill template additions; em-dash rule conflict (cleanup-patterns #13 vs prose-critic); rolling changes into the three projects via `/tools sync-template` (CWN uses 🔵 for "secondary" — rename on sync)
