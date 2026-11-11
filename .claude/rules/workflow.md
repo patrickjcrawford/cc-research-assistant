@@ -130,6 +130,7 @@ always runs the full pipeline.
 - Prefer intentional `/checkpoint` + `/compact` at natural stopping points over letting auto-compression summarize for you
 - Save important context to disk before it's lost
 - `/clear` only when context is genuinely polluted
+- `/checkpoint` before committing, so logs ship with the work. Verify critic findings against the source before acting on them; re-read open paper files before editing (`.claude/references/working-practices.md`)
 
 ### Context Survival Strategy
 

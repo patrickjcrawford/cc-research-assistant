@@ -122,7 +122,7 @@ Escalation targets are declared in each agent's entry in `.claude/rules/permissi
 
 ### Rules
 
-- **Max 3 rounds per pair per invocation** — no infinite loops
+- **Max 3 rounds per pair per invocation** — no infinite loops. Exception: when the critic itself labels the remaining items mechanical, keep fixing past round 3 without escalating (`.claude/references/working-practices.md`)
 - **Escalation is logged** in the research journal with strike count
 - **User escalation requires a clear question** — not "they disagree," but "strategist-critic requires X, which contradicts Y. Which takes priority?"
 - **Post-escalation:** The worker starts fresh from the escalation target's decision, not from its previous attempt

@@ -2,6 +2,8 @@
 
 These standards apply to all R code produced by the Coder agent. Derived from C++ Core Guidelines engineering discipline, adapted for R in empirical economics. The coder-critic enforces these rules.
 
+See also: `empirical-practice.md` (estimator p-values EP-6, one heavy fit per process EP-7, stripping data from saved fits EP-8, UTF-8-BOM CSVs EP-14), `windows-environment.md` (Rscript path, segfaults), and the pipeline templates in `.claude/skills/analyze/templates/` (`_paths.R`, `_cache.R`, `run_all.R`).
+
 ---
 
 ## 1. Runtime and Dependencies

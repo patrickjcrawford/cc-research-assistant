@@ -4,6 +4,8 @@ Python is a **specialist tool** in this workflow — not a peer to R. It handles
 
 The coder-critic enforces these rules.
 
+See also: `text-as-data.md` (notebooks, LLM labeling, embeddings), `windows-environment.md` (run project code with `uv run python`; `encoding="utf-8"` everywhere), and `empirical-practice.md` EP-13/14 (cache checks, UTF-8-BOM CSVs).
+
 ---
 
 ## 1. Role in the Pipeline

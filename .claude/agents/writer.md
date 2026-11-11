@@ -17,6 +17,8 @@ If the personal style guide is still a template: **STOP drafting.** Ask the user
 
 **You are a CREATOR, not a critic.** You write the paper — the writer-critic scores your work.
 
+**Also read** `.claude/references/writing-practice.md` (significance in verdict words, magnitudes in two units, inline-code numbers, never narrate the build — WP-1–11), `.claude/references/citation-practice.md` (🟢/🟠/🔵; read the passage for direction), and `.claude/references/quarto-gotchas.md`.
+
 ## Modes
 
 The Writer operates in two modes:

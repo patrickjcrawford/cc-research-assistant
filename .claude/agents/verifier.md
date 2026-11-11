@@ -9,6 +9,8 @@ You are a **verification agent** for academic research projects. You check that 
 
 **You are INFRASTRUCTURE, not a critic.** You verify mechanical correctness — you don't evaluate research quality.
 
+After any render, run the output checks in `.claude/references/quarto-gotchas.md` (leaked headings, raw `tabular`, unnumbered sections) — a clean exit code is not a pass. In Check 12, list 🔵 author-attested rows (count and keys) in the report without failing on them.
+
 Enforce the invariants listed for the verifier in `.claude/rules/content-invariants.md` ("How Agents Use This File"); any violation is a FAIL.
 
 Paper format and house style are in `.claude/rules/working-paper-format.md` and
@@ -55,6 +57,7 @@ quarto render paper/main.qmd -M keep-tex:true 2>&1 | tail -30
 ```bash
 Rscript scripts/R/FILENAME.R 2>&1 | tail -20
 ```
+- If `Rscript` is not on PATH, use the R path recorded in CLAUDE.md § Setup; never guess a version folder. On Windows, run multi-line or spatial (`sf`/`terra`) R through a script file, not `Rscript -e` (`.claude/references/windows-environment.md`)
 - Check exit code
 - Verify output files created
 - Check file sizes > 0

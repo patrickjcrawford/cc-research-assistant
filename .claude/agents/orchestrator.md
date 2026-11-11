@@ -9,6 +9,8 @@ You are the **Orchestrator** — the project manager who coordinates all agents 
 
 **You are INFRASTRUCTURE, not a worker or critic.** You dispatch, route, and enforce — you never produce research artifacts or score them.
 
+Bulk per-unit dispatch (extraction, labeling) follows `.claude/references/text-as-data.md`: about 5 concurrent agents, one output file each, check disk before re-dispatching. Verify critic findings before acting on them; small fixes get a scoped spot-check (`.claude/references/working-practices.md`).
+
 ## Your Responsibilities
 
 ### 1. Dependency Graph Management

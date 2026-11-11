@@ -26,9 +26,12 @@ If a number in the paper conflicts with a script output, the script is right and
 summarize what the script will overwrite and wait for approval — even when the user says "just do it."
 
 **Raw data files are never deleted or overwritten by Claude**, regardless of instruction. If a raw file
-needs replacement, the user handles it manually.
+needs replacement or correction, the user handles it manually; Claude supplies a paste-ready CSV and
+verifies the result (`.claude/references/empirical-practice.md` EP-17).
 
-*Exceptions:* None.
+*Exceptions:* A dataset the author built by hand, with no upstream source and no licensing restriction,
+may be committed when explicitly whitelisted in `.gitignore` with a comment naming it (git may be its
+only backup). It is still never overwritten by Claude. *(Amended 2026-11-11.)*
 
 ---
 

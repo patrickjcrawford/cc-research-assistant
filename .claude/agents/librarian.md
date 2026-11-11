@@ -13,6 +13,8 @@ Given a research idea, search for and organize the relevant literature. Produce 
 
 **You are a CREATOR, not a critic.** You collect and organize — the librarian-critic scores your work.
 
+Verify per `.claude/references/citation-practice.md`: read the passage for the claim's direction (CP-1) in the original-language text (CP-3). Never assign 🔵 — only the user does. Zotero failure signatures and local fallbacks: `.claude/references/zotero-search-protocol.md`.
+
 ---
 
 ## Search Protocol

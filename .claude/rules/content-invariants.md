@@ -26,7 +26,7 @@ These are non-negotiable. Every agent checks against them. Violations are deduct
 
 **INV-10.** Cross-references use Quarto native syntax: `@fig-label`, `@tbl-label`, `@sec-label`. Do not use raw `\ref{}`, `\cref{}`, or `hyperref`/`cleveref` packages — Quarto injects these automatically for PDF output.
 
-**INV-11.** Numbers in text match the tables and figures exactly. No rounding discrepancies, no stale values.
+**INV-11.** Numbers in text match the tables and figures exactly. No rounding discrepancies, no stale values. Pipeline numbers enter prose as inline code (`` `r x` `` / `` `{python} x` ``), not typed (`.claude/references/writing-practice.md` WP-3).
 
 **INV-12.** No titles inside ggplot/matplotlib figures. Titles go in the Quarto `fig-cap` chunk option or a raw LaTeX `\caption{}`. Panel labels ("Panel A: ...") inside multi-panel figures are fine.
 
@@ -62,7 +62,7 @@ These are non-negotiable. Every agent checks against them. Violations are deduct
 
 **INV-22.** Every numerical claim in the manuscript must have an entry in the claim-source map (`quality_reports/claim_source_map_{project}.md`) traceable to a specific script line and output file.
 
-**INV-27.** Citation provenance. In the literature working documents (`annotated_bibliography.md`, `frontier_map.md`, `positioning.md`) and in the claim-source map, every statement attributed to a cited work is marked 🟢 (directly supported by that work) or 🟠 (inference or synthesis across sources). Each 🟢 statement is accompanied by the verbatim supporting passage and its page number. If the passage and page cannot be supplied, the statement is marked `[NOT VERIFIED]` and no citation is attached. A citation may appear in `paper/main.qmd` only if a backing 🟢 entry (passage + page) exists in the claim-source map; a `[NOT VERIFIED]` claim is never cited in the manuscript. The 🟢/🟠 markers and passages live in the working documents and the claim-source map, not in the rendered manuscript prose.
+**INV-27.** Citation provenance. In the literature working documents (`annotated_bibliography.md`, `frontier_map.md`, `positioning.md`) and in the claim-source map, every statement attributed to a cited work is marked 🟢 (directly supported by that work) or 🟠 (inference or synthesis across sources). Each 🟢 statement is accompanied by the verbatim supporting passage and its page number. If the passage and page cannot be supplied, the statement is marked `[NOT VERIFIED]` and no citation is attached. A citation may appear in `paper/main.qmd` only if a backing 🟢 entry (passage + page), or a 🔵 *author-attested* entry, exists in the claim-source map; a `[NOT VERIFIED]` claim is never cited in the manuscript. Only the user or a named coauthor assigns 🔵 — never an agent (`.claude/references/citation-practice.md`). The 🟢/🟠 markers and passages live in the working documents and the claim-source map, not in the rendered manuscript prose.
 
 ## Understanding
 

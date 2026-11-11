@@ -33,6 +33,27 @@ All tool names above take the `mcp__zotero-mcp__` prefix (e.g. `mcp__zotero-mcp_
 
 If a `mcp__zotero-mcp__*` call errors, times out, or the tools are simply absent from the environment (server not connected/authorized), note **"Zotero library not available this session"** once in your output and continue with your normal method unmodified. Never block, retry indefinitely, or degrade the rest of your output because Zotero is unavailable. This mirrors the existing Obsidian MCP precedent (`.claude/state/obsidian-config.md.example`, referenced from `workflow.md`).
 
+### Known failure signatures
+
+| Symptom | Cause | What to do |
+|---------|-------|------------|
+| `[WinError 10061]` / connection refused | Zotero desktop app is closed | Ask the user to open Zotero, then retry once. Do not silently fall back to web search for a library question. |
+| `zotero_read_pdf_pages` says a PDF is a "scanned image" | Many JSTOR-style PDFs have an invisible OCR text layer the tool misses (~1 in 9 items in one library) | Read the local file before accepting it: `pdftotext -enc UTF-8 ~/Zotero/storage/<KEY>/<file>.pdf -` or PyMuPDF. |
+| First `zotero_semantic_search` hangs (up to the 30-minute timeout) and later calls queue behind it | Index build on first use | Prefer collection listing or keyword search; if you use semantic search, phrase specifically and judge results by relative rank — recall is weak across a multi-project library. |
+| Long session memory growth | zotero-mcp process leak; each restored editor session spawns another | Mention it to the user if the machine slows; don't restart services yourself. |
+
+### Local fallbacks (read-only)
+
+When an MCP call times out but the desktop app is running:
+- PDFs: `~/Zotero/storage/<KEY>/` — read with `pdftotext -enc UTF-8` or the Read tool.
+- Local API: `curl.exe "http://127.0.0.1:23119/api/users/0/items?q=<terms>"` (PowerShell's
+  `Invoke-WebRequest` fails against it on Windows).
+- Better BibTeX JSON-RPC (`item.citationkey`, `item.export`) at `http://127.0.0.1:23119/better-bibtex/json-rpc`.
+  Better BibTeX export output counts as "exported from Zotero" for `references.bib`.
+
+Quote and verify from the original-language PDF, never a machine-translation attachment
+(`citation-practice.md` CP-3).
+
 ---
 
 ## Generic Usage Protocol

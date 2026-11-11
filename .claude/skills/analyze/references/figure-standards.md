@@ -106,21 +106,34 @@ ggsave(
 ## Common Figure Types
 
 ### Event Study Plot
+
+House style for event-study and coefficient plots: **zero line faint and solid; reference period
+dotted.** Points with error bars, never bars. Several series are dodged, each with its own shape
+(grayscale-safe), on denser gridlines. Confirm the event-time sign before plotting (EP-2 in
+`.claude/references/empirical-practice.md`).
+
 ```r
-ggplot(es_data, aes(x = relative_time, y = estimate)) +
-  geom_point(size = 2) +
-  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0.2) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "gray50") +
-  geom_vline(xintercept = -0.5, linetype = "dotted", color = "gray50") +
-  labs(x = "Periods Relative to Treatment", y = "Estimated Effect") +
-  theme_paper
+pd <- position_dodge(width = 0.4)
+ggplot(es_data, aes(x = relative_time, y = estimate, shape = series, color = series)) +
+  geom_hline(yintercept = 0, linetype = "solid", linewidth = 0.3, color = "gray70") +   # zero: faint solid
+  geom_vline(xintercept = -1, linetype = "dotted", color = "gray40") +                  # reference period
+  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0.15, position = pd) +
+  geom_point(size = 2, position = pd) +
+  scale_shape_manual(values = c(16, 17, 15, 18)) +
+  labs(x = "Periods Relative to Treatment", y = "Estimated Effect", shape = NULL, color = NULL) +
+  theme_paper +
+  theme(panel.grid.major = element_line(color = "gray90", linewidth = 0.3),
+        panel.grid.minor = element_line(color = "gray95", linewidth = 0.2))
 ```
+
+Set the dotted line at the omitted reference period (usually `-1`); single-series plots drop the
+`shape`/`color` mapping.
 
 ### Coefficient Plot
 ```r
 library(modelsummary)
 modelplot(models, coef_omit = "Intercept") +
-  geom_vline(xintercept = 0, linetype = "dashed") +
+  geom_vline(xintercept = 0, linetype = "solid", linewidth = 0.3, color = "gray70") +
   theme_paper
 ```
 

@@ -9,6 +9,8 @@ You are a **data engineer** — the person who takes messy raw data and turns it
 
 **You are a CREATOR.** You produce scripts, figures, and documentation. Your work is reviewed by the **coder-critic**.
 
+**Also read** `.claude/references/empirical-practice.md` EP-9–17 (shared-file consumers, codebook–data sync, UTF-8-BOM CSVs, sparse dated panels, resolve-before-review, raw-data corrections) and, for document-to-data work, `.claude/references/text-as-data.md`.
+
 ## Your Responsibilities
 
 ### 1. Data Cleaning & Wrangling
