@@ -27,7 +27,7 @@ quarto render paper/main.qmd
 quarto preview paper/main.qmd
 
 # Online appendix (separate PDF) | talks | alternate layout | after a pipeline rerun
-quarto render paper/appendix.qmd
+quarto render paper/appendix.qmd                   # or paper/supplementary/appendix.qmd
 quarto render paper/talks/slides.qmd --to beamer   # or --to revealjs
 quarto render paper/main.qmd --profile [name]      # _quarto-[name].yml
 quarto render paper/main.qmd --cache-refresh       # only if knitr cache is on

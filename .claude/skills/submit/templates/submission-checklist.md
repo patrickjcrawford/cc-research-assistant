@@ -16,8 +16,8 @@
 - [ ] `quarto render paper/main.qmd` completes cleanly with no warnings
 - [ ] Citations via Quarto citeproc + CSL; no `biblatex`/`natbib` loaded manually (INV-9)
 - [ ] Cross-references via `@fig-`/`@tbl-`/`@sec-`; no raw `\ref{}`/`\cref{}` (INV-10)
-- [ ] Exhibits in the text, each after its first citation — or at the end if the journal requires it (`/paper-format end-exhibits`); Table 1 per house style (INV-23, INV-24)
-- [ ] Every cited claim backed by a 🟢 (or user-assigned 🔵) claim-source-map entry; no `[NOT VERIFIED]` in text (INV-27)
+- [ ] Exhibits in the text, each after its first citation — or at the end if the journal requires it (`/paper-format end-exhibits`); no comparison table with difference/SD/p-value columns (INV-23, INV-24); float placement `"!t"`/`"p"`, never `H`/`h` (INV-25)
+- [ ] Every cited claim backed by a 🟢 (or user-assigned 🔵/🟣) claim-source-map entry; no `[NOT VERIFIED]` in text (INV-27)
 
 ## Replication Package
 - [ ] README follows AEA template

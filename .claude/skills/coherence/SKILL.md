@@ -52,7 +52,13 @@ Standard library only, no dependencies, exits 1 when a blocking finding exists.
 
 **Quarto (this fork).** The parser reads LaTeX, so for `paper/main.qmd` it audits Quarto's keep-tex
 output, `paper/main.tex` (gitignored). It re-renders first (`quarto render paper/main.qmd -M
-keep-tex:true`) when that file is missing or older than any `.qmd`; `--no-render` refuses instead.
+keep-tex:true`) when that file is missing or older than `main.qmd`, any file it pulls in with
+`{{< include >}}` (recursively), `_quarto.yml`, or `references.bib`; other `.qmd` files under `paper/`
+(appendix, talks, outreach) do not count. `--no-render` refuses instead. Citeproc's
+`\citeproc{ref-<key>}` links are read as citations of `<key>`, and only the document body is
+scanned for citations (the preamble's macro definitions are not). Tables typeset inside their float
+(etable, kableExtra, modelsummary chunk output) are indexed in place, so the number checks run on
+Quarto papers too.
 Findings cite lines in the rendered `main.tex`, which inlines every section — map each one back to
 the `.qmd` by searching for the quoted text. `--scope` takes the rendered file, not a section `.qmd`.
 
@@ -68,12 +74,12 @@ the `.qmd` by searching for the quoted text. `--scope` takes the rendered file, 
 | `number-wrong-table` | minor | The number exists, but in a table other than the one cited |
 | `derived-arithmetic` | minor | "X% relative to a baseline of Y" does not follow from the stated effect |
 | `significance-mismatch` | minor | Reported p-value disagrees with the cell's stars |
-| `orphan-float` | minor | A table or figure is never referenced in the text |
+| `orphan-float` | minor | A table or figure is never referenced in the text (a panel counts as referenced when its figure is) |
 | `table-file-wrapped` | minor | A table body carries its own float/caption (INV-13) |
 | `float-in-section` | minor | LaTeX-manuscript projects only (upstream house style); never fires on this fork's Quarto papers, where exhibits belong in the section files (fork INV-23) |
 | `duplicate-macro` | minor | A macro is defined twice — silent notation drift (INV-7) |
 | `abstract-too-long` | major | Abstract over 150 words (INV-5; `--abstract-limit N` for a journal's own limit) |
-| `table1-extra-columns` | major | Table 1 has difference, SD, or p-value columns, or more than two value columns (INV-24) |
+| `table1-extra-columns` | major | A treated-vs-control comparison table (captioned pre-treatment / baseline / characteristics, or headed by treated and control columns), whatever its number, has difference, SD, or p-value columns, or more than two value columns (INV-24). Regression tables and balance-*test* tables are not checked |
 
 Enforces **INV-5, INV-7, INV-11, INV-13, INV-24**. (This fork's INV-23 — exhibits in the text — is audited by `/paper-format`.)
 
@@ -98,7 +104,11 @@ false positives, not hypotheticals:
 - years and year ranges, citation years, layout lengths (`0.5em`)
 
 When no table body can be parsed at all, the number checks stay silent rather
-than inventing findings about tables they could not read.
+than inventing findings about tables they could not read. A number the prose
+takes from the online appendix or computes inline (a quantile, a derived gap)
+is not in the main-text table the paragraph cites, so it is reported; read those
+as traceability gaps (INV-22), not as stale values, unless the nearest cell is
+the same quantity.
 
 ---
 

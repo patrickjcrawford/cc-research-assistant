@@ -121,7 +121,10 @@ Enforce all Required items from `.claude/rules/working-paper-format.md`:
 | Abstract exceeds 150 words (INV-5) | -5 |
 | No titles inside figures -- titles in `fig-cap` only (INV-12) | -3 per, max -9 |
 | Script writes rendered `.tex` or calls `etable()`/`modelsummary()` instead of saving `.rds` (INV-13) | -3 per, max -9 |
-| Exhibit not in the text: collected at the end of `main.qmd`, placed before its first citation, far from its discussion, or never cited (INV-23) | -3 per, max -9 |
+| Exhibit not in the text: collected at the end of `main.qmd`, placed before its first citation, far from its first substantive discussion (intro/roadmap previews don't count), or never cited — appendix table blocks introduced together are exempt (INV-23) | -3 per, max -9 |
+| Float placement `H`, `h`, or `hold_position`, or an exhibit without `"!t"`/`"p"` placement (INV-25) | -2 per, max -6 |
+| Table notes or figure captions repeat the SE type or star thresholds (INV-1/2) | -2 per, max -6 |
+| Departure from a *(default)* clause (note/caption length, data sources in notes, title case, Table 1 position, multi-panel layout, figure drawn in the `.qmd`) | 0 — report as advisory |
 
 ---
 

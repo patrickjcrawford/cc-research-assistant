@@ -26,6 +26,7 @@ PROTECTED_PATTERNS = [
     "strategy-memo-*.md",
     "referee-report-*.md",
     "quality-score-*.json",
+    "scaffold-override.json",  # a human raises the always-loaded budget (check_scaffold.py), never Claude
 ]
 
 

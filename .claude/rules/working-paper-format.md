@@ -20,7 +20,8 @@ quarto render paper/main.qmd
 # Live preview (auto-reloads on save)
 quarto preview paper/main.qmd
 
-# Render the online/published appendix (standalone document, not included in main.qmd)
+# Render the online/published appendix (standalone document, not included in main.qmd);
+# it lives at paper/appendix.qmd or paper/supplementary/appendix.qmd — both layouts are supported
 quarto render paper/appendix.qmd
 ```
 
@@ -217,7 +218,8 @@ natbib/BibTeX citations in the `.tex`), add a Quarto profile instead of a second
 
 Skeleton: `templates/quarto-profile/` (profile YAML, marked header, pre/post-render guards, a filter
 that drops the duplicate References heading under natbib). The pre/post-render guards matter:
-Quarto always writes the kept tex to `paper/main.tex`, which `/coherence` and `scripts/verify.py`
+Quarto always writes the kept tex to `paper/main.tex` (gitignored by default, like every kept `.tex`; a
+project may opt in by deleting its `.gitignore` line), which `/coherence` and `scripts/verify.py`
 audit, so without them a profile render silently replaces the audited file. Switching to
 `cite-method: natbib` inside a profile is the one sanctioned exception to INV-9.
 

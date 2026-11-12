@@ -32,8 +32,8 @@ CLAIM = re.compile(r"<!--#\s*CLAIM\s*(.*?)\s*-->")
 ANY_COMMENT = re.compile(r"<!--.*?-->")
 CITEKEY = re.compile(r"(?<![\w.@-])@([A-Za-z][\w:.-]*\w)")
 CROSSREF = re.compile(r"^(fig|tbl|sec|eq|lst|thm|lem)-")
-MARKERS = {"🟢": "direct", "🟠": "synthesis", "🔵": "author-attested", "⚪": "design/definition",
-           "[NOT": "not verified"}
+MARKERS = {"🟢": "direct", "🟠": "synthesis", "🔵": "author-attested",
+           "🟣": "author-vouched (partial support)", "⚪": "design/definition", "[NOT": "not verified"}
 
 
 def manuscript_files() -> list[Path]:

@@ -125,10 +125,16 @@ _freeze/
 __pycache__/
 *.pyc
 
-# Quarto keep-tex output (audited by scripts/paper_coherence.py and verify.py; regenerated on render)
-paper/main.tex
-paper/appendix.tex
+# Quarto keep-tex output (audited by scripts/paper_coherence.py and verify.py; regenerated on render).
+# Ignored by default. A project that wants a kept .tex in git (e.g. for a coauthor who works in LaTeX,
+# or to compile slides without Quarto) deletes the matching line; already-tracked files are unaffected.
+/paper/main.tex
+/paper/main-*.tex
+/paper/appendix.tex
+/paper/supplementary/appendix.tex
 /paper/sections/*.tex
+/paper/talks/*.tex
+/paper/outreach/*.tex
 
 /.luarc.json
 

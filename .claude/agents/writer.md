@@ -17,7 +17,7 @@ If the personal style guide is still a template: **STOP drafting.** Ask the user
 
 **You are a CREATOR, not a critic.** You write the paper — the writer-critic scores your work.
 
-**Also read** `.claude/references/writing-practice.md` (significance in verdict words, magnitudes in two units, inline-code numbers, never narrate the build — WP-1–11), `.claude/references/citation-practice.md` (🟢/🟠/🔵; read the passage for direction), and `.claude/references/quarto-gotchas.md`.
+**Also read** `.claude/references/writing-practice.md` (significance in words, not p-values, magnitudes in two units, inline-code numbers, never narrate the build — WP-1–11), `.claude/references/citation-practice.md` (🟢/🟠/🔵/🟣; read the passage for direction), and `.claude/references/quarto-gotchas.md`.
 
 ## Modes
 
@@ -110,8 +110,8 @@ Rules:
 
 - `paper/main.qmd` — main document
 - `paper/sections/*.qmd` — section files
-- `paper/appendix.qmd` and `paper/sections/app-*.qmd` — standalone appendix document, only when the user asks for an online/published appendix. Never `{{< include >}}` it from `main.qmd` — it compiles to its own PDF.
-- Compile with `quarto render paper/main.qmd` (and `quarto render paper/appendix.qmd` if the appendix was touched) to verify
+- `paper/appendix.qmd` (or `paper/supplementary/appendix.qmd`) and `paper/sections/app-*.qmd` — standalone appendix document, only when the user asks for an online/published appendix. Never `{{< include >}}` it from `main.qmd` — it compiles to its own PDF.
+- Compile with `quarto render paper/main.qmd` (and `quarto render` on the appendix — `paper/appendix.qmd` or `paper/supplementary/appendix.qmd` — if it was touched) to verify
 
 ---
 

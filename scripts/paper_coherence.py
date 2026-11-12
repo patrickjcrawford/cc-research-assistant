@@ -124,6 +124,7 @@ class TableDoc:
     numbers: List[TableNumber] = field(default_factory=list)
     rows: List[List[str]] = field(default_factory=list)
     wrapped: bool = False  # contains \begin{table} or \caption — violates INV-13
+    inline: bool = False  # tabular typeset inside the float itself (Quarto chunk output), not \input
 
 
 @dataclass
@@ -225,6 +226,11 @@ CITE_RE = re.compile(
     r"\\(?:no)?(?:text|paren|foot|auto|super|smart|full)?cite[a-zA-Z]*\s*"
     r"(?:\[[^\]]*\]\s*)*\{([^}]*)\}"
 )
+# Quarto/pandoc citeproc writes each citation as \citeproc{ref-<key>}{<rendered text>}.
+# The first argument is the bib key with a `ref-` prefix; the second is display text
+# (author, year, page pins) whose numbers are never claims.
+CITEPROC_RE = re.compile(r"\\citeproc\s*\{([^}]*)\}\s*\{(?:[^{}]|\{[^{}]*\})*\}")
+CITEPROC_PREFIX = "ref-"
 INPUT_RE = re.compile(r"\\(?:input|include|subfile)\s*\{([^}]*)\}")
 GRAPHIC_RE = re.compile(r"\\includegraphics\s*(?:\[[^\]]*\])?\s*\{([^}]*)\}")
 BEGIN_RE = re.compile(r"\\begin\s*\{([^}]*)\}")
@@ -255,6 +261,7 @@ class Index:
         self.label_to_table: Dict[str, str] = {}  # label -> table rel path
         self.label_kind: Dict[str, str] = {}  # label -> table | figure | equation | section
         self.float_context: Dict[str, dict] = {}  # label -> {caption, notes}
+        self.subfloat_parent: Dict[str, List[str]] = {}  # subfigure label -> parent float labels
         self.paragraphs: List[Paragraph] = []
         self.environments: List[EnvBlock] = []
         self.missing_inputs: List[Located] = []
@@ -315,11 +322,20 @@ class Index:
                 key = key.strip()
                 if key:
                     self.refs.append(Located(key, src.rel, src.line_of(m.start())))
-        for m in CITE_RE.finditer(src.text):
+        # Citations live in the document body. The preamble holds macro
+        # definitions (CSL's \NewDocumentCommand\citeproc{mm}{...\cite{#1}...})
+        # whose \cite arguments are parameter specs, not keys.
+        body_start = src.text.find("\\begin{document}")
+        body_start = 0 if body_start < 0 else body_start
+        for m in CITE_RE.finditer(src.text, body_start):
+            citeproc = m.group(0).startswith("\\citeproc") and not m.group(0).startswith("\\citeproctext")
             for key in m.group(1).split(","):
                 key = key.strip()
-                if key:
-                    self.cites.append(Located(key, src.rel, src.line_of(m.start())))
+                if not key or "#" in key:
+                    continue
+                if citeproc and key.startswith(CITEPROC_PREFIX):
+                    key = key[len(CITEPROC_PREFIX):]
+                self.cites.append(Located(key, src.rel, src.line_of(m.start())))
         for m in GRAPHIC_RE.finditer(src.text):
             self.graphics.append(Located(m.group(1).strip(), src.rel, src.line_of(m.start())))
         for m in NEWCMD_RE.finditer(src.text):
@@ -385,16 +401,34 @@ class Index:
                     depth = max(0, depth - 1)
                     if depth == 0:
                         blob = "\n".join(cur_raw)
-                        cap = re.search(r"\\caption\s*\{(.+?)\}\s*(?:\\label|$)", blob, re.DOTALL)
+                        cap = caption_text(blob)
                         notes = re.findall(r"\\item\s*(.+?)(?=\\item|\\end\s*\{tablenotes\}|$)", blob, re.DOTALL)
                         if not notes:
                             notes = re.findall(r"\\textit\s*\{Notes?:?\}(.+?)(?=\\end|$)", blob, re.DOTALL)
+                        children = subfloat_labels(blob)
+                        parents = [lab for lab in cur_labels if lab not in children]
+                        for child in children:
+                            self.subfloat_parent[child] = parents
+                        # A table typeset in place (Quarto chunk output: etable,
+                        # kableExtra, modelsummary) has no \input'd body file; its
+                        # tabular sits inside the float. Index it under a key that
+                        # names the file and label, so number checks can use it.
+                        inline_key = ""
+                        resolved_inputs = [self._resolve_input(t, src.path) for t in cur_inputs]
+                        has_body_file = any(r is not None and r.suffix == ".tex" for r in resolved_inputs)
+                        if cur_kind == "table" and parents and not has_body_file and TABULAR_BODY_RE.search(blob):
+                            inline_key = "%s#%s" % (src.rel, parents[0])
+                            doc = TableDoc(inline_key, inline=True)
+                            parse_tabular_into(blob, doc)
+                            self.tables[inline_key] = doc
                         for lab in cur_labels:
                             self.float_context[lab] = {
-                                "caption": normalize_ws(clean_cell(cap.group(1))) if cap else "",
+                                "caption": normalize_ws(clean_cell(LABEL_RE.sub(" ", cap))) if cap else "",
                                 "notes": [normalize_ws(clean_cell(n))[:1500] for n in notes if n.strip()],
                             }
                             self.label_kind[lab] = cur_kind
+                            if inline_key and lab in parents:
+                                self.label_to_table[lab] = inline_key
                             for tgt in cur_inputs:
                                 resolved = self._resolve_input(tgt, src.path)
                                 if resolved is not None and resolved.suffix == ".tex":
@@ -597,7 +631,7 @@ def extract_refs(text: str) -> List[str]:
 def _mask_noise(text: str) -> str:
     """Blank out spans whose numbers are never empirical claims."""
     masked = text
-    for pattern in (CITE_RE, LABEL_RE, REF_RE, INPUT_RE, GRAPHIC_RE):
+    for pattern in (CITEPROC_RE, CITE_RE, LABEL_RE, REF_RE, INPUT_RE, GRAPHIC_RE):
         masked = pattern.sub(lambda m: " " * len(m.group(0)), masked)
     # Year ranges: 2005--2012
     masked = YEAR_RANGE_RE.sub(lambda m: " " * len(m.group(0)), masked)
@@ -685,6 +719,48 @@ MULTICOL_RE = re.compile(r"\\multicolumn\s*\{\d+\}\s*\{[^}]*\}\s*\{(.*?)\}", re.
 TEXT_WRAP_RE = re.compile(r"\\(?:textit|textbf|emph|texttt|textsc|mathrm|text)\s*\{([^{}]*)\}")
 SE_CELL_RE = re.compile(r"^\(\s*(?P<body>[^()]*)\s*\)$")
 STAR_RE = re.compile(r"(\*+|\\\*|\$\^\{?\*+\}?\$)")
+
+
+SUBCAPTION_LABEL_RE = re.compile(
+    r"\\sub(?:caption|float|table|figure)\s*(?:\[[^\]]*?\\label\s*\{([^}]*)\}|\{\s*\\label\s*\{([^}]*)\})"
+)
+SUBENV_RE = re.compile(r"\\begin\s*\{sub(?:figure|table)\}(?P<body>.*?)\\end\s*\{sub(?:figure|table)\}", re.DOTALL)
+
+
+CAPTION_START_RE = re.compile(r"\\caption\s*(?:\[[^\]]*\])?\s*\{")
+
+
+def caption_text(blob: str) -> str:
+    r"""The argument of the float's main \caption{...}, brace-balanced.
+
+    Quarto writes \caption{\label{tbl-x}Title.}, so a lazy regex stopping at the
+    first `}` (or running to the end of the float) gets the wrong span.
+    """
+    for m in CAPTION_START_RE.finditer(blob):
+        depth, i = 1, m.end()
+        while i < len(blob) and depth:
+            ch = blob[i]
+            if ch == "\\":
+                i += 2
+                continue
+            depth += ch == "{"
+            depth -= ch == "}"
+            i += 1
+        return blob[m.end() : i - 1] if depth == 0 else blob[m.end() :]
+    return ""
+
+
+def subfloat_labels(blob: str) -> Set[str]:
+    r"""Labels of panels inside a float: \subcaption{\label{x}...}, \subfloat[\label{x}...],
+    or any \label inside a subfigure/subtable environment. Quarto writes the first form."""
+    out: Set[str] = set()
+    for m in SUBCAPTION_LABEL_RE.finditer(blob):
+        key = (m.group(1) or m.group(2) or "").strip()
+        if key:
+            out.add(key)
+    for m in SUBENV_RE.finditer(blob):
+        out.update(x.group(1).strip() for x in LABEL_RE.finditer(m.group("body")))
+    return out
 
 
 def clean_cell(cell: str) -> str:
@@ -842,6 +918,13 @@ def check_references(idx: Index) -> List[Finding]:
             )
         )
     referenced = {r.value for r in idx.refs}
+    # A panel is pointed to when its float is, and a float when any of its panels is.
+    for child, parents in idx.subfloat_parent.items():
+        if child in referenced:
+            referenced.update(parents)
+    for child, parents in idx.subfloat_parent.items():
+        if any(p in referenced for p in parents):
+            referenced.add(child)
     for label, locs in sorted(idx.labels.items()):
         if len(locs) > 1:
             out.append(
@@ -1294,35 +1377,66 @@ def check_abstract_length(idx: Index, limit: int = ABSTRACT_WORD_LIMIT) -> List[
     ]
 
 
+COMPARISON_CAPTION_RE = re.compile(
+    r"pre[-\s]?treatment|baseline|characteristics|treated|control\s+group", re.IGNORECASE
+)
+# Balance-test tables are where difference / SD / p-value columns belong
+# (paper-organization.md §2), so they are never flagged.
+BALANCE_TEST_RE = re.compile(r"\bbalance\b|\btests?\b", re.IGNORECASE)
+GROUP_HEADER_RE = re.compile(r"\b(treat(?:ed|ment)|control)\b", re.IGNORECASE)
+
+
+def _is_group_comparison(label: str, caption: str, doc: TableDoc) -> bool:
+    """A pre-treatment characteristics table: named as one, or headed by treated and control columns."""
+    named = f"{label} {caption}"
+    if BALANCE_TEST_RE.search(named):
+        return False
+    if COMPARISON_CAPTION_RE.search(named):
+        return True
+    header = " ".join(c for row in doc.rows[:3] for c in row[1:])
+    return bool(re.search(r"\btreat(?:ed|ment)\b", header, re.I) and re.search(r"\bcontrol\b", header, re.I))
+
+
 def check_table1_columns(idx: Index) -> List[Finding]:
-    """INV-24: Table 1 has a label column plus treated and control columns only."""
-    first = next((lab for lab, kind in idx.label_kind.items() if kind == "table"), None)
-    if first is None or first not in idx.label_to_table:
-        return []
-    rel = idx.label_to_table[first]
-    doc = idx.tables.get(rel)
-    if doc is None or not doc.rows:
-        return []
-    width = max(len(r) for r in doc.rows)
-    extra_headers = [c for row in doc.rows[:3] for c in row[1:] if TABLE1_EXTRA_HEADER_RE.search(c)]
-    if width <= 3 and not extra_headers:
-        return []
-    detail = []
-    if width > 3:
-        detail.append("%d value columns" % (width - 1))
-    if extra_headers:
-        detail.append("header cells " + ", ".join(repr(c) for c in extra_headers[:3]))
-    return [
-        Finding(
-            check="table1-extra-columns",
-            severity="major",
-            file=rel,
-            line=1,
-            message="Table 1 (%s) has %s; it should show only treated and control columns (INV-24)."
-            % (first, " and ".join(detail)),
-            suggestion="Move difference, SD, or p-value columns to an appendix balance table.",
+    """INV-24: a treated-vs-control comparison table shows the two group columns only.
+
+    Which table comes first is a house-style default, not checked here: a regression
+    table numbered 1 is fine. The check applies to any table that is a group comparison.
+    """
+    out: List[Finding] = []
+    seen: Set[str] = set()
+    for lab, kind in idx.label_kind.items():
+        if kind != "table" or lab not in idx.label_to_table:
+            continue
+        rel = idx.label_to_table[lab]
+        doc = idx.tables.get(rel)
+        if rel in seen or doc is None or not doc.rows:
+            continue
+        seen.add(rel)
+        caption = idx.float_context.get(lab, {}).get("caption", "")
+        if not _is_group_comparison(lab, caption, doc):
+            continue
+        width = max(len(r) for r in doc.rows)
+        extra_headers = [c for row in doc.rows[:3] for c in row[1:] if TABLE1_EXTRA_HEADER_RE.search(c)]
+        if width <= 3 and not extra_headers:
+            continue
+        detail = []
+        if width > 3:
+            detail.append("%d value columns" % (width - 1))
+        if extra_headers:
+            detail.append("header cells " + ", ".join(repr(c) for c in extra_headers[:3]))
+        out.append(
+            Finding(
+                check="table1-extra-columns",
+                severity="major",
+                file=rel,
+                line=1,
+                message="A treated-vs-control comparison table (%s) has %s; it should show only the "
+                "treated and control columns (INV-24)." % (lab, " and ".join(detail)),
+                suggestion="Move difference, SD, or p-value columns to an appendix balance table.",
+            )
         )
-    ]
+    return out
 
 
 def run_checks(idx: Index) -> List[Finding]:
@@ -1834,13 +1948,43 @@ def find_quarto_main(paper_dir: Path) -> Optional[Path]:
     return cand if cand.is_file() else None
 
 
+QUARTO_INCLUDE_RE = re.compile(r"\{\{<\s*include\s+([^\s>]+)\s*>\}\}")
+
+
+def quarto_sources(qmd: Path) -> List[Path]:
+    """main.qmd plus every file it pulls in with {{< include >}}, recursively.
+
+    Only these feed the rendered main.tex. Other .qmd files under paper/ (the
+    appendix, talks, outreach scaffolds) are separate documents and must not
+    mark the paper stale.
+    """
+    out: List[Path] = []
+    seen: Set[Path] = set()
+    stack = [qmd]
+    while stack:
+        cur = stack.pop()
+        key = cur.resolve()
+        if key in seen or not cur.is_file():
+            continue
+        seen.add(key)
+        out.append(cur)
+        try:
+            text = cur.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        for m in QUARTO_INCLUDE_RE.finditer(text):
+            target = m.group(1).strip().strip("\"'")
+            stack.append((cur.parent / target) if not os.path.isabs(target) else Path(target))
+    return out
+
+
 def quarto_tex_stale(qmd: Path, root: Path) -> bool:
-    """True when the keep-tex output is missing or older than any .qmd or config it renders from."""
+    """True when the keep-tex output is missing or older than main.qmd, a file it includes, or the config."""
     tex = qmd.with_suffix(".tex")
     if not tex.is_file():
         return True
     built = tex.stat().st_mtime
-    deps = list(qmd.parent.rglob("*.qmd")) + [root / name for name in QUARTO_DEPS]
+    deps = quarto_sources(qmd) + [root / name for name in QUARTO_DEPS]
     return any(p.is_file() and p.stat().st_mtime > built for p in deps)
 
 

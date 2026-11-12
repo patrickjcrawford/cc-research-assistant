@@ -10,8 +10,9 @@ paths:
 This is the house layout for every paper in this project (content invariants INV-23, INV-24, INV-25),
 translated from upstream clo-author's LaTeX house style to this fork's Quarto workflow — with one
 deliberate difference: **exhibits sit in the text, not at the end** (fork amendment, 2026-11-11). Follow it
-unless the user asks otherwise: the writer-critic deducts for deviations and the verifier fails on
-them. It is the single source for float placement, Table 1, the table and figure chunks, and section
+unless the user asks otherwise: the writer-critic deducts for deviations from the invariant parts and
+the verifier fails on them; parts marked *(default)* are house style that critics report as advisory
+and never deduct (`content-invariants.md` § Defaults). It is the single source for float placement, Table 1, the table and figure chunks, and section
 order; `working-paper-format.md` covers Quarto mechanics (YAML, citations, cross-reference syntax).
 
 **Reference exemplars.** Keep one or two well-organized prior papers (e.g. in
@@ -22,7 +23,9 @@ order; `working-paper-format.md` covers Quarto mechanics (YAML, citations, cross
 ## 1. Float placement — in the text, where each exhibit is discussed (INV-23)
 
 Each table and figure chunk lives in the **section file where it is discussed**, placed right after
-the paragraph that first cites it. There are no TABLES/FIGURES blocks at the end of `main.qmd`; the
+the paragraph that first discusses it. Preview citations do not count: the introduction's summary of
+results, a roadmap paragraph ("@tbl-x then asks whether ..."), or a forward pointer from the strategy
+section. The exhibit goes after the first paragraph that actually reads it. There are no TABLES/FIGURES blocks at the end of `main.qmd`; the
 reader meets each exhibit next to its discussion. (Upstream clo-author collects exhibits at the end;
 this fork does not. If a journal requires end-of-paper exhibits at submission, set `fig-pos`/
 `tbl-pos` per its rules or move them then — `/paper-format` can do it.)
@@ -62,11 +65,15 @@ The next paragraph continues the argument ...
 ````
 
 - **Cite before it appears.** Every exhibit is cited in the prose before its chunk; one exhibit per
-  chunk; an exhibit discussed in several sections sits where it is *first* discussed.
+  chunk; an exhibit discussed in several sections sits where it is *first* discussed. A multi-panel
+  figure whose panels are discussed in different places sits after the first panel's discussion.
+- **Appendix blocks.** In the online appendix, a set of tables that the section's prose introduces
+  together ("the tables below replicate ...") may follow that paragraph without each table being cited
+  individually.
 - Chunks in section files run in `main.qmd`'s knitr session: packages and the facts `.rds` for
   inline numbers load once in the setup chunk at the top of `main.qmd`.
 
-- **Float placement by size.** Never `H`, `h`, or `hold_position` — they leave blank half-pages.
+- **Float placement by size (invariant, INV-25).** Never `H`, `h`, or `hold_position` — they leave blank half-pages.
   Normal tables/figures: `tbl-pos: "!t"` / `fig-pos: "!t"`. Page-sized exhibits (roughly more than
   half a page): `"p"`, with `\clearpage` between them. After rendering, grep the kept tex for
   `begin{table}[` / `begin{figure}[` to confirm.
@@ -80,17 +87,22 @@ The next paragraph continues the argument ...
 - The reader navigates by `@tbl-x` / `@fig-y` from the text; Quarto numbers and links them.
 - Appendix exhibits follow the same convention inside their appendix sections (`sections/app-*.qmd`).
 
-## 2. Table 1 is pre-treatment characteristics (INV-24)
+## 2. Table 1 and the pre-treatment characteristics table (INV-24)
 
-**When the design compares a treated and a control group**, the first table describes the sample as a
-**two-group comparison at baseline**:
+**The format is the invariant; the position is a default.** A table that compares a treated and a
+control group at baseline:
 
 - **Two value columns only: treated and control. No difference column, no SD column, no p-value.**
   Group means / percentages, one value per cell. Balance *tests* go in an appendix table.
-- Rows grouped into **thematic panels** (panel label row + `\midrule`), e.g. *Demographics*,
+
+*(default)* When the design compares a treated and a control group, this is Table 1, in the Data
+section, so the reader sees the sample before any estimate; otherwise Table 1 is the summary-statistics
+table. A paper may lead with its main results instead (e.g. with descriptives in the online appendix).
+
+- *(default)* Rows grouped into **thematic panels** (panel label row + `\midrule`), e.g. *Demographics*,
   *Economic structure*, *Sector composition (%)*.
-- **Bottom rows:** unit counts (e.g. `Counties`, `Individuals`) — the N lives here, not in a column.
-- Caption names the baseline window: e.g. "Pre-Treatment Characteristics, 1860".
+- *(default)* **Bottom rows:** unit counts (e.g. `Counties`, `Individuals`) — the N lives here, not in a column.
+- *(default)* Caption names the baseline window: e.g. "Pre-Treatment Characteristics, 1860".
 
 The script saves a summary data frame (`.rds`, INV-13), not a rendered table; the chunk in the Data
 section styles it:
@@ -118,21 +130,25 @@ Scripts save model objects or summary data frames as `.rds` (INV-13). Every tabl
 section where it is discussed, that loads the `.rds` and calls the styling function — the "wrapper" is
 that chunk:
 
-- `#| label: tbl-...` and a caption: a **full descriptive title in title case**, method or cohort in
-  parentheses (`etable(title = ...)` or `#| tbl-cap:`).
+- `#| label: tbl-...` and a descriptive caption (`etable(title = ...)` or `#| tbl-cap:`). *(default)* A
+  **full descriptive title in title case**, method or cohort in parentheses.
 - `#| tbl-pos: "!t"` (or `"p"` when page-sized, §1). Table notes are a single string; an `!expr`
   caption is single-quoted. Never wrap the chunk in a `::: {#tbl-}` div or add a raw `\label{}`.
 - `#| output: asis`; `etable(..., tex = TRUE)` / `modelsummary(..., output = "latex")` /
   `kbl(..., booktabs = TRUE)` per `working-paper-format.md` § Tables.
 - **Notes** via `etable(notes = ...)`, `modelsummary(notes = ...)`, or `kableExtra::footnote(threeparttable = TRUE)`.
-  Notes follow **INV-1** (roughly 40–70 words: what the table shows, how to read it, sample details
-  the table does not print; data sources in the prose). This fork's INV-1 overrides upstream's
-  "exhaustive notes".
+  Notes follow **INV-1**: never repeat the SE type or star thresholds the footer prints (invariant);
+  *(default)* roughly 40–70 words — what the table shows, how to read it, sample details the table does
+  not print — with data sources in the prose. This fork's INV-1 overrides upstream's "exhaustive notes".
 - Booktabs rules only, no `\hline`, no vertical rules (INV-3). Stars per the journal profile (INV-4).
 - "Total effect" rows (base + interaction) report **delta-method SEs in brackets**.
 - Hand-written tables: a raw `{=latex}` `talltblr` block with `note{}` keys (`working-paper-format.md`).
 
-## 4. Canonical figure chunk (multi-panel)
+## 4. Canonical figure chunk (multi-panel) — *(default)*
+
+The layout below is the house default (INV-25 default); a figure drawn in the `.qmd`, or one
+`patchwork` image with in-plot panel labels, is reported as advisory, not deducted. Float placement and
+the caption rules of INV-2 still apply.
 
 ````markdown
 ```{r}
@@ -172,13 +188,14 @@ section at the next level-1 heading, so `##` sections would all render inside th
 
 ## 6. Caption and file naming
 
-- Captions are full descriptive titles in title case, method/cohort in parentheses:
+- *(default)* Captions are full descriptive titles in title case, method/cohort in parentheses:
   *"Main Results: County Wealth and Unrest (1860 Cohort)"*, *"Pre-Treatment Characteristics, 1860"*.
-- Exhibits are organized **by script** (CLAUDE.md Output Organization): `paper/tables/NN_name/*.rds`,
-  `paper/figures/NN_name/*.pdf`. The script writes the bare exhibit; the chunk in the paper owns
+- Exhibits are organized **by script** in the output directory `CLAUDE.md` § Output Organization names
+  (default `paper/tables/NN_name/*.rds`, `paper/figures/NN_name/*.pdf`; a project whose model objects
+  cannot be committed may use a gitignored directory such as `data/cleaned/`). The script writes the bare exhibit; the chunk in the paper owns
   numbering, caption, and notes.
 
-## 7. Exhibit numbering
+## 7. Exhibit numbering — *(default)*
 
 - **Table 1:** pre-treatment characteristics (§2), or summary statistics.
 - **Table 2:** main results.

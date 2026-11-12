@@ -12,13 +12,19 @@ writer, writer-critic, and verifier. Critics cite these as `CP-n`.
 | 🟢 | Directly supported: verbatim passage + page recorded | Yes |
 | 🟠 | Synthesis or inference across sources | Yes, worded as the paper's own argument (CP-2) |
 | 🔵 | **Author-attested**: the user or a named coauthor vouches for the source; no full text available | Yes |
+| 🟣 | **Author-vouched**: the text was read and supports the claim only partly, or for a different scope; the user or a named coauthor keeps the citation anyway | Yes |
 | ⚪ | Design or definition statement sourced to the project's own code, config, or documents (not a cited work, not a pipeline number) | n/a — carries no citation |
 | `[NOT VERIFIED]` | Passage/page could not be supplied | **No** |
 
-**🔵 rules.** Only the user (or a coauthor the user names) assigns 🔵 — **an agent never marks its own
-claim 🔵**, and never converts `[NOT VERIFIED]` to 🔵. The map row records who attested, the date, and
-why no passage exists (e.g., archival volume not digitized). Critics do not deduct for 🔵. At
-submission the verifier lists all 🔵 rows in its report (count + keys) but does not FAIL on them.
+**🔵 and 🟣 rules.** Only the user (or a coauthor the user names) assigns 🔵 or 🟣 — **an agent never
+marks its own claim 🔵 or 🟣**, and never converts `[NOT VERIFIED]` or 🟠 to either. 🔵 is strictly for
+sources with no full text available; a source that was read and does not fully support the claim is
+🟣, never 🔵. The map row records who attested, the date, and the reason: for 🔵 why no passage exists
+(e.g., archival volume not digitized); for 🟣 the closest passage, its page, and what it does not
+cover. An agent that finds a partly supporting passage offers the author three options — reword the
+sentence, mark it 🟠 and word it as the paper's argument, or keep it as 🟣 — and records the choice.
+Critics do not deduct for 🔵 or 🟣. At submission the verifier lists all 🔵 and 🟣 rows in its report
+(count + keys, by marker) but does not FAIL on them.
 
 ## Verification
 

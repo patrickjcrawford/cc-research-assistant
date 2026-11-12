@@ -79,7 +79,7 @@ Every table uses exactly three horizontal rules and **zero vertical lines**:
 - Point estimates on one row, standard errors in parentheses on the row below
 - The SE type/clustering and star thresholds are printed by `etable()`'s footer (or `modelsummary`'s `stars` note). Do **not** repeat them in the table notes (INV-1); a hand-built `kbl()` table without such a footer states them once in its note.
 
-**Significance reporting in tables depends on the target journal** (prose never quotes p-values or SEs, whatever the journal — see `.claude/references/writing-practice.md` WP-1):
+**Significance reporting in tables depends on the target journal** (prose never quotes p-values, and quotes SEs only when precision is the point, whatever the journal — see `.claude/references/writing-practice.md` WP-1):
 
 | Context | Convention |
 |---------------------------------|---------------------------------------|

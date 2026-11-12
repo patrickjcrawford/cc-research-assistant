@@ -15,20 +15,30 @@ INV-25**) on this fork's Quarto manuscript: `paper/main.qmd` plus `paper/section
 ## Modes
 
 ### `audit [paper/main.qmd]` (default)
-Check the paper against the house style and report violations with invariant numbers:
+Check the paper against the house style and report violations with invariant numbers. Report a
+departure from a clause marked *(default)* in `content-invariants.md` separately, as advisory ("INV-25
+default"), never as a violation:
 1. **INV-23 — exhibits in the text.** For every `#| label: (tbl|fig)-` chunk, `{#fig-` image, and
    `{=latex}` table/figure block in `main.qmd` and `paper/sections/*.qmd`:
    - it sits in the section file that discusses it — a chunk after the `::: {#refs}` div or in an
      end-of-paper TABLES/FIGURES block is a violation;
    - its first `@tbl-`/`@fig-` citation comes *before* it, in the same section (or an earlier one);
-   - it follows the paragraph of that first citation, not several paragraphs later;
-   - an exhibit never cited in the prose is a violation.
-2. **INV-24 — Table 1.** If the design has treated and control groups, confirm the first table is
-   pre-treatment characteristics: two group columns, thematic panels, unit counts at the bottom, and
-   **no difference / SD / p-value column**. Otherwise confirm it is the summary-statistics table.
+   - it follows the paragraph of its first substantive discussion, not several paragraphs later —
+     preview citations (the introduction's results summary, a roadmap paragraph, a forward pointer from
+     the strategy section) don't count;
+   - an exhibit never cited in the prose is a violation, except in the online appendix, where a block of
+     tables the section's prose introduces together ("the tables below") is exempt.
+2. **INV-24 — comparison tables.** Any table comparing treated and control groups has two group
+   columns and **no difference / SD / p-value column** (violation). *(default, advisory)* Table 1 is
+   that table (or the summary-statistics table without a control group), with thematic panels and unit
+   counts at the bottom.
 3. **INV-25 — canonical chunks.** Every table chunk loads an `.rds` and styles it at render time, has a
-   label, a title-case caption, and notes per INV-1; every multi-panel figure uses `fig-subcap` +
-   `layout-ncol` with `fig-cap-location: top`.
+   `tbl-` label, a caption, and notes per INV-1 (no SE type or star thresholds); every exhibit has
+   `"!t"` (or `"p"`) placement and none uses `H`/`h`/`hold_position` — grep the kept tex for
+   `begin{table}[` / `begin{figure}[`. *(default, advisory)* title-case captions; notes and captions of
+   roughly 40–70 words with data sources in the prose; multi-panel figures with `fig-subcap` +
+   `layout-ncol` and `fig-cap-location: top`; figures exported by a script rather than drawn in the
+   `.qmd`.
 4. Booktabs only (no `\hline`, no vertical rules), `.rds` exports from scripts (INV-13), no in-figure
    titles (INV-12), section headings carry `{#sec-...}` anchors.
 
@@ -60,4 +70,4 @@ placement layout) from the rule for quick copy-paste.
 
 The full specification lives in `.claude/rules/paper-organization.md`; this skill operationalizes it.
 Where the house style and `working-paper-format.md` disagree on exhibit placement, the house style wins.
-Table and figure note length follows INV-1/INV-2.
+Table and figure note length follows INV-1/INV-2 (a default).

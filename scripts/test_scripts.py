@@ -176,6 +176,101 @@ def test_coherence_additions():
     check("--abstract-limit 100 flags a 120-word abstract", "abstract-too-long" in checks, checks)
 
 
+QUARTO_TEX = r"""\documentclass{article}
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{\begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\begin{document}
+\section{Results}\label{sec-results}
+As shown before (\citeproc{ref-smith2020Wages}{Smith, 2020, pp. 131--134}; \citeproc{ref-ghost2021Missing}{Ghost, 2021}),
+the coefficient in Table~\ref{tbl-reg} is -1.170, and the panels of Figure~\ref{fig-panels} agree. A stale claim: -1.950.
+
+\begin{table}
+\caption{\label{tbl-reg}Regression Results}
+\centering{
+\begin{threeparttable}[b]
+   \begin{tabular}{lccc}
+      \tabularnewline \midrule \midrule
+      Dependent Variable: & \multicolumn{3}{c}{Events per 1,000}\\
+      Model:  & (1)            & (2)           & (3)\\
+      \midrule
+      HHI     & -1.170$^{***}$ & -1.453$^{**}$ & -1.450$^{**}$\\
+              & (0.3337)       & (0.6662)      & (0.6653)\\
+      Observations & 253 & 202 & 202\\
+      \midrule \midrule
+      \multicolumn{4}{l}{\emph{Signif. Codes: ***: 0.01, **: 0.05, *: 0.1}}\\
+   \end{tabular}
+   \begin{tablenotes}\item Outcome is events per 1,000; control means 0.123 and baseline 9.99.\end{tablenotes}
+\end{threeparttable}
+}
+\end{table}
+
+Balance is in Table~\ref{tbl-baseline}.
+
+\begin{table}
+\caption{\label{tbl-baseline}Pre-Treatment Characteristics}
+\begin{tabular}{lcccc}
+\toprule
+ & Treated & Control & Difference & p-value \\
+\midrule
+Wage & 1.0 & 1.0 & 0.0 & 0.9 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}
+\begin{minipage}{0.5\linewidth}\includegraphics{a.png}\subcaption{\label{fig-panels-a}A}\end{minipage}
+\begin{minipage}{0.5\linewidth}\includegraphics{b.png}\subcaption{\label{fig-panels-b}B}\end{minipage}
+\caption{\label{fig-panels}Two panels}
+\end{figure}
+\end{document}
+"""
+
+
+def test_coherence_quarto():
+    print("paper_coherence.py (Quarto keep-tex output)")
+    root = project()
+    (root / "paper").mkdir()
+    (root / "paper/main.tex").write_text(QUARTO_TEX, encoding="utf-8")
+    for img in ("a.png", "b.png"):
+        (root / "paper" / img).write_bytes(b"\x89PNG")
+    (root / "references.bib").write_text("@article{smith2020Wages,\n  title = {T},\n}\n", encoding="utf-8")
+    run("paper_coherence.py", "--json", str(root / "out.json"), "--quiet", root=root)
+    d = json.loads((root / "out.json").read_text(encoding="utf-8"))
+    fs = d["findings"]
+    undefined = {f["message"].split("`")[1] for f in fs if f["check"] == "undefined-cite"}
+    check("citeproc ref- prefix resolved; preamble \\cite{#1}/{mm} ignored", undefined == {"ghost2021Missing"}, undefined)
+    tables = d["index"]["tables"]
+    cells = sum(len(t["numbers"]) for t in (tables.values() if isinstance(tables, dict) else tables))
+    check("inline etable body indexed", cells >= 9, tables)
+    msgs = [f["message"] for f in fs if f["check"].startswith("number-")]
+    check("tabulated prose number matches its inline cell", not any(m.startswith("1.170 ") for m in msgs), msgs)
+    check("stale prose number against an inline table is flagged", any(m.startswith("1.950 ") for m in msgs), msgs)
+    orphans = {f["message"].split("`")[1] for f in fs if f["check"] == "orphan-float"}
+    check("subfigures of a referenced figure are not orphans", not orphans, orphans)
+    t1 = [f["message"] for f in fs if f["check"] == "table1-extra-columns"]
+    check("regression table numbered first does not trip INV-24", not any("tbl-reg" in m for m in t1), t1)
+    check("treated/control table with Difference/p-value flagged (INV-24)", any("tbl-baseline" in m for m in t1), t1)
+
+    sys.path.insert(0, str(REPO / "scripts"))
+    import paper_coherence as pc
+    q = Path(tempfile.mkdtemp(prefix="clo-quarto-"))
+    (q / "paper/sections").mkdir(parents=True)
+    (q / "paper/outreach").mkdir()
+    (q / "paper/main.qmd").write_text("{{< include sections/01_intro.qmd >}}\n")
+    (q / "paper/sections/01_intro.qmd").write_text("# Intro\n{{< include 01b_more.qmd >}}\n")
+    (q / "paper/sections/01b_more.qmd").write_text("More.\n")
+    (q / "paper/outreach/op_ed.qmd").write_text("Op-ed.\n")
+    tex = q / "paper/main.tex"
+    tex.write_text("x")
+    old = 1_000_000_000
+    for p in (q / "paper/main.qmd", q / "paper/sections/01_intro.qmd", q / "paper/sections/01b_more.qmd"):
+        os.utime(p, (old, old))
+    os.utime(tex, (old + 10, old + 10))
+    check("unrelated .qmd under paper/ does not mark main.tex stale", not pc.quarto_tex_stale(q / "paper/main.qmd", q))
+    os.utime(q / "paper/sections/01b_more.qmd", (old + 20, old + 20))
+    check("a nested include newer than main.tex marks it stale", pc.quarto_tex_stale(q / "paper/main.qmd", q))
+
+
 def test_verify():
     print("verify.py")
     root = project()
@@ -233,6 +328,46 @@ def test_check_scaffold():
     check("boolean key that swallowed text caught", "'disable-model-invocation' must be true or false" in out, out[-900:])
     check("exit 1 on errors", code == 1)
 
+    big = Path(tempfile.mkdtemp(prefix="clo-scaffold-size-"))
+    shutil.copytree(REPO / ".claude", big / ".claude", ignore=shutil.ignore_patterns("state"))
+    shutil.copytree(REPO / "templates", big / "templates")
+    (big / "scripts").mkdir()
+    for f in (REPO / "scripts").iterdir():
+        if f.is_file():
+            shutil.copy(f, big / "scripts")
+    (big / "CLAUDE.md").write_text((REPO / "CLAUDE.md").read_text(encoding="utf-8") + "line\n" * 1000, encoding="utf-8")
+    code, out, _ = run("check_scaffold.py", "--quiet", root=big)
+    check("over budget: ERROR when run alone", code == 1 and "ERROR size        always-loaded" in out, out[-400:])
+    code, out, _ = run("check_scaffold.py", "--quiet", "--warn-size", root=big)
+    check("over budget: --warn-size (pre-commit) warns and exits 0", code == 0 and "WARN  size        always-loaded" in out, out[-400:])
+    ov = big / ".claude" / "scaffold-override.json"
+    ov.write_text(json.dumps({"always_loaded_budget": 5000, "reason": "long project notes",
+                              "approved_by": "Test Author", "date": "2026-11-11"}), encoding="utf-8")
+    code, out, _ = run("check_scaffold.py", root=big)
+    check("valid human override raises the budget and names who approved it",
+          code == 0 and "raised to 5000" in out and "Test Author" in out, out[-500:])
+    ov.write_text(json.dumps({"always_loaded_budget": 5000}), encoding="utf-8")
+    code, out, _ = run("check_scaffold.py", "--quiet", root=big)
+    check("override without reason/approver/date is rejected", code == 1 and "missing reason, approved_by, date" in out, out[-500:])
+
+
+def test_claim_comments():
+    print("claim_comments.py")
+    root = Path(tempfile.mkdtemp(prefix="clo-claims-"))
+    (root / "scripts").mkdir()
+    (root / "paper").mkdir()
+    (root / "quality_reports").mkdir()
+    shutil.copy(REPO / "scripts" / "claim_comments.py", root / "scripts")
+    (root / "paper" / "main.qmd").write_text(
+        "Effects persist [@a2019X]. <!--# CLAIM 🟢 a2019X p. 3 -->\n"
+        "Seigneurs were aligned [@b1983Y]. <!--# CLAIM 🟣 b1983Y read; scope differs, kept by coauthor -->\n"
+        "Archival claim [@c1794Z]. <!--# CLAIM 🔵 c1794Z not digitized -->\n"
+        "Bad marker [@d2000W]. <!--# CLAIM ?? d2000W -->\n", encoding="utf-8")
+    p = subprocess.run([sys.executable, str(root / "scripts" / "claim_comments.py"), "--check"],
+                       capture_output=True, text=True, timeout=60, encoding="utf-8")
+    bad = [l for l in p.stdout.splitlines() if "without a valid marker" in l]
+    check("🟣 and 🔵 are valid markers; an unknown one is not", p.returncode == 1 and len(bad) == 1 and ":4:" in bad[0], p.stdout)
+
 
 def test_style_metrics():
     print("style_metrics.py")
@@ -251,7 +386,8 @@ def test_style_metrics():
 
 
 if __name__ == "__main__":
-    for t in (test_score, test_pipeline, test_coherence_additions, test_verify, test_check_scaffold, test_style_metrics):
+    for t in (test_score, test_pipeline, test_coherence_additions, test_coherence_quarto, test_verify,
+              test_check_scaffold, test_claim_comments, test_style_metrics):
         t()
     print("all script tests passed" if not failures else f"{len(failures)} script test(s) FAILED")
     sys.exit(1 if failures else 0)

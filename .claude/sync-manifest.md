@@ -88,6 +88,7 @@ Preserve project additions: title, author, custom fonts, extra preamble includes
 | `WORKFLOW_QUICK_REF.md` | TEMPLATE | Quick reference card. No project customization needed. |
 | `settings.json` | MERGE | Hook wiring (PreToolUse, PreCompact, SessionStart, PostToolUse) is template-owned. The `permissions.allow` list may have project-specific additions — preserve those, overwrite the hooks section. |
 | `settings.local.json` | PROJECT | Machine-local config (API keys, local paths). Never sync. |
+| `scaffold-override.json` | PROJECT | Human-approved override of the always-loaded size budget for `scripts/check_scaffold.py` (budget, reason, approver, date). Written by the user only; absent from the template. Never sync. |
 
 ### `.claude/agents/`
 
@@ -226,6 +227,7 @@ All skill files are **TEMPLATE**. Downstream projects do not edit skill logic, t
 | `talks/` | PROJECT | Project-specific presentations. Never overwrite. |
 | `outreach/` | PROJECT | Op-eds, press pieces. Never overwrite. |
 | `replication/` | PROJECT | Replication package. Never overwrite. |
+| `appendix.qmd` or `supplementary/` | PROJECT | The online appendix; projects keep it at either location. Never overwrite. |
 | `preambles/beamer/slides-header.tex` | TEMPLATE | Shared Beamer preamble. Overwrite unless project has custom Beamer theme. |
 | `preambles/draft-article/article-header.tex` | TEMPLATE | Shared article preamble. |
 | `preambles/draft-article/before-body.tex` | TEMPLATE | Shared article preamble. |

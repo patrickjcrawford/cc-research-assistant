@@ -10,6 +10,29 @@ All notable changes to this template are documented here.
 
 Changes in this fork (cc-research-assistant) not in upstream clo-author.
 
+### Defaults vs. invariants; 🟣 marker; coherence-parser fixes (2026-11-11)
+
+From the first post-sync audit of LC-Newspapers. Decisions by the template owner.
+
+- **Defaults.** `content-invariants.md` now separates invariants from *(default)* clauses: critics report a departure from a default as advisory and never deduct, and the verifier never fails on it.
+  - Strict: every table has notes and every figure a caption; notes and captions never repeat the SE type or star thresholds; float placement `"!t"`/`"p"`, never `H`/`h`/`hold_position`; a treated-vs-control table has no difference/SD/p-value column.
+  - Defaults: note and caption length (40–70 words) and data sources in the prose; title-case captions; which table is Table 1; thematic panels; `fig-subcap` multi-panel layout; figures exported by a script rather than drawn in the `.qmd`.
+  - Rubrics gain small deductions for the strict parts (float placement, SE/stars in notes) and a 0-point advisory row for defaults.
+- **INV-23 clarified.** "First discussion" excludes preview citations (intro summary, roadmap paragraph, forward pointers). A multi-panel figure sits after its first panel's discussion. Online-appendix table blocks introduced together ("the tables below") need not cite each table.
+- **WP-1.** Significance phrasing is the author's choice (the table is examples); explicit p-values stay out of prose. Standard errors may be quoted when precision is the point (a coefficient that moves while its SE does not).
+- **🟣 author-vouched** (INV-27, `citation-practice.md`): the text was read and supports the claim only partly or for a different scope, and the author keeps the citation. User-assigned only, citable, listed with 🔵 at submission. 🔵 stays strictly "no full text available".
+- **Output directory.** INV-13 and INV-26 follow `CLAUDE.md` § Output Organization (default `paper/tables/`, `paper/figures/`).
+- **Appendix location.** `paper/appendix.qmd` and `paper/supplementary/appendix.qmd` are both supported (docs, `.gitignore`, sync manifest).
+- **Kept `.tex` ignored by default:** main, profile layouts, appendix (both locations), sections, talks and outreach. A project opts in by deleting the line.
+- **Size budget.** The pre-commit hook warns on the always-loaded budget instead of blocking (`check_scaffold.py --warn-size`). Standalone, `check_scaffold.py` still errors unless a human-written `.claude/scaffold-override.json` (budget, reason, approved_by, date) raises the budget. `protect-files.py` denies Claude edits to that file (Edit/Write only); the manifest labels it PROJECT.
+- **`paper_coherence.py` fixes**, with regression tests:
+  - citeproc `\citeproc{ref-key}` resolved, and citations scanned only in the document body (192 false "undefined-cite" findings on one paper);
+  - tables typeset inside their own float (etable, kableExtra, modelsummary) indexed, so number checks run, and captions extracted with balanced braces;
+  - subfigure labels inherit the parent's reference;
+  - the staleness guard counts only `main.qmd`, its includes and config files;
+  - `table1-extra-columns` applies to any treated-vs-control comparison table, whatever its number, and no longer to a regression Table 1.
+- `claim_comments.py` accepts 🟣.
+
 ### Exhibits in the text; AI disclosure; template-wide journal profiles (2026-11-11)
 
 - **INV-23 inverted (fork amendment):** each table/figure chunk sits in the section that discusses it, right after its first citation — not in end-of-paper blocks as in upstream's house style. `/paper-format` audits and places exhibits in the text; a new `end-exhibits` mode moves them to the end only for a journal that requires it. The scaffold `main.qmd` gains a setup chunk so section-file chunks have their packages.

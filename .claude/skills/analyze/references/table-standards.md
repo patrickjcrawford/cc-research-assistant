@@ -72,7 +72,7 @@ The `.rds` a script saves holds the *model objects*, not this LaTeX — this is 
 - Point estimates on one row, standard errors in parentheses on the row below
 - The SE type/clustering and star thresholds come from the estimator's footer (`etable`, `modelsummary`); do not repeat them in the notes (INV-1). A hand-built `kbl()` table without such a footer states them once in its note.
 
-**Significance reporting in tables depends on the target journal** (prose never quotes p-values or SEs — `.claude/references/writing-practice.md` WP-1):
+**Significance reporting in tables depends on the target journal** (prose never quotes p-values, and quotes SEs only when precision is the point — `.claude/references/writing-practice.md` WP-1):
 
 | Context | Convention |
 |---------|-----------|

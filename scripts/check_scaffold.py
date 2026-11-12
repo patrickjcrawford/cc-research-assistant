@@ -20,11 +20,13 @@ Checks:
   weights       permissions.md QUALITY_WEIGHT agrees with quality-gates.json
   settings      settings.json parses; every hook command points at a file
   hooks         no hook reads CLAUDE_TOOL_* env vars (Claude Code never sets them)
-  size          SKILL.md under 500 lines; always-loaded rules within budget
+  size          SKILL.md under 500 lines; always-loaded rules within budget (a human may raise
+                the budget in .claude/scaffold-override.json; --warn-size makes an overrun a warning)
 
 Usage:
-    python3 scripts/check_scaffold.py          # exit 1 on any ERROR
-    python3 scripts/check_scaffold.py --quiet  # print only problems
+    python3 scripts/check_scaffold.py              # exit 1 on any ERROR
+    python3 scripts/check_scaffold.py --quiet      # print only problems
+    python3 scripts/check_scaffold.py --warn-size  # budget overrun warns, never fails (pre-commit)
 """
 
 from __future__ import annotations
@@ -48,7 +50,13 @@ SKILL_MAX_LINES = 500
 # loads into every session, and Claude Code's docs put the adherence limit near 200 lines per file.
 # Fork patch (cc-research-assistant): 850, not upstream's 700 — constitutional-governance.md
 # (110 lines) is an always-loaded rule here; upstream ships it only as a template.
+# Over budget is an ERROR when this script runs on its own and a WARN under --warn-size (the
+# pre-commit hook): a size overrun is not a correctness problem and must not block commits.
+# A human can raise the budget for one project with .claude/scaffold-override.json —
+#   {"always_loaded_budget": 950, "reason": "...", "approved_by": "...", "date": "YYYY-MM-DD"}
+# The file is committed so the decision is visible; protect-files.py blocks Claude's edits to it.
 ALWAYS_LOADED_BUDGET = 850
+OVERRIDE_FILE = Path(".claude") / "scaffold-override.json"
 PATH_RE = re.compile(r"`((?:\.claude|scripts|templates)/[^`\s]+)`")
 
 Problem = Tuple[str, str, str]  # (level, check, message)
@@ -92,7 +100,33 @@ def frontmatter_problems(text: str) -> List[str]:
     return out
 
 
-def check(root: Path) -> List[Problem]:
+def budget_override(root: Path) -> Tuple[int, List[Problem]]:
+    """The always-loaded budget, after a human-approved override if one is present and valid."""
+    path = root / OVERRIDE_FILE
+    if not path.exists():
+        return ALWAYS_LOADED_BUDGET, []
+    rel = OVERRIDE_FILE.as_posix()
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        return ALWAYS_LOADED_BUDGET, [("ERROR", "size", f"{rel}: not valid JSON ({exc}); default budget used")]
+    budget = data.get("always_loaded_budget") if isinstance(data, dict) else None
+    missing = [k for k in ("reason", "approved_by", "date") if not (isinstance(data, dict) and str(data.get(k, "")).strip())]
+    bad = []
+    if not isinstance(budget, int) or isinstance(budget, bool) or budget <= 0:
+        bad.append("'always_loaded_budget' must be a positive integer")
+    if missing:
+        bad.append("missing " + ", ".join(missing))
+    if isinstance(data, dict) and data.get("date") and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(data["date"])):
+        bad.append("'date' must be YYYY-MM-DD")
+    if bad:
+        return ALWAYS_LOADED_BUDGET, [("ERROR", "size", f"{rel}: {'; '.join(bad)}; default budget used")]
+    note = (f"always-loaded budget raised to {budget} (default {ALWAYS_LOADED_BUDGET}) by "
+            f"{data['approved_by']} on {data['date']}: {data['reason']}")
+    return budget, [("INFO", "size", note)]
+
+
+def check(root: Path, warn_size: bool = False) -> List[Problem]:
     probs: List[Problem] = []
     claude = root / ".claude"
 
@@ -145,6 +179,8 @@ def check(root: Path) -> List[Problem]:
                 target = ref.split("#")[0].split(":")[0].rstrip(".,;)")
                 if target.startswith(".claude/state/"):
                     continue  # runtime state, created on first use and gitignored
+                if target == OVERRIDE_FILE.as_posix():
+                    continue  # optional, created by a human only when a project needs it
                 if target.startswith("scripts/") and target.count("/") > 1:
                     continue  # an example analysis path in a user project, not scaffold code
                 skill_dir = next((p for p in src.parents if p.parent.name == "skills"), None)
@@ -208,8 +244,16 @@ def check(root: Path) -> List[Problem]:
         text = rule.read_text(errors="replace")
         if "paths" not in frontmatter(text):
             total += text.count("\n")
-    level = "ERROR" if total > ALWAYS_LOADED_BUDGET else "INFO"
-    probs.append((level, "size", f"always-loaded instructions: {total} lines (budget {ALWAYS_LOADED_BUDGET})"))
+    budget, override_notes = budget_override(root)
+    size_probs: List[Problem] = list(override_notes)
+    if total > budget:
+        size_probs.append(("ERROR", "size", f"always-loaded instructions: {total} lines (budget {budget}); "
+                           f"trim CLAUDE.md into README-project.md, or a human sets {OVERRIDE_FILE.as_posix()}"))
+    else:
+        size_probs.append(("INFO", "size", f"always-loaded instructions: {total} lines (budget {budget})"))
+    if warn_size:
+        size_probs = [("WARN" if lvl == "ERROR" else lvl, name, msg) for lvl, name, msg in size_probs]
+    probs.extend(size_probs)
     return probs
 
 
@@ -217,8 +261,10 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Integrity checks for the clo-author scaffold.")
     ap.add_argument("--root", default=".")
     ap.add_argument("--quiet", action="store_true")
+    ap.add_argument("--warn-size", action="store_true",
+                    help="report the always-loaded budget as a warning, never an error (pre-commit hook)")
     args = ap.parse_args(argv)
-    probs = check(Path(args.root).resolve())
+    probs = check(Path(args.root).resolve(), warn_size=args.warn_size)
     errors = [p for p in probs if p[0] == "ERROR"]
     for level, name, msg in probs:
         if args.quiet and level == "INFO":

@@ -45,7 +45,7 @@ Never call `latexmk`, `xelatex`, or `biber` directly.
 
 ```bash
 quarto render paper/main.qmd                          # paper
-quarto render paper/appendix.qmd                      # online appendix (separate PDF)
+quarto render paper/appendix.qmd                      # online appendix (separate PDF; or paper/supplementary/appendix.qmd)
 quarto render paper/talks/[file].qmd --to beamer      # talk, Beamer PDF
 quarto render paper/talks/[file].qmd --to revealjs    # talk, HTML deck
 quarto render paper/main.qmd --profile [name]         # alternate layout (_quarto-[name].yml)

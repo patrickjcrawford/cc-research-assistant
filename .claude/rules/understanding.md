@@ -13,8 +13,8 @@ acceptable answer once. It is not an acceptable posture toward your own paper.
 
 ## The rule
 
-**INV-26.** Every script that produces a paper exhibit (a file in `paper/tables/` or
-`paper/figures/`) has a current explainer in `quality_reports/explainers/` and a passing quiz
+**INV-26.** Every script that produces a paper exhibit (a file in the output directory,
+default `paper/tables/` / `paper/figures/`) has a current explainer in `quality_reports/explainers/` and a passing quiz
 attempt logged at the script's current fingerprint.
 
 Current means the fingerprint in the explainer's front matter matches

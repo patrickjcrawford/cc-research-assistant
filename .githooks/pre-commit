@@ -7,6 +7,9 @@
 #
 #   Blocking
 #     - scripts/check_scaffold.py   when .claude/, CLAUDE.md, or scripts/*.py change
+#                                   (--warn-size: the always-loaded size budget only warns here;
+#                                   run the script alone to see it as an error. A human can raise
+#                                   the budget in .claude/scaffold-override.json.)
 #     - scripts/test_hooks.py       when .claude/hooks/ or .claude/settings*.json change
 #     - scripts/test_scripts.py     when scripts/*.py, permissions.md, or quality-gates.json change
 #     - lint-scripts.sh [HIGH]      on staged analysis scripts (INV-14/15/16/19:
@@ -38,7 +41,7 @@ has() { grep -qE "$1" <<<"$STAGED"; }
 
 if has '^(\.claude/|CLAUDE\.md$|scripts/[^/]+\.py$)'; then
   echo "── pre-commit: scaffold integrity ──"
-  python3 scripts/check_scaffold.py --quiet || FAIL=1
+  python3 scripts/check_scaffold.py --quiet --warn-size || FAIL=1
 fi
 
 if has '^\.claude/(hooks/|settings)'; then

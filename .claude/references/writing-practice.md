@@ -8,18 +8,25 @@ and storyteller. These are template rules, not personal voice; the author's voic
 
 ## Reporting
 
-**WP-1. Significance in prose is verdict words — never quoted p-values or standard errors.** Whatever
-the target journal, sentences use one of:
+**WP-1. Significance in prose is words, not quoted p-values.** Whatever the target journal, prose
+states significance in words — the level ("significant at the 5% level", "at the 10% level in all
+seven columns") or a verdict ("marginally significant", "indistinguishable from zero"). The exact
+phrasing is the author's; keep it consistent within a paper. Examples:
 
-| Word | Meaning |
-|------|---------|
-| significant (at the 1 / 5 percent level) | p < .01 / p < .05 |
-| marginally significant | .05 ≤ p < .10 |
-| indistinguishable from zero | p ≥ .10 |
+| Phrasing | Meaning |
+|----------|---------|
+| significant at the 1% / 5% level | p < .01 / p < .05 |
+| significant at the 10% level · marginally significant | .05 ≤ p < .10 |
+| not statistically significant · indistinguishable from zero | p ≥ .10 |
 
 Tables keep their stars, SEs, p-values, or confidence intervals per the journal profile (INV-4). Quote
 an exact p-value in prose only when the claim depends on it (e.g., a pre-registered threshold). For a
 headline null, say what it rules out ("rules out effects larger than 2 percent of the mean"), not a CI.
+
+Standard errors stay out of prose too, with one exception: when the point is precision itself — a
+coefficient that moves while its standard error does not, or an estimate that loses significance
+because the SE grew — the SEs may be quoted next to the estimates they qualify ("falls from 0.95 to
+0.31, with an almost unchanged standard error, 0.21 against 0.20").
 
 **WP-2. Magnitudes in two units.** Headline coefficients are translated into percent of the
 baseline/mean of the outcome **and** absolute units, with 2–3 significant digits. Compare to a

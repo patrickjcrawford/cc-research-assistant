@@ -45,6 +45,9 @@ Consolidated deduction tables from all critic agents. Each critic starts at 100 
 | Rule of three | -3 |
 | Paragraph openings don't match style guide | -3 per, max -9 |
 | Unresolved references | -3 per |
+| Float placement `H`/`h`/`hold_position` or missing `"!t"`/`"p"` (INV-25) | -2 per, max -6 |
+| Notes/captions repeat SE type or star thresholds (INV-1/2) | -2 per, max -6 |
+| Departure from a *(default)* clause in `content-invariants.md` | 0 — advisory |
 | Overfull hbox warnings | -1 per, max -5 |
 
 ---
