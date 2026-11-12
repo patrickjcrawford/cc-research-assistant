@@ -114,3 +114,19 @@
 **Status:**
 - Done: Tiers A–D implemented on `template/dissertation-learnings` (not merged to main, not pushed)
 - Pending: user review of drafts for `~/.claude/CLAUDE.md` and personal style guide (scratchpad); decide econ-writing-skill template additions; em-dash rule conflict (cleanup-patterns #13 vs prose-critic); rolling changes into the three projects via `/tools sync-template` (CWN uses 🔵 for "secondary" — rename on sync)
+
+## 2026-11-11 (later) — Merge to main and first sync into the three dissertation projects
+
+**Operations:**
+- Template `main` fast-forwarded to `90ba836` (local; not pushed — projects' `template` remote is GitHub, so the commit was fetched from the local repo path)
+- Each project: path-scoped checkout of template-owned files that were absent or stale (HRE 130, LC 132, CWN 126), 4–12 retired template files removed (old `.sh` hooks, `rules/html-dashboard.md`, CWN's pre-26.09 templates)
+- Hand-merged: `settings.json` (template hooks + deny list; HRE keeps 11 project allow rules, 10 dead scratchpad rules dropped), `.gitignore` (missing non-data rules appended; patterns matching tracked files skipped), `CLAUDE.md` (new skill rows + setup line only)
+- HRE journal notes moved verbatim into its `domain-profile.md` § Project-Specific Journal Notes; master personal style guide installed over placeholders; `.claude/template-sync.log` started in each project
+- Kept project versions: LC `paper/preambles/revealjs/slides.scss` (extra slide rules), CWN `README.md`, CWN `templates/cover-letter.tex`
+
+**Results:**
+- CWN: check_scaffold, test_hooks, test_scripts pass. HRE/LC: hooks pass; check_scaffold fails only the always-loaded budget (868 / 939 vs 850, from long project CLAUDE.md files) — pre-commit gate is not installed in any project, so commits are not blocked
+
+**Status:**
+- Pending: user reviews and commits each project; decide CLAUDE.md trim vs budget for HRE/LC before installing the pre-commit gate there; push template when ready (then project syncs can fetch from the `template` remote)
+- Saved for later review: hanlulong/econ-slides-skill (#12), hanlulong/econ-paper-review-skill (#13)
