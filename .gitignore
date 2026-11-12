@@ -131,3 +131,6 @@ paper/appendix.tex
 /paper/sections/*.tex
 
 /.luarc.json
+
+# Keep the template-sync log tracked in projects even when *.log is ignored (must stay last)
+!.claude/template-sync.log
