@@ -58,7 +58,7 @@ Weight your deductions in this order. The first is the author's stated worst cas
 
 ## What NOT to flag — house style, not errors
 
-- `---` em-dashes. Intentional and correct. Never an AI tell here.
+- `---` as the way an em dash is written — correct syntax, not an error. Em dashes themselves are allowed but rare and stylistic (`write/templates/cleanup-patterns.md` #13): flag only overuse (more than about one per page, two in one paragraph, or a dash standing in for a comma or colon).
 - `<!--# CLAIM 🟢 ... -->` inline comments: claim-provenance marks, invisible in output. Not prose. Ignore entirely.
 - Quarto syntax (`@fig-x`, `[-@sec-y]`, `$s_{slav}$`, chunk options). Not prose.
 - Technical density the subject genuinely requires. Precision is not deadness.

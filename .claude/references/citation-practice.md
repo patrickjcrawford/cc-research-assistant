@@ -12,6 +12,7 @@ writer, writer-critic, and verifier. Critics cite these as `CP-n`.
 | 🟢 | Directly supported: verbatim passage + page recorded | Yes |
 | 🟠 | Synthesis or inference across sources | Yes, worded as the paper's own argument (CP-2) |
 | 🔵 | **Author-attested**: the user or a named coauthor vouches for the source; no full text available | Yes |
+| ⚪ | Design or definition statement sourced to the project's own code, config, or documents (not a cited work, not a pipeline number) | n/a — carries no citation |
 | `[NOT VERIFIED]` | Passage/page could not be supplied | **No** |
 
 **🔵 rules.** Only the user (or a coauthor the user names) assigns 🔵 — **an agent never marks its own

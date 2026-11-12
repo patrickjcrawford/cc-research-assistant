@@ -29,7 +29,8 @@ Every statement in the manuscript attributed to a cited work. Mark 🟢 (the cit
 
 ## Optional: inline CLAIM comments
 
-Provenance can also live next to the sentence it backs, with the marker as the first token:
+Provenance can also live next to the sentence it backs, with the marker (🟢 🟠 🔵, or ⚪ for a design or
+definition statement sourced to the project's code or documents) as the first token:
 `...persists for a decade. <!--# CLAIM 🟢 jones2019LongRun p. 12: "..." -->`
 
 - `python3 scripts/claim_comments.py` indexes every comment into `quality_reports/claim_index.md`

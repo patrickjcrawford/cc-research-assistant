@@ -6,7 +6,14 @@ for a specific journal. Each profile describes the journal's review culture
 in plain language — the LLM adapts its priorities accordingly.
 
 Used by: domain-referee.md, methods-referee.md (via /review --peer [journal])
+
+Template-wide file (sync-manifest: TEMPLATE). Keep profiles general — a journal's culture, not one
+paper's situation. Paper-specific expectations at a journal go in the project's
+domain-profile.md § Project-Specific Journal Notes, which referees read alongside this file.
 -->
+
+Referees combine the journal's profile below with the project's `domain-profile.md`
+§ Project-Specific Journal Notes, when present.
 
 ## How This Works
 

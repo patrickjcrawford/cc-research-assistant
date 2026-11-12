@@ -170,7 +170,12 @@ author:
 abstract: |
   Abstract text here (150 words or fewer).
 date: today
+thanks: "AI DISCLOSURE: Generative AI was used for coding assistance for data analysis, proofreading, and formatting."
 ```
+
+**AI-use disclosure.** Every paper carries the disclosure above, verbatim, as the first sentence of the
+title-page `thanks:` footnote (acknowledgments follow it in the same string). Do not reword it; adjust
+it only if the user says the uses changed.
 
 JEL codes and keywords go in the body after the abstract, as a raw LaTeX block:
 

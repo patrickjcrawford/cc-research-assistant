@@ -3,6 +3,8 @@ filters:
   - abstract-section
   - claim-margin.lua   # inert unless rendered with -M annotate-claims:true (review PDF with claims in the margin)
 
+thanks: "AI DISCLOSURE: Generative AI was used for coding assistance for data analysis, proofreading, and formatting. [Acknowledgments.]"
+
 keywords: ["keyword one", "keyword two", "keyword three"]
 jel-codes: ["X00", "Y00"]
 

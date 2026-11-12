@@ -114,6 +114,16 @@ If no field is specified, agents default to applied economics.
 - [e.g., "Moral hazard vs adverse selection" — referees expect you to distinguish]
 - [e.g., "External validity" — Medicaid population ≠ general population]
 
+## Project-Specific Journal Notes
+
+<!-- How this paper will read at each target journal. The general journal profiles live in
+journal-profiles.md (template-wide); add only what is specific to this paper. -->
+
+### [Journal abbreviation]
+- **Referees will expect:** [e.g., engagement with the German-language historiography (Blickle)]
+- **Likely concerns for this paper:** [e.g., "Is the event dataset reliable? Coverage bias in sources?"]
+- **Framing for this audience:** [e.g., sell the setting to readers outside the period]
+
 ---
 
 ## Quality Tolerance Thresholds

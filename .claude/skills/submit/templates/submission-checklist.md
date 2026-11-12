@@ -32,4 +32,5 @@
 - [ ] Target journal selected (from journal profiles)
 - [ ] Formatting matches journal requirements
 - [ ] Author information complete
+- [ ] AI-use disclosure present verbatim in the title-page `thanks:` footnote: "AI DISCLOSURE: Generative AI was used for coding assistance for data analysis, proofreading, and formatting." — and it satisfies the target journal's AI policy (check the journal's submission guidelines)
 - [ ] Significance stars match journal convention (INV-4)

@@ -177,9 +177,11 @@ from the project's copy of `.claude/sync-manifest.md` — after the first sync, 
   - report; never merge to main or push without the user's review
 ```
 
-Content that lives in PROJECT files (e.g., new journal profiles added to the template's
-`journal-profiles.md`) is not pulled automatically — the status list names such files so the user can
-copy sections by hand.
+Content that lives in PROJECT files (e.g., new sections added to the template's `domain-profile.md`
+placeholder) is not pulled automatically — the status list names such files so the user can copy
+sections by hand. The first sync of a project whose `journal-profiles.md` was customized moves its
+paper-specific notes into `domain-profile.md` § Project-Specific Journal Notes before taking the
+template's file.
 
 ---
 

@@ -20,6 +20,7 @@ local TAGS = {
   ["\240\159\159\162"] = "[DIRECT]",      -- green circle: passage + page recorded
   ["\240\159\159\160"] = "[SYNTHESIS]",   -- orange circle: inference across sources
   ["\240\159\148\181"] = "[ATTESTED]",    -- blue circle: author-attested (user-assigned only)
+  ["\226\154\170"]     = "[DESIGN]",      -- white circle: design/definition sourced to code or docs
   ["\226\154\160\239\184\143"] = "[WARNING]",
   ["\226\154\160"]     = "[WARNING]",
 }

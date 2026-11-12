@@ -156,7 +156,7 @@ Split: language standards are template-owned; field/journal/style files are proj
 | `coding-standards-python.md` | TEMPLATE | Language conventions, not field-specific. |
 | `coding-standards-julia.md` | TEMPLATE | Language conventions, not field-specific. |
 | `domain-profile.md` | PROJECT | Ships empty in the template. Filled in per-researcher at project init. Never overwrite during sync. |
-| `journal-profiles.md` | PROJECT | Ships empty in the template. Filled in per-researcher at project init. Never overwrite during sync. |
+| `journal-profiles.md` | TEMPLATE | Template-wide since 2026-11-11: general profiles of each journal's review culture. Project-specific concerns for a journal ("referees will expect engagement with X") go in the project's `domain-profile.md` § Project-Specific Journal Notes, never here. To add or improve a journal, edit the template and sync. |
 | `personal-style-guide.md` | PROJECT | Ships empty in the template. Filled in per-researcher at project init. Never overwrite during sync. |
 | `empirical-practice.md`, `writing-practice.md`, `citation-practice.md`, `quarto-gotchas.md`, `windows-environment.md`, `text-as-data.md`, `working-practices.md`, `outreach-style.md` | TEMPLATE | Fork-only practice references (2026-11-11). Projects do not edit; propose changes to the template. |
 | `zotero-search-protocol.md` | TEMPLATE | Tool surface, degradation behavior, and add-only-when-asked rule for Zotero MCP integration across librarian/explorer/critics. |
@@ -312,6 +312,7 @@ When syncing template updates, you can unconditionally overwrite everything in t
 .claude/rules/
 .claude/skills/
 .claude/references/coding-standards-*.md
+.claude/references/journal-profiles.md
 .claude/references/{empirical,writing,citation}-practice.md
 .claude/references/{quarto-gotchas,windows-environment,text-as-data,working-practices,outreach-style,zotero-search-protocol}.md
 .claude/sync-manifest.md

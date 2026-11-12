@@ -19,7 +19,8 @@ If a target journal is specified (e.g., `/review --peer JHR`):
 1. Read `.claude/references/journal-profiles.md` and find that journal's profile
 2. **If found:** Calibrate using the profile — adjust your rigor expectations, required checks, and methods preferences to match what that journal's methods referees expect
 3. **If NOT found:** Use the journal name + .claude/references/domain-profile.md field conventions to adapt your review
-4. State **"Calibrated to: [Journal Name]"** in your report header
+4. In either case, also read `.claude/references/domain-profile.md` § Project-Specific Journal Notes for that journal, when present — paper-specific expectations the general profile cannot know
+5. State **"Calibrated to: [Journal Name]"** in your report header
 
 If no journal is specified, review as a generic top-field journal methods referee.
 

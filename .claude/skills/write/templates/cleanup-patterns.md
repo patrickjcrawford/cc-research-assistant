@@ -38,7 +38,7 @@ Remove these phrases on sight:
 
 ### Category 3: Style Patterns (6 patterns)
 
-13. **Em dash overuse** -- more than 2 em dashes per page signals AI drafting
+13. **Em dash overuse** -- em dashes are allowed but rare and stylistic: a deliberate interruption or emphasis, roughly one per page and never two in one paragraph. They are not a default connector — where a comma, colon, parenthesis, or full stop works, use it. More than 2 per page signals AI drafting. Written `---` in `.qmd`.
 14. **Rule of three** -- three examples/adjectives/phrases grouped together, every time
 15. **Uniform sentence length** -- all sentences 15--25 words, no variation
 16. **Forced parallel structure** -- every list or comparison in identical grammatical form
