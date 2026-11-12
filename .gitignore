@@ -58,7 +58,8 @@ data/cache/
 *.Ruserdata
 *_cache/
 paper/**/*_files/
-_freeze/          # Quarto freeze cache (execute: freeze: auto); regenerated on render
+# Quarto freeze cache (execute: freeze: auto); regenerated on render
+_freeze/
 .luarc.json
 
 
