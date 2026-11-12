@@ -1,0 +1,72 @@
+{
+  "project": "",
+  "phase": "",
+  "last_updated": "2026-11-11T19:30:55",
+  "agents_completed": [],
+  "agents_in_progress": [],
+  "agents_pending": [
+    "librarian",
+    "explorer",
+    "strategist",
+    "theorist",
+    "coherence-finder",
+    "coherence-skeptic",
+    "coherence-consolidator"
+  ],
+  "agents_waiting": [
+    {
+      "agent": "data-engineer",
+      "missing": "strategist-critic has no verdict in the research journal"
+    },
+    {
+      "agent": "coder",
+      "missing": "strategist-critic has no verdict in the research journal"
+    },
+    {
+      "agent": "explainer",
+      "missing": "coder-critic has no score in the research journal"
+    },
+    {
+      "agent": "writer",
+      "missing": "coder-critic has no score in the research journal"
+    },
+    {
+      "agent": "prose-critic",
+      "missing": "`paper/sections/*.qmd` missing or empty"
+    },
+    {
+      "agent": "editor",
+      "missing": "writer-critic has no score in the research journal"
+    },
+    {
+      "agent": "domain-referee",
+      "missing": "writer-critic has no score in the research journal"
+    },
+    {
+      "agent": "methods-referee",
+      "missing": "writer-critic has no score in the research journal"
+    },
+    {
+      "agent": "storyteller",
+      "missing": "writer-critic has no score in the research journal"
+    },
+    {
+      "agent": "verifier",
+      "missing": "overall None (needs >= 95)"
+    }
+  ],
+  "overall_score": null,
+  "components": {
+    "literature": null,
+    "data": null,
+    "identification": null,
+    "theory": null,
+    "code": null,
+    "manuscript": null,
+    "referee_domain": null,
+    "referee_methods": null,
+    "replication": null
+  },
+  "blocked_by": "pr gate: no component has been scored yet",
+  "derived_from": "quality_reports/research_journal.md via scripts/pipeline.py status"
+}
