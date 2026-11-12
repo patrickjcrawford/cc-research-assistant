@@ -189,8 +189,8 @@ How to narrate by output type:
 ## Conclusion (500--700 words)
 
 **Common backbone:**
-1. **Restatement** -- Main finding with effect size (one paragraph)
-2. **Qualification** -- Where this doesn't generalize
+1. **Restatement** -- Main finding with effect size, in different words from the abstract and introduction (one paragraph)
+2. **Scope** -- One or two sentences on where the result does *not* travel (external validity only). Not a repeat of identification caveats already stated in the body (state a caveat once); may be folded into the implications paragraph ("these results speak to X, not to Y")
 
 **Type-specific endings:**
 

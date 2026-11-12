@@ -136,7 +136,7 @@ Frozen choices every session must respect; change only with the user.
 | `/checkpoint [--flag]` | Session handoff: memory + SESSION_REPORT + research journal + exploration tree |
 | `/explain [script]` | Explainer + quiz on agent-written analysis code (INV-26 gate at `/submit`) |
 | `/coherence [--deep]` | Internal-consistency audit: refs, citations, numbers vs. tables, notation |
-| `/paper-format [mode]` | Audit/apply the Quarto house style: exhibits at end, Table 1, chunks (INV-23–25) |
+| `/paper-format [mode]` | Audit/apply the Quarto house style: exhibits in the text, Table 1, chunks (INV-23–25) |
 | `python3 scripts/generate_dashboard.py` | Regenerate `project_dashboard.html` from current project state |
 
 **Setup (once per clone):** Claude Code ≥ 2.1.295; a `python3` on PATH (Windows: `uv python install --default`); `bash scripts/install-hooks.sh` for the pre-commit gate; copy `.Rprofile.example` → `.Rprofile` (never commit); project Python via `uv run python`. R path if `Rscript` is not on PATH: `[C:/Program Files/R/R-x.y.z/bin/Rscript.exe]`. On Windows read `.claude/references/windows-environment.md`.

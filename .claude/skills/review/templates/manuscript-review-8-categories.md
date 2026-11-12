@@ -121,7 +121,7 @@ Enforce all Required items from `.claude/rules/working-paper-format.md`:
 | Abstract exceeds 150 words (INV-5) | -5 |
 | No titles inside figures -- titles in `fig-cap` only (INV-12) | -3 per, max -9 |
 | Script writes rendered `.tex` or calls `etable()`/`modelsummary()` instead of saving `.rds` (INV-13) | -3 per, max -9 |
-| Exhibit chunk inside a section `.qmd` instead of the end blocks of `main.qmd` (INV-23) | -3 per, max -9 |
+| Exhibit not in the text: collected at the end of `main.qmd`, placed before its first citation, far from its discussion, or never cited (INV-23) | -3 per, max -9 |
 
 ---
 

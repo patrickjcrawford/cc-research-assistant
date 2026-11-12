@@ -70,12 +70,12 @@ the `.qmd` by searching for the quoted text. `--scope` takes the rendered file, 
 | `significance-mismatch` | minor | Reported p-value disagrees with the cell's stars |
 | `orphan-float` | minor | A table or figure is never referenced in the text |
 | `table-file-wrapped` | minor | A table body carries its own float/caption (INV-13) |
-| `float-in-section` | minor | A float is declared in a section file (INV-23) |
+| `float-in-section` | minor | LaTeX-manuscript projects only (upstream house style); never fires on this fork's Quarto papers, where exhibits belong in the section files (fork INV-23) |
 | `duplicate-macro` | minor | A macro is defined twice — silent notation drift (INV-7) |
 | `abstract-too-long` | major | Abstract over 150 words (INV-5; `--abstract-limit N` for a journal's own limit) |
 | `table1-extra-columns` | major | Table 1 has difference, SD, or p-value columns, or more than two value columns (INV-24) |
 
-Enforces **INV-5, INV-7, INV-11, INV-13, INV-23, INV-24**.
+Enforces **INV-5, INV-7, INV-11, INV-13, INV-24**. (This fork's INV-23 — exhibits in the text — is audited by `/paper-format`.)
 
 ### How number matching works
 

@@ -8,7 +8,8 @@ paths:
 # Paper Organization — House Style (Tables, Figures, Structure)
 
 This is the house layout for every paper in this project (content invariants INV-23, INV-24, INV-25),
-translated from upstream clo-author's LaTeX house style to this fork's Quarto workflow. Follow it
+translated from upstream clo-author's LaTeX house style to this fork's Quarto workflow — with one
+deliberate difference: **exhibits sit in the text, not at the end** (fork amendment, 2026-11-11). Follow it
 unless the user asks otherwise: the writer-critic deducts for deviations and the verifier fails on
 them. It is the single source for float placement, Table 1, the table and figure chunks, and section
 order; `working-paper-format.md` covers Quarto mechanics (YAML, citations, cross-reference syntax).
@@ -18,47 +19,52 @@ order; `working-paper-format.md` covers Quarto mechanics (YAML, citations, cross
 
 ---
 
-## 1. Float placement — collect at the END, never inline (INV-23)
+## 1. Float placement — in the text, where each exhibit is discussed (INV-23)
 
-Section files (`paper/sections/*.qmd`) contain **only prose and `@tbl-`/`@fig-` cross-references —
-no exhibits.** No chunk with a `tbl-`/`fig-` label, no `![...](...){#fig-...}` image, no
-`{=latex}` table or figure block. All tables and figures live in `paper/main.qmd`, in two blocks
-placed **after** the references div:
+Each table and figure chunk lives in the **section file where it is discussed**, placed right after
+the paragraph that first cites it. There are no TABLES/FIGURES blocks at the end of `main.qmd`; the
+reader meets each exhibit next to its discussion. (Upstream clo-author collects exhibits at the end;
+this fork does not. If a journal requires end-of-paper exhibits at submission, set `fig-pos`/
+`tbl-pos` per its rules or move them then — `/paper-format` can do it.)
 
 ````markdown
-{{< include sections/01_introduction.qmd >}}
-{{< include sections/02_background.qmd >}}
-...                                          <!-- all text, no exhibits -->
+<!-- paper/main.qmd -->
+```{r}
+#| label: setup
+#| include: false
+library(here); library(fixest); library(kableExtra)   # every included section's chunks run in this session
+```
 
-\clearpage
+# Abstract
+...
+{{< include sections/01_introduction.qmd >}}
+{{< include sections/05_results.qmd >}}
 
 # References {.unnumbered}
 
 ::: {#refs}
 :::
 
-<!-- ============================================================ -->
-<!-- TABLES                                                       -->
-<!-- ============================================================ -->
+<!-- paper/sections/05_results.qmd -->
+# Results {#sec-results}
 
-\clearpage
-
-```{r}
-#| label: tbl-pretreatment
-...                                          <!-- one chunk per table, \clearpage between large ones -->
-```
-
-<!-- ============================================================ -->
-<!-- FIGURES                                                      -->
-<!-- ============================================================ -->
-
-\clearpage
+Wealthier counties were more likely to ... (@tbl-main).        <!-- first citation -->
 
 ```{r}
-#| label: fig-event-study
-...                                          <!-- one chunk per figure -->
+#| label: tbl-main
+#| tbl-cap: "Main Results: County Wealth and Unrest (1860 Cohort)"
+#| tbl-pos: "!t"
+#| output: asis
+...                                                            <!-- canonical chunk, §3 -->
 ```
+
+The next paragraph continues the argument ...
 ````
+
+- **Cite before it appears.** Every exhibit is cited in the prose before its chunk; one exhibit per
+  chunk; an exhibit discussed in several sections sits where it is *first* discussed.
+- Chunks in section files run in `main.qmd`'s knitr session: packages and the facts `.rds` for
+  inline numbers load once in the setup chunk at the top of `main.qmd`.
 
 - **Float placement by size.** Never `H`, `h`, or `hold_position` — they leave blank half-pages.
   Normal tables/figures: `tbl-pos: "!t"` / `fig-pos: "!t"`. Page-sized exhibits (roughly more than
@@ -72,7 +78,7 @@ placed **after** the references div:
 - Wide tables/figures: wrap the chunk in raw `{=latex}` `\begin{landscape}` / `\end{landscape}`
   (load `pdflscape` in `paper/preambles/draft-article/article-header.tex`).
 - The reader navigates by `@tbl-x` / `@fig-y` from the text; Quarto numbers and links them.
-- Appendix exhibits follow the same convention at the end of `paper/appendix.qmd`.
+- Appendix exhibits follow the same convention inside their appendix sections (`sections/app-*.qmd`).
 
 ## 2. Table 1 is pre-treatment characteristics (INV-24)
 
@@ -86,7 +92,8 @@ placed **after** the references div:
 - **Bottom rows:** unit counts (e.g. `Counties`, `Individuals`) — the N lives here, not in a column.
 - Caption names the baseline window: e.g. "Pre-Treatment Characteristics, 1860".
 
-The script saves a summary data frame (`.rds`, INV-13), not a rendered table; `main.qmd` styles it:
+The script saves a summary data frame (`.rds`, INV-13), not a rendered table; the chunk in the Data
+section styles it:
 
 ````markdown
 ```{r}
@@ -107,8 +114,9 @@ table; the rest of this section does not apply.
 
 ## 3. Canonical table chunk (INV-25)
 
-Scripts save model objects or summary data frames as `.rds` (INV-13). Every table in `main.qmd` is
-one chunk that loads the `.rds` and calls the styling function — the "wrapper" is that chunk:
+Scripts save model objects or summary data frames as `.rds` (INV-13). Every table is one chunk, in the
+section where it is discussed, that loads the `.rds` and calls the styling function — the "wrapper" is
+that chunk:
 
 - `#| label: tbl-...` and a caption: a **full descriptive title in title case**, method or cohort in
   parentheses (`etable(title = ...)` or `#| tbl-cap:`).
@@ -167,8 +175,8 @@ section at the next level-1 heading, so `##` sections would all render inside th
 - Captions are full descriptive titles in title case, method/cohort in parentheses:
   *"Main Results: County Wealth and Unrest (1860 Cohort)"*, *"Pre-Treatment Characteristics, 1860"*.
 - Exhibits are organized **by script** (CLAUDE.md Output Organization): `paper/tables/NN_name/*.rds`,
-  `paper/figures/NN_name/*.pdf`. The script writes the bare exhibit; `main.qmd` owns numbering,
-  caption, and notes.
+  `paper/figures/NN_name/*.pdf`. The script writes the bare exhibit; the chunk in the paper owns
+  numbering, caption, and notes.
 
 ## 7. Exhibit numbering
 

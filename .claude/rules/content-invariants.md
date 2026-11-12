@@ -32,11 +32,11 @@ These are non-negotiable. Every agent checks against them. Violations are deduct
 
 **INV-13.** R/Python/Julia scripts export fitted model objects (or summary-stats data frames) as `.rds` to `paper/tables/` — never rendered `.tex`, and never a script-side call to `etable()`/`modelsummary()`. The paper's `main.qmd` loads the object and calls the styling function (`etable()`, `modelsummary()`, `kableExtra::kbl()`) with the caption, notes, and significance convention applied at render time.
 
-**INV-23.** Exhibits are collected in TABLES and FIGURES blocks at the **end of `paper/main.qmd`** (after the `::: {#refs}` div), never inline. Section files (`paper/sections/*.qmd`) contain prose and `@tbl-`/`@fig-` references only — no `tbl-`/`fig-` chunks, image exhibits, or `{=latex}` table/figure blocks. Per `.claude/rules/paper-organization.md` §1.
+**INV-23.** Exhibits sit **in the text**: each table/figure chunk is placed in the section file where it is discussed, right after the paragraph that first cites it (`@tbl-`/`@fig-`), never collected at the end of the paper. Every exhibit is cited in the prose before it appears; appendix exhibits sit in their appendix sections. Per `.claude/rules/paper-organization.md` §1. *(Fork amendment 2026-11-11; upstream collects exhibits at the end.)*
 
 **INV-24.** When the design has treated and control groups, Table 1 is the pre-treatment characteristics table: two group columns (treated vs. control), grouped into thematic panels, with unit counts as bottom rows — no difference, SD, or p-value column. Otherwise Table 1 is the summary-statistics table. Per `paper-organization.md` §2.
 
-**INV-25.** Every table is one canonical chunk in `main.qmd` that loads an `.rds` and styles it at render time, with a `tbl-` label, a title-case descriptive caption, and notes per INV-1; multi-panel figures use `fig-subcap` + `layout-ncol` with the caption on top. Per `paper-organization.md` §3–4.
+**INV-25.** Every table is one canonical chunk, in the section where it is discussed, that loads an `.rds` and styles it at render time, with a `tbl-` label, a title-case descriptive caption, and notes per INV-1; multi-panel figures use `fig-subcap` + `layout-ncol` with the caption on top. Per `paper-organization.md` §3–4.
 
 ## Code
 
@@ -80,6 +80,6 @@ These are non-negotiable. Every agent checks against them. Violations are deduct
 | **storyteller-critic** | INV-20, INV-21 | Deduct per scoring rubric |
 | **verifier** | INV-9, INV-10, INV-14, INV-15, INV-16, INV-19, INV-23, INV-24, INV-25, INV-26, INV-27 | FAIL if present |
 | **explainer** | INV-26 | Produces the artifacts the invariant requires |
-| **/coherence** (deterministic) | INV-5, INV-7, INV-11, INV-13, INV-23, INV-24 | Major findings block; minor findings block only under `--strict` |
+| **/coherence** (deterministic) | INV-5, INV-7, INV-11, INV-13, INV-24 | Major findings block; minor findings block only under `--strict` |
 | **/coherence --deep** finders (reasoning) | INV-7, INV-8, INV-11 | Advisory finding — never blocks |
 | **lint hook** | INV-14, INV-15, INV-16, INV-19 | Advisory warning |

@@ -24,7 +24,7 @@ generate_html_report script (replaced by `generate_dashboard.py`).
 
 **Translated, not taken as-is:** LaTeX-specific upstream rules become Quarto equivalents —
 `working-paper-format.md`, `content-standards.md` (table workflow), `paper-organization.md`,
-`/paper-format`, INV-1/2/9/10/12/13 and INV-23–25. Fork-only invariant: **INV-27** (citation provenance).
+`/paper-format`, INV-1/2/9/10/12/13 and INV-23–25. **INV-23 is inverted in the fork** (2026-11-11): exhibits sit in the text, not in end blocks — keep this when merging upstream house-style changes. Fork-only invariant: **INV-27** (citation provenance).
 
 **Fork-patched scripts** (first lines carry `clo-author: infrastructure-fork`; MERGE — take upstream's
 new version, then re-apply the patch described in each file's docstring): `scripts/paper_coherence.py`,

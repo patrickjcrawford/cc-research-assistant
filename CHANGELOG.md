@@ -10,6 +10,12 @@ All notable changes to this template are documented here.
 
 Changes in this fork (cc-research-assistant) not in upstream clo-author.
 
+### Exhibits in the text; AI disclosure; template-wide journal profiles (2026-11-11)
+
+- **INV-23 inverted (fork amendment):** each table/figure chunk sits in the section that discusses it, right after its first citation — not in end-of-paper blocks as in upstream's house style. `/paper-format` audits and places exhibits in the text; a new `end-exhibits` mode moves them to the end only for a journal that requires it. The scaffold `main.qmd` gains a setup chunk so section-file chunks have their packages.
+- **Conclusion template:** "Qualification" becomes **Scope** — one or two sentences on where the result does not travel, never a repeat of caveats.
+- AI-use disclosure (exact wording) in the title-page `thanks:` footnote; em dashes rare and stylistic; ⚪ design/definition claim marker; `journal-profiles.md` template-wide, paper-specific notes in `domain-profile.md`.
+
 ### Lessons from three dissertation projects (2026-11-11)
 
 About 100 corrections recorded while writing three economic-history papers with this template, triaged

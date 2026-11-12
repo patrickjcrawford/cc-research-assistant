@@ -20,11 +20,23 @@ format:
     number-sections: true
 ---
 
+```{r}
+#| label: setup
+#| include: false
+# Runs before every included section: packages and the numbers quoted inline (WP-3).
+# Exhibit chunks live in the section files, next to the paragraph that first cites them (INV-23).
+library(here)
+# library(fixest); library(kableExtra)
+# N <- readRDS(here("paper", "tables", "01_descriptives", "facts.rds"))
+```
+
 # Abstract
 
 [Abstract — 150 words or fewer.]
 
-<!-- {{< include [section QMDs] >}} -->
+<!-- {{< include sections/01_introduction.qmd >}} -->
+<!-- {{< include sections/02_background.qmd >}} ... each section holds its own tables and figures -->
+
 
 \clearpage
 
