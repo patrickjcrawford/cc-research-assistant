@@ -64,7 +64,7 @@ through chat; never overwrite PROJECT-labeled files.
 | `_quarto.yml` | PROJECT | Paper-specific: title, author, font choices, custom preamble includes, citation CSL. Sync only if the project's version is missing required keys (see MERGE note below). |
 | `references.bib` | PROJECT | Project bibliography. Never overwrite. |
 | `.gitignore` | MERGE | Template owns the "Always ignored" blocks; project owns whitelists (hand-built data) and extras. |
-| `.Rprofile.example` | TEMPLATE | The real `.Rprofile` is machine-local and gitignored. |
+| `.Rprofile.example` | PROJECT | Seeded from the template once (if absent); the project lists its own data roots. The real `.Rprofile` is machine-local and gitignored. |
 | `pyproject.toml`, `uv.lock` | PROJECT | Seeded from the template once; the project owns its dependencies. |
 | `_quarto-*.yml` | PROJECT | Alternate-layout profiles. |
 | `template-sync.log` (in .claude, projects only) | PROJECT | One line per `/tools sync-template --apply`: date, template commit, paths taken. |
@@ -317,7 +317,6 @@ When syncing template updates, you can unconditionally overwrite everything in t
 .claude/references/{quarto-gotchas,windows-environment,text-as-data,working-practices,outreach-style,zotero-search-protocol}.md
 .claude/sync-manifest.md
 .claude/WORKFLOW_QUICK_REF.md
-.Rprofile.example
 templates/
 scripts/generate_dashboard.py
 scripts/{score,pipeline,journal,explainer_status,claim_comments}.py
